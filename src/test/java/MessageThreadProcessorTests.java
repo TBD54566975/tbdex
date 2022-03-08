@@ -1,5 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
 import io.tbd.tbdex.protocol.messages.Close;
