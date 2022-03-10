@@ -43,6 +43,9 @@ public class MessageThreadProcessor {
             }
 
             Message lastMessage = this.messageThread.getLastMessage();
+
+            // TODO: Check to see if message's sender matches the sender of the last message
+
             if (!lastMessage.body().isValidReply(messageType)) {
                 throw new RuntimeException(messageType + " is not a valid reply to the most recent message [" + lastMessage.type() + "]" + "in this thread");
             }
@@ -59,6 +62,22 @@ public class MessageThreadProcessor {
         this.addMessage(resultingMessage);
 
         return resultingMessage;
+    }
+
+    /**
+     *
+     * @param encryptedSignedJWM - the encrypted then signed message
+     * @return Message
+     */
+    public Message addMessage(String encryptedSignedJWM) {
+        // TODO: decrypt JWM using recipient's private key
+        // TODO: decode JWS payload (which is the message itself)
+        // TODO: get recipient's DID from the message
+        // TODO: resolve the recipient's DID to get DID Doc
+        // TODO: use `kid` from JWS header to grab the appropriate public key from DID Doc
+        // TODO: verify the JWS
+
+        throw new UnsupportedOperationException("Method not yet implemented");
     }
 
     public static class Builder {
