@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageThreadProcessor {
-    MessageThread messageThread;
+    MessageThreadStore messageThreadStore;
     Map<MessageType, MessageProcessor> messageProcessors = new HashMap<>();
 
-    private MessageThreadProcessor() {
-        this.messageThread = new MessageThread();
+    private MessageThreadProcessor(MessageThreadStore messageThreadStore) {
+        this.messageThreadStore = messageThreadStore;
     }
 
     private void addProcessor(MessageType type, MessageProcessor processor) {
@@ -30,9 +30,12 @@ public class MessageThreadProcessor {
             return null;
         }
 
+        String threadToken = message.threadID();
+        Message lastMessage = messageThreadStore.getLastMessage(threadToken);
+
         MessageType messageType = message.type();
 
-        if (this.messageThread.isEmpty()) {
+        if (lastMessage == null) {
             // an Ask should always be the first message
             if (messageType != MessageType.Ask) {
                 throw new RuntimeException("The first message in a thread can only be an Ask");
@@ -42,8 +45,6 @@ public class MessageThreadProcessor {
                 throw new RuntimeException("an Ask can only be the first message in a thread");
             }
 
-            Message lastMessage = this.messageThread.getLastMessage();
-
             // TODO: Check to see if message's sender matches the sender of the last message
 
             if (!lastMessage.body().isValidReply(messageType)) {
@@ -51,7 +52,7 @@ public class MessageThreadProcessor {
             }
         }
 
-        this.messageThread.addMessage(message);
+        this.messageThreadStore.addMessageToThread(threadToken, message);
         MessageProcessor processor = messageProcessors.get(message.type());
 
         if (processor == null) {
@@ -83,14 +84,8 @@ public class MessageThreadProcessor {
     public static class Builder {
         private final MessageThreadProcessor instance;
 
-        public Builder() {
-            this.instance = new MessageThreadProcessor();
-        }
-
-        public Builder setMessageThread(MessageThread messageThread) {
-            this.instance.messageThread = messageThread;
-
-            return this;
+        public Builder(MessageThreadStore messageThreadStore) {
+            this.instance = new MessageThreadProcessor(messageThreadStore);
         }
 
         /**

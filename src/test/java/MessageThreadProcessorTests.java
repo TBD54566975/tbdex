@@ -1,3 +1,4 @@
+import io.tbd.tbdex.protocol.InMemoryMessageThreadStore;
 import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
 import io.tbd.tbdex.protocol.messages.Close;
@@ -10,7 +11,8 @@ class MessageThreadProcessorTests {
     @Test
     @DisplayName("throws an exception if Ask is not the first message")
     void testAskNotFirstMessageThrowsException() {
-        MessageThreadProcessor messageThreadProcessor = new MessageThreadProcessor.Builder().build();
+        InMemoryMessageThreadStore messageThreadStore = new InMemoryMessageThreadStore();
+        MessageThreadProcessor messageThreadProcessor = new MessageThreadProcessor.Builder(messageThreadStore).build();
 
         Message message = new Message.Builder("mid", "thid", "pfi", "alice")
             .build(new Close("but whai?"));
