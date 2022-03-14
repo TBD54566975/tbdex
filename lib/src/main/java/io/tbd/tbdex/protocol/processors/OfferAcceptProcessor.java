@@ -1,10 +1,10 @@
 package io.tbd.tbdex.protocol.processors;
 
 import io.tbd.tbdex.protocol.core.Message;
+import io.tbd.tbdex.protocol.messages.OfferAccept;
 
-public class OfferAcceptProcessor implements MessageProcessor {
-    @Override
-    public Message process(Message message) {
-        return null;
+public interface OfferAcceptProcessor extends MessageProcessor {
+    static OfferAccept getOfferAcceptFromMessage(Message message) {
+        return (OfferAccept) message.body();
     }
 }

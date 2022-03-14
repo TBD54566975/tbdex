@@ -1,10 +1,10 @@
 package io.tbd.tbdex.protocol.processors;
 
 import io.tbd.tbdex.protocol.core.Message;
+import io.tbd.tbdex.protocol.messages.ConditionalOffer;
 
-public class ConditionalOfferProcessor implements MessageProcessor {
-    @Override
-    public Message process(Message message) {
-        return null;
+public interface ConditionalOfferProcessor extends MessageProcessor {
+    static ConditionalOffer getConditionalOfferFromMessage(Message message) {
+        return (ConditionalOffer) message.body();
     }
 }

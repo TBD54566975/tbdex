@@ -1,9 +1,10 @@
 package io.tbd.tbdex.protocol.processors;
 
 import io.tbd.tbdex.protocol.core.Message;
+import io.tbd.tbdex.protocol.messages.Close;
 
-public class CloseProcessor implements MessageProcessor {
-  @Override public Message process(Message message) {
-    return null;
+public interface CloseProcessor extends MessageProcessor {
+  static Close getCloseFromMessage(Message message) {
+    return (Close) message.body();
   }
 }

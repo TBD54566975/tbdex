@@ -1,3 +1,5 @@
+package io.tbd.tbdex.protocol.core;
+
 import io.tbd.tbdex.protocol.InMemoryMessageThreadStore;
 import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
