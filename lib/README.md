@@ -1,7 +1,6 @@
 # tbDEX Protocol
 
 - [tbDEX Protocol](#tbdex-protocol)
-  - [Motivation](#motivation)
   - [Message Format & Structure](#message-format--structure)
   - [Message Types](#message-types)
     - [`Ask`](#ask)
@@ -17,9 +16,6 @@
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
   - [Project Resources](#project-resources)
-
-## Motivation
-The motivation behind this project is to act as a tool that we can use to easily test the ideas we come up with as we iterate our way to what we hope is a robust protocol.
 
 ## Message Format & Structure
 The structure of all tbDEX messages is modeled after [JSON Web Message (JWM)](https://tools.ietf.org/id/draft-looker-jwm-01.html). The reasons for choosing JWM are:
