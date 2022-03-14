@@ -5,8 +5,8 @@ import java.util.LinkedList;
 public class MessageThread {
     private LinkedList<Message> messageThread;
 
-    public MessageThread() {
-        this.messageThread = new LinkedList<>();
+    public MessageThread(LinkedList<Message> messageThread) {
+        this.messageThread = messageThread;
     }
 
     public MessageThread(Message message) {
@@ -25,6 +25,10 @@ public class MessageThread {
         }
 
         return this.messageThread.getLast();
+    }
+
+    public int getSize() {
+        return messageThread.size();
     }
 
     public boolean isEmpty() {

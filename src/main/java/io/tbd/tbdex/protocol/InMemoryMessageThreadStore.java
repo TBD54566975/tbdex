@@ -33,11 +33,11 @@ public class InMemoryMessageThreadStore implements MessageThreadStore  {
     }
 
     @Override
-    public void addMessageToThread(String threadToken, Message message) {
-        MessageThread thread = this.getThread(threadToken);
+    public void addMessageToThread(Message message) {
+        MessageThread thread = this.getThread(message.threadID());
 
         if (thread == null) {
-            throw new RuntimeException("Thread " + threadToken + " does not exist.");
+            throw new RuntimeException("Thread " + message.threadID() + " does not exist.");
         }
 
         thread.addMessage(message);

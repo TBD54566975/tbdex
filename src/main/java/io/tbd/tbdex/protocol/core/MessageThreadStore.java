@@ -5,5 +5,5 @@ public interface MessageThreadStore {
 
     Message getLastMessage(String threadToken);
 
-    void addMessageToThread(String threadToken, Message message);
+    void addMessageToThread(Message message);
 }

@@ -26,7 +26,7 @@ public class MessageConverter implements AttributeConverter<Message, String> {
 
     Message message = null;
     try {
-      message = JsonParser.getParser().fromJson(messageJSON, Message.class);
+      message = Message.Builder.fromJson(messageJSON);
     } catch (Exception e) {
       System.out.println(e);
     }
