@@ -14,11 +14,13 @@ application {
 
 dependencies {
     implementation project(':lib')
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'org.hibernate:hibernate-core:4.3.11.Final'
     implementation 'org.hibernate.common:hibernate-commons-annotations:4.0.1.Final'
     implementation 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
     implementation 'mysql:mysql-connector-java:5.1.46'
     implementation 'joda-time:joda-time:2.10.10'
+    implementation 'org.json:json:20211205'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
