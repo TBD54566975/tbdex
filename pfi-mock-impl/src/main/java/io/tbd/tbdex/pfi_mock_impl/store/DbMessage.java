@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "messages")
-public class DbMessage {
+public class DbMessage extends TimestampedEntity {
   @Id
   @GeneratedValue(strategy= GenerationType.IDENTITY)
   @Column(name="id")
