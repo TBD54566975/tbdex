@@ -52,7 +52,7 @@ public class MessageThreadProcessor {
             }
         }
 
-        this.messageThreadStore.addMessageToThread(threadToken, message);
+        this.messageThreadStore.addMessageToThread(message);
         MessageProcessor processor = messageProcessors.get(message.type());
 
         if (processor == null) {
