@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 public class HibernateMessageThreadStore implements MessageThreadStore {
   @SuppressWarnings("unchecked")
   @Override public MessageThread getThread(String threadToken) {
-    Session session = Transacter.getSession();
+    Session session = HibernateUtil.getSession();
     Transaction tx = session.getTransaction();
     tx.begin();
     Query query = session.createQuery(
@@ -36,7 +36,7 @@ public class HibernateMessageThreadStore implements MessageThreadStore {
   }
 
   @Override public void addMessageToThread(Message message) {
-    Session session = Transacter.getSession();
+    Session session = HibernateUtil.getSession();
     Transaction tx = session.getTransaction();
     tx.begin();
     DbMessage ask = new DbMessage();

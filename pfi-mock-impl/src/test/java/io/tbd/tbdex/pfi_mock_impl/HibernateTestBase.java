@@ -4,7 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.tbd.tbdex.pfi_mock_impl.store.DbMessage;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateModule;
-import io.tbd.tbdex.pfi_mock_impl.store.Transacter;
+import io.tbd.tbdex.pfi_mock_impl.store.HibernateUtil;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -21,7 +21,7 @@ public class HibernateTestBase {
   }
 
   private void truncateTables() {
-    Session session = Transacter.getSession();
+    Session session = HibernateUtil.getSession();
     Transaction tx = session.getTransaction();
 
     // Delete all messages
