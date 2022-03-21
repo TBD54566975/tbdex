@@ -21,6 +21,8 @@ dependencies {
     implementation 'mysql:mysql-connector-java:5.1.46'
     implementation 'joda-time:joda-time:2.10.10'
     implementation 'org.json:json:20211205'
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.0'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
