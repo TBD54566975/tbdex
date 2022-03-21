@@ -1,12 +1,17 @@
 # PFI Mock Implementation
 
 ## Introduction
-**TODO**: Fill out
+This is a mock implementation of a PFI (Participating Financial Institution) for the tbDex protocol. It is leveraging Circle's APIs in order to facilitate the on and off ramps.
+
+The state machine from the perspective of the PFI:
+![Screenshot](state-machine.png)
 
 - Supports USD -> USDC on-ramp
+- Supports USDC -> USD off-ramp
 - Stores messages in MySQL
 
 ## Contributing
+TODO: Fill out
 
 ### Pre-requisites
 - Java 15
