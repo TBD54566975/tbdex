@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class HibernateStoreTest extends HibernateTestBase {
+public class HibernateStoreTest extends TestBase {
   @Inject MessageThreadStore threadStore;
 
   @Test
