@@ -20,7 +20,7 @@ public class Main {
 
   public static void run() {
     Javalin app = Javalin.create().start(9004);
-    app.post("/handleMessage", handleMessage);
+    app.post("/handle-message", handleMessage);
   }
 
   public static Handler handleMessage = ctx -> {

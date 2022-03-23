@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.json:json:20211205'
     implementation 'javax.ws.rs:javax.ws.rs-api:2.0'
     implementation 'io.javalin:javalin:2.8.0'
+    implementation 'org.slf4j:slf4j-simple:1.7.26'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
