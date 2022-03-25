@@ -82,7 +82,7 @@ message ConvertFundsRequest {
   optional string idempotency_key = 3;
   optional BankAddress bank_address = 4;
   optional BillingDetails billing_details = 5;
-  optional string ask_idempotence_token = 6;
+  optional string thread_token = 6;
   optional PayoutRequest payout_request = 7;
   optional string wallet_address = 8;
   optional string email_address = 9;

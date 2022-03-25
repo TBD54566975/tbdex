@@ -13,12 +13,19 @@ import com.squareup.protos.tbd.pfi.PayoutRequest;
 import com.squareup.protos.tbd.pfi.Source;
 import com.squareup.protos.tbd.pfi.TransferRequest;
 import io.tbd.tbdex.pfi_mock_impl.circle.CircleClient;
+import io.tbd.tbdex.pfi_mock_impl.circle.RealCircleClient;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
 import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.messages.Ask;
 import java.util.UUID;
 
 public class PaymentProcessor {
+  private CircleClient circleClient;
+
+  public PaymentProcessor(CircleClient circleClient) {
+    this.circleClient = circleClient;
+  }
+
   // This is the test wallet ID for Circle. Hard coded for now.
   // Funds can not be moved directly to an external address so this will be a middle ground.
   // TODO: find more elegant solution
@@ -27,10 +34,10 @@ public class PaymentProcessor {
       .type("wallet")
       .build();
 
-  public static void convertFunds(ConvertFundsRequest request) {
+  public void convertFunds(ConvertFundsRequest request) {
     // Get ASK from thread store
     HibernateMessageThreadStore threadStore = new HibernateMessageThreadStore();
-    MessageThread messageThread = threadStore.getThread(request.ask_idempotence_token);
+    MessageThread messageThread = threadStore.getThread(request.thread_token);
     Ask ask = messageThread.getAsk();
     Preconditions.checkNotNull(ask);
 
@@ -62,9 +69,9 @@ public class PaymentProcessor {
           .build();
       try {
         // Create a WIRE payment Request.
-        CircleClient.createWirePayment(createWirePaymentRequest);
+        circleClient.createWirePayment(createWirePaymentRequest);
         // Transfer USDC to external wallet address.
-        CircleClient.transfer(transferRequest);
+        circleClient.transfer(transferRequest);
       } catch (Exception e) {
         System.out.println("wire payment failed");
       }
@@ -84,14 +91,14 @@ public class PaymentProcessor {
             .amount(amount)
             .build();
 
-        CircleClient.payout(payoutRequest);
+        circleClient.payout(payoutRequest);
       } catch (Exception e) {
         System.out.println("payout failed");
       }
     }
   }
 
-  private static BankAccount createBankAccount(ConvertFundsRequest request) {
+  private BankAccount createBankAccount(ConvertFundsRequest request) {
     CreateBankAccountRequest createBankAccountRequest = new CreateBankAccountRequest.Builder()
         .accountNumber(request.account_number)
         .routingNumber(request.routing_number)
@@ -102,7 +109,7 @@ public class PaymentProcessor {
 
     BankAccount bankAccount;
     try {
-      bankAccount = CircleClient.createBankAccount(createBankAccountRequest);
+      bankAccount = circleClient.createBankAccount(createBankAccountRequest);
     } catch (Exception e) {
       bankAccount = null;
     }
