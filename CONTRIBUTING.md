@@ -16,51 +16,8 @@ ___***UPDATE TABLE OF PROJECT DEPS AND INSTALLATION NOTES***___
 
 | Requirement | Tested Version | Installation Instructions                            |
 |-------------|----------------|------------------------------------------------------|
-| Go          | 1.17.6         |[go.dev](https://go.dev/doc/tutorial/compile-install) |
-| Mage        | 1.12.1         |[magefile.org](https://magefile.org/)                 |
 | Java        | 17.0.2         | Below, recommended via [SDKMan](https://sdkman.io)   |
-
-### Go
-
-This project is written in Go, a modern, open source programming language. 
-
-You may verify your `go` installation via the terminal:
-
-```
-$> go version
-go version go1.17.6 darwin/amd64
-```
-
-If you do not have go, we recommend installing it by:
-
-#### MacOS
-
-##### Homebrew
-```
-$> brew install go
-```
-
-### Mage
-
-The build is run by Mage.
-
-You may verify your `mage` installation via the terminal:
-
-```
-$> mage --version
-Mage Build Tool 1.12.1
-Build Date: 2021-12-15T21:00:02Z
-Commit: 2f1ec40
-built with: go1.17.6
-```
-
-#### MacOS
-
-##### Homebrew
-
-```
-$> brew install mage
-```
+| Docker      | 20.10.11         | Below, recommended via [SDKMan](https://sdkman.io)   |
 
 ### Java
 
@@ -104,11 +61,12 @@ Consult the SDKMan documentation for more info.
 
 ---
 
-## Build (Mage)
+### Docker
 
-```
-$> mage build
-```
+We recommend installing docker through the website https://docs.docker.com/desktop/mac/install/
+
+Installing the app will also include docker-compose which will be used to spin up a new mysql 
+container for testing and local development.
 
 ## Build (Java / Gradle)
 
@@ -120,12 +78,6 @@ $> ./gradlew build
 ### Windows
 ```shell
 $> gradlew.bat build
-```
-
-## Test (Mage)
-
-```
-$> mage test
 ```
 
 ## Test (Java / Gradle)
