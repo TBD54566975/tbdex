@@ -2,6 +2,11 @@ package io.tbd.tbdex.pfi_mock_impl.circle;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.protos.tbd.pfi.BankAccount;
+import com.squareup.protos.tbd.pfi.CreateBankAccountRequest;
+import com.squareup.protos.tbd.pfi.CreateWirePaymentRequest;
+import com.squareup.protos.tbd.pfi.PayoutRequest;
+import com.squareup.protos.tbd.pfi.TransferRequest;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,10 +40,10 @@ public class CircleClient {
     Response response = client.newCall(request).execute();
     JSONObject data = new JSONObject(response.body().string()).getJSONObject("data");
 
-    BankAccount bankAccount = new BankAccount();
-    bankAccount.id = data.getString("id");
-    bankAccount.trackingRef = data.getString("trackingRef");
-    return bankAccount;
+    return new BankAccount.Builder()
+        .trackingRef(data.getString("trackingRef"))
+        .id(data.getString("id"))
+        .build();
   }
 
   public static void createWirePayment(CreateWirePaymentRequest createWirePaymentRequest)
@@ -88,76 +93,5 @@ public class CircleClient {
     Response response = client.newCall(request).execute();
 
     System.out.println(response.body().string());
-  }
-
-  static class BankAccount {
-    String id;
-    String trackingRef;
-  }
-
-  static class CreateBankAccountRequest {
-    String accountNumber;
-    String routingNumber;
-    String idempotencyKey;
-    BankAddress bankAddress;
-    BillingDetails billingDetails;
-  }
-
-  static class BillingDetails {
-    String name ;
-    String city;
-    String country;
-    String line1;
-    String postalCode;
-    String district;
-  }
-
-  static class BankAddress {
-    String country;
-  }
-
-  static class CreateWirePaymentRequest {
-    Amount amount;
-    String trackingRef;
-  }
-
-  static class Amount {
-    String amount;
-    CurrencyCode currency;
-  }
-  enum CurrencyCode {
-    USD,
-    USDC
-  }
-
-  static class PayoutRequest {
-    Source source;
-    Destination destination;
-    Amount amount;
-    Metadata metadata;
-    String idempotencyKey;
-  }
-
-  static class TransferRequest {
-    Source source;
-    Destination destination;
-    Amount amount;
-    String idempotencyKey;
-  }
-
-  static class Source {
-    String id;
-    String type;
-  }
-
-  static class Destination {
-    String id;
-    String type;
-    String address;
-    String chain;
-  }
-
-  static class Metadata {
-    String beneficiaryEmail;
   }
 }

@@ -1,6 +1,8 @@
 package io.tbd.tbdex.protocol.core;
 
+import io.tbd.tbdex.protocol.messages.Ask;
 import java.util.LinkedList;
+import javax.annotation.Nullable;
 
 public class MessageThread {
     private LinkedList<Message> messageThread;
@@ -25,6 +27,15 @@ public class MessageThread {
         }
 
         return this.messageThread.getLast();
+    }
+
+    public @Nullable Ask getAsk() {
+        for(Message message : messageThread) {
+            if (message.type() == MessageType.Ask) {
+                return (Ask) message.body();
+            }
+        }
+        return null;
     }
 
     public boolean isEmpty() {
