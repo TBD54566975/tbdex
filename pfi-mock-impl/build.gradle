@@ -1,7 +1,21 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.squareup.wire:wire-gradle-plugin:4.0.1"
+    }
+}
+
 plugins {
     id 'application'
 }
+apply plugin: 'com.squareup.wire'
+apply plugin: 'java'
 
+group 'org.example'
 version '0.1.0'
 
 repositories {
@@ -24,6 +38,9 @@ dependencies {
     implementation 'javax.ws.rs:javax.ws.rs-api:2.0'
     implementation 'io.javalin:javalin:2.8.0'
     implementation 'org.slf4j:slf4j-simple:1.7.26'
+    implementation 'com.squareup.wire:wire-gradle-plugin:4.0.1'
+    implementation 'com.squareup.wire:wire-grpc-client:4.0.1'
+    implementation 'com.squareup.wire:wire-moshi-adapter:4.0.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
@@ -31,4 +48,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+wire {
+    protoLibrary = true
+
+    sourcePath {
+        srcDir("src/main/proto/")
+    }
+
+    java {
+        emitDeclaredOptions = true
+        emitAppliedOptions = true
+    }
 }

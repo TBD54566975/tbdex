@@ -1,0 +1,8 @@
+syntax = "proto2";
+package squareup.protos.tbd.state;
+
+option java_package = "com.squareup.protos.tbd.state";
+
+enum State {
+  WAITING_ON_CUSTOMER = 1;
+}
