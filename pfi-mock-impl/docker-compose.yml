@@ -19,14 +19,6 @@ services:
       tbdex:
         aliases:
           - "mysql"
-  java:
-    image: openjdk:17
-    container_name: dev
-    networks:
-      tbdex:
-    command: sleep infinity
-    volumes:
-      - ../:/code
 
 networks:
   tbdex:
