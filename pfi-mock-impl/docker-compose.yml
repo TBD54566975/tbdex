@@ -20,7 +20,7 @@ services:
         aliases:
           - "mysql"
   java:
-    image: openjdk:15
+    image: openjdk:17
     container_name: dev
     networks:
       tbdex:
