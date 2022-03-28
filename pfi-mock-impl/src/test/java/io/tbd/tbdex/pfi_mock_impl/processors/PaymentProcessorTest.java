@@ -16,7 +16,7 @@ public class PaymentProcessorTest extends TestBase {
 
   @Test
   @DisplayName("runs without error")
-  void requestNotValid() {
+  void happyPath() {
     PaymentProcessor paymentProcessor = new PaymentProcessor(new MockCircleClient());
 
     String threadToken = "thid";

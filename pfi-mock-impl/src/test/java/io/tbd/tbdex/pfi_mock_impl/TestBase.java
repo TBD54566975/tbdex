@@ -15,7 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 public class TestBase {
   protected Injector injector = Guice.createInjector(
       new HibernateModule(),
-      new ProcessorModule()
+      new ProcessorModule(),
+      new CircleTestModule()
   );
 
   @BeforeEach
