@@ -15,11 +15,11 @@ import io.tbd.tbdex.protocol.core.MessageType;
 public class Main {
   public static void main(String[] args) {
     run();
-    System.out.println("wew hew");
   }
 
   public static void run() {
     Javalin app = Javalin.create().start(9004);
+    app.get("/hello-world", ctx -> ctx.result("Hello World"));
     app.post("/handle-message", handleMessage);
   }
 
