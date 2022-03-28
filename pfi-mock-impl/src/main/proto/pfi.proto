@@ -76,7 +76,7 @@ message BankAddress {
   optional string country = 1;
 }
 
-message ConvertFundsRequest {
+message PaymentProcessorRequest {
   optional string account_number = 1;
   optional string routing_number = 2;
   optional string idempotency_key = 3;

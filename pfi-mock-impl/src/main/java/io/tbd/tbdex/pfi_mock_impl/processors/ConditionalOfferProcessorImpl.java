@@ -1,9 +1,9 @@
 package io.tbd.tbdex.pfi_mock_impl.processors;
 
 import io.tbd.tbdex.protocol.core.Message;
-import io.tbd.tbdex.protocol.processors.CloseProcessor;
+import io.tbd.tbdex.protocol.processors.ConditionalOfferProcessor;
 
-public class MockCloseProcessor implements CloseProcessor {
+public class ConditionalOfferProcessorImpl implements ConditionalOfferProcessor {
   @Override public Message process(Message message) {
     return null;
   }

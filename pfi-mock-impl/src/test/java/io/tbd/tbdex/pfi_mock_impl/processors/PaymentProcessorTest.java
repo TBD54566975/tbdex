@@ -1,6 +1,6 @@
 package io.tbd.tbdex.pfi_mock_impl.processors;
 
-import com.squareup.protos.tbd.pfi.ConvertFundsRequest;
+import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import io.tbd.tbdex.pfi_mock_impl.TestBase;
 import io.tbd.tbdex.pfi_mock_impl.circle.MockCircleClient;
 import io.tbd.tbdex.protocol.core.Message;
@@ -24,11 +24,11 @@ public class PaymentProcessorTest extends TestBase {
         .build(new Ask("USDC", BigDecimal.valueOf(100), "USDC"));
     threadStore.addMessageToThread(message1);
 
-    ConvertFundsRequest request = new ConvertFundsRequest.Builder()
+    PaymentProcessorRequest request = new PaymentProcessorRequest.Builder()
         .wallet_address("12345")
         .thread_token(threadToken)
         .build();
 
-    paymentProcessor.convertFunds(request);
+    paymentProcessor.process(request);
   }
 }
