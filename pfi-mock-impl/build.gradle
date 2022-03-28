@@ -1,19 +1,6 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-    dependencies {
-        classpath "com.squareup.wire:wire-gradle-plugin:4.0.1"
-    }
-}
-
 plugins {
     id 'application'
 }
-apply plugin: 'com.squareup.wire'
-apply plugin: 'java'
 
 group 'org.example'
 version '0.1.0'
@@ -51,17 +38,4 @@ test {
     // show standard out and standard error of the test JVM(s) on the console
     testLogging.events("passed", "skipped", "failed")
     testLogging.showStandardStreams = true
-}
-
-wire {
-    protoLibrary = true
-
-    sourcePath {
-        srcDir("src/main/proto/")
-    }
-
-    java {
-        emitDeclaredOptions = true
-        emitAppliedOptions = true
-    }
 }
