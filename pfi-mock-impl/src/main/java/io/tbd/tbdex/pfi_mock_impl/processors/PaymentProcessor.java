@@ -3,17 +3,16 @@ package io.tbd.tbdex.pfi_mock_impl.processors;
 import com.google.common.base.Preconditions;
 import com.squareup.protos.tbd.pfi.Amount;
 import com.squareup.protos.tbd.pfi.BankAccount;
-import com.squareup.protos.tbd.pfi.ConvertFundsRequest;
 import com.squareup.protos.tbd.pfi.CreateBankAccountRequest;
 import com.squareup.protos.tbd.pfi.CreateWirePaymentRequest;
 import com.squareup.protos.tbd.pfi.CurrencyCode;
 import com.squareup.protos.tbd.pfi.Destination;
 import com.squareup.protos.tbd.pfi.Metadata;
+import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import com.squareup.protos.tbd.pfi.PayoutRequest;
 import com.squareup.protos.tbd.pfi.Source;
 import com.squareup.protos.tbd.pfi.TransferRequest;
 import io.tbd.tbdex.pfi_mock_impl.circle.CircleClient;
-import io.tbd.tbdex.pfi_mock_impl.circle.RealCircleClient;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
 import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.messages.Ask;
@@ -34,7 +33,7 @@ public class PaymentProcessor {
       .type("wallet")
       .build();
 
-  public void convertFunds(ConvertFundsRequest request) {
+  public void process(PaymentProcessorRequest request) {
     // Get ASK from thread store
     HibernateMessageThreadStore threadStore = new HibernateMessageThreadStore();
     MessageThread messageThread = threadStore.getThread(request.thread_token);
@@ -98,7 +97,7 @@ public class PaymentProcessor {
     }
   }
 
-  private BankAccount createBankAccount(ConvertFundsRequest request) {
+  private BankAccount createBankAccount(PaymentProcessorRequest request) {
     CreateBankAccountRequest createBankAccountRequest = new CreateBankAccountRequest.Builder()
         .accountNumber(request.account_number)
         .routingNumber(request.routing_number)

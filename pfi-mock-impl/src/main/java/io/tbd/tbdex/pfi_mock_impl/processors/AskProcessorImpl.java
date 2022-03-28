@@ -9,7 +9,7 @@ import io.tbd.tbdex.protocol.processors.AskProcessor;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class MockAskProcessor implements AskProcessor {
+public class AskProcessorImpl implements AskProcessor {
   @Override public Message process(Message message) {
     Preconditions.checkState(message.type() == MessageType.Ask);
     Ask ask = (Ask) message.body();

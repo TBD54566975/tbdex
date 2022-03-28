@@ -19,7 +19,7 @@ public class AskProcessorTest extends TestBase {
   @DisplayName("throws an exception response is not a conditional offer")
   void testReturnsConditionalOffer() {
     MessageThreadProcessor processor = new MessageThreadProcessor.Builder(threadStore)
-        .registerProcessor(MessageType.Ask, new MockAskProcessor())
+        .registerProcessor(MessageType.Ask, new AskProcessorImpl())
         .build();
     Message message = new Message.Builder("mid", "thid", "pfi", "alice")
         .build(new Ask("USD", BigDecimal.valueOf(100), "USDC"));

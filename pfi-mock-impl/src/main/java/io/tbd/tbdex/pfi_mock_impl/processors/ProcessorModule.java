@@ -8,9 +8,9 @@ import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
 
 public class ProcessorModule extends AbstractModule {
   @Override protected void configure() {
-    bind(AskProcessor.class).to(MockAskProcessor.class);
-    bind(CloseProcessor.class).to(MockCloseProcessor.class);
-    bind(ConditionalOfferProcessor.class).to(MockConditionalOfferProcessor.class);
-    bind(OfferAcceptProcessor.class).to(MockOfferAcceptProcessor.class);
+    bind(AskProcessor.class).to(AskProcessorImpl.class);
+    bind(CloseProcessor.class).to(CloseProcessorImpl.class);
+    bind(ConditionalOfferProcessor.class).to(ConditionalOfferProcessorImpl.class);
+    bind(OfferAcceptProcessor.class).to(OfferAcceptProcessorImpl.class);
   }
 }
