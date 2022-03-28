@@ -17,19 +17,15 @@ import org.junit.jupiter.api.Test;
 
 public class OfferAcceptProcessorTest extends TestBase {
   @Inject MessageThreadStore threadStore;
+  @Inject MessageThreadProcessor processor;
 
   @Test
   @DisplayName("runs without error")
   void happyPath() {
-    MessageThreadProcessor threadProcessor = new MessageThreadProcessor.Builder(threadStore)
-        .registerProcessor(MessageType.Ask, new AskProcessorImpl())
-        .registerProcessor(MessageType.OfferAccept, new OfferAcceptProcessorImpl())
-        .build();
-
     String threadToken = "thid";
     Message askMessage = new Message.Builder("mid", threadToken, "pfi", "alice")
         .build(new Ask("USDC", BigDecimal.valueOf(100), "USDC"));
-    threadProcessor.addMessage(askMessage);
+    processor.addMessage(askMessage);
 
     PaymentProcessorRequest request = new PaymentProcessorRequest.Builder()
         .wallet_address("12345")
@@ -37,7 +33,7 @@ public class OfferAcceptProcessorTest extends TestBase {
         .build();
     Message offerAcceptMessage = new Message.Builder("mid", threadToken, "pfi", "alice")
         .build(new OfferAccept(request));
-    threadProcessor.addMessage(offerAcceptMessage);
+    processor.addMessage(offerAcceptMessage);
 
     MessageThread messageThread = threadStore.getThread("thid");
     Assertions.assertSame(3, messageThread.getSize());

@@ -5,7 +5,7 @@ import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.core.MessageThreadStore;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

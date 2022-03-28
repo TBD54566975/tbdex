@@ -1,16 +1,21 @@
 package io.tbd.tbdex.pfi_mock_impl.processors;
 
 import com.google.inject.AbstractModule;
-import io.tbd.tbdex.protocol.processors.AskProcessor;
-import io.tbd.tbdex.protocol.processors.CloseProcessor;
-import io.tbd.tbdex.protocol.processors.ConditionalOfferProcessor;
-import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
+import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
+import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
+import io.tbd.tbdex.protocol.core.MessageType;
 
 public class ProcessorModule extends AbstractModule {
   @Override protected void configure() {
-    bind(AskProcessor.class).to(AskProcessorImpl.class);
-    bind(CloseProcessor.class).to(CloseProcessorImpl.class);
-    bind(ConditionalOfferProcessor.class).to(ConditionalOfferProcessorImpl.class);
-    bind(OfferAcceptProcessor.class).to(OfferAcceptProcessorImpl.class);
+    MessageThreadProcessor processor =
+        // TODO: figure out how to grab thread store instance from injector
+        new MessageThreadProcessor.Builder(new HibernateMessageThreadStore())
+            .registerProcessor(MessageType.Ask, new AskProcessorImpl())
+            .registerProcessor(MessageType.ConditionalOffer, new ConditionalOfferProcessorImpl())
+            .registerProcessor(MessageType.OfferAccept, new OfferAcceptProcessorImpl())
+            .registerProcessor(MessageType.Close, new CloseProcessorImpl())
+            .build();
+
+    bind(MessageThreadProcessor.class).toInstance(processor);
   }
 }

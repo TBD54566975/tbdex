@@ -12,7 +12,7 @@ import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import com.squareup.protos.tbd.pfi.PayoutRequest;
 import com.squareup.protos.tbd.pfi.Source;
 import com.squareup.protos.tbd.pfi.TransferRequest;
-import io.tbd.tbdex.pfi_mock_impl.circle.CircleClient;
+import io.tbd.tbdex.pfi_mock_impl.circle.client.CircleClient;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
 import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.messages.Ask;
@@ -35,6 +35,7 @@ public class PaymentProcessor {
 
   public void process(PaymentProcessorRequest request) {
     // Get ASK from thread store
+    // TODO: change to get conditional offer and also add source and target amounts in offer
     HibernateMessageThreadStore threadStore = new HibernateMessageThreadStore();
     MessageThread messageThread = threadStore.getThread(request.thread_token);
     Ask ask = messageThread.getAsk();

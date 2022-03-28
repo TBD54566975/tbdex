@@ -1,4 +1,4 @@
-package io.tbd.tbdex.pfi_mock_impl.circle;
+package io.tbd.tbdex.pfi_mock_impl.circle.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
