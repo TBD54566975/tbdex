@@ -2,8 +2,8 @@ plugins {
     id 'application'
 }
 
-group 'org.example'
-version '0.1.0'
+group 'io.tbd.tbdex'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
