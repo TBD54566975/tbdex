@@ -1,4 +1,4 @@
-package io.tbd.tbdex.pfi_mock_impl.processors;
+package io.tbd.tbdex.protocol.core.processors;
 
 import com.google.inject.AbstractModule;
 import io.tbd.tbdex.protocol.processors.AskProcessor;
