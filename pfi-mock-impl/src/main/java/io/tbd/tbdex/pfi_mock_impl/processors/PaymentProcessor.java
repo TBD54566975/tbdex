@@ -26,7 +26,7 @@ public class PaymentProcessor {
   // Funds can not be moved directly to an external address so this will be a middle ground.
   // TODO: find more elegant solution
   private static final Source WALLET_SOURCE = new Source.Builder()
-      .id("1000594591")
+      .id("")
       .type("wallet")
       .build();
 
