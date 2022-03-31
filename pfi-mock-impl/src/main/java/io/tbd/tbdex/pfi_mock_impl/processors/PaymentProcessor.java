@@ -44,6 +44,7 @@ public class PaymentProcessor {
     Preconditions.checkNotNull(ask);
 
     // Register Bank Account with Circle.
+    // TODO: Do not store bank account in our database
     BankAccount bankAccount = createBankAccount(request);
     System.out.println(bankAccount);
 
@@ -112,6 +113,7 @@ public class PaymentProcessor {
     try {
       bankAccount = circleClient.createBankAccount(createBankAccountRequest);
     } catch (Exception e) {
+      // TODO: add more error handling here
       bankAccount = null;
     }
     return bankAccount;
