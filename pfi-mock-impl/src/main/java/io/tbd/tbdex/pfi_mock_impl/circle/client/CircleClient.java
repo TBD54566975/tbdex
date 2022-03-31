@@ -1,4 +1,4 @@
-package io.tbd.tbdex.pfi_mock_impl.circle;
+package io.tbd.tbdex.pfi_mock_impl.circle.client;
 
 import com.squareup.protos.tbd.pfi.BankAccount;
 import com.squareup.protos.tbd.pfi.CreateBankAccountRequest;

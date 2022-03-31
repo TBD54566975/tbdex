@@ -7,7 +7,7 @@ import io.tbd.tbdex.pfi_mock_impl.store.DbMessage;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateModule;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateUtil;
 import java.util.List;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.BeforeEach;

@@ -12,18 +12,15 @@ import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import com.squareup.protos.tbd.pfi.PayoutRequest;
 import com.squareup.protos.tbd.pfi.Source;
 import com.squareup.protos.tbd.pfi.TransferRequest;
-import io.tbd.tbdex.pfi_mock_impl.circle.CircleClient;
+import io.tbd.tbdex.pfi_mock_impl.circle.client.CircleClient;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
 import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.messages.Ask;
 import java.util.UUID;
+import javax.inject.Inject;
 
 public class PaymentProcessor {
-  private CircleClient circleClient;
-
-  public PaymentProcessor(CircleClient circleClient) {
-    this.circleClient = circleClient;
-  }
+  @Inject CircleClient circleClient;
 
   // This is the test wallet ID for Circle. Hard coded for now.
   // Funds can not be moved directly to an external address so this will be a middle ground.
@@ -35,6 +32,7 @@ public class PaymentProcessor {
 
   public void process(PaymentProcessorRequest request) {
     // Get ASK from thread store
+    // TODO: change to get conditional offer and also add source and target amounts in offer
     HibernateMessageThreadStore threadStore = new HibernateMessageThreadStore();
     MessageThread messageThread = threadStore.getThread(request.thread_token);
     Ask ask = messageThread.getAsk();

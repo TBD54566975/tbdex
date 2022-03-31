@@ -87,13 +87,67 @@ $> ../gradlew :pfi-mock-impl:build
 ### macOS / Linux
 
 ```shell
-$> ../gradlew run
+$> ../gradlew :pfi-mock-impl:run
 ```
 
 ```shell
 $> curl http://localhost:9004/hello-world
 ```
 
+## Example Message (Java / Gradle)
+
+### macOS / Linux
+This command will spin up mysql in a docker container with the appropriate migrations
+```shell
+$> make dev-up
+```
+#### Setup Database
+
+access docker mysql container
+```shell
+$> docker exec -it mysql mysql -u root -ptbdev tbdex
+```
+
+create messages table
+```
+CREATE TABLE messages (
+  id           BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  thread_token VARCHAR(20) NOT NULL,
+  message      longtext NOT NULL,
+  created_at   TIMESTAMP NULL,
+  updated_at   TIMESTAMP NULL,
+  KEY idx_thread_token(thread_token)
+);
+```
+
+Start Application
+```shell
+$> ../gradlew :pfi-mock-impl:run
+```
+Sends an `ASK` to the application to process
+```shell
+$> curl \
+--header "Content-type: application/json" \
+--data-raw '{
+    "id":"mid",
+    "threadID":"thid1",
+    "type":"Ask",
+    "from":"pfi",
+    "to":"alice",
+    "body":{
+      "sourceCurrency":"USD",
+      "sourceAmount":100,
+      "targetCurrency":"USDC",
+      "type":"Ask",
+      "validReplyTypes":["Close","ConditionalOffer"]
+    }
+  }' 'http://localhost:9004/handle-message'
+```
+## Access Docker MySQL Database
+
+```shell
+$> docker exec -it mysql mysql -u root -ptbdev tbdex
+```
 
 ## Test (Java / Gradle)
 
