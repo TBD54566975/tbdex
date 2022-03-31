@@ -79,13 +79,11 @@ message BankAddress {
 message PaymentProcessorRequest {
   optional string account_number = 1;
   optional string routing_number = 2;
-  optional string idempotency_key = 3;
-  optional BankAddress bank_address = 4;
-  optional BillingDetails billing_details = 5;
-  optional string thread_token = 6;
-  optional PayoutRequest payout_request = 7;
-  optional string wallet_address = 8;
-  optional string email_address = 9;
+  optional BankAddress bank_address = 3;
+  optional BillingDetails billing_details = 4;
+  optional PayoutRequest payout_request = 5;
+  optional string wallet_address = 6;
+  optional string email_address = 7;
 }
 
 message CreateBankAccountRequest {
