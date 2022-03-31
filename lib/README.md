@@ -49,17 +49,20 @@ The `body` of each message can be any of the following message types
 | `sourceCurrency` | string    | Y        | The currency that you currently hold                                                                 |
 | `sourceAmount`   | int       | Y        | The amount that you currently hold. Amount **must** be in the smallest denomination of said currency |
 | `targetCurrency` | int       | Y        | the currency that you want                                                                           |
-| `targetAmount`   | int       | N        | the **minimum** amount you're looking for                                                            |
 
 ### `ConditionalOffer`
 **Description**:
 | field | data type | required | description |
-| ----- | --------- | -------- | ----------- |
+| ---------------- | --------- | -------- | ------------------------------------- |
+| `sourceCurrency` | string    | Y        | The currency that the customer held   |
+| `targetCurrency` | int       | Y        | The currency that the customer wanted |
+| `targetAmount`   | int       | Y        | The amount you're willing to offer    |
 
 ### `OfferAccept`
 **Description**:
 | field | data type | required | description |
-| ----- | --------- | -------- | ----------- |
+| ------------------------- | -------- | -------- | -------------------------------- |
+| `paymentProcessorRequest` | proto    | Y        | A proto with payment information |
 
 ### `IDVRequest`
 **Description**:
