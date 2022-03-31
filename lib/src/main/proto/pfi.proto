@@ -73,7 +73,12 @@ enum CurrencyCode {
 message Response {}
 
 message BankAddress {
-  optional string country = 1;
+  optional string bankName = 1;
+  optional string city = 2;
+  optional string country = 3;
+  optional string line1 = 4;
+  optional string line2 = 5;
+  optional string district = 6;
 }
 
 message PaymentProcessorRequest {

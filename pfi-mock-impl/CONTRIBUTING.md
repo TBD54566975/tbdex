@@ -28,6 +28,10 @@ This project uses docker-compose to spin up a mysql instance for testing and run
 
 #### MacOS
 
+```shell
+xcode-select --install
+```
+
 ##### Homebrew
 ```
 $> brew install docker-compose
@@ -97,7 +101,7 @@ $> curl http://localhost:9004/hello-world
 ## Example Message (Java / Gradle)
 
 ### macOS / Linux
-This command will spin up mysql in a docker container with the appropriate migrations
+This command will spin up mysql in a docker container with the appropriate migrations, make sure docker is up and running
 ```shell
 $> make dev-up
 ```
@@ -143,6 +147,56 @@ $> curl \
     }
   }' 'http://localhost:9004/handle-message'
 ```
+Sends an `OfferAccept` to the application to process, please change 
+the wallet_address and idempotency_key, make sure the threadID and 
+thread_token match the one in the `ASK` request.
+
+Also before making this call, please populate BEARER_KEY in RealCircleClient,
+and WALLET_SOURCE in PaymentProcessor,
+learn more about [Circle API](https://developers.circle.com/reference)
+```shell
+$> curl \
+--header "Content-type: application/json" \
+--data-raw '{
+    "id":"mid",
+    "threadID":"thid1",
+    "type":"OfferAccept",
+    "from":"alice",
+    "to":"pfi",
+    "body":{
+      "paymentProcessorRequest": {
+          "thread_token": "thid1",
+          "idempotency_key": "ba943ff1-ca16-49b2-ba55-1057e70ca5c7",
+             "account_number": "12340010",
+             "routing_number": "121000248",
+             "billing_details": {
+                  "name": "Satoshi Nakamoto",
+                  "city": "Boston",
+                  "country": "US",
+                  "line1": "100 Money Street",
+                  "line2": "Suite 1",
+                  "district": "MA",
+                  "postalCode": "01234"
+             },
+          "bank_address": {
+              "bankName": "SAN FRANCISCO",
+              "city": "SAN FRANCISCO",
+              "country": "US",
+              "line1": "100 Money Street",
+              "line2": "Suite 1",
+              "district": "CA"
+          },
+          "wallet_address":"0x_YOUR_EVM_WALLET_ADDRESS"
+      },
+      "type":"OfferAccept",
+      "validReplyTypes":["Close"]
+    }
+  }' 'http://localhost:9004/handle-message'
+```
+
+Add this [ERC20 token](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48) address to your wallet,
+and switch to ETH Goerli testnet to see the USDC
+
 ## Access Docker MySQL Database
 
 ```shell

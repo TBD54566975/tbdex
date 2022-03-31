@@ -33,7 +33,7 @@ public class RealCircleClient implements CircleClient {
         .toJson(createBankAccountRequest));
 
     Request request = requestBuilder
-        .url("https://api-sandbox.circle.com/v1/banks/wires")
+        .url("https://api-sandbox.circle.com/v1/businessAccount/banks/wires")
         .post(body)
         .build();
 
@@ -58,9 +58,7 @@ public class RealCircleClient implements CircleClient {
         .post(body)
         .build();
 
-    Response response = client.newCall(request).execute();
-
-    System.out.println(response.body().string());
+    client.newCall(request).execute();
   }
 
   @Override public void transfer(TransferRequest transferRequest) throws Exception {
@@ -74,9 +72,7 @@ public class RealCircleClient implements CircleClient {
         .post(body)
         .build();
 
-    Response response = client.newCall(request).execute();
-
-    System.out.println(response.body().string());
+    client.newCall(request).execute();
   }
 
   @Override public void payout(PayoutRequest payoutRequest) throws Exception {
