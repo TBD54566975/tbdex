@@ -10,11 +10,7 @@ There are many ways to be an open source contributor, and we're here to help you
 
 This guide is for you.
 
-NOTE: All commands are run in path `tbdex-protocol/pfi-mock-impl`
-
 ## Development Prerequisites
-
-___***UPDATE TABLE OF PROJECT DEPS AND INSTALLATION NOTES***___
 
 | Requirement    | Tested Version  | Installation Instructions                          |
 |----------------|-----------------|----------------------------------------------------|
@@ -75,17 +71,38 @@ Consult the SDKMan documentation for more info.
 
 ---
 
-## Build (Java / Gradle)
+#### All commands are run in path `tbdex-protocol/pfi-mock-impl`
 
-### macOS / Linux
+## Setup Database
+
+Note: Please make sure that docker daemon is running
+
+This command will spin up mysql in a docker container with the appropriate migrations
 ```shell
-$> ../gradlew :pfi-mock-impl:build
+$> make dev-up
+```
+
+### Access Docker Mysql Container
+```shell
+$> docker exec -it mysql mysql -u root -ptbdev tbdex
+```
+
+### Create Messages Table
+```
+CREATE TABLE messages (
+  id           BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  thread_token VARCHAR(20) NOT NULL,
+  message      longtext NOT NULL,
+  created_at   TIMESTAMP NULL,
+  updated_at   TIMESTAMP NULL,
+  KEY idx_thread_token(thread_token)
+);
 ```
 
 ## Hello World (Java / Gradle)
 
 ### macOS / Linux
-
+make sure `make dev-up` is running
 ```shell
 $> ../gradlew :pfi-mock-impl:run
 ```
@@ -97,28 +114,7 @@ $> curl http://localhost:9004/hello-world
 ## Example Message (Java / Gradle)
 
 ### macOS / Linux
-This command will spin up mysql in a docker container with the appropriate migrations
-```shell
-$> make dev-up
-```
-#### Setup Database
-
-access docker mysql container
-```shell
-$> docker exec -it mysql mysql -u root -ptbdev tbdex
-```
-
-create messages table
-```
-CREATE TABLE messages (
-  id           BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  thread_token VARCHAR(20) NOT NULL,
-  message      longtext NOT NULL,
-  created_at   TIMESTAMP NULL,
-  updated_at   TIMESTAMP NULL,
-  KEY idx_thread_token(thread_token)
-);
-```
+make sure `make dev-up` is running
 
 Start Application
 ```shell
@@ -152,10 +148,7 @@ $> docker exec -it mysql mysql -u root -ptbdev tbdex
 ## Test (Java / Gradle)
 
 ### macOS / Linux
-This command will spin up mysql in a docker container with the appropriate migrations
-```shell
-$> make dev-up
-```
+make sure `make dev-up` is running
 
 ```shell
 $> ../gradlew :pfi-mock-impl:test

@@ -10,8 +10,6 @@ There are many ways to be an open source contributor, and we're here to help you
 
 This guide is for you.
 
-NOTE: All commands are run in path `tbdex-protocol/lib`
-
 ## Development Prerequisites
 
 | Requirement    | Tested Version  | Installation Instructions                          |
@@ -60,12 +58,7 @@ Consult the SDKMan documentation for more info.
 
 ---
 
-## Build (Java / Gradle)
-
-### macOS / Linux
-```shell
-$> ../gradlew :lib:build
-```
+#### All commands are run in path `tbdex-protocol/lib`
 
 ## Test (Java / Gradle)
 
