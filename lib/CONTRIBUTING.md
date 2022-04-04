@@ -2,8 +2,8 @@
 
 There are many ways to be an open source contributor, and we're here to help you on your way! You may:
 
-* Propose ideas in our [discussion forums](LINK_HERE)  ___***FIX LINK AND REMOVE THIS NOTICE***___
-* Raise an issue or feature request in our [issue tracker](LINK_HERE)  ___***FIX LINK AND REMOVE THIS NOTICE***___
+* Propose ideas in our [discussion forums](https://github.com/TBD54566975/tbdex-protocol/discussions)
+* Raise an issue or feature request in our [issue tracker](https://github.com/TBD54566975/tbdex-protocol/issues)
 * Help another contributor with one of their questions, or a code review
 * Suggest improvements to our Getting Started documentation by supplying a Pull Request
 * Evangelize our work together in conferences, podcasts, and social media spaces.
@@ -13,8 +13,6 @@ This guide is for you.
 NOTE: All commands are run in path `tbdex-protocol/lib`
 
 ## Development Prerequisites
-
-___***UPDATE TABLE OF PROJECT DEPS AND INSTALLATION NOTES***___
 
 | Requirement    | Tested Version  | Installation Instructions                          |
 |----------------|-----------------|----------------------------------------------------|
@@ -81,16 +79,13 @@ $> ../gradlew :lib:test
 
 ### Issues
 
-Anyone from the community is welcome (and encouraged!) to raise issues via [GitHub Issues](LINK_HERE)  ___***FIX LINK AND REMOVE THIS NOTICE***___.
+Anyone from the community is welcome (and encouraged!) to raise issues via [GitHub Issues](https://github.com/TBD54566975/tbdex-protocol/issues).
 
 ### Discussions
 
-Design discussions and proposals take place on [GitHub Discussions](LINK_HERE)  ___***FIX LINK AND REMOVE THIS NOTICE***___.
+Design discussions and proposals take place on [GitHub Discussions](https://github.com/TBD54566975/tbdex-protocol/discussions).
 
 We advocate an asynchronous, written debate model - so write up your thoughts and invite the community to join in!
-
-
- ___***FIX LINK ABOVE AND REMOVE THIS NOTICE***___
 
 ## Contribution
 
