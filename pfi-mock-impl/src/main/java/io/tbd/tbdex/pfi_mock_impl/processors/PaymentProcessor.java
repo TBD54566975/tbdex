@@ -30,11 +30,11 @@ public class PaymentProcessor {
       .type("wallet")
       .build();
 
-  public void process(PaymentProcessorRequest request) {
+  public void process(PaymentProcessorRequest request, String threadToken) {
     // Get ASK from thread store
     // TODO: change to get conditional offer and also add source and target amounts in offer
     HibernateMessageThreadStore threadStore = new HibernateMessageThreadStore();
-    MessageThread messageThread = threadStore.getThread(request.thread_token);
+    MessageThread messageThread = threadStore.getThread(threadToken);
     Ask ask = messageThread.getAsk();
     Preconditions.checkNotNull(ask);
 
@@ -99,7 +99,6 @@ public class PaymentProcessor {
     CreateBankAccountRequest createBankAccountRequest = new CreateBankAccountRequest.Builder()
         .accountNumber(request.account_number)
         .routingNumber(request.routing_number)
-        .idempotencyKey(request.idempotency_key)
         .billingDetails(request.billing_details)
         .bankAddress(request.bank_address)
         .build();

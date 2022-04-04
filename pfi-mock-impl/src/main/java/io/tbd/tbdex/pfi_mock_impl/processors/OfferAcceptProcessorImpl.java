@@ -14,7 +14,7 @@ public class OfferAcceptProcessorImpl implements OfferAcceptProcessor {
     Preconditions.checkState(message.type() == MessageType.OfferAccept);
     OfferAccept offerAccept = (OfferAccept) message.body();
 
-    paymentProcessor.process(offerAccept.paymentProcessorRequest);
+    paymentProcessor.process(offerAccept.paymentProcessorRequest, message.threadID());
 
     // TODO: return a receipt of sorts
     return null;

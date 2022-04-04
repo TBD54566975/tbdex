@@ -29,7 +29,6 @@ public class OfferAcceptProcessorTest extends TestBase {
 
     PaymentProcessorRequest request = new PaymentProcessorRequest.Builder()
         .wallet_address("12345")
-        .thread_token(threadToken)
         .build();
     Message offerAcceptMessage = new Message.Builder("mid", threadToken, "pfi", "alice")
         .build(new OfferAccept(request));

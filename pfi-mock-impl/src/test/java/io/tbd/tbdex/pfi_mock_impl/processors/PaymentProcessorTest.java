@@ -25,9 +25,8 @@ public class PaymentProcessorTest extends TestBase {
 
     PaymentProcessorRequest request = new PaymentProcessorRequest.Builder()
         .wallet_address("12345")
-        .thread_token(threadToken)
         .build();
 
-    paymentProcessor.process(request);
+    paymentProcessor.process(request, threadToken);
   }
 }
