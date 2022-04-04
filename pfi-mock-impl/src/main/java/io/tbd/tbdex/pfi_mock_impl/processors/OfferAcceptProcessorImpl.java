@@ -5,18 +5,15 @@ import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageType;
 import io.tbd.tbdex.protocol.messages.Close;
 import io.tbd.tbdex.protocol.messages.OfferAccept;
-import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
-import javax.inject.Inject;
+import io.tbd.tbdex.protocol.processors.MessageProcessor;
 import java.util.UUID;
 
-public class OfferAcceptProcessorImpl implements OfferAcceptProcessor {
-  @Inject PaymentProcessor paymentProcessor;
-
+public class OfferAcceptProcessorImpl implements MessageProcessor {
   @Override public Message process(Message message) {
     Preconditions.checkState(message.type() == MessageType.OfferAccept);
     OfferAccept offerAccept = (OfferAccept) message.body();
 
-    paymentProcessor.process(offerAccept.paymentProcessorRequest);
+
 
     String messageId = UUID.randomUUID().toString();
 

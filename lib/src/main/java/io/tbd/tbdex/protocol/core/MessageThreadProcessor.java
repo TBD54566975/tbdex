@@ -1,42 +1,20 @@
 package io.tbd.tbdex.protocol.core;
 
-import com.google.common.collect.ImmutableMap;
-import io.tbd.tbdex.protocol.processors.AskProcessor;
-import io.tbd.tbdex.protocol.processors.CloseProcessor;
-import io.tbd.tbdex.protocol.processors.ConditionalOfferProcessor;
 import io.tbd.tbdex.protocol.processors.MessageProcessor;
 
-import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
+import java.util.HashMap;
 import java.util.Map;
-import javax.inject.Inject;
 
 public class MessageThreadProcessor {
     MessageThreadStore messageThreadStore;
-    AskProcessor askProcessor;
-    CloseProcessor closeProcessor;
-    ConditionalOfferProcessor conditionalOfferProcessor;
-    OfferAcceptProcessor offerAcceptProcessor;
-    Map<MessageType, MessageProcessor> messageProcessors;
+    Map<MessageType, MessageProcessor> messageProcessors = new HashMap<>();
 
-    @Inject
-    MessageThreadProcessor(
-        MessageThreadStore messageThreadStore,
-        AskProcessor askProcessor,
-        CloseProcessor closeProcessor,
-        ConditionalOfferProcessor conditionalOfferProcessor,
-        OfferAcceptProcessor offerAcceptProcessor
-    ) {
+    private MessageThreadProcessor(MessageThreadStore messageThreadStore) {
         this.messageThreadStore = messageThreadStore;
-        this.askProcessor = askProcessor;
-        this.closeProcessor = closeProcessor;
-        this.conditionalOfferProcessor = conditionalOfferProcessor;
-        this.offerAcceptProcessor = offerAcceptProcessor;
-        this.messageProcessors = ImmutableMap.of(
-            MessageType.Ask, askProcessor,
-            MessageType.Close, closeProcessor,
-            MessageType.ConditionalOffer, conditionalOfferProcessor,
-            MessageType.OfferAccept, offerAcceptProcessor
-        );
+    }
+
+    private void addProcessor(MessageType type, MessageProcessor processor) {
+        this.messageProcessors.put(type, processor);
     }
 
     /**
@@ -101,5 +79,39 @@ public class MessageThreadProcessor {
         // TODO: verify the JWS
 
         throw new UnsupportedOperationException("Method not yet implemented");
+    }
+
+    public static class Builder {
+        private final MessageThreadProcessor instance;
+
+        public Builder(MessageThreadStore messageThreadStore) {
+            this.instance = new MessageThreadProcessor(messageThreadStore);
+        }
+
+        /**
+         * registers the {@link MessageProcessor] provided as the processor that gets called
+         * whenever a message of type {@link MessageType} is added to the MessageThreadProcessor
+         * using {@link MessageThreadProcessor#addMessage(Message)}. {@link MessageProcessor#process(Message)}
+         * only gets called if the message being added is considered to be valid with respect to the
+         * current state of the thread
+         * @param type - The {@link MessageType} to register the processor to
+         * @param processor - the processor to register
+         * @return MessageThreadProcesor.Builder
+         */
+        public Builder registerProcessor(MessageType type, MessageProcessor processor) {
+            this.instance.addProcessor(type, processor);
+
+            return this;
+        }
+
+        public MessageThreadProcessor build() {
+            /* TODO: Decide if we want to keep this
+             if (this.instance.messageProcessors.isEmpty()) {
+                throw new RuntimeException("please provide at least 1 processor");
+             }
+            */
+
+            return instance;
+        }
     }
 }

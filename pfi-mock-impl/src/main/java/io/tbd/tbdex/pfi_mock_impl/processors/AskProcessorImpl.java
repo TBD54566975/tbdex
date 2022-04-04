@@ -5,11 +5,12 @@ import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageType;
 import io.tbd.tbdex.protocol.messages.Ask;
 import io.tbd.tbdex.protocol.messages.ConditionalOffer;
-import io.tbd.tbdex.protocol.processors.AskProcessor;
+import io.tbd.tbdex.protocol.processors.MessageProcessor;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class AskProcessorImpl implements AskProcessor {
+public class AskProcessorImpl implements MessageProcessor {
   @Override public Message process(Message message) {
     Preconditions.checkState(message.type() == MessageType.Ask);
     Ask ask = (Ask) message.body();
