@@ -17,12 +17,27 @@ public class AskProcessorTest extends TestBase {
   @Inject MessageThreadProcessor processor;
 
   @Test
-  @DisplayName("throws an exception response is not a conditional offer")
+  @DisplayName("throws an exception response if not a conditional offer")
   void testReturnsConditionalOffer() {
     Message message = new Message.Builder("mid", "thid", "pfi", "alice")
         .build(new Ask("USD", BigDecimal.valueOf(100), "USDC"));
 
     Message response = processor.addMessage(message);
+    Assertions.assertSame(response.type(), MessageType.ConditionalOffer);
+
+    Assertions.assertSame(2, threadStore.getThread("thid").getSize());
+  }
+
+  @Test
+  @DisplayName("happyPath")
+  void happyPathFromBuilder() {
+    MessageThreadProcessor processorFromBuilder = new MessageThreadProcessor.Builder(threadStore)
+        .registerProcessor(MessageType.Ask, new AskProcessorImpl())
+        .build();
+    Message message = new Message.Builder("mid", "thid", "pfi", "alice")
+        .build(new Ask("USD", BigDecimal.valueOf(100), "USDC"));
+
+    Message response = processorFromBuilder.addMessage(message);
     Assertions.assertSame(response.type(), MessageType.ConditionalOffer);
 
     Assertions.assertSame(2, threadStore.getThread("thid").getSize());

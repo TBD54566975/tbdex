@@ -7,6 +7,7 @@ import io.tbd.tbdex.protocol.processors.ConditionalOfferProcessor;
 import io.tbd.tbdex.protocol.processors.MessageProcessor;
 
 import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
+import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 
@@ -19,7 +20,7 @@ public class MessageThreadProcessor {
     Map<MessageType, MessageProcessor> messageProcessors;
 
     @Inject
-    MessageThreadProcessor(
+    public MessageThreadProcessor(
         MessageThreadStore messageThreadStore,
         AskProcessor askProcessor,
         CloseProcessor closeProcessor,
@@ -31,12 +32,36 @@ public class MessageThreadProcessor {
         this.closeProcessor = closeProcessor;
         this.conditionalOfferProcessor = conditionalOfferProcessor;
         this.offerAcceptProcessor = offerAcceptProcessor;
-        this.messageProcessors = ImmutableMap.of(
-            MessageType.Ask, askProcessor,
-            MessageType.Close, closeProcessor,
-            MessageType.ConditionalOffer, conditionalOfferProcessor,
-            MessageType.OfferAccept, offerAcceptProcessor
+        this.messageProcessors = buildMessageProcessorMap(
+            askProcessor,
+            closeProcessor,
+            conditionalOfferProcessor,
+            offerAcceptProcessor
         );
+    }
+
+    private ImmutableMap<MessageType, MessageProcessor> buildMessageProcessorMap(
+        AskProcessor askProcessor,
+        CloseProcessor closeProcessor,
+        ConditionalOfferProcessor conditionalOfferProcessor,
+        OfferAcceptProcessor offerAcceptProcessor) {
+        ImmutableMap.Builder<MessageType, MessageProcessor> builder = ImmutableMap.builder();
+        if (askProcessor != null) {
+            builder.put(MessageType.Ask, askProcessor);
+        }
+
+        if (closeProcessor != null) {
+            builder.put(MessageType.Close, closeProcessor);
+        }
+
+        if (conditionalOfferProcessor != null) {
+            builder.put(MessageType.ConditionalOffer, conditionalOfferProcessor);
+        }
+
+        if (offerAcceptProcessor != null) {
+            builder.put(MessageType.OfferAccept, offerAcceptProcessor);
+        }
+        return builder.build();
     }
 
     /**
@@ -101,5 +126,45 @@ public class MessageThreadProcessor {
         // TODO: verify the JWS
 
         throw new UnsupportedOperationException("Method not yet implemented");
+    }
+
+    public static class Builder {
+        MessageThreadStore messageThreadStore;
+        Map<MessageType, MessageProcessor> messageProcessors = new HashMap<>();
+
+        public Builder(MessageThreadStore messageThreadStore) {
+            this.messageThreadStore = messageThreadStore;
+        }
+
+        /**
+         * registers the {@link MessageProcessor] provided as the processor that gets called
+         * whenever a message of type {@link MessageType} is added to the MessageThreadProcessor
+         * using {@link MessageThreadProcessor#addMessage(Message)}. {@link MessageProcessor#process(Message)}
+         * only gets called if the message being added is considered to be valid with respect to the
+         * current state of the thread
+         * @param type - The {@link MessageType} to register the processor to
+         * @param processor - the processor to register
+         * @return MessageThreadProcesor.Builder
+         */
+        public Builder registerProcessor(MessageType type, MessageProcessor processor) {
+            this.messageProcessors.put(type, processor);
+            return this;
+        }
+
+        public MessageThreadProcessor build() {
+            /* TODO: Decide if we want to keep this
+             if (this.instance.messageProcessors.isEmpty()) {
+                throw new RuntimeException("please provide at least 1 processor");
+             }
+            */
+
+            return new MessageThreadProcessor(
+                messageThreadStore,
+                (AskProcessor) messageProcessors.get(MessageType.Ask),
+                (CloseProcessor) messageProcessors.get(MessageType.Close),
+                (ConditionalOfferProcessor) messageProcessors.get(MessageType.ConditionalOffer),
+                (OfferAcceptProcessor) messageProcessors.get(MessageType.OfferAccept)
+            );
+        }
     }
 }

@@ -6,7 +6,6 @@ import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
 import io.tbd.tbdex.protocol.core.MessageThreadStore;
-import io.tbd.tbdex.protocol.core.MessageType;
 import io.tbd.tbdex.protocol.messages.Ask;
 import io.tbd.tbdex.protocol.messages.OfferAccept;
 import java.math.BigDecimal;
