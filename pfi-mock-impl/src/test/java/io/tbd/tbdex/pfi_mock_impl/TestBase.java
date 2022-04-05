@@ -2,9 +2,7 @@ package io.tbd.tbdex.pfi_mock_impl;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import io.tbd.tbdex.pfi_mock_impl.processors.ProcessorModule;
 import io.tbd.tbdex.pfi_mock_impl.store.DbMessage;
-import io.tbd.tbdex.pfi_mock_impl.store.HibernateModule;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateUtil;
 import java.util.List;
 import org.hibernate.query.Query;
@@ -13,11 +11,7 @@ import org.hibernate.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 
 public class TestBase {
-  protected Injector injector = Guice.createInjector(
-      new HibernateModule(),
-      new ProcessorModule(),
-      new CircleTestModule()
-  );
+  protected Injector injector = Guice.createInjector(new ProcessorTestModule());
 
   @BeforeEach
   void setup() {
