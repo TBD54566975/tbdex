@@ -19,7 +19,8 @@ services:
       tbdex:
         aliases:
           - "mysql"
-
+    volumes:
+      - ./src/main/resources/migrations:/docker-entrypoint-initdb.d
 networks:
   tbdex:
 

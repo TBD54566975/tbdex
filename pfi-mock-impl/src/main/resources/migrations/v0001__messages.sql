@@ -1,4 +1,4 @@
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
   id           BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   thread_token VARCHAR(20) NOT NULL,
   message      longtext NOT NULL,
