@@ -5,10 +5,13 @@ import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageType;
 import io.tbd.tbdex.protocol.messages.OfferAccept;
 import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
-import javax.inject.Inject;
 
 public class OfferAcceptProcessorImpl implements OfferAcceptProcessor {
-  @Inject PaymentProcessor paymentProcessor;
+  PaymentProcessor paymentProcessor;
+
+  public OfferAcceptProcessorImpl(PaymentProcessor paymentProcessor) {
+    this.paymentProcessor = paymentProcessor;
+  }
 
   @Override public Message process(Message message) {
     Preconditions.checkState(message.type() == MessageType.OfferAccept);

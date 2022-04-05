@@ -4,19 +4,13 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.javalin.Handler;
 import io.javalin.Javalin;
-import io.tbd.tbdex.pfi_mock_impl.circle.CircleModule;
 import io.tbd.tbdex.pfi_mock_impl.processors.ProcessorModule;
-import io.tbd.tbdex.pfi_mock_impl.store.HibernateModule;
 import io.tbd.tbdex.pfi_mock_impl.store.MessageConverter;
 import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
 
 public class Main {
-  private static final Injector injector = Guice.createInjector(
-      new HibernateModule(),
-      new ProcessorModule(),
-      new CircleModule()
-  );
+  private static final Injector injector = Guice.createInjector(new ProcessorModule());
 
   public static void main(String[] args) {
     run();

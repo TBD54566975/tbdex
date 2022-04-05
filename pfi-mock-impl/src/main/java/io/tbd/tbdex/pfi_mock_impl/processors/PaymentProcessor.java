@@ -20,7 +20,12 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 public class PaymentProcessor {
-  @Inject CircleClient circleClient;
+  CircleClient circleClient;
+
+  @Inject
+  public PaymentProcessor(CircleClient circleClient) {
+    this.circleClient = circleClient;
+  }
 
   // This is the test wallet ID for Circle. Hard coded for now.
   // Funds can not be moved directly to an external address so this will be a middle ground.
