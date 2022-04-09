@@ -17,10 +17,10 @@ public class ProcessorModule extends AbstractModule {
             new AskProcessorImpl())
         .registerProcessor(MessageType.Close,
             new CloseProcessorImpl())
-        .registerProcessor(MessageType.ConditionalOffer,
-            new ConditionalOfferProcessorImpl())
         .registerProcessor(MessageType.OfferAccept,
-            new OfferAcceptProcessorImpl(new PaymentProcessor(circleClient)))
+            new OfferAcceptProcessorImpl())
+        .registerProcessor(MessageType.SettlementDetails,
+            new SettlementDetailsProcessorImpl(new PaymentProcessor(circleClient)))
         .build();
 
     bind(MessageThreadProcessor.class).toInstance(processor);

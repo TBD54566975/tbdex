@@ -22,7 +22,7 @@ public class AskProcessorImpl implements AskProcessor {
         ask.targetCurrency
     );
 
-    return new Message.Builder(messageId, message.threadID(), "", "")
+    return new Message.Builder(messageId, message.threadID(), message.to(), message.from())
         .build(conditionalOffer);
   }
 }

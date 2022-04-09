@@ -81,14 +81,27 @@ message BankAddress {
   optional string district = 6;
 }
 
+message PaymentInstrument {
+  optional InstrumentType instrument_type = 1;
+  optional string account_number = 2;
+  optional string routing_number = 3;
+  optional string card_pan = 4;
+  optional string expiration_date = 5;
+  optional string cvv = 6;
+}
+
+enum InstrumentType {
+  BANK_ACCOUNT = 1;
+  CARD = 2;
+}
+
 message PaymentProcessorRequest {
   optional string account_number = 1;
   optional string routing_number = 2;
   optional BankAddress bank_address = 3;
   optional BillingDetails billing_details = 4;
-  optional PayoutRequest payout_request = 5;
-  optional string wallet_address = 6;
-  optional string email_address = 7;
+  optional string wallet_address = 5;
+  optional string email_address = 6;
 }
 
 message CreateBankAccountRequest {

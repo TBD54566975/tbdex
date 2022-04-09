@@ -3,14 +3,9 @@ package io.tbd.tbdex.protocol.core;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import io.tbd.tbdex.protocol.messages.Ask;
-import io.tbd.tbdex.protocol.messages.Close;
-import io.tbd.tbdex.protocol.messages.ConditionalOffer;
-import io.tbd.tbdex.protocol.messages.OfferAccept;
-
-import java.lang.reflect.Type;
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Message {
@@ -89,15 +84,6 @@ public class Message {
                 "to",
                 "body"
         );
-
-        private static final Map<MessageType, Type> messageTypeClassMap = new HashMap<>();
-
-        static {
-            messageTypeClassMap.put(MessageType.Ask, Ask.class);
-            messageTypeClassMap.put(MessageType.Close, Close.class);
-            messageTypeClassMap.put(MessageType.ConditionalOffer, ConditionalOffer.class);
-            messageTypeClassMap.put(MessageType.OfferAccept, OfferAccept.class);
-        }
 
         private Builder() {
             this.message = new Message();
@@ -192,14 +178,17 @@ public class Message {
             }
 
             // deserialize MessageType
-            message.type = parser.fromJson(jsonObject.get("type"), MessageType.class);
+            MessageType messageType = parser.fromJson(jsonObject.get("type"), MessageType.class);
+            message.type = messageType;
 
             // deserialize the message body into its concrete type
             JsonElement bodyJson = jsonObject.remove("body");
-            Type messageType = messageTypeClassMap.get(message.type());
 
-            message.body = parser.fromJson(bodyJson, messageType);
-
+            try {
+                message.body = parser.fromJson(bodyJson, messageType.getMessageBodyClass());
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
             return message;
         }
     }
