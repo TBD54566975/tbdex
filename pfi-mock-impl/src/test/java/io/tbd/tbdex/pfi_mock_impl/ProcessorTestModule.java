@@ -1,12 +1,12 @@
 package io.tbd.tbdex.pfi_mock_impl;
 
 import com.google.inject.AbstractModule;
-import io.tbd.tbdex.pfi_mock_impl.circle.client.CircleClient;
-import io.tbd.tbdex.pfi_mock_impl.circle.client.MockCircleClient;
+import io.tbd.tbdex.pfi_mock_impl.payments.circle.CircleClient;
+import io.tbd.tbdex.pfi_mock_impl.payments.circle.MockCircleClient;
 import io.tbd.tbdex.pfi_mock_impl.processors.AskProcessorImpl;
 import io.tbd.tbdex.pfi_mock_impl.processors.CloseProcessorImpl;
 import io.tbd.tbdex.pfi_mock_impl.processors.OfferAcceptProcessorImpl;
-import io.tbd.tbdex.pfi_mock_impl.processors.PaymentProcessor;
+import io.tbd.tbdex.pfi_mock_impl.payments.PaymentProcessor;
 import io.tbd.tbdex.pfi_mock_impl.processors.SettlementDetailsProcessorImpl;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
 import io.tbd.tbdex.protocol.core.MessageThreadProcessor;

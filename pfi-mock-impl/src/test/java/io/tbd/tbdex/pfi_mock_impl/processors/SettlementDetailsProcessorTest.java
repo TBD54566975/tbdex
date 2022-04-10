@@ -24,6 +24,6 @@ public class SettlementDetailsProcessorTest extends TestBase {
     processor.addMessage(TestHelper.settlementDetails(threadToken));
 
     MessageThread messageThread = threadStore.getThread("thid");
-    Assertions.assertSame(5, messageThread.getSize());
+    Assertions.assertSame(6, messageThread.getSize());
   }
 }

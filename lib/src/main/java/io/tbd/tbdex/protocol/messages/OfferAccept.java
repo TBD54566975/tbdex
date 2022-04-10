@@ -4,9 +4,9 @@ import io.tbd.tbdex.protocol.core.MessageBody;
 import io.tbd.tbdex.protocol.core.MessageType;
 
 public class OfferAccept extends MessageBody {
-    public OfferAccept() {
-        super(MessageType.OfferAccept);
+  public OfferAccept() {
+    super(MessageType.OfferAccept);
 
-        this.addValidReplyTypes(MessageType.SettlementRequest, MessageType.Close);
-    }
+    this.addValidReplyTypes(MessageType.SettlementRequest, MessageType.Close);
+  }
 }

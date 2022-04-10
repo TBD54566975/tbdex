@@ -13,14 +13,14 @@ import javax.persistence.Table;
 @Table(name = "messages")
 public class DbMessage extends TimestampedEntity {
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
-  @Column(name="id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private long id;
 
-  @Column(name="thread_token")
+  @Column(name = "thread_token")
   private String threadToken;
 
-  @Column(name="message", length = 65535, columnDefinition = "longblob")
+  @Column(name = "message", length = 65535, columnDefinition = "longblob")
   @Convert(converter = MessageConverter.class)
   private Message message;
 

@@ -1,9 +1,9 @@
 package io.tbd.tbdex.protocol.core;
 
 public interface MessageThreadStore {
-    MessageThread getThread(String threadToken);
+  MessageThread getThread(String threadToken);
 
-    Message getLastMessage(String threadToken);
+  Message getLastMessage(String threadToken);
 
-    void addMessageToThread(Message message);
+  void addMessageToThread(Message message);
 }

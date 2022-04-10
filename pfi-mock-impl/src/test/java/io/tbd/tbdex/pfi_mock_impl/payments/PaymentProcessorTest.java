@@ -1,4 +1,4 @@
-package io.tbd.tbdex.pfi_mock_impl.processors;
+package io.tbd.tbdex.pfi_mock_impl.payments;
 
 import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import io.tbd.tbdex.pfi_mock_impl.TestBase;

@@ -1,4 +1,4 @@
-package io.tbd.tbdex.pfi_mock_impl.processors;
+package io.tbd.tbdex.pfi_mock_impl.payments;
 
 import com.google.common.base.Preconditions;
 import com.squareup.protos.tbd.pfi.Amount;
@@ -12,7 +12,7 @@ import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import com.squareup.protos.tbd.pfi.PayoutRequest;
 import com.squareup.protos.tbd.pfi.Source;
 import com.squareup.protos.tbd.pfi.TransferRequest;
-import io.tbd.tbdex.pfi_mock_impl.circle.client.CircleClient;
+import io.tbd.tbdex.pfi_mock_impl.payments.circle.CircleClient;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
 import io.tbd.tbdex.protocol.core.JsonParser;
 import io.tbd.tbdex.protocol.core.MessageThread;
@@ -22,13 +22,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 public class PaymentProcessor {
-  CircleClient circleClient;
-
-  @Inject
-  public PaymentProcessor(CircleClient circleClient) {
-    this.circleClient = circleClient;
-  }
-
   // This is the test wallet ID for Circle. Hard coded for now.
   // Funds can not be moved directly to an external address so this will be a middle ground.
   // TODO: find more elegant solution
@@ -36,6 +29,12 @@ public class PaymentProcessor {
       .id("")
       .type("wallet")
       .build();
+  CircleClient circleClient;
+
+  @Inject
+  public PaymentProcessor(CircleClient circleClient) {
+    this.circleClient = circleClient;
+  }
 
   public void process(SettlementDetails settlementDetails, String threadToken) {
     // Get ASK from thread store
@@ -83,7 +82,7 @@ public class PaymentProcessor {
       } catch (Exception e) {
         System.out.println("wire payment failed");
       }
-    // Off-Ramp
+      // Off-Ramp
     } else if (CurrencyCode.valueOf(ask.targetCurrency) == CurrencyCode.USD) {
       try {
         PayoutRequest payoutRequest = new PayoutRequest.Builder()

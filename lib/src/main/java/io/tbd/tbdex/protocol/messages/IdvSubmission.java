@@ -5,11 +5,11 @@ import io.tbd.tbdex.protocol.core.MessageBody;
 import io.tbd.tbdex.protocol.core.MessageType;
 
 public class IdvSubmission extends MessageBody {
-    JsonObject presentationSubmission;
+  JsonObject presentationSubmission;
 
-    public IdvSubmission(JsonObject presentationSubmission) {
-        super(MessageType.IdvSubmission);
+  public IdvSubmission(JsonObject presentationSubmission) {
+    super(MessageType.IdvSubmission);
 
-        this.presentationSubmission = presentationSubmission;
-    }
+    this.presentationSubmission = presentationSubmission;
+  }
 }

@@ -4,11 +4,11 @@ import io.tbd.tbdex.protocol.core.MessageBody;
 import io.tbd.tbdex.protocol.core.MessageType;
 
 public class Close extends MessageBody {
-    String reason;
+  String reason;
 
-    public Close(String reason) {
-        super(MessageType.Close);
+  public Close(String reason) {
+    super(MessageType.Close);
 
-        this.reason = reason;
-    }
+    this.reason = reason;
+  }
 }

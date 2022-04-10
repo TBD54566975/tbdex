@@ -1,13 +1,15 @@
 package io.tbd.tbdex.pfi_mock_impl.processors;
 
 import com.google.common.base.Preconditions;
+import io.tbd.tbdex.pfi_mock_impl.payments.PaymentProcessor;
 import io.tbd.tbdex.protocol.core.Message;
+import io.tbd.tbdex.protocol.core.MessageProcessor;
 import io.tbd.tbdex.protocol.core.MessageType;
-import io.tbd.tbdex.protocol.messages.OfferAccept;
 import io.tbd.tbdex.protocol.messages.SettlementDetails;
-import io.tbd.tbdex.protocol.processors.OfferAcceptProcessor;
+import io.tbd.tbdex.protocol.messages.SettlementReceipt;
+import java.util.UUID;
 
-public class SettlementDetailsProcessorImpl implements OfferAcceptProcessor {
+public class SettlementDetailsProcessorImpl extends MessageProcessor<SettlementDetails> {
   PaymentProcessor paymentProcessor;
 
   public SettlementDetailsProcessorImpl(PaymentProcessor paymentProcessor) {
@@ -16,11 +18,11 @@ public class SettlementDetailsProcessorImpl implements OfferAcceptProcessor {
 
   @Override public Message process(Message message) {
     Preconditions.checkState(message.type() == MessageType.SettlementDetails);
-    SettlementDetails settlementDetails = (SettlementDetails) message.body();
-
+    SettlementDetails settlementDetails = getBody(message);
     paymentProcessor.process(settlementDetails, message.threadID());
 
-    // TODO: return a receipt of sorts
-    return null;
+    String messageId = UUID.randomUUID().toString();
+    return new Message.Builder(messageId, message.threadID(), message.to(), message.from())
+        .build(new SettlementReceipt("receipt"));
   }
 }

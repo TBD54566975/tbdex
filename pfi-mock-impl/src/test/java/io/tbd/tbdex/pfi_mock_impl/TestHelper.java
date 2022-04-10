@@ -7,6 +7,7 @@ import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import io.tbd.tbdex.protocol.core.JsonParser;
 import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.messages.Ask;
+import io.tbd.tbdex.protocol.messages.Close;
 import io.tbd.tbdex.protocol.messages.OfferAccept;
 import io.tbd.tbdex.protocol.messages.SettlementDetails;
 import java.math.BigDecimal;
@@ -31,12 +32,12 @@ public class TestHelper {
       .build();
 
   public static Message askMessage(String threadToken) {
-    return new Message.Builder("mid", threadToken, "pfi", "alice")
+    return new Message.Builder("mid", threadToken, "alice", "pfi")
         .build(new Ask("USDC", BigDecimal.valueOf(100), "USDC"));
   }
 
   public static Message offerAccept(String threadToken) {
-    return new Message.Builder("mid", threadToken, "pfi", "alice")
+    return new Message.Builder("mid", threadToken, "alice", "pfi")
         .build(new OfferAccept());
   }
 
@@ -44,7 +45,12 @@ public class TestHelper {
     PaymentProcessorRequest request = new PaymentProcessorRequest.Builder()
         .wallet_address("12345")
         .build();
-    return new Message.Builder("mid", threadToken, "pfi", "alice")
+    return new Message.Builder("mid", threadToken, "alice", "pfi")
         .build(new SettlementDetails(JsonParser.getParser().toJson(request)));
+  }
+
+  public static Message close(String threadToken) {
+    return new Message.Builder("mid", threadToken, "pfi", "alice")
+        .build(new Close("close"));
   }
 }
