@@ -7,7 +7,7 @@ import io.tbd.tbdex.protocol.messages.ConditionalOffer;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class AskProcessorImpl extends MessageProcessor<Ask> {
+public class AskProcessor extends MessageProcessor<Ask> {
   @Override public Message process(Message message) {
     Ask ask = getBody(message);
 

@@ -9,10 +9,10 @@ import io.tbd.tbdex.protocol.messages.SettlementDetails;
 import io.tbd.tbdex.protocol.messages.SettlementReceipt;
 import java.util.UUID;
 
-public class SettlementDetailsProcessorImpl extends MessageProcessor<SettlementDetails> {
+public class SettlementDetailsProcessor extends MessageProcessor<SettlementDetails> {
   PaymentProcessor paymentProcessor;
 
-  public SettlementDetailsProcessorImpl(PaymentProcessor paymentProcessor) {
+  public SettlementDetailsProcessor(PaymentProcessor paymentProcessor) {
     this.paymentProcessor = paymentProcessor;
   }
 

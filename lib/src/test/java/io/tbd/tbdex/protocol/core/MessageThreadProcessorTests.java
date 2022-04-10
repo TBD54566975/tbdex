@@ -1,9 +1,9 @@
 package io.tbd.tbdex.protocol.core;
 
 import io.tbd.tbdex.protocol.InMemoryMessageThreadStore;
-import io.tbd.tbdex.protocol.core.processors.AskProcessorImpl;
-import io.tbd.tbdex.protocol.core.processors.CloseProcessorImpl;
-import io.tbd.tbdex.protocol.core.processors.OfferAcceptProcessorImpl;
+import io.tbd.tbdex.protocol.core.processors.AskProcessor;
+import io.tbd.tbdex.protocol.core.processors.CloseProcessor;
+import io.tbd.tbdex.protocol.core.processors.OfferAcceptProcessor;
 import io.tbd.tbdex.protocol.messages.Close;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,11 +13,11 @@ class MessageThreadProcessorTests {
   MessageThreadStore threadStore = new InMemoryMessageThreadStore();
   MessageThreadProcessor processor = new MessageThreadProcessor.Builder(threadStore)
       .registerProcessor(MessageType.Ask,
-          new AskProcessorImpl())
+          new AskProcessor())
       .registerProcessor(MessageType.Close,
-          new CloseProcessorImpl())
+          new CloseProcessor())
       .registerProcessor(MessageType.OfferAccept,
-          new OfferAcceptProcessorImpl())
+          new OfferAcceptProcessor())
       .build();
 
   @Test

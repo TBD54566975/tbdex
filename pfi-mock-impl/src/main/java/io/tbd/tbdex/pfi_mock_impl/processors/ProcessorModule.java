@@ -15,13 +15,13 @@ public class ProcessorModule extends AbstractModule {
     CircleClient circleClient = new RealCircleClient();
     MessageThreadProcessor processor = new MessageThreadProcessor.Builder(threadStore)
         .registerProcessor(MessageType.Ask,
-            new AskProcessorImpl())
+            new AskProcessor())
         .registerProcessor(MessageType.Close,
-            new CloseProcessorImpl())
+            new CloseProcessor())
         .registerProcessor(MessageType.OfferAccept,
-            new OfferAcceptProcessorImpl())
+            new OfferAcceptProcessor())
         .registerProcessor(MessageType.SettlementDetails,
-            new SettlementDetailsProcessorImpl(new PaymentProcessor(circleClient)))
+            new SettlementDetailsProcessor(new PaymentProcessor(circleClient)))
         .build();
 
     bind(MessageThreadProcessor.class).toInstance(processor);

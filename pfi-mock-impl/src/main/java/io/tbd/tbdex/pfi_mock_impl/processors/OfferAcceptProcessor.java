@@ -6,7 +6,7 @@ import io.tbd.tbdex.protocol.messages.OfferAccept;
 import io.tbd.tbdex.protocol.messages.SettlementRequest;
 import java.util.UUID;
 
-public class OfferAcceptProcessorImpl extends MessageProcessor<OfferAccept> {
+public class OfferAcceptProcessor extends MessageProcessor<OfferAccept> {
   @Override public Message process(Message message) {
     String messageId = UUID.randomUUID().toString();
 

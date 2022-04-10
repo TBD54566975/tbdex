@@ -1,0 +1,424 @@
+{
+  "definitions": {
+    "WyreWallet": {
+      "title": "WyreWallet",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "deposit_addresses": {
+          "$ref": "#/definitions/DepositAddresses"
+        },
+        "srn": {
+          "type": "string"
+        }
+      }
+    },
+    "DepositAddresses": {
+      "title": "DepositAddresses",
+      "type": "object",
+      "properties": {
+        "btc_address": {
+          "type": "string"
+        },
+        "eth_address": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string"
+        },
+        "descriptor": {
+          "$ref": "#/definitions/Descriptor"
+        },
+        "attestation": {
+          "$ref": "#/definitions/Attestation"
+        }
+      }
+    },
+    "Descriptor": {
+      "title": "Descriptor",
+      "type": "object",
+      "properties": {
+        "object_id": {
+          "type": "string"
+        },
+        "cid": {
+          "type": "string"
+        },
+        "clock": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "method": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "string"
+        },
+        "data_format": {
+          "type": "string"
+        }
+      }
+    },
+    "Attestation": {
+      "title": "Attestation",
+      "type": "object",
+      "properties": {
+        "protected": {
+          "$ref": "#/definitions/Protected"
+        },
+        "payload": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        }
+      }
+    },
+    "Protected": {
+      "title": "Protected",
+      "type": "object",
+      "properties": {
+        "alg": {
+          "type": "string"
+        },
+        "kid": {
+          "type": "string"
+        }
+      }
+    },
+    "ReceiveAskRequest": {
+      "title": "ReceiveAskRequest",
+      "type": "object",
+      "properties": {
+        "amount_cents": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "source_currency_code": {
+          "title": "CurrencyCode",
+          "type": "string",
+          "enum": [
+            "USD",
+            "USDC"
+          ]
+        },
+        "destination_currency_code": {
+          "title": "CurrencyCode",
+          "type": "string",
+          "enum": [
+            "USD",
+            "USDC"
+          ]
+        },
+        "idempotence_token": {
+          "type": "string"
+        }
+      }
+    },
+    "ReceiveCredentialsRequest": {
+      "title": "ReceiveCredentialsRequest",
+      "type": "object",
+      "properties": {
+        "account_number": {
+          "type": "string"
+        },
+        "routing_number": {
+          "type": "string"
+        },
+        "bank_address": {
+          "$ref": "#/definitions/BankAddress"
+        },
+        "billing_details": {
+          "$ref": "#/definitions/BillingDetails"
+        }
+      }
+    },
+    "CredentialsAskRequest": {
+      "title": "CredentialsAskRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "line1": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "district": {
+          "type": "string"
+        }
+      }
+    },
+    "Response": {
+      "title": "Response",
+      "type": "object",
+      "properties": {}
+    },
+    "BankAddress": {
+      "title": "BankAddress",
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentInstrument": {
+      "title": "PaymentInstrument",
+      "type": "object",
+      "properties": {
+        "instrument_type": {
+          "title": "InstrumentType",
+          "type": "string",
+          "enum": [
+            "BANK_ACCOUNT",
+            "CARD"
+          ]
+        },
+        "account_number": {
+          "type": "string"
+        },
+        "routing_number": {
+          "type": "string"
+        },
+        "card_pan": {
+          "type": "string"
+        },
+        "expiration_date": {
+          "type": "string"
+        },
+        "cvv": {
+          "type": "string"
+        }
+      }
+    },
+    "BillingDetails": {
+      "title": "BillingDetails",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "line1": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "district": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentProcessorRequest": {
+      "title": "PaymentProcessorRequest",
+      "type": "object",
+      "properties": {
+        "account_number": {
+          "type": "string"
+        },
+        "routing_number": {
+          "type": "string"
+        },
+        "bank_address": {
+          "$ref": "#/definitions/BankAddress"
+        },
+        "billing_details": {
+          "$ref": "#/definitions/BillingDetails"
+        },
+        "wallet_address": {
+          "type": "string"
+        },
+        "email_address": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateBankAccountRequest": {
+      "title": "CreateBankAccountRequest",
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string"
+        },
+        "routingNumber": {
+          "type": "string"
+        },
+        "idempotencyKey": {
+          "type": "string"
+        },
+        "bankAddress": {
+          "$ref": "#/definitions/BankAddress"
+        },
+        "billingDetails": {
+          "$ref": "#/definitions/BillingDetails"
+        }
+      }
+    },
+    "CreateWirePaymentRequest": {
+      "title": "CreateWirePaymentRequest",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "$ref": "#/definitions/Amount"
+        },
+        "trackingRef": {
+          "type": "string"
+        }
+      }
+    },
+    "Amount": {
+      "title": "Amount",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "currency": {
+          "title": "CurrencyCode",
+          "type": "string",
+          "enum": [
+            "USD",
+            "USDC"
+          ]
+        }
+      }
+    },
+    "Source": {
+      "title": "Source",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Destination": {
+      "title": "Destination",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "chain": {
+          "type": "string"
+        }
+      }
+    },
+    "Metadata": {
+      "title": "Metadata",
+      "type": "object",
+      "properties": {
+        "beneficiaryEmail": {
+          "type": "string"
+        }
+      }
+    },
+    "PayoutRequest": {
+      "title": "PayoutRequest",
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/Source"
+        },
+        "destination": {
+          "$ref": "#/definitions/Destination"
+        },
+        "amount": {
+          "$ref": "#/definitions/Amount"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "idempotencyKey": {
+          "type": "string"
+        }
+      }
+    },
+    "TransferRequest": {
+      "title": "TransferRequest",
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/Source"
+        },
+        "destination": {
+          "$ref": "#/definitions/Destination"
+        },
+        "amount": {
+          "$ref": "#/definitions/Amount"
+        },
+        "idempotencyKey": {
+          "type": "string"
+        }
+      }
+    },
+    "BankAccount": {
+      "title": "BankAccount",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "trackingRef": {
+          "type": "string"
+        }
+      }
+    },
+    "CurrencyCode": {
+      "title": "CurrencyCode",
+      "type": "string",
+      "enum": [
+        "USD",
+        "USDC"
+      ]
+    },
+    "InstrumentType": {
+      "title": "InstrumentType",
+      "type": "string",
+      "enum": [
+        "BANK_ACCOUNT",
+        "CARD"
+      ]
+    }
+  }
+}

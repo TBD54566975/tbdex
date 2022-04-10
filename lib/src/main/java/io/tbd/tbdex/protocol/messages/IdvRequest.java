@@ -1,15 +1,15 @@
 package io.tbd.tbdex.protocol.messages;
 
-import com.google.gson.JsonObject;
+import com.squareup.protos.tbd.presentation_exchange.PresentationDefinition;
 import io.tbd.tbdex.protocol.core.MessageBody;
 import io.tbd.tbdex.protocol.core.MessageType;
 
 public class IdvRequest extends MessageBody {
-  JsonObject presentationRequest;
+  PresentationDefinition presentationDefinition;
 
-  public IdvRequest(JsonObject presentationRequest) {
+  public IdvRequest(PresentationDefinition presentationDefinition) {
     super(MessageType.IdvRequest);
 
-    this.presentationRequest = presentationRequest;
+    this.presentationDefinition = presentationDefinition;
   }
 }

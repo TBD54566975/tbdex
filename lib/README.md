@@ -61,8 +61,7 @@ The `body` of each message can be any of the following message types
 ### `OfferAccept`
 **Description**:
 | field | data type | required | description |
-| ------------------------- | -------- | -------- | -------------------------------- |
-| `paymentProcessorRequest` | proto    | Y        | A proto with payment information |
+| ----- | --------- | -------- | ----------- |
 
 ### `IDVRequest`
 **Description**:
@@ -77,12 +76,14 @@ The `body` of each message can be any of the following message types
 ### `SettlementRequest`
 **Description**:
 | field | data type | required | description |
-| ----- | --------- | -------- | ----------- |
+| -------- | --------- | -------- | ------------------------------------------------------------------- |
+| `schema` | string    | Y        | The json schema that defines what fields are required for payment   |
 
 ### `SettlementDetails`
 **Description**:
 | field | data type | required | description |
-| ----- | --------- | -------- | ----------- |
+| ------ | --------- | -------- | ------------------------------------------------ |
+| `body` | string    | Y        | The json schema from SettlementRequest filled in |
 
 ### `SettlementReceipt`
 **Description**:
