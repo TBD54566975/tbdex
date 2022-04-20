@@ -36,7 +36,7 @@ public class PaymentProcessorTest extends TestBase {
 
     String body = JsonParser.getParser().toJson(request);
 
-    SettlementDetails settlementDetails = new SettlementDetails(body);
+    SettlementDetails settlementDetails = new SettlementDetails(JsonParser.getParser().toJsonTree(body));
 
     paymentProcessor.process(settlementDetails, threadToken);
   }

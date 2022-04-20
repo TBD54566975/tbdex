@@ -1,12 +1,13 @@
 package io.tbd.tbdex.protocol.messages;
 
+import com.google.gson.JsonElement;
 import io.tbd.tbdex.protocol.core.MessageBody;
 import io.tbd.tbdex.protocol.core.MessageType;
 
 public class SettlementDetails extends MessageBody {
-  public String body;
+  public JsonElement body;
 
-  public SettlementDetails(String body) {
+  public SettlementDetails(JsonElement body) {
     super(MessageType.SettlementDetails);
 
     this.body = body;

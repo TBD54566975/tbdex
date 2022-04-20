@@ -170,7 +170,23 @@ $> curl \
     "from":"alice",
     "to":"pfi",
     "body":{
-      "paymentProcessorRequest": {
+      "type":"OfferAccept",
+      "validReplyTypes":["SettlementRequest", "Close"]
+    }
+  }' 'http://localhost:9004/handle-message'
+```
+
+```shell
+$> curl \
+--header "Content-type: application/json" \
+--data-raw '{
+    "id":"mid",
+    "threadID":"thid1",
+    "type":"SettlementDetails",
+    "from":"alice",
+    "to":"pfi",
+    "body":{
+      "body": {
           "thread_token": "thid1",
           "idempotency_key": "ba943ff1-ca16-49b2-ba55-1057e70ca5c7",
              "account_number": "12340010",
@@ -194,8 +210,8 @@ $> curl \
           },
           "wallet_address":"0x_YOUR_EVM_WALLET_ADDRESS"
       },
-      "type":"OfferAccept",
-      "validReplyTypes":["Close"]
+      "type":"SettlementDetails",
+      "validReplyTypes":["SettlementReceipt", "Close"]
     }
   }' 'http://localhost:9004/handle-message'
 ```
