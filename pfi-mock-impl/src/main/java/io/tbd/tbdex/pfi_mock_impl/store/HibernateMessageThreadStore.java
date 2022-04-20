@@ -5,9 +5,10 @@ import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.core.MessageThreadStore;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.joda.time.DateTime;
 
 public class HibernateMessageThreadStore implements MessageThreadStore {
   @SuppressWarnings("unchecked")
@@ -42,6 +43,7 @@ public class HibernateMessageThreadStore implements MessageThreadStore {
     DbMessage ask = new DbMessage();
     ask.setThreadToken(message.threadID());
     ask.setMessage(message);
+    ask.setCreatedAt(new DateTime());
     session.save(ask);
     tx.commit();
     session.close();

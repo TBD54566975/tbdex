@@ -11,6 +11,11 @@ import io.tbd.tbdex.protocol.core.MessageThreadProcessor;
 
 public class Main {
   private static final Injector injector = Guice.createInjector(new ProcessorModule());
+  public static Handler handleMessage = ctx -> {
+    MessageThreadProcessor processor = injector.getInstance(MessageThreadProcessor.class);
+    Message message = new MessageConverter().convertToEntityAttribute(ctx.body());
+    processor.addMessage(message);
+  };
 
   public static void main(String[] args) {
     run();
@@ -23,10 +28,4 @@ public class Main {
     app.get("/hello-world", ctx -> ctx.result("Hello World"));
     app.post("/handle-message", handleMessage);
   }
-
-  public static Handler handleMessage = ctx -> {
-    MessageThreadProcessor processor = injector.getInstance(MessageThreadProcessor.class);
-    Message message = new MessageConverter().convertToEntityAttribute(ctx.body());
-    processor.addMessage(message);
-  };
 }

@@ -1,4 +1,4 @@
-package io.tbd.tbdex.pfi_mock_impl.processors;
+package io.tbd.tbdex.pfi_mock_impl.payments;
 
 import com.google.common.base.Preconditions;
 import com.squareup.protos.tbd.pfi.Amount;
@@ -12,21 +12,16 @@ import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import com.squareup.protos.tbd.pfi.PayoutRequest;
 import com.squareup.protos.tbd.pfi.Source;
 import com.squareup.protos.tbd.pfi.TransferRequest;
-import io.tbd.tbdex.pfi_mock_impl.circle.client.CircleClient;
+import io.tbd.tbdex.pfi_mock_impl.payments.circle.CircleClient;
 import io.tbd.tbdex.pfi_mock_impl.store.HibernateMessageThreadStore;
+import io.tbd.tbdex.protocol.core.JsonParser;
 import io.tbd.tbdex.protocol.core.MessageThread;
 import io.tbd.tbdex.protocol.messages.Ask;
+import io.tbd.tbdex.protocol.messages.SettlementDetails;
 import java.util.UUID;
 import javax.inject.Inject;
 
 public class PaymentProcessor {
-  CircleClient circleClient;
-
-  @Inject
-  public PaymentProcessor(CircleClient circleClient) {
-    this.circleClient = circleClient;
-  }
-
   // This is the test wallet ID for Circle. Hard coded for now.
   // Funds can not be moved directly to an external address so this will be a middle ground.
   // TODO: find more elegant solution
@@ -34,14 +29,23 @@ public class PaymentProcessor {
       .id("")
       .type("wallet")
       .build();
+  CircleClient circleClient;
 
-  public void process(PaymentProcessorRequest request, String threadToken) {
+  @Inject
+  public PaymentProcessor(CircleClient circleClient) {
+    this.circleClient = circleClient;
+  }
+
+  public void process(SettlementDetails settlementDetails, String threadToken) {
     // Get ASK from thread store
     // TODO: change to get conditional offer and also add source and target amounts in offer
     HibernateMessageThreadStore threadStore = new HibernateMessageThreadStore();
     MessageThread messageThread = threadStore.getThread(threadToken);
     Ask ask = messageThread.getAsk();
     Preconditions.checkNotNull(ask);
+
+    PaymentProcessorRequest request = JsonParser.getParser()
+        .fromJson(settlementDetails.body, PaymentProcessorRequest.class);
 
     // Register Bank Account with Circle.
     // TODO: Do not store bank account in our database
@@ -78,7 +82,7 @@ public class PaymentProcessor {
       } catch (Exception e) {
         System.out.println("wire payment failed");
       }
-    // Off-Ramp
+      // Off-Ramp
     } else if (CurrencyCode.valueOf(ask.targetCurrency) == CurrencyCode.USD) {
       try {
         PayoutRequest payoutRequest = new PayoutRequest.Builder()

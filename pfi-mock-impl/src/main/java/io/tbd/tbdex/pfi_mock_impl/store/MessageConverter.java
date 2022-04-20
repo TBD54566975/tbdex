@@ -5,7 +5,7 @@ import io.tbd.tbdex.protocol.core.Message;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-@Converter(autoApply=true)
+@Converter(autoApply = true)
 public class MessageConverter implements AttributeConverter<Message, String> {
 
   @Override

@@ -1,11 +1,13 @@
-package io.tbd.tbdex.pfi_mock_impl.processors;
+package io.tbd.tbdex.pfi_mock_impl.payments;
 
 import com.squareup.protos.tbd.pfi.PaymentProcessorRequest;
 import io.tbd.tbdex.pfi_mock_impl.TestBase;
-import io.tbd.tbdex.pfi_mock_impl.circle.client.MockCircleClient;
+import io.tbd.tbdex.pfi_mock_impl.TestHelper;
+import io.tbd.tbdex.protocol.core.JsonParser;
 import io.tbd.tbdex.protocol.core.Message;
 import io.tbd.tbdex.protocol.core.MessageThreadStore;
 import io.tbd.tbdex.protocol.messages.Ask;
+import io.tbd.tbdex.protocol.messages.SettlementDetails;
 import java.math.BigDecimal;
 import javax.inject.Inject;
 import org.junit.jupiter.api.DisplayName;
@@ -24,9 +26,18 @@ public class PaymentProcessorTest extends TestBase {
     threadStore.addMessageToThread(message1);
 
     PaymentProcessorRequest request = new PaymentProcessorRequest.Builder()
-        .wallet_address("12345")
+        .account_number(TestHelper.PAYMENT_INSTRUMENT.account_number)
+        .routing_number(TestHelper.PAYMENT_INSTRUMENT.routing_number)
+        .bank_address(TestHelper.BANK_ADDRESS)
+        .billing_details(TestHelper.BILLING_DETAILS)
+        .wallet_address("123")
+        .email_address("123")
         .build();
 
-    paymentProcessor.process(request, threadToken);
+    String body = JsonParser.getParser().toJson(request);
+
+    SettlementDetails settlementDetails = new SettlementDetails(body);
+
+    paymentProcessor.process(settlementDetails, threadToken);
   }
 }
