@@ -46,7 +46,7 @@ public class TestHelper {
         .wallet_address("12345")
         .build();
     return new Message.Builder("mid", threadToken, "alice", "pfi")
-        .build(new SettlementDetails(JsonParser.getParser().toJson(request)));
+        .build(new SettlementDetails(JsonParser.getParser().toJsonTree(request)));
   }
 
   public static Message close(String threadToken) {

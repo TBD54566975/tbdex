@@ -1,6 +1,7 @@
 package io.tbd.tbdex.pfi_mock_impl.payments;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 import com.squareup.protos.tbd.pfi.Amount;
 import com.squareup.protos.tbd.pfi.BankAccount;
 import com.squareup.protos.tbd.pfi.CreateBankAccountRequest;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 public class PaymentProcessor {
+  private static final Gson parser = JsonParser.getParser();
   // This is the test wallet ID for Circle. Hard coded for now.
   // Funds can not be moved directly to an external address so this will be a middle ground.
   // TODO: find more elegant solution
@@ -44,8 +46,8 @@ public class PaymentProcessor {
     Ask ask = messageThread.getAsk();
     Preconditions.checkNotNull(ask);
 
-    PaymentProcessorRequest request = JsonParser.getParser()
-        .fromJson(settlementDetails.body, PaymentProcessorRequest.class);
+    String body = parser.toJson(settlementDetails.body);
+    PaymentProcessorRequest request = parser.fromJson(body, PaymentProcessorRequest.class);
 
     // Register Bank Account with Circle.
     // TODO: Do not store bank account in our database
@@ -111,6 +113,7 @@ public class PaymentProcessor {
         .routingNumber(request.routing_number)
         .billingDetails(request.billing_details)
         .bankAddress(request.bank_address)
+        .idempotencyKey(UUID.randomUUID().toString())
         .build();
 
     BankAccount bankAccount;
