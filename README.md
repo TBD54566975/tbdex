@@ -8,9 +8,9 @@ The central aim of this repo is to act as a playground that is set up for us to 
   - A mock PFI implementation
 
 This repo currently contains 3 projects:
-- [tbDEX Protocol Library](https://github.com/TBD54566975/tbdex-protocol/blob/ce618d3e99b000ea02658b9c5d9957542640a55c/lib/README.md) - Houses the core logic to process tbDEX messages. Can be used by both wallets and PFIs
-- [PFI Mock Implementation](https://github.com/TBD54566975/tbdex-protocol/blob/ce618d3e99b000ea02658b9c5d9957542640a55c/pfi-mock-impl/README.md) - A mock implementation of a PFI. Implements message storage and message processors.
-- [DID Library](https://github.com/TBD54566975/tbdex-protocol/blob/ce618d3e99b000ea02658b9c5d9957542640a55c/did/README.md) - Houses logic specific to Decentralized Identifiers. Can be used by both wallets and PFIs
+- [tbDEX Protocol Library](https://github.com/TBD54566975/tbdex-protocol/blob/main/lib/README.md) - Houses the core logic to process tbDEX messages. Can be used by both wallets and PFIs
+- [PFI Mock Implementation](https://github.com/TBD54566975/tbdex-protocol/blob/main/pfi-mock-impl/README.md) - A mock implementation of a PFI. Implements message storage and message processors.
+- [DID Library](https://github.com/TBD54566975/tbdex-protocol/blob/main/did/README.md) - Houses logic specific to Decentralized Identifiers. Can be used by both wallets and PFIs
 
 Our end-goal is to split these projects out into their own repos. For now, we've elected to keep all of them here to help us iterate as quickly as possible. Each project has been modularized to where moving it to another repo should be as easy as copy/pasting the proect's directory to another repo.
 
