@@ -2,7 +2,7 @@
 
 There are many ways to be an open source contributor, and we're here to help you on your way! You may:
 
-* Propose ideas in our [discussion forums](https://discord.gg/MASAPKPYJM)
+* Propose ideas in our [discussion forums](https://github.com/TBD54566975/tbdex-protocol/discussions)
 * Raise an issue or feature request in our [issue tracker](https://github.com/TBD54566975/tbdex-protocol/issues)
 * Help another contributor with one of their questions, or a code review
 * Suggest improvements to our Getting Started documentation by supplying a Pull Request
@@ -238,16 +238,13 @@ $> ../gradlew :pfi-mock-impl:test
 
 ### Issues
 
-Anyone from the community is welcome (and encouraged!) to raise issues via [GitHub Issues](LINK_HERE)  ___***FIX LINK AND REMOVE THIS NOTICE***___.
+Anyone from the community is welcome (and encouraged!) to raise issues via [GitHub Issues](https://github.com/TBD54566975/tbdex-protocol/discussions).
 
 ### Discussions
 
-Design discussions and proposals take place on [GitHub Discussions](LINK_HERE)  ___***FIX LINK AND REMOVE THIS NOTICE***___. 
+Design discussions and proposals take place on [GitHub Discussions](https://github.com/TBD54566975/tbdex-protocol/issues) 
 
 We advocate an asynchronous, written debate model - so write up your thoughts and invite the community to join in!
-
-
- ___***FIX LINK ABOVE AND REMOVE THIS NOTICE***___
 
 ## Contribution
 
