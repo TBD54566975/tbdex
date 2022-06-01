@@ -25,7 +25,7 @@ graph TD
 - Stores messages in MySQL
 
 ## Contributing
-[CONTRIBUTING.md](CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/TBD54566975/tbdex-protocol/blob/main/pfi-mock-impl/CONTRIBUTING.md)
 
 ### Pre-requisites
 - Java 17
