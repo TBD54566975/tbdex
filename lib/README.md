@@ -108,6 +108,8 @@ _Note: Assume that any vertex can transition to a `Close` by either participant_
 
 ```mermaid
 flowchart TD
+    accTitle: State Machine of Message Thread
+    accDescr: Possible state sequences for a message thread
     Ask --> |PFI| COND_OFFER[Conditional Offer]
     COND_OFFER --> |Alice| OFFER_ACCEPT[Offer Accept]
     OFFER_ACCEPT --> |PFI| IDV_REQ[IDV Request]
