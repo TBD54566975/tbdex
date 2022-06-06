@@ -32,7 +32,7 @@ Every message contains the following fields:
 | `threadID`    | ?             | Y              | The thread ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
 | `from`        | `string`      | Y              | The sender's DID                                                                                                                      |
 | `to`          | `string`      | Y              | The recipient's DID                                                                                                                   |
-| `type`        | `string`      | Y              | The specific message type. Any of the message types documented under the [Message Types](#Message-Types) section are considered valid |
+| `type`        | `string`      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
 | `body`        | `JSON Object` | Y              | The actual message content. the fields within `body` must adhere to the fields expected for the given message type                    |
 | `createdTime` | `long`        | Y              | The creation time of the message. Expressed as seconds since the Epoch                                                                |
 | `expiresTime` | `long`        | N              | The time after which this message should be considered as experied. Expressed as seconds since the epcoh                              |
