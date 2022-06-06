@@ -1,11 +1,13 @@
 # PFI Mock Implementation
 
 ## Introduction
-This is a mock implementation of a PFI (Participating Financial Institution) for the tbDex protocol. It is leveraging Circle's APIs in order to facilitate the on and off ramps.
+This is a mock implementation of a PFI (Participating Financial Institution) for the tbDEX protocol. It is leveraging Circle's APIs in order to facilitate the on and off ramps.
 
 The state machine from the perspective of the PFI:
 ```mermaid
 graph TD
+    accTitle: State Machine of On and Off Ramp
+    accDescr: Flow chart illustrating the steps to on and off ramp from the perspective of a Participating Financial Institution
     A[Receive Ask] --> B{Conditional Offer}
     B -->|Denied| C[Close Offer]
     B -->|Accepted| D[Request IDV]
