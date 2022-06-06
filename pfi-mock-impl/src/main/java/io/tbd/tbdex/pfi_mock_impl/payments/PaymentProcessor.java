@@ -46,8 +46,7 @@ public class PaymentProcessor {
     Ask ask = messageThread.getAsk();
     Preconditions.checkNotNull(ask);
 
-    String body = parser.toJson(settlementDetails.body);
-    PaymentProcessorRequest request = parser.fromJson(body, PaymentProcessorRequest.class);
+    PaymentProcessorRequest request = parser.fromJson(settlementDetails.body, PaymentProcessorRequest.class);
 
     // Register Bank Account with Circle.
     // TODO: Do not store bank account in our database
