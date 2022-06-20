@@ -1,8 +1,8 @@
 package io.tbd.tbdex.protocol.core;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -75,6 +75,49 @@ public class Message {
     return JsonParser.getParser().toJson(this);
   }
 
+  public static class MessageDeserializer implements JsonDeserializer<Message> {
+    @Override
+    public Message deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+      JsonObject jsonObject = json.getAsJsonObject();
+
+      Gson parser = JsonParser.getParser();
+      // add all required fields
+      Message message = new Message(
+              jsonObject.get("id").getAsString(),
+              jsonObject.get("threadID").getAsString(),
+              jsonObject.get("from").getAsString(),
+              jsonObject.get("to").getAsString()
+      );
+
+      if (jsonObject.has("createdTime")) {
+        message.createdTime = jsonObject.get("createdTime").getAsLong();
+      }
+
+      if (jsonObject.has("expiresTime")) {
+        message.expiresTime = jsonObject.get("expiresTime").getAsLong();
+      }
+
+      if (jsonObject.has("replyTo")) {
+        message.replyTo = jsonObject.get("replyTo").getAsString();
+      }
+
+      // deserialize MessageType
+      MessageType messageType = parser.fromJson(jsonObject.get("type"), MessageType.class);
+      message.type = messageType;
+
+      // deserialize the message body into its concrete type
+      JsonElement bodyJson = jsonObject.remove("body");
+
+      try {
+        message.body = parser.fromJson(bodyJson, messageType.getMessageBodyClass());
+      } catch (Exception e) {
+        throw new RuntimeException();
+      }
+
+      return message;
+    }
+  }
+
   public static class Builder {
     private static final List<String> requiredFields = Arrays.asList(
         "id",
@@ -102,54 +145,8 @@ public class Message {
      */
     public static Message fromJson(String serializedMessage) {
       Gson parser = JsonParser.getParser();
-      JsonObject json = parser.fromJson(serializedMessage, JsonObject.class);
 
-      return fromJson(json);
-    }
-
-    // TODO: find cleaner way to do this or separate into different class
-    private static Message fromJson(JsonObject jsonObject) {
-      // check to ensure that all required fields exist. Throw exception if any are missing
-      for (String field : requiredFields) {
-        if (!jsonObject.has(field)) {
-          throw new RuntimeException(field + " is a required field");
-        }
-      }
-
-      Gson parser = JsonParser.getParser();
-      Message message = new Message();
-
-      // add all required fields
-      message.id = jsonObject.get("id").getAsString();
-      message.threadID = jsonObject.get("threadID").getAsString();
-      message.from = jsonObject.get("from").getAsString();
-      message.to = jsonObject.get("to").getAsString();
-
-      if (jsonObject.has("createdTime")) {
-        message.createdTime = jsonObject.get("createdTime").getAsLong();
-      }
-
-      if (jsonObject.has("expiresTime")) {
-        message.expiresTime = jsonObject.get("expiresTime").getAsLong();
-      }
-
-      if (jsonObject.has("replyTo")) {
-        message.replyTo = jsonObject.get("replyTo").getAsString();
-      }
-
-      // deserialize MessageType
-      MessageType messageType = parser.fromJson(jsonObject.get("type"), MessageType.class);
-      message.type = messageType;
-
-      // deserialize the message body into its concrete type
-      JsonElement bodyJson = jsonObject.remove("body");
-
-      try {
-        message.body = parser.fromJson(bodyJson, messageType.getMessageBodyClass());
-      } catch (Exception e) {
-        throw new RuntimeException();
-      }
-      return message;
+      return parser.fromJson(serializedMessage, Message.class);
     }
 
     public Builder createdTime(Instant instant) {
