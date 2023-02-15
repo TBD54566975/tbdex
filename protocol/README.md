@@ -64,11 +64,15 @@ Note: there can be more than one conditional offer in a message body: for exampl
 | `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount). |
 
 
+TODO: add a final offer
+
 ### `SettlementRequest`
 
 | field | data type | required | description |
 | -------- | --------- | -------- | ------------------------------------------------------------------- |
 | `schema` | string    | Y        | The json schema that defines what fields are required for payment   |
+
+TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details.
 
 ### `SettlementDetails`
 
