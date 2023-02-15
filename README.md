@@ -1,17 +1,34 @@
 # tbDEX Protocol
+
 ## Introduction
+
 The central aim of this repo is to act as a playground that is set up for us to easily test the ideas we come up with as we iterate our way to what we hope is a robust protocol. Specifically, this repo is focused on fleshing out:
   - tbDEX message schemas/formats
     - What types of messages do Alice and a PFI send to one another?
     - What do these messages contain?
     - What does the state machine look like for a thread of tbDEX messages?
-  - A mock PFI implementation
+  - A mock PFI implementation that works with DIDs and "web5"
 
-This repo currently contains 3 projects:
-- [tbDEX Protocol Library](https://github.com/TBD54566975/tbdex-protocol/blob/main/lib/README.md) - Houses the core logic to process tbDEX messages. Can be used by both wallets and PFIs
-- [PFI Mock Implementation](https://github.com/TBD54566975/tbdex-protocol/blob/main/pfi-mock-impl/README.md) - A mock implementation of a PFI. Implements message storage and message processors.
-- [DID Library](https://github.com/TBD54566975/tbdex-protocol/blob/main/did/README.md) - Houses logic specific to Decentralized Identifiers. Can be used by both wallets and PFIs
 
-Our end-goal is to split these projects out into their own repos. For now, we've elected to keep all of them here to help us iterate as quickly as possible. Each project has been modularized to where moving it to another repo should be as easy as copy/pasting the proect's directory to another repo.
+## Getting Started
 
-Each project also has its own respective README with info specific to that project.
+See the protocol readme (protocol/README.md) for more information on how to get started.
+
+Read the paper: https://tbdex.io/whitepaper.pdf
+
+
+## Roadmap
+
+1. IN PROGRESS: Establish a first draft of the protocol
+2. Implement a webhook emitter that works with DWN-aggregators and DIDs to receive asks
+3. Implement a mock PFI that responds to asks with conditional offers
+
+
+## Existing implementations of requirements
+
+Some of the concepts needed by TBDex can be found in the following implementations
+
+* DWN reference implementation
+* Self Soverign Identity reference implementation
+* SSI Service 
+* DWN Aggregator
