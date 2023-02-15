@@ -28,7 +28,7 @@ Read the paper: https://tbdex.io/whitepaper.pdf
 
 Some of the concepts needed by TBDex can be found in the following implementations
 
-* DWN reference implementation
-* Self Soverign Identity reference implementation
-* SSI Service 
-* DWN Aggregator
+* (DWN reference implementation)[https://github.com/TBD54566975/dwn-sdk-js]
+* (Self Soverign Identity SDK)[https://github.com/TBD54566975/ssi-sdk]
+* (SSI Service)[https://github.com/TBD54566975/ssi-service]
+* (DWN Aggregator)[https://github.com/TBD54566975/dwn-aggregator]

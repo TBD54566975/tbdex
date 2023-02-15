@@ -108,7 +108,6 @@ flowchart TD
     COND_OFFER --> |Alice| OFFER_ACCEPT[Offer Accept]
     OFFER_ACCEPT --> |PFI| SETTL_REQ[Settlement Request]
     SETTL_REQ --> |Alice| SETTL_DETAIL[Settlement Details]
-    SETTL_DETAIL --> |PFI| IDV_REQ
     SETTL_DETAIL ---> |PFI| SETTL_REQ
     SETTL_DETAIL --> |PFI| SETTL_RECEIPT[Settlement Receipt]
 ```
