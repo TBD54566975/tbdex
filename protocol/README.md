@@ -1,18 +1,18 @@
-# tbDEX Protocol
+# tbDEX Protocol <!-- omit in toc -->
 
-- [tbDEX Protocol](#tbdex-protocol)
-  - [Message Structure](#message-structure)
-  - [Message Types](#message-types)
-    - [`Ask`](#ask)
-    - [`Bid`](#bid)
-    - [`BidAccept`](#bidaccept)
-    - [`SettlementRequest`](#settlementrequest)
-    - [`SettlementDetails`](#settlementdetails)
-    - [`SettlementReceipt`](#settlementreceipt)
-    - [`Close`](#close)
-  - [State Machine Diagram](#state-machine-diagram)
+- [Message Structure](#message-structure)
+- [Message Types](#message-types)
+  - [`Ask`](#ask)
+  - [`Bid`](#bid)
+  - [`BidAccept`](#bidaccept)
+  - [`SettlementRequest`](#settlementrequest)
+  - [`SettlementDetails`](#settlementdetails)
+  - [`SettlementReceipt`](#settlementreceipt)
+  - [`Close`](#close)
+- [State Machine Diagram](#state-machine-diagram)
 
-## Message Structure
+
+# Message Structure
 
 This is a high level description of the message structure. In certainl implementations, some fields may be ommitted as they are part of some external envelope when transmitting on the wire as a message payload (for example - `threadID` is part of a DWN message (aka `contextId`), or DIDComm message, or could be a HTTP header). 
 
@@ -31,11 +31,11 @@ Every TBDex message contains the following fields:
 | `createdTime` | `long`        | Y              | The creation time of the message. Expressed as seconds since the Epoch                                                                |
 | `expiresTime` | `long`        | N              | The time after which this message should be considered as expired. Expressed as seconds since the Epoch                               |
 
-## Message Types
+# Message Types
 
 The `body` of each message can be any of the following message types
 
-### `Ask`
+## `Ask`
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
@@ -43,7 +43,7 @@ The `body` of each message can be any of the following message types
 | `sourceAmount`   | int       | Y        | The amount that you currently hold. Amount **must** be in the smallest denomination of said currency |
 | `targetCurrency` | string    | Y        | the currency that you want                                                                           |
 
-### `Bid`
+## `Bid`
 
 Note: there can be more than one bid in a message body: for example one that requires hi-KYC/AML and one that requires lo-KYC/AML - which will have different amounts exchanged depending on the risk the PFI wants to take on.
 
@@ -54,7 +54,7 @@ Note: there can be more than one bid in a message body: for example one that req
 | `targetAmount`   | int         | Y        | The amount you're willing to offer                            |
 | `idvRequest`     | JSON Object | Y        | The conditions that **must** be met for the offer to be valid |
 
-### `BidAccept`
+## `BidAccept`
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
@@ -64,7 +64,7 @@ Note: there can be more than one bid in a message body: for example one that req
 
 TODO: add a final offer perhaps?
 
-### `SettlementRequest`
+## `SettlementRequest`
 
 | field    | data type | required | description                                                       |
 | -------- | --------- | -------- | ----------------------------------------------------------------- |
@@ -72,28 +72,24 @@ TODO: add a final offer perhaps?
 
 TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details.
 
-### `SettlementDetails`
+## `SettlementDetails`
 
 | field  | data type | required | description                                      |
 | ------ | --------- | -------- | ------------------------------------------------ |
 | `body` | string    | Y        | The json schema from SettlementRequest filled in |
 
-### `SettlementReceipt`
+## `SettlementReceipt`
 
 | field | data type | required | description |
 | ----- | --------- | -------- | ----------- |
 
-### `Close`
+## `Close`
 
 | field    | data type | required | description        |
 | -------- | --------- | -------- | ------------------ |
 | `reason` | string    | ?        | Reason for closing |
 
-
-
-
-
-## State Machine Diagram
+# State Machine Diagram
 
 A sequence of associated messages is defined as a message thread. This diagram illustrates all possible state sequences for a message thread.
 Each vertex represents a message type. Each edge represents who can transition the state of a message thread to the next vertex.
