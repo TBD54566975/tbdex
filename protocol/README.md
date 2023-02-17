@@ -1,13 +1,11 @@
 # tbDEX Protocol
 
 - [tbDEX Protocol](#tbdex-protocol)
-  - [Message Format & Structure](#message-format--structure)
+  - [Message Structure](#message-structure)
   - [Message Types](#message-types)
     - [`Ask`](#ask)
-    - [`ConditionalOffer`](#conditionaloffer)
-    - [`OfferAccept`](#offeraccept)
-    - [`IDVRequest`](#idvrequest)
-    - [`IDVSubmission`](#idvsubmission)
+    - [`Bid`](#bid)
+    - [`BidAccept`](#bidaccept)
     - [`SettlementRequest`](#settlementrequest)
     - [`SettlementDetails`](#settlementdetails)
     - [`SettlementReceipt`](#settlementreceipt)
@@ -16,7 +14,7 @@
 
 ## Message Structure
 
-This is a high level description of the message structure. In certainly implementaions, some fields may be ommitted as the are part of some external envelope when transmitting on the wire as a message payload (for example - threadID is part of the a DWN message, or DIDComm message, or could be a HTTP header). 
+This is a high level description of the message structure. In certainl implementations, some fields may be ommitted as they are part of some external envelope when transmitting on the wire as a message payload (for example - `threadID` is part of a DWN message (aka `contextId`), or DIDComm message, or could be a HTTP header). 
 
 In any case, PFIs implementing this protocol should consider the fields below.
 
@@ -31,7 +29,7 @@ Every TBDex message contains the following fields:
 | `type`        | `string`      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
 | `body`        | `JSON Object` | Y              | The actual message content. the fields within `body` must adhere to the fields expected for the given message type                    |
 | `createdTime` | `long`        | Y              | The creation time of the message. Expressed as seconds since the Epoch                                                                |
-| `expiresTime` | `long`        | N              | The time after which this message should be considered as experied. Expressed as seconds since the Epoch                              |
+| `expiresTime` | `long`        | N              | The time after which this message should be considered as expired. Expressed as seconds since the Epoch                               |
 
 ## Message Types
 
@@ -49,34 +47,34 @@ The `body` of each message can be any of the following message types
 
 Note: there can be more than one bid in a message body: for example one that requires hi-KYC/AML and one that requires lo-KYC/AML - which will have different amounts exchanged depending on the risk the PFI wants to take on.
 
-| field | data type | required   | description |
-| ---------------- | ---------   | -------- | ------------------------------------- |
-| `sourceCurrency` | string      | Y        | The currency that the customer held   |
-| `targetCurrency` | string      | Y        | The currency that the customer wanted |
-| `targetAmount`   | int         | Y        | The amount you're willing to offer    |
+| field            | data type   | required | description                                                   |
+| ---------------- | ----------- | -------- | ------------------------------------------------------------- |
+| `sourceCurrency` | string      | Y        | The currency that the customer held                           |
+| `targetCurrency` | string      | Y        | The currency that the customer wanted                         |
+| `targetAmount`   | int         | Y        | The amount you're willing to offer                            |
 | `idvRequest`     | JSON Object | Y        | The conditions that **must** be met for the offer to be valid |
 
 ### `BidAccept`
 
-| field | data type | required | description |
-| ----- | --------- | -------- | ----------- |
+| field             | data type   | required | description                                                                             |
+| ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
 | `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that meets the idvRequest requirements in the conditional offer |
-| `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount). |
+| `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount).                                   |
 
 
 TODO: add a final offer perhaps?
 
 ### `SettlementRequest`
 
-| field | data type | required | description |
-| -------- | --------- | -------- | ------------------------------------------------------------------- |
-| `schema` | string    | Y        | The json schema that defines what fields are required for payment   |
+| field    | data type | required | description                                                       |
+| -------- | --------- | -------- | ----------------------------------------------------------------- |
+| `schema` | string    | Y        | The json schema that defines what fields are required for payment |
 
 TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details.
 
 ### `SettlementDetails`
 
-| field | data type | required | description |
+| field  | data type | required | description                                      |
 | ------ | --------- | -------- | ------------------------------------------------ |
 | `body` | string    | Y        | The json schema from SettlementRequest filled in |
 
@@ -117,8 +115,8 @@ flowchart TD
 ```
 
 
-| Resource                                   | Description                                                                   |
-| ------------------------------------------ | ----------------------------------------------------------------------------- |
+| Resource                                                                                         | Description                                                                   |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
 | [CODEOWNERS](https://github.com/TBD54566975/tbdex-protocol/blob/main/CODEOWNERS)                 | Outlines the project lead(s)                                                  |
 | [CODE_OF_CONDUCT.md](https://github.com/TBD54566975/tbdex-protocol/blob/main/CODE_OF_CONDUCT.md) | Expected behavior for project contributors, promoting a welcoming environment |
 | [CONTRIBUTING.md](https://github.com/TBD54566975/tbdex-protocol/blob/main/CONTRIBUTING.md)       | Developer guide to build, test, run, access CI, chat, discuss, file issues    |
