@@ -45,9 +45,9 @@ The `body` of each message can be any of the following message types
 | `sourceAmount`   | int       | Y        | The amount that you currently hold. Amount **must** be in the smallest denomination of said currency |
 | `targetCurrency` | string    | Y        | the currency that you want                                                                           |
 
-### `ConditionalOffer`
+### `Bid`
 
-Note: there can be more than one conditional offer in a message body: for example one that requires hi-KYC/AML and one that requires lo-KYC/AML - which will have different amounts exchanged depending on the risk the PFI wants to take on.
+Note: there can be more than one bid in a message body: for example one that requires hi-KYC/AML and one that requires lo-KYC/AML - which will have different amounts exchanged depending on the risk the PFI wants to take on.
 
 | field | data type | required   | description |
 | ---------------- | ---------   | -------- | ------------------------------------- |
@@ -56,15 +56,15 @@ Note: there can be more than one conditional offer in a message body: for exampl
 | `targetAmount`   | int         | Y        | The amount you're willing to offer    |
 | `idvRequest`     | JSON Object | Y        | The conditions that **must** be met for the offer to be valid |
 
-### `OfferAccept`
+### `BidAccept`
 
 | field | data type | required | description |
 | ----- | --------- | -------- | ----------- |
-| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that meets the idvRequest in the conditional offer |
+| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that meets the idvRequest requirements in the conditional offer |
 | `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount). |
 
 
-TODO: add a final offer
+TODO: add a final offer perhaps?
 
 ### `SettlementRequest`
 
