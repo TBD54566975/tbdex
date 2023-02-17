@@ -1,5 +1,0 @@
-rootProject.name = 'tbdex-protocol'
-include 'lib'
-include 'pfi-mock-impl'
-include 'did'
-
