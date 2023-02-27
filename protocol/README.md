@@ -2,9 +2,9 @@
 
 - [Message Structure](#message-structure)
 - [Message Types](#message-types)
-  - [`Ask`](#ask)
-  - [`Bid`](#bid)
-  - [`BidAccept`](#bidaccept)
+  - [`Request For Quote`](#quote)
+  - [`Quote`](#quote)
+  - [`QuoteAccept`](#quoteaccept)
   - [`SettlementRequest`](#settlementrequest)
   - [`SettlementDetails`](#settlementdetails)
   - [`SettlementReceipt`](#settlementreceipt)
@@ -35,30 +35,29 @@ Every TBDex message contains the following fields:
 
 The `body` of each message can be any of the following message types
 
-## `Ask`
+## `RequestForQuote`
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `sourceCurrency` | string    | Y        | The currency that you currently hold                                                                 |
 | `sourceAmount`   | int       | Y        | The amount that you currently hold. Amount **must** be in the smallest denomination of said currency |
 | `targetCurrency` | string    | Y        | the currency that you want                                                                           |
+| `idvAvailable`     | JSON Object | Y        | Identity type that is available for for verification if an offer is made |
 
-## `Bid`
 
-Note: there can be more than one bid in a message body: for example one that requires hi-KYC/AML and one that requires lo-KYC/AML - which will have different amounts exchanged depending on the risk the PFI wants to take on.
+## `Quote`
 
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
 | `sourceCurrency` | string      | Y        | The currency that the customer held                           |
 | `targetCurrency` | string      | Y        | The currency that the customer wanted                         |
 | `targetAmount`   | int         | Y        | The amount you're willing to offer                            |
-| `idvRequest`     | JSON Object | Y        | The conditions that **must** be met for the offer to be valid |
 
-## `BidAccept`
+## `QuoteAccept`
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that meets the idvRequest requirements in the conditional offer |
+| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies what was promised in the RFQ |
 | `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount).                                   |
 
 
@@ -70,7 +69,7 @@ TODO: add a final offer perhaps?
 | -------- | --------- | -------- | ----------------------------------------------------------------- |
 | `schema` | string    | Y        | The json schema that defines what fields are required for payment |
 
-TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details.
+TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details?
 
 ## `SettlementDetails`
 
@@ -102,9 +101,9 @@ _Note: Assume that any vertex can transition to a `Close` by either participant_
 flowchart TD
     accTitle: State Machine of Message Thread
     accDescr: Possible state sequences for a message thread
-    Ask --> |PFI| COND_OFFER[Conditional Offer]
-    COND_OFFER --> |Alice| OFFER_ACCEPT[Offer Accept]
-    OFFER_ACCEPT --> |PFI| SETTL_REQ[Settlement Request]
+    RFQ --> |PFI| Quote[Conditional Quote]
+    Quote --> |Alice| QuoteAccept[Quote Accept]
+    QuoteAccept --> |PFI| SETTL_REQ[Settlement Request]
     SETTL_REQ --> |Alice| SETTL_DETAIL[Settlement Details]
     SETTL_DETAIL ---> |PFI| SETTL_REQ
     SETTL_DETAIL --> |PFI| SETTL_RECEIPT[Settlement Receipt]
