@@ -93,7 +93,7 @@ TODO: alice may offer some settlement details and then the PFI will need to ask 
 A sequence of associated messages is defined as a message thread. This diagram illustrates all possible state sequences for a message thread.
 Each vertex represents a message type. Each edge represents who can transition the state of a message thread to the next vertex.
 
-For example, starting from the top: "A PFI can reply to an `Ask` with a `ConditionalOffer`"
+For example, starting from the top: "A PFI can reply to an `RFQ` with a `Quote`"
 
 _Note: Assume that any vertex can transition to a `Close` by either participant_
 
@@ -101,6 +101,7 @@ _Note: Assume that any vertex can transition to a `Close` by either participant_
 flowchart TD
     accTitle: State Machine of Message Thread
     accDescr: Possible state sequences for a message thread
+    start --> |Alice| RFQ
     RFQ --> |PFI| Quote[Conditional Quote]
     Quote --> |Alice| QuoteAccept[Quote Accept]
     QuoteAccept --> |PFI| SETTL_REQ[Settlement Request]
