@@ -2,9 +2,9 @@
 
 - [Message Structure](#message-structure)
 - [Message Types](#message-types)
-  - [`Ask`](#ask)
-  - [`Bid`](#bid)
-  - [`BidAccept`](#bidaccept)
+  - [`Request For Quote`](#quote)
+  - [`Quote`](#quote)
+  - [`QuoteAccept`](#quoteaccept)
   - [`SettlementRequest`](#settlementrequest)
   - [`SettlementDetails`](#settlementdetails)
   - [`SettlementReceipt`](#settlementreceipt)
@@ -35,53 +35,97 @@ Every TBDex message contains the following fields:
 
 The `body` of each message can be any of the following message types
 
-## `Ask`
+## `RequestForQuote`
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `sourceCurrency` | string    | Y        | The currency that you currently hold                                                                 |
-| `sourceAmount`   | int       | Y        | The amount that you currently hold. Amount **must** be in the smallest denomination of said currency |
-| `targetCurrency` | string    | Y        | the currency that you want                                                                           |
+| `id` | string    | Y        | A unique identifier for this request.                                                                 |
+| `have` | string    | Y        | What you have.                                                                 |
+| `want` | string    | Y        | What you want.                                                                           |
+| `side`   | enum       | Y        | One of ["have", "want"] |
+| `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
+| `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
+| `paymentTypes`   | JSON Object    | N        |  A normalized object describing the type of payments you need quotes for. When absent, the PFI is free to include any payment types.                 |
 
-## `Bid`
+```json
+{
+  "id" : "1234",
+  "have": "AUD",
+  "want": "Cheese",
+  "side": "have",
+  "size": 100
+}
+```
+I have 100 AUD, and I want Cheese
 
-Note: there can be more than one bid in a message body: for example one that requires hi-KYC/AML and one that requires lo-KYC/AML - which will have different amounts exchanged depending on the risk the PFI wants to take on.
+```json
+{
+  "id": "1234",
+  "have": "AUD",
+  "want": "Cheese",
+  "side": "want",
+  "size": 100
+}
+```
+I have AUD, and I want 100 Cheese.
 
+
+## Array of `Quote`
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `sourceCurrency` | string      | Y        | The currency that the customer held                           |
-| `targetCurrency` | string      | Y        | The currency that the customer wanted                         |
-| `targetAmount`   | int         | Y        | The amount you're willing to offer                            |
-| `idvRequest`     | JSON Object | Y        | The conditions that **must** be met for the offer to be valid |
+| `quoteId`        | string         | Y        | Identifier for this quote.                                 |
+| `requestForQuoteId`          | string         | Y        | The request this quote is responding to.                   |
+| `offerUnit`     | string            | Y        | What I'm offering.                                         |
+| `offerSize`     | int         | Y        | Amount that's being offered.                                         |
+| `costUnit`      | string         | Y        | What is being requested in exchange for this offer.                            |
+| `costSize`      | int            | Y        | Amount of `costUnit` that is being requested for this offer.                            |
+| `paymentType`   | JSON Object    | Y        | A normalized object describing the type of payment acceptable for this offer.                        |
+| `presentationDefinitionRequest`     | JSON Object    | Y        | PresentationRequest that describes that credential requirements needed to accept this offer |
 
-## `BidAccept`
+```json
+{
+  "quoteId": "5678",
+  "requestForQuoteId": "1234",
+  "offerSize": 100,
+  "offerUnit": "Cheese",
+  "costSize": 150,
+  "costUnit": "AUD",  
+  "paymentType": {
+    "type": "creditCard"
+  },
+  "presentationDefinitionRequest": ""
+}
+```
+I'm offering 100 Cheese, and it will cost 150 AUD. You can pay me using a credit card.
+
+## `Accept`
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that meets the idvRequest requirements in the conditional offer |
-| `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount).                                   |
+| `credentialsSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies `presentationDefinitionRequest` |
+| `acceptedQuoteId` | string      | Y        | ID ofr the chosen quote                            |
+| `deliveryInstructions` | JSON Object      | Y        | Standard instructions of what the PFI should do after receiving payment.                        |
 
+```json
+{
+  "credentialsSubmission": {...},
+  "acceptedQuoteId": "5678",
+  "deliveryInstructions": "leave a doggy back with cheese on address 1234"
+}
+```
 
-TODO: add a final offer perhaps?
-
-## `SettlementRequest`
+## `PaymentRequest`
 
 | field    | data type | required | description                                                       |
 | -------- | --------- | -------- | ----------------------------------------------------------------- |
-| `schema` | string    | Y        | The json schema that defines what fields are required for payment |
+| `paymentInstructions` | JSON Object    | Y        | Standard instructions of how the user should pay the PFI. |
 
-TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details.
 
-## `SettlementDetails`
-
-| field  | data type | required | description                                      |
-| ------ | --------- | -------- | ------------------------------------------------ |
-| `body` | string    | Y        | The json schema from SettlementRequest filled in |
-
-## `SettlementReceipt`
+## `PaymentReceipt`
 
 | field | data type | required | description |
 | ----- | --------- | -------- | ----------- |
+| `verifiableCredentialJwt` | string | Y | A VC that represents a receipt of payment in a JWT representation. |
 
 ## `Close`
 
@@ -94,7 +138,7 @@ TODO: alice may offer some settlement details and then the PFI will need to ask 
 A sequence of associated messages is defined as a message thread. This diagram illustrates all possible state sequences for a message thread.
 Each vertex represents a message type. Each edge represents who can transition the state of a message thread to the next vertex.
 
-For example, starting from the top: "A PFI can reply to an `Ask` with a `ConditionalOffer`"
+For example, starting from the top: "A PFI can reply to an `RFQ` with a `Quote`"
 
 _Note: Assume that any vertex can transition to a `Close` by either participant_
 
@@ -102,12 +146,12 @@ _Note: Assume that any vertex can transition to a `Close` by either participant_
 flowchart TD
     accTitle: State Machine of Message Thread
     accDescr: Possible state sequences for a message thread
-    Ask --> |PFI| COND_OFFER[Conditional Offer]
-    COND_OFFER --> |Alice| OFFER_ACCEPT[Offer Accept]
-    OFFER_ACCEPT --> |PFI| SETTL_REQ[Settlement Request]
-    SETTL_REQ --> |Alice| SETTL_DETAIL[Settlement Details]
-    SETTL_DETAIL ---> |PFI| SETTL_REQ
-    SETTL_DETAIL --> |PFI| SETTL_RECEIPT[Settlement Receipt]
+    start --> |Alice| RFQ
+    RFQ --> |PFI| Quote
+    Quote --> |Alice| Accept
+    Accept --> |PFI| PaymentRequest
+    PaymentRequest --> |Alice| MakePayment
+    MakePayment --> |PFI| PaymentReceipt
 ```
 
 
