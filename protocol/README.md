@@ -154,6 +154,22 @@ flowchart TD
     MakePayment --> |PFI| PaymentReceipt
 ```
 
+# Sequence Diagram
+
+```mermaid
+sequenceDiagram
+  actor Alice
+  actor PFI
+  Alice->>PFI: RequestForQuote
+  PFI->>Alice: []Quote
+  Alice->>PFI: Accept
+  PFI->>Alice: PaymentRequest
+  Alice->>Interwebs: PayMoneyz
+  Interwebs->>PFI: PaymentHook
+  PFI->>Alice: PaymentReceipt
+  
+```
+
 
 | Resource                                                                                         | Description                                                                   |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
