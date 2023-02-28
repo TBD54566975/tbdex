@@ -39,29 +39,64 @@ The `body` of each message can be any of the following message types
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `sourceCurrency` | string    | Y        | The currency that you currently hold                                                                 |
-| `sourceAmount`   | int       | Y        | The amount that you currently hold. Amount **must** be in the smallest denomination of said currency |
-| `targetCurrency` | string    | Y        | the currency that you want                                                                           |
-| `idvAvailable`     | JSON Object | Y        | Identity type that is available for for verification if an offer is made |
+| `sourceAsset` | string    | Y        | The currency that you currently hold                                                                 |
+| `targetAsset` | string    | Y        | the currency that you want                                                                           |
+| `quantity`   | int       | Y        | The amount that you currently want to convert.  |
+| `denomination`   | string       | N        | sourceAsset or targetAsset |
+
+```json
+{
+  "have": "AUD",
+  "want": "Cheese",
+  "haveQuantity": "1" 
+}
+```
+
+```json
+{
+  "have": "AUD",
+  "want": "USD",
+  "wantQuantity": "100" 
+}
+
+```
+
+I want 100 USD, and I have AUD.
+Quote1: I can give you 100 USD for 150AUD
+Quote2: I can give you 90 USD for 100AUD
 
 
-## `Quote`
+I have 150 AUD, I want to convert it to USD
+Quote1: I can give you 100 USD for 150AUD
+Quote2: I can give you 90 USD for 99AUD
+
+
+
+
+## `Quote` (multiple quotes can result from one RFQ)
 
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `sourceCurrency` | string      | Y        | The currency that the customer held                           |
-| `targetCurrency` | string      | Y        | The currency that the customer wanted                         |
+| `sourceAsset` | string      | Y        | The currency that the customer held                           |
+| `targetAsset` | string      | Y        | The currency that the customer wanted                         |
 | `targetAmount`   | int         | Y        | The amount you're willing to offer                            |
+| `idvRequest`     | JSON Object | Y        | Identity requirements to satisfy this offer |
+
+```json
+{
+  "have": "AUD",
+  "want": "USD",
+  "wantQuantity": "100", 
+  "idvRequest: ""
+}
+```
 
 ## `QuoteAccept`
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies what was promised in the RFQ |
-| `acceptedBidHash` | string      | Y        | A hash of the chosen bid (source, target and amount).                                   |
-
-
-TODO: add a final offer perhaps?
+| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies `idvRequest` |
+| `acceptedBidHash` | string      | Y        | A hash of the chosen quote (source, target and amount).                                   |
 
 ## `SettlementRequest`
 
@@ -69,7 +104,6 @@ TODO: add a final offer perhaps?
 | -------- | --------- | -------- | ----------------------------------------------------------------- |
 | `schema` | string    | Y        | The json schema that defines what fields are required for payment |
 
-TODO: alice may offer some settlement details and then the PFI will need to ask for credentials or other fields to complete the final settlement details?
 
 ## `SettlementDetails`
 
@@ -102,7 +136,7 @@ flowchart TD
     accTitle: State Machine of Message Thread
     accDescr: Possible state sequences for a message thread
     start --> |Alice| RFQ
-    RFQ --> |PFI| Quote[Conditional Quote]
+    RFQ --> |PFI| Quote[Quote]
     Quote --> |Alice| QuoteAccept[Quote Accept]
     QuoteAccept --> |PFI| SETTL_REQ[Settlement Request]
     SETTL_REQ --> |Alice| SETTL_DETAIL[Settlement Details]
