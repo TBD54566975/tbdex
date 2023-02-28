@@ -39,82 +39,93 @@ The `body` of each message can be any of the following message types
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `sourceAsset` | string    | Y        | The currency that you currently hold                                                                 |
-| `targetAsset` | string    | Y        | the currency that you want                                                                           |
-| `quantity`   | int       | Y        | The amount that you currently want to convert.  |
-| `denomination`   | string       | N        | sourceAsset or targetAsset |
+| `id` | string    | Y        | A unique identifier for this request.                                                                 |
+| `have` | string    | Y        | What you have.                                                                 |
+| `want` | string    | Y        | What you want.                                                                           |
+| `side`   | enum       | Y        | One of ["have", "want"] |
+| `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
+| `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
+| `paymentTypes`   | JSON Object    | N        |  A normalized object describing the type of payments you need quotes for. When absent, the PFI is free to include any payment types.                 |
 
 ```json
 {
+  "id" : "1234",
   "have": "AUD",
   "want": "Cheese",
-  "haveQuantity": "1" 
+  "side": "have",
+  "size": 100
 }
 ```
+I have 100 AUD, and I want Cheese
 
 ```json
 {
+  "id": "1234",
   "have": "AUD",
-  "want": "USD",
-  "wantQuantity": "100" 
+  "want": "Cheese",
+  "side": "want",
+  "size": 100
 }
-
 ```
-
-I want 100 USD, and I have AUD.
-Quote1: I can give you 100 USD for 150AUD
-Quote2: I can give you 90 USD for 100AUD
+I have AUD, and I want 100 Cheese.
 
 
-I have 150 AUD, I want to convert it to USD
-Quote1: I can give you 100 USD for 150AUD
-Quote2: I can give you 90 USD for 99AUD
-
-
-
-
-## `Quote` (multiple quotes can result from one RFQ)
-
+## Array of `Quote`
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `sourceAsset` | string      | Y        | The currency that the customer held                           |
-| `targetAsset` | string      | Y        | The currency that the customer wanted                         |
-| `targetAmount`   | int         | Y        | The amount you're willing to offer                            |
-| `idvRequest`     | JSON Object | Y        | Identity requirements to satisfy this offer |
+| `quoteId`        | string         | Y        | Identifier for this quote.                                 |
+| `requestForQuoteId`          | string         | Y        | The request this quote is responding to.                   |
+| `offerUnit`     | string            | Y        | What I'm offering.                                         |
+| `offerSize`     | int         | Y        | Amount that's being offered.                                         |
+| `costUnit`      | string         | Y        | What is being requested in exchange for this offer.                            |
+| `costSize`      | int            | Y        | Amount of `costUnit` that is being requested for this offer.                            |
+| `paymentType`   | JSON Object    | Y        | A normalized object describing the type of payment acceptable for this offer.                        |
+| `presentationDefinitionRequest`     | JSON Object    | Y        | PresentationRequest that describes that credential requirements needed to accept this offer |
 
 ```json
 {
-  "have": "AUD",
-  "want": "USD",
-  "wantQuantity": "100", 
-  "idvRequest: ""
+  "quoteId": "5678",
+  "requestForQuoteId": "1234",
+  "offerSize": 100,
+  "offerUnit": "Cheese",
+  "costSize": 150,
+  "costUnit": "AUD",  
+  "paymentType": {
+    "type": "creditCard"
+  },
+  "presentationDefinitionRequest": ""
 }
 ```
+I'm offering 100 Cheese, and it will cost 150 AUD. You can pay me using a credit card.
 
-## `QuoteAccept`
+## `Accept`
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `idvSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies `idvRequest` |
-| `acceptedBidHash` | string      | Y        | A hash of the chosen quote (source, target and amount).                                   |
+| `credentialsSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies `presentationDefinitionRequest` |
+| `acceptedQuoteId` | string      | Y        | ID ofr the chosen quote                            |
+| `deliveryInstructions` | JSON Object      | Y        | Standard instructions of what the PFI should do after receiving payment.                        |
 
-## `SettlementRequest`
+```json
+{
+  "credentialsSubmission": {...},
+  "acceptedQuoteId": "5678",
+  "deliveryInstructions": "leave a doggy back with cheese on address 1234"
+}
+```
+
+## `PaymentRequest`
 
 | field    | data type | required | description                                                       |
 | -------- | --------- | -------- | ----------------------------------------------------------------- |
-| `schema` | string    | Y        | The json schema that defines what fields are required for payment |
+| `paymentInstructions` | JSON Object    | Y        | Standard instructions of how the user should pay the PFI. |
 
 
-## `SettlementDetails`
-
-| field  | data type | required | description                                      |
-| ------ | --------- | -------- | ------------------------------------------------ |
-| `body` | string    | Y        | The json schema from SettlementRequest filled in |
-
-## `SettlementReceipt`
+## `PaymentReceipt`
 
 | field | data type | required | description |
 | ----- | --------- | -------- | ----------- |
+| `verifiableCredentialJwt` | string | Y | A VC that represents a receipt of payment in a JWT representation. |
 
 ## `Close`
 
@@ -136,12 +147,11 @@ flowchart TD
     accTitle: State Machine of Message Thread
     accDescr: Possible state sequences for a message thread
     start --> |Alice| RFQ
-    RFQ --> |PFI| Quote[Quote]
-    Quote --> |Alice| QuoteAccept[Quote Accept]
-    QuoteAccept --> |PFI| SETTL_REQ[Settlement Request]
-    SETTL_REQ --> |Alice| SETTL_DETAIL[Settlement Details]
-    SETTL_DETAIL ---> |PFI| SETTL_REQ
-    SETTL_DETAIL --> |PFI| SETTL_RECEIPT[Settlement Receipt]
+    RFQ --> |PFI| Quote
+    Quote --> |Alice| Accept
+    Accept --> |PFI| PaymentRequest
+    PaymentRequest --> |Alice| MakePayment
+    MakePayment --> |PFI| PaymentReceipt
 ```
 
 
