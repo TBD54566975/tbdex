@@ -19,7 +19,7 @@ Read the paper: https://tbdex.io/whitepaper.pdf
 
 ## Roadmap
 
-1. IN PROGRESS: Establish a first draft of the protocol
+1. ✅ Establish a first draft of the protocol
 2. Implement a webhook emitter that works with DWN-aggregators and DIDs to receive asks
 3. Implement a mock PFI that responds to asks with conditional offers
 4. Wrap it all up into a "TBDEX SDK" that can be used by PFIs (that may not be in this repo, however)
