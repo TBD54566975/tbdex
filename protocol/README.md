@@ -4,10 +4,10 @@
 - [Message Types](#message-types)
   - [`Request For Quote`](#quote)
   - [`Quote`](#quote)
-  - [`QuoteAccept`](#quoteaccept)
-  - [`SettlementRequest`](#settlementrequest)
+  - [`Accept`](#quoteaccept)
+  - [`PaymentRequest`](#settlementrequest)
   - [`SettlementDetails`](#settlementdetails)
-  - [`SettlementReceipt`](#settlementreceipt)
+  - [`PaymentReceipt`](#settlementreceipt)
   - [`Close`](#close)
 - [State Machine Diagram](#state-machine-diagram)
 
