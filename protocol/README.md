@@ -1,16 +1,6 @@
-# tbDEX Protocol <!-- omit in toc -->
+# tbDEX Protocol 
 
-- [Message Structure](#message-structure)
-- [Message Types](#message-types)
-  - [`Request For Quote`](#quote)
-  - [`Quote`](#quote)
-  - [`Accept`](#quoteaccept)
-  - [`PaymentRequest`](#settlementrequest)
-  - [`SettlementDetails`](#settlementdetails)
-  - [`PaymentReceipt`](#settlementreceipt)
-  - [`Close`](#close)
-- [State Machine Diagram](#state-machine-diagram)
-
+Currently non normative.
 
 # Message Structure
 
@@ -23,7 +13,7 @@ Every TBDex message contains the following fields:
 | Field         | Data Type     | Required (y/n) | Description                                                                                                                           |
 | ------------- | ------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `id`          | `string`      | Y              | The message ID                                                                                                                        |
-| `threadID`    | `string`      | Y              | The thread ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
+| `contextId`    | `string`      | Y              | The context ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
 | `from`        | `string`      | Y              | The sender's DID                                                                                                                      |
 | `to`          | `string`      | Y              | The recipient's DID                                                                                                                   |
 | `type`        | `string`      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
@@ -170,6 +160,7 @@ sequenceDiagram
   
 ```
 
+Some terminology was inspired by https://github.com/fxcm/FIXAPI
 
 | Resource                                                                                         | Description                                                                   |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
