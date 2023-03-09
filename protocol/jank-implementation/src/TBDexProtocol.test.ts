@@ -1,8 +1,8 @@
-import { RequestForQuoteMessage } from "./TBDexProtocol";
+import { RequestForQuote } from "./TBDexProtocol";
 import { expect } from "chai";
 
-describe("RequestForQuoteMessage", () => {
-  const message: RequestForQuoteMessage = {
+describe("RequestForQuote", () => {
+  const message: RequestForQuote = {
     id: "1234",
     have: "AUD",
     want: "Cheese",

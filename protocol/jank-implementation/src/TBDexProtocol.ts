@@ -1,4 +1,4 @@
-export interface RequestForQuoteMessage {
+export interface RequestForQuote {
     id: string;
     have: string;
     want: string;
@@ -7,7 +7,7 @@ export interface RequestForQuoteMessage {
     paymentTypes?: Record<string, unknown>;
   }
   
-  export interface QuoteMessage {
+  export interface Quote {
     quoteId: string;
     requestForQuoteId: string;
     offerUnit: string;
@@ -18,21 +18,21 @@ export interface RequestForQuoteMessage {
     presentationDefinitionRequest: Record<string, unknown>;
   }
   
-  export interface AcceptMessage {
+  export interface Accept {
     credentialsSubmission: Record<string, unknown>;
     acceptedQuoteId: string;
     deliveryInstructions: Record<string, unknown>;
   }
   
-  export interface PaymentRequestMessage {
+  export interface PaymentRequest {
     paymentInstructions: Record<string, unknown>;
   }
   
-  export interface PaymentReceiptMessage {
+  export interface PaymentReceipt {
     verifiableCredentialJwt: string;
   }
   
-  export interface CloseMessage {
+  export interface Close {
     reason?: string;
   }
   
@@ -42,7 +42,7 @@ export interface RequestForQuoteMessage {
     from: string;
     to: string;
     type: "RequestForQuote" | "Quote" | "Accept" | "PaymentRequest" | "PaymentReceipt" | "Close";
-    body: RequestForQuoteMessage | QuoteMessage | AcceptMessage | PaymentRequestMessage | PaymentReceiptMessage | CloseMessage;
+    body: RequestForQuote | Quote | Accept | PaymentRequest | PaymentReceipt | Close;
     createdTime: number;
     expiresTime?: number;
   }
