@@ -4,7 +4,7 @@ export interface RequestForQuote {
     want: string;
     side: "have" | "want";
     size: number;
-    paymentTypes?: Record<string, unknown>;
+    paymentTypes?: string[];
   }
   
   export interface Quote {

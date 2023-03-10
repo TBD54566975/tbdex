@@ -35,6 +35,7 @@ describe("Fetch Quotes", () => {
             want: 'Cheese',
             side: 'want',
             size: 1,
+            paymentTypes: ['creditCard'],
           },
         createdTime: Date.now(),
       };

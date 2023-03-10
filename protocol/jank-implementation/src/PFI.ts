@@ -26,8 +26,10 @@ export function makeBid(message: TBDexMessage): Quote[] {
   // Extract the RequestForQuote from the TBDexMessage body
   const rfq = message.body as RequestForQuote;
 
-  // Filter the QUOTES array based on the RFQ criteria
-  const filteredQuotes = QUOTES.filter(q => q.payment === rfq.have && q.product === rfq.want);
+
+  // Filter the QUOTES array based on the RFQ criteria and payment types
+  const filteredQuotes = QUOTES.filter(q => q.payment === rfq.have && q.product === rfq.want &&
+    (!rfq.paymentTypes || rfq.paymentTypes.includes(q.paymentType)));
 
   // Create a Quote object for each matching quote
   const quotes = filteredQuotes.map(q => {
@@ -49,7 +51,7 @@ export function makeBid(message: TBDexMessage): Quote[] {
       costUnit: q.payment,
       costSize,
       paymentType: { type: q.paymentType },
-      presentationDefinitionRequest: { credentials: q.credentialsRequired === 'none' ? [] : [{ type: q.credentialsRequired }] },
+      presentationDefinitionRequest: { credentials: q.credentialsRequired === 'none' ? null : { type: q.credentialsRequired } },
     };
 
     return quote;
