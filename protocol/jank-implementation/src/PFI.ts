@@ -36,11 +36,11 @@ export function makeBid(message: TBDexMessage): Quote[] {
     let offerSize = 0, costSize = 0;
 
     if (rfq.side === 'have') {
-      offerSize = rfq.size;
-      costSize = rfq.size / q.rate;
-    } else if (rfq.side === 'want') {
       offerSize = rfq.size / q.rate;
-      costSize = rfq.size;
+      costSize = rfq.size ;
+    } else if (rfq.side === 'want') {
+      offerSize = rfq.size;
+      costSize = rfq.size  * q.rate;
     }
 
     const quote: Quote = {

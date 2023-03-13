@@ -23,6 +23,14 @@ describe("Fetch Quotes", () => {
       };
     console.log(makeBid(msg));
 
+
+    // I should get to quotes back. 
+    // one for a larger amount of cheese, and one for a smaller amount of cheese - the larger one should ask for identity.
+
+    
+
+    
+
     msg = {
         id: 'abcd',
         contextId: 'efgh',
