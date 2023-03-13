@@ -42,7 +42,7 @@ export interface RequestForQuote {
     from: string;
     to: string;
     type: "RequestForQuote" | "Quote" | "Accept" | "PaymentRequest" | "PaymentReceipt" | "Close";
-    body: RequestForQuote | Quote | Accept | PaymentRequest | PaymentReceipt | Close;
+    body: RequestForQuote | [Quote] | Accept | PaymentRequest | PaymentReceipt | Close;
     createdTime: number;
     expiresTime?: number;
   }
