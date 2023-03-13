@@ -23,7 +23,7 @@ describe("Fetch Quotes", () => {
       };
     console.log(makeBid(msg));
 
-    const quotes = makeBid(msg);
+    let quotes = makeBid(msg);
 
     // I should get to quotes back. 
     // one for a larger amount of cheese, and one for a smaller amount of cheese - the larger one should ask for identity.
@@ -34,12 +34,12 @@ describe("Fetch Quotes", () => {
     expect(noIdQuote).to.have.property("costSize", 100);
 
     // larger offer as it asks for a drivers licence. But both cost the same
-    const idQuote = quotes[1];    
+    let idQuote = quotes[1];    
     expect(idQuote).to.have.property("offerSize", 100);
     expect(idQuote).to.have.property("presentationDefinitionRequest");
-    const presentationRequest = idQuote.presentationDefinitionRequest;
+    let presentationRequest = idQuote.presentationDefinitionRequest;
     expect(presentationRequest).to.have.property("credentials");
-    const credentials = presentationRequest.credentials;
+    let credentials = presentationRequest.credentials;
     expect(credentials).to.have.property("type", "driversLicense");
     
     expect(idQuote).to.have.property("costSize", 100);
@@ -68,6 +68,16 @@ describe("Fetch Quotes", () => {
     console.log(bid);
     console.log(bid[1].presentationDefinitionRequest);
     
+    expect(bid).to.have.length(2);
+    let expensiveBid = bid[0];
+    expect(expensiveBid).to.have.property("costSize", 2);
+
+    let cheapBid = bid[1];
+    expect(cheapBid).to.have.property("costSize", 1);
+
+
+
+
 
   });
 });
