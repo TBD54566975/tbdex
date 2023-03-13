@@ -14,8 +14,8 @@ export interface RequestForQuote {
     offerSize: number;
     costUnit: string;
     costSize: number;
-    paymentType: Record<string, unknown>;
-    presentationDefinitionRequest: Record<string, unknown>;
+    paymentType: {  type: string|null  };
+    presentationDefinitionRequest: { credentials: { type: string } | null };
   }
   
   export interface Accept {
