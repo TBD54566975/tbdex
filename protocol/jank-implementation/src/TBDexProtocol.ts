@@ -14,12 +14,12 @@ export interface RequestForQuote {
     offerSize: number;
     costUnit: string;
     costSize: number;
-    paymentType: {  type: string|null  };
-    presentationDefinitionRequest: { credentials: { type: string } | null };
+    paymentType: string;
+    presentationDefinitionRequest?: {type: "verifiablePresentation" | "verifiableCredential", specification: string};
   }
   
   export interface Accept {
-    credentialsSubmission: Record<string, unknown>;
+    credentialsSubmission: {type: "verifiablePresentation" | "verifiableCredential", submission: string};
     acceptedQuoteId: string;
     deliveryInstructions: Record<string, unknown>;
   }

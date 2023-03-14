@@ -43,18 +43,23 @@ export function makeBid(message: TBDexMessage): Quote[] {
       costSize = rfq.size  * q.rate;
     }
 
-    const quote: Quote = {
+    let vcRequired = null
+
+    const quote: Partial<Quote> = {
       quoteId: Math.random().toString(36).substr(2, 9),
       requestForQuoteId: message.id,
       offerUnit: q.product,
       offerSize,
       costUnit: q.payment,
       costSize,
-      paymentType: { type: q.paymentType },
-      presentationDefinitionRequest: { credentials: q.credentialsRequired === 'none' ? null : { type: q.credentialsRequired } },
+      paymentType: q.paymentType,      
     };
 
-    return quote;
+    if (q.credentialsRequired !== 'none') {
+        quote.presentationDefinitionRequest = { type: "verifiableCredential", specification: q.credentialsRequired };
+    }
+
+    return quote as Quote;
   });
 
   return quotes;

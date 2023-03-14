@@ -38,9 +38,9 @@ describe("Fetch Quotes", () => {
     expect(idQuote).to.have.property("offerSize", 100);
     expect(idQuote).to.have.property("presentationDefinitionRequest");
     let presentationRequest = idQuote.presentationDefinitionRequest;
-    expect(presentationRequest).to.have.property("credentials");
-    let credentials = presentationRequest.credentials;
-    expect(credentials).to.have.property("type", "driversLicense");
+    expect(presentationRequest).to.have.property("type");
+    expect(presentationRequest).to.have.property("type", "verifiableCredential");
+    expect(presentationRequest).to.have.property("specification", "driversLicense");
     
     expect(idQuote).to.have.property("costSize", 100);
 
