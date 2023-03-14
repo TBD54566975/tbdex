@@ -3,15 +3,20 @@ import { TBDexMessage, RequestForQuote, Quote } from "./TBDexProtocol";
 
 export function selectBid(
     quotes: Quote[],
-    identities: string[],
+    identityTypes: string[],
     paymentTypes: string[]
   ): Quote | null {
     let bestDeal: Quote | null = null;
     let bestCost: number = Number.POSITIVE_INFINITY;
     for (const quote of quotes) {
-      if (paymentTypes.includes(quote.paymentType.type)) { 
-        const matchingIdentity = identities.find((id) => id === quote.presentationDefinitionRequest.credentials.type);
-        if (matchingIdentity) {
+      if (paymentTypes.includes(quote.paymentType)) {
+        if (
+          (identityTypes.length === 0 && !quote.presentationDefinitionRequest) ||
+          (quote.presentationDefinitionRequest &&
+            identityTypes.includes(
+              quote.presentationDefinitionRequest.type
+            ))
+        ) {
           const cost = quote.costSize * quote.offerSize;
           if (cost < bestCost) {
             bestDeal = quote;

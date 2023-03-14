@@ -55,6 +55,7 @@ export function makeBid(message: TBDexMessage): Quote[] {
       paymentType: q.paymentType,      
     };
 
+    // at the moment we only support VC's for identity
     if (q.credentialsRequired !== 'none') {
         quote.presentationDefinitionRequest = { type: "verifiableCredential", specification: q.credentialsRequired };
     }
