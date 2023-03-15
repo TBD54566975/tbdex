@@ -94,13 +94,13 @@ I'm offering 100 Cheese, and it will cost 150 AUD. You can pay me using a credit
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
 | `credentialsSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies `presentationDefinitionRequest` |
 | `acceptedQuoteId` | string      | Y        | ID ofr the chosen quote                            |
-| `deliveryInstructions` | JSON Object      | Y        | Standard instructions of what the PFI should do after receiving payment.                        |
+| `deliveryInstructions` | JSON Object      | Y        | Standard instructions of what the PFI should do after receiving payment. It could be physical instructions or bank account details of where to settle the funds.                        |
 
 ```json
 {
   "credentialsSubmission": {...},
   "acceptedQuoteId": "5678",
-  "deliveryInstructions": "leave a doggy back with cheese on address 1234"
+  "deliveryInstructions": "leave a doggy bag with cheese on address 1234"
 }
 ```
 
@@ -161,6 +161,12 @@ sequenceDiagram
 ```
 
 Some terminology was inspired by https://github.com/fxcm/FIXAPI
+
+A sketch of the protocol flow done on a whiteboard in NYC: 
+
+![Whiteboard sketch](./whiteboard-sketch.jpeg)
+
+This also shows (above the horizontal line) a propsal for PFI discovery (to find where to send RFQs to).
 
 | Resource                                                                                         | Description                                                                   |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
