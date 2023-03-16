@@ -39,8 +39,6 @@ function implementMakeBid(message: TBDexMessage<RequestForQuote>): Quote[] {
       costSize = rfq.size  * q.rate;
     }
 
-    let vcRequired = null
-
     const quote: Partial<Quote> = {
       quoteId: Math.random().toString(36).substr(2, 9),
       requestForQuoteId: message.id,
