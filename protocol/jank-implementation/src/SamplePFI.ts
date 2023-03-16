@@ -1,28 +1,13 @@
-import { TBDexMessage, RequestForQuote, Quote } from "./TBDexProtocol";
+import { TBDexMessage, RequestForQuote, Quote, PFI } from "./TBDexProtocol";
 
 
-// Define a CSV lookup table of payment, product, rate, paymentType, and credentialsRequired
-const QUOTE_LOOKUP_TABLE = `
-AUD,USD,1.3,creditCard,driversLicense
-AUD,USD,1.4,wireTransfer,driversLicense
-AUD,USD,1.41,wireTransfer,passport
-AUD,Cheese,2,creditCard,none
-AUD,Cheese,1,creditCard,driversLicense
-`;
+export class SamplePFI implements PFI {
+  makeBid(message: TBDexMessage<RequestForQuote>): Quote[] {
+    return implementMakeBid(message);
+  }
+}
 
-// Parse the CSV lookup table into an array of objects
-const QUOTES = QUOTE_LOOKUP_TABLE.trim().split('\n').map(line => {
-  const [payment, product, rate, paymentType, credentialsRequired] = line.split(',');
-  return {
-    payment,
-    product,
-    rate: parseFloat(rate),
-    paymentType,
-    credentialsRequired,
-  };
-});
-
-export function makeBid(message: TBDexMessage): Quote[] {
+function implementMakeBid(message: TBDexMessage<RequestForQuote>): Quote[] {
   // Extract the RequestForQuote from the TBDexMessage body
   const rfq = message.body as RequestForQuote;
 
@@ -65,3 +50,25 @@ export function makeBid(message: TBDexMessage): Quote[] {
 
   return quotes;
 }
+
+
+// Define a CSV lookup table of payment, product, rate, paymentType, and credentialsRequired
+const QUOTE_LOOKUP_TABLE = `
+AUD,USD,1.3,creditCard,driversLicense
+AUD,USD,1.4,wireTransfer,driversLicense
+AUD,USD,1.41,wireTransfer,passport
+AUD,Cheese,2,creditCard,none
+AUD,Cheese,1,creditCard,driversLicense
+`;
+
+// Parse the CSV lookup table into an array of objects
+const QUOTES = QUOTE_LOOKUP_TABLE.trim().split('\n').map(line => {
+  const [payment, product, rate, paymentType, credentialsRequired] = line.split(',');
+  return {
+    payment,
+    product,
+    rate: parseFloat(rate),
+    paymentType,
+    credentialsRequired,
+  };
+});

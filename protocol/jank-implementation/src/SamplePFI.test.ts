@@ -1,12 +1,12 @@
 import { RequestForQuote, TBDexMessage } from "./TBDexProtocol";
 import { expect } from "chai";
-import { makeBid } from "./PFI";
+import { SamplePFI } from "./SamplePFI";
 
 describe("Fetch Quotes", () => {
 
 
   it("smoke test", () => {
-    let msg: TBDexMessage = {
+    let msg: TBDexMessage<RequestForQuote> = {
         id: 'abcd',
         contextId: 'efgh',
         from: 'did:example:alice',
@@ -21,9 +21,11 @@ describe("Fetch Quotes", () => {
           },
         createdTime: Date.now(),
       };
-    console.log(makeBid(msg));
 
-    let quotes = makeBid(msg);
+    const pfi = new SamplePFI();  
+    console.log(pfi.makeBid(msg));
+
+    let quotes = pfi.makeBid(msg);
 
     // I should get to quotes back. 
     // one for a larger amount of cheese, and one for a smaller amount of cheese - the larger one should ask for identity.
@@ -64,7 +66,7 @@ describe("Fetch Quotes", () => {
           },
         createdTime: Date.now(),
       };
-    let bid = makeBid(msg);    
+    let bid = pfi.makeBid(msg);    
     console.log(bid);
     console.log(bid[1].presentationDefinitionRequest);
     

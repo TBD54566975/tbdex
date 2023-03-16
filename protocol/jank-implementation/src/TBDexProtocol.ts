@@ -36,14 +36,21 @@ export interface RequestForQuote {
     reason?: string;
   }
   
-  export interface TBDexMessage {
+  export interface TBDexMessage<T = RequestForQuote | [Quote] | Accept | PaymentRequest | PaymentReceipt | Close> {
     id: string;
     contextId: string;
     from: string;
     to: string;
     type: "RequestForQuote" | "Quote" | "Accept" | "PaymentRequest" | "PaymentReceipt" | "Close";
-    body: RequestForQuote | [Quote] | Accept | PaymentRequest | PaymentReceipt | Close;
+    body: T, //RequestForQuote | [Quote] | Accept | PaymentRequest | PaymentReceipt | Close;
     createdTime: number;
     expiresTime?: number;
   }
   
+
+  /*
+   * To be implemented by PFIs
+   */
+  export interface PFI {
+    makeBid(message: TBDexMessage<RequestForQuote>): Quote[];
+  }
