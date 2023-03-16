@@ -1,6 +1,17 @@
 import { TBDexMessage, RequestForQuote, Quote, PFI } from "./TBDexProtocol";
 
 
+/*
+ * 
+ * This is a sample implementation of a PFI. It is not intended to be used in production. 
+ * A PFI should respond to RFQs with quotes, 
+ * action on Accepts and settle/provide payment details.
+ * 
+ * The PFI interface is evolving to show what is required if you are to be a PFI participating in TBDex.
+ * 
+ * 
+ */
+
 export class SamplePFI implements PFI {
   makeBid(message: TBDexMessage<RequestForQuote>): Quote[] {
     return implementMakeBid(message);

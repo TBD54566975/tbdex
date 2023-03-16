@@ -49,7 +49,7 @@ export interface RequestForQuote {
   
 
   /*
-   * To be implemented by PFIs
+   * To be implemented by PFIs. 
    */
   export interface PFI {
     makeBid(message: TBDexMessage<RequestForQuote>): Quote[];
