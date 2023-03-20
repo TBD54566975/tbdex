@@ -164,7 +164,7 @@ Some terminology was inspired by https://github.com/fxcm/FIXAPI
 
 A sketch of the protocol flow done on a whiteboard in NYC: 
 
-![Whiteboard sketch](./whiteboard-sketch.jpeg)
+![Whiteboard sketch](./whiteboard_sketch.jpeg)
 
 This also shows (above the horizontal line) a propsal for PFI discovery (to find where to send RFQs to).
 
