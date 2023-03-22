@@ -34,7 +34,6 @@ The `body` of each message can be any of the following message types
 | `want` | string    | Y        | What you want.                                                                           |
 | `side`   | enum       | Y        | One of ["have", "want"] |
 | `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
-| `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
 | `paymentTypes`   | JSON Object    | N        |  A normalized object describing the type of payments you need quotes for. When absent, the PFI is free to include any payment types.                 |
 
 ```json
