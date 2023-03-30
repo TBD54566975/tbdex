@@ -5,7 +5,7 @@ import { SamplePFI } from "./SamplePFI";
 describe("Fetch Quotes", () => {
 
 
-  it("smoke test", () => {
+  it("should fetch quotes and match", () => {
     let msg: TBDexMessage<RequestForQuote> = {
         id: 'abcd',
         contextId: 'efgh',
@@ -23,7 +23,7 @@ describe("Fetch Quotes", () => {
       };
 
     const pfi = new SamplePFI();  
-    console.log(pfi.makeBid(msg));
+    
 
     let quotes = pfi.makeBid(msg);
 
@@ -67,8 +67,6 @@ describe("Fetch Quotes", () => {
         createdTime: Date.now(),
       };
     let bid = pfi.makeBid(msg);    
-    console.log(bid);
-    console.log(bid[1].presentationDefinitionRequest);
     
     expect(bid).to.have.length(2);
     let expensiveBid = bid[0];
