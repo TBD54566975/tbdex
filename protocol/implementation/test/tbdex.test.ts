@@ -1,8 +1,8 @@
-import { RequestForQuote } from "./TBDexProtocol";
+import { RequestForQuote } from "../src/interfaces/tbdex-types"
 import { expect } from "chai";
 
 describe("RequestForQuote", () => {
-  const message: RequestForQuote = {
+  const message: RequestForQuote = { 
     id: "1234",
     have: "AUD",
     want: "Cheese",

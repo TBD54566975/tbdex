@@ -1,6 +1,6 @@
-import { RequestForQuote, TBDexMessage } from "./TBDexProtocol";
+import { RequestForQuote, TBDexMessage } from "../src/interfaces/tbdex-types";
 import { expect } from "chai";
-import { SamplePFI } from "./SamplePFI";
+import { SamplePFI } from "../src/mock-pfi/MockPFI";
 
 describe("Fetch Quotes", () => {
 

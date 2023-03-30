@@ -1,5 +1,5 @@
-import { TBDexMessage, RequestForQuote, Quote, PFI } from "./TBDexProtocol";
-
+import { TBDexMessage, RequestForQuote, Quote } from "../interfaces/tbdex-types";
+import { PFI } from "../interfaces/pfi-types";
 
 /*
  * 
