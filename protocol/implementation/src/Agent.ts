@@ -1,4 +1,4 @@
-import { TBDexMessage, RequestForQuote, Quote } from "../interfaces/tbdex-types";
+import { TBDexMessage, RequestForQuote, Quote } from "./interfaces/tbdex-types";
 
 
 export function selectBid(

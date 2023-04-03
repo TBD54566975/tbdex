@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Quote } from "../src/interfaces/tbdex-types";
-import { selectBid } from "../src/mock-pfi/Agent";
+import { selectBid } from "../src/Agent";
 
 describe("selectBid", () => {
   const quotes: Quote[] = [
