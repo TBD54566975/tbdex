@@ -84,11 +84,54 @@ function createAddress(walletId, callback) {
   req.end();
 }
 
+function checkBalance(walletId, callback) {
+    const options = {
+      hostname: 'api-sandbox.circle.com',
+      path: `/v1/transfers?destinationWalletId=${walletId}`,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${api_key}`
+      }
+    };
+  
+    const req = https.request(options, (res) => {
+      let response_data = '';
+  
+      res.on('data', (d) => {
+        response_data += d;
+      });
+  
+      res.on('end', () => {
+        const response_json = JSON.parse(response_data);
+        callback(response_json);
+      });
+    });
+  
+    req.on('error', (error) => {
+      console.error(error);
+    });
+  
+    req.end();
+  }
 
 
-createWallet((walletId) => {
+
+  //Wallet ID: 1015335492
+  //Address: 0xf42d430b12f19b0a25dc894ab2743cbbc1874546
+
+  //checkBalance("1015335492", (balance) => {
+  //  console.log(balance.data[0].amount);
+  //});
+
+  createWallet((walletId) => {
     console.log(`Wallet ID: ${walletId}`);
     createAddress(walletId, (address) => {
         console.log(`Address: ${address}`);
-      });    
+        setInterval(() => {
+            checkBalance(walletId, (balance) => {
+                console.log(`Balance: ${balance}`);
+                console.log(balance);
+            });
+        }, 2000); // 2 seconds in milliseconds
+    });    
 });
