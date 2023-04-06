@@ -41,6 +41,54 @@ function createWallet(callback) {
   req.end();
 }
 
+
+function createAddress(walletId, callback) {
+  const idempotencyKey = uuidv4();
+  const data = JSON.stringify({
+    idempotencyKey: idempotencyKey,
+    currency: 'USD',
+    chain: 'ETH'
+  });
+
+  const options = {
+    hostname: 'api-sandbox.circle.com',
+    path: `/v1/wallets/${walletId}/addresses`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${api_key}`,
+      'Content-Length': data.length,
+      'Accept': 'application/json'
+    }
+  };
+
+  const req = https.request(options, (res) => {
+    let response_data = '';
+
+    res.on('data', (d) => {
+      response_data += d;
+    });
+
+    res.on('end', () => {
+      const response_json = JSON.parse(response_data);
+      const address = response_json.data.address;
+      callback(address);
+    });
+  });
+
+  req.on('error', (error) => {
+    console.error(error);
+  });
+
+  req.write(data);
+  req.end();
+}
+
+
+
 createWallet((walletId) => {
-  console.log(`Wallet ID: ${walletId}`);
+    console.log(`Wallet ID: ${walletId}`);
+    createAddress(walletId, (address) => {
+        console.log(`Address: ${address}`);
+      });    
 });
