@@ -5,7 +5,9 @@
   "version": "0.0.1",
 
   "scripts": {
+
     "test": "NODE_OPTIONS=\"--loader ts-node/esm\" mocha **/*.test.ts"
+
   },
 
   "devDependencies": {
@@ -21,6 +23,12 @@
     "mocha": "^9.1.1",
 
     "ts-node": "^10.9.1"
+
+  },
+
+  "dependencies": {
+
+    "uuid": "^9.0.0"
 
   }
 
