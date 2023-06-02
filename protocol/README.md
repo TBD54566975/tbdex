@@ -25,122 +25,130 @@ Every TBDex message contains the following fields:
 
 The `body` of each message can be any of the following message types
 
+## `Offering`
+| field            | data type | required | description                                                                                          |
+| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `id` | string    | Y        | A unique identifier for this offering.|
+| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
+| `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
+| `fee`   | string       | Y        | Base fee associated with this offering |
+| `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
+| `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
+| `presentationRequest`   | PresentationRequest    | Y        |  PresentationRequest which describes the credential needed to choose this offer.|
+| `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
+| `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
+
+### Note on base and counter currency in `pair`
+There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is selling. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is buying the Counter Currency). In trading terms, the side is always "SELL". 
+
+### `PaymentInstrument`
+| field            | data type | required | description                                                                                          |
+| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `kind` | enum    | Y        | Type of payment instrument (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
+| `fee` | string    | N        | Optional fee associated with using this kind of payment instrument.|
+| `presentationRequest` | PresentationRequest    | Y        | PresentationRequest which describes the credential needed to use this kind of payment instrument.|
+
+PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD, and here are the constraints of my offer, in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me, and what payment instruments I can use to pay you."
+```json
+{
+  "pair": "BTC_USD",
+  "unitPrice": 27000.00,
+  "fee": 1.00,
+  "min": 10.00,
+  "max": 100.00,
+  "presentationRequest": { ... },
+  "payinInstruments": [{
+      "kind": "DEBIT_CARD",
+      "fee": 1,
+      "presentationRequest": {},
+  }],
+  "payoutInstruments": [{
+      "kind": "BTC_ADDRESS",
+      "presentationRequest": {}
+  }]
+}
+```
 ## `RequestForQuote`
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `id` | string    | Y        | A unique identifier for this request.                                                                 |
-| `have` | string    | Y        | What you have.                                                                 |
-| `want` | string    | Y        | What you want.                                                                           |
-| `side`   | enum       | Y        | One of ["have", "want"] |
-| `size`   | int       | Y        | When side is "want", amount of want to spend on order. When "have", amount of have to spend on order.  |
-| `paymentTypes`   | JSON Object    | N        |  A normalized object describing the type of payments you need quotes for. When absent, the PFI is free to include any payment types.                 |
+| `rfqId` | string    | Y        | A unique identifier for this Request for Quote. |
+| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
+| `amount` | string    | Y        | Amount of counter currency you want to spend in order to receive base currency|
+| `verifiablePresentation` | VerifiablePresentation    | Y        | VerifiablePresentation that meets the specification per PresentationRequest in the Offering |
+| `payinInstrument`   | PaymentInstrument       | Y        | Specify which payment instrument to send counter currency. |
+| `payoutInstrument`   | PaymentInstrument       | Y        | Specify which payment instrument to receive base currency. |
+
+Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much counter currency I want to trade for your base currency. Here's the payment instrument I intend to pay you with, and here's the payment instrument I expect you to pay me in."
 
 ```json
 {
-  "id" : "1234",
-  "have": "AUD",
-  "want": "Cheese",
-  "side": "have",
-  "size": 100
+  "rfqId": "1",
+  "pair": "BTC_USD",
+  "amount": 10.00,
+  "verifiablePresentation": { ... },
+  "payin_instrument": {
+      "kind": "DEBIT_CARD"
+  },
+  "payout_instrument": {
+      "kind": "BTC_ADDRESS"
+  }
 }
 ```
-I have 100 AUD, and I want Cheese
 
-```json
-{
-  "id": "1234",
-  "have": "AUD",
-  "want": "Cheese",
-  "side": "want",
-  "size": 100
-}
-```
-I have AUD, and I want 100 Cheese.
-
-
-## Array of `Quote`
+## `Quote`
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `quoteId`        | string         | Y        | Identifier for this quote.                                 |
-| `requestForQuoteId`          | string         | Y        | The request this quote is responding to.                   |
-| `offerUnit`     | string            | Y        | What I'm offering.                                         |
-| `offerSize`     | int         | Y        | Amount that's being offered.                                         |
-| `costUnit`      | string         | Y        | What is being requested in exchange for this offer.                            |
-| `costSize`      | int            | Y        | Amount of `costUnit` that is being requested for this offer.                            |
-| `paymentType`   | JSON Object    | Y        | A normalized object describing the type of payment acceptable for this offer.                        |
-| `presentationDefinitionRequest`     | JSON Object    | Y        | PresentationRequest that describes that credential requirements needed to accept this offer |
+| `rfqId`          | string         | Y        | The identifier of the RFQ request this quote is responding to.|
+| `quoteId`          | string         | Y        | The identifier of this quote.|
+| `expiryTime`     | datetime         | Y        | When this quote expires.|
+| `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote|
+| `amount`     | string         | Y        | Amount of base currency that the PFI is willing to send|
+| `paymentPresentationRequest`     | PresentationRequest   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) |
 
+PFI -> Alice: "OK, here's your Quote that describes how much base currency you will receive based on your RFQ. Here's the total fee associated with the payment instruments you selected, and here is the presentationRequest you can use to send in your payment instruments in, when you're ready to execute the Quote."
 ```json
 {
-  "quoteId": "5678",
-  "requestForQuoteId": "1234",
-  "offerSize": 100,
-  "offerUnit": "Cheese",
-  "costSize": 150,
-  "costUnit": "AUD",  
-  "paymentType": {
-    "type": "creditCard"
-  },
-  "presentationDefinitionRequest": ""
+  "rfqId": "1",
+  "quoteId": "2",
+  "expiryTime": "2023-04-14T12:12:12Z",
+  "totalFee": 1.00,
+  "amount": 0.000383,
+  "paymentPresentationRequest": { ...}
 }
-```
-I'm offering 100 Cheese, and it will cost 150 AUD. You can pay me using a credit card.
 
-## `Accept`
+```
+
+## `Order`
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `credentialsSubmission`   | JSON Object | Y        | Verifiable Presentation that satifies `presentationDefinitionRequest` |
-| `acceptedQuoteId` | string      | Y        | ID ofr the chosen quote                            |
-| `deliveryInstructions` | JSON Object      | Y        | Standard instructions of what the PFI should do after receiving payment. It could be physical instructions or bank account details of where to settle the funds.                        |
+| `orderId`   | string | Y        | A unique identifier for the Order being submitted |
+| `quoteId` | string      | Y        | Identifier referencing the Quote to create the Order|
+| `paymentVerifiablePresentation` | VerifiablePresentation      | Y        | VerifiablePresentation that meets the specification per paymentPresentationRequest in the Quote. |
 
+Alice -> PFI: "Let's execute the Quote and turn it into an Order. Here are my payment instruments in the form of verifiable presentation, built against the paymentPresentationRequest in the Quote."
 ```json
 {
-  "credentialsSubmission": {...},
-  "acceptedQuoteId": "5678",
-  "deliveryInstructions": "leave a doggy bag with cheese on address 1234"
+    "orderId": 32432,
+    "quoteId": 2,
+    "paymentVerifiablePresentation": { ...}
 }
 ```
 
-## `PaymentRequest`
+## `OrderStatus`
 
-| field    | data type | required | description                                                       |
-| -------- | --------- | -------- | ----------------------------------------------------------------- |
-| `paymentInstructions` | JSON Object    | Y        | Standard instructions of how the user should pay the PFI. |
+| field             | data type   | required | description                                                                             |
+| ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
+| `orderId`   | string | Y        | A unique identifier for the Order that was submitted |
+| `orderStatus` | enum      | Y        | Current status of Order that's being executed |
 
-
-## `PaymentReceipt`
-
-| field | data type | required | description |
-| ----- | --------- | -------- | ----------- |
-| `verifiableCredentialJwt` | string | Y | A VC that represents a receipt of payment in a JWT representation. |
-
-## `Close`
-
-| field    | data type | required | description        |
-| -------- | --------- | -------- | ------------------ |
-| `reason` | string    | ?        | Reason for closing |
-
-# State Machine Diagram
-
-A sequence of associated messages is defined as a message thread. This diagram illustrates all possible state sequences for a message thread.
-Each vertex represents a message type. Each edge represents who can transition the state of a message thread to the next vertex.
-
-For example, starting from the top: "A PFI can reply to an `RFQ` with a `Quote`"
-
-_Note: Assume that any vertex can transition to a `Close` by either participant_
-
-```mermaid
-flowchart TD
-    accTitle: State Machine of Message Thread
-    accDescr: Possible state sequences for a message thread
-    start --> |Alice| RFQ
-    RFQ --> |PFI| Quote
-    Quote --> |Alice| Accept
-    Accept --> |PFI| PaymentRequest
-    PaymentRequest --> |Alice| MakePayment
-    MakePayment --> |PFI| PaymentReceipt
+PFI -> Alice: "Here's the status of your order."
+```json
+{
+    "orderId": 32432,
+    "orderStatus": "PENDING"
+}
 ```
 
 # Sequence Diagram
@@ -148,24 +156,18 @@ flowchart TD
 ```mermaid
 sequenceDiagram
   actor Alice
-  actor PFI
-  Alice->>PFI: RequestForQuote
-  PFI->>Alice: []Quote
-  Alice->>PFI: Accept
-  PFI->>Alice: PaymentRequest
-  Alice->>Interwebs: PayMoneyz
-  Interwebs->>PFI: PaymentHook
-  PFI->>Alice: PaymentReceipt
-  
+	actor PFI1
+  actor PFI2
+	actor PFIn
+	PFI1->>Alice: Offering
+	PFI2->>Alice: Offering
+	PFIn->>Alice: Offering
+  Alice->>PFI1: RequestForQuote (RFQ)
+  PFI1->>Alice: Quote
+  Alice->>PFI1: Order
+  PFI1->>Alice: OrderStatus
 ```
 
-Some terminology was inspired by https://github.com/fxcm/FIXAPI
-
-A sketch of the protocol flow done on a whiteboard in NYC: 
-
-![Whiteboard sketch](./whiteboard_sketch.jpeg)
-
-This also shows (above the horizontal line) a propsal for PFI discovery (to find where to send RFQs to).
 
 | Resource                                                                                         | Description                                                                   |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
