@@ -31,7 +31,7 @@ The `body` of each message can be any of the following message types
 | `id` | string    | Y        | A unique identifier for this offering.|
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
-| `fee`   | string       | Y        | Base fee associated with this offering |
+| `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which Payment Instruments are used |
 | `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
 | `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
 | `presentationRequest`   | PresentationRequest    | Y        |  PresentationRequest which describes the credential needed to choose this offer.|
@@ -45,26 +45,25 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `kind` | enum    | Y        | Type of payment instrument (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `fee` | string    | N        | Optional fee associated with using this kind of payment instrument.|
-| `presentationRequest` | PresentationRequest    | Y        | PresentationRequest which describes the credential needed to use this kind of payment instrument.|
+| `fee` | object    | N        | Optional fee associated with using this kind of payment instrument.|
 
 PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD, and here are the constraints of my offer, in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me, and what payment instruments I can use to pay you."
 ```json
 {
   "pair": "BTC_USD",
   "unitPrice": 27000.00,
-  "fee": 1.00,
+  "baseFee": 1.00,
   "min": 10.00,
   "max": 100.00,
-  "presentationRequest": { ... },
+  "presentationRequest": { /* Presentation Request for KYC VC */ },
   "payinInstruments": [{
       "kind": "DEBIT_CARD",
-      "fee": 1,
-      "presentationRequest": {},
+      "fee": {
+        "flatFee": 1.00
+      }
   }],
   "payoutInstruments": [{
-      "kind": "BTC_ADDRESS",
-      "presentationRequest": {}
+      "kind": "BTC_ADDRESS"
   }]
 }
 ```
@@ -86,11 +85,11 @@ Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offerin
   "rfqId": "1",
   "pair": "BTC_USD",
   "amount": 10.00,
-  "verifiablePresentation": { ... },
-  "payin_instrument": {
+  "verifiablePresentation": { /* Alice's KYC VC in Verifiable Presentation format */ },
+  "payinInstrument": {
       "kind": "DEBIT_CARD"
   },
-  "payout_instrument": {
+  "payoutInstrument": {
       "kind": "BTC_ADDRESS"
   }
 }
@@ -114,7 +113,7 @@ PFI -> Alice: "OK, here's your Quote that describes how much base currency you w
   "expiryTime": "2023-04-14T12:12:12Z",
   "totalFee": 1.00,
   "amount": 0.000383,
-  "paymentPresentationRequest": { ...}
+  "paymentPresentationRequest": { /* Payin and payout instrument presentation requests in one */ }
 }
 
 ```
@@ -132,7 +131,7 @@ Alice -> PFI: "Let's execute the Quote and turn it into an Order. Here are my pa
 {
     "orderId": 32432,
     "quoteId": 2,
-    "paymentVerifiablePresentation": { ...}
+    "paymentVerifiablePresentation": { /* Alice's Debit Card and Bitcoin VC in Verifiable Presentation format  */}
 }
 ```
 

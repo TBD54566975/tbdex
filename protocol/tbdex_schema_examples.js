@@ -1,18 +1,18 @@
 let offering = {
   "pair": "BTC_USD",
   "unitPrice": 27000.00,
-  "fee": 1.00,
+  "baseFee": 1.00,
   "min": 10.00,
   "max": 100.00,
   "presentationRequest": { },
   "payinInstruments": [{
       "kind": "DEBIT_CARD",
-      "fee": 1,
-      "presentationRequest": {},
+      "fee": {
+        "flatFee": 1.00
+      }
   }],
   "payoutInstruments": [{
-      "kind": "BTC_ADDRESS",
-      "presentationRequest": {}
+      "kind": "BTC_ADDRESS"
   }]
 }
 
@@ -33,7 +33,7 @@ let quote = {
   "rfqId": "1",
   "quoteId": "2",
   "expiryTime": "2023-04-14T12:12:12Z",
-  "totalFee": 1.00,
+  "totalFee": 2.00,
   "amount": 0.000383,
   "paymentPresentationRequest": { }
 }
