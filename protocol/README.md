@@ -29,12 +29,13 @@ The `body` of each message can be any of the following message types
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `id` | string    | Y        | A unique identifier for this offering.|
+| `description` | string    | Y        | Brief description of what is being offered.|
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
 | `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which Payment Instruments are used |
 | `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
 | `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
-| `presentationRequest`   | PresentationRequest    | Y        |  PresentationRequest which describes the credential needed to choose this offer.|
+| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT format which describes the credential needed to choose this offer.|
 | `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
 | `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
 
@@ -50,12 +51,13 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD, and here are the constraints of my offer, in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me, and what payment instruments I can use to pay you."
 ```json
 {
+  "description": "Buy BTC with USD, much wow!",
   "pair": "BTC_USD",
   "unitPrice": 27000.00,
   "baseFee": 1.00,
   "min": 10.00,
   "max": 100.00,
-  "presentationRequest": { /* Presentation Request for KYC VC */ },
+  "presentationRequestJwt": "/* Presentation Request for KYC VC in JWT string format */",
   "payinInstruments": [{
       "kind": "DEBIT_CARD",
       "fee": {
@@ -101,11 +103,11 @@ Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offerin
 | `rfqId`          | string         | Y        | The identifier of the RFQ request this quote is responding to.|
 | `quoteId`          | string         | Y        | The identifier of this quote.|
 | `expiryTime`     | datetime         | Y        | When this quote expires.|
-| `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote|
-| `amount`     | string         | Y        | Amount of base currency that the PFI is willing to send|
-| `paymentPresentationRequest`     | PresentationRequest   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) |
+| `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote in counter currency.|
+| `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
+| `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) |
 
-PFI -> Alice: "OK, here's your Quote that describes how much base currency you will receive based on your RFQ. Here's the total fee associated with the payment instruments you selected, and here is the presentationRequest you can use to send in your payment instruments in, when you're ready to execute the Quote."
+PFI -> Alice: "OK, here's your Quote that describes how much base currency you will receive based on your RFQ. Here's the total fee associated with the payment instruments you selected, and here is the paymentPresentationRequestJwt you can use to send in your payment instruments in, when you're ready to execute the Quote."
 ```json
 {
   "rfqId": "1",
@@ -113,7 +115,7 @@ PFI -> Alice: "OK, here's your Quote that describes how much base currency you w
   "expiryTime": "2023-04-14T12:12:12Z",
   "totalFee": 1.00,
   "amount": 0.000383,
-  "paymentPresentationRequest": { /* Payin and payout instrument presentation requests in one */ }
+  "paymentPresentationRequestJwt": "/* Payin and payout instrument presentation requests in one, in JWT string format */"
 }
 
 ```
