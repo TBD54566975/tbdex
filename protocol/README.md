@@ -21,26 +21,31 @@ Every TBDex message contains the following fields:
 | `createdTime` | `long`        | Y              | The creation time of the message. Expressed as seconds since the Epoch                                                                |
 | `expiresTime` | `long`        | N              | The time after which this message should be considered as expired. Expressed as seconds since the Epoch                               |
 
+
+# ID for each message types
+The top-level TBDex `id` will serve as each message type's unique identifier. The message type is indicated with `type` field (i.e. `Offering`, `RFQ`, etc). `contextId` will serve as a way to identify a "thread" of messages sent back and forth between Alice and PFI.
+
 # Message Types
 
-The `body` of each message can be any of the following message types
+The `body` of each message can be any of the following message types.
 
 ## `Offering`
+> PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD. Here are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me USD, and what payment instruments I can use to pay you BTC."
+
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `id` | string    | Y        | A unique identifier for this offering.|
 | `description` | string    | Y        | Brief description of what is being offered.|
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
 | `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which Payment Instruments are used |
 | `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
 | `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
-| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT format which describes the credential needed to choose this offer.|
+| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
 | `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
 | `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
 
 ### Note on base and counter currency in `pair`
-There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is selling. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is buying the Counter Currency). In trading terms, the side is always "SELL". 
+There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is **selling**. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is **buying** the Counter Currency). In trading terms, the PFI's side is always "SELL". 
 
 ### `PaymentInstrument`
 | field            | data type | required | description                                                                                          |
@@ -48,109 +53,129 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 | `kind` | enum    | Y        | Type of payment instrument (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
 | `fee` | object    | N        | Optional fee associated with using this kind of payment instrument.|
 
-PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD, and here are the constraints of my offer, in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me, and what payment instruments I can use to pay you."
+
 ```json
 {
-  "description": "Buy BTC with USD, much wow!",
+  "description": "Buy BTC with USD!",
   "pair": "BTC_USD",
   "unitPrice": 27000.00,
   "baseFee": 1.00,
   "min": 10.00,
   "max": 100.00,
-  "presentationRequestJwt": "/* Presentation Request for KYC VC in JWT string format */",
+  "presentationRequestJwt": "eyJhb...MIDw",
   "payinInstruments": [{
-      "kind": "DEBIT_CARD",
-      "fee": {
-        "flatFee": 1.00
-      }
+    "kind": "DEBIT_CARD",
+    "fee": {
+      "flatFee": 1.00
+    }
+  },
+  {
+    "kind": "CREDIT_CARD",
+    "fee": {
+      "flatFee": 4.00
+    }
   }],
   "payoutInstruments": [{
-      "kind": "BTC_ADDRESS"
+    "kind": "BTC_ADDRESS"
   }]
 }
 ```
 ## `RequestForQuote`
+> Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much USD I want to trade for BTC. Here's the payment instrument I intend to pay you USD with, and here's the payment instrument I expect you to pay me BTC in."
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `rfqId` | string    | Y        | A unique identifier for this Request for Quote. |
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `amount` | string    | Y        | Amount of counter currency you want to spend in order to receive base currency|
-| `verifiablePresentation` | VerifiablePresentation    | Y        | VerifiablePresentation that meets the specification per PresentationRequest in the Offering |
+| `verifiablePresentationJwt` | string    | Y        | VerifiablePresentation that meets the specification per PresentationRequest in the Offering, in JWT string format |
 | `payinInstrument`   | PaymentInstrument       | Y        | Specify which payment instrument to send counter currency. |
 | `payoutInstrument`   | PaymentInstrument       | Y        | Specify which payment instrument to receive base currency. |
 
-Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much counter currency I want to trade for your base currency. Here's the payment instrument I intend to pay you with, and here's the payment instrument I expect you to pay me in."
 
 ```json
 {
-  "rfqId": "1",
   "pair": "BTC_USD",
   "amount": 10.00,
-  "verifiablePresentation": { /* Alice's KYC VC in Verifiable Presentation format */ },
+  "verifiablePresentationJwt": "",
   "payinInstrument": {
-      "kind": "DEBIT_CARD"
+    "kind": "DEBIT_CARD"
   },
-  "payoutInstrument": {
-      "kind": "BTC_ADDRESS"
+  "payoutInnstrument": {
+    "kind": "BTC_ADDRESS"
   }
 }
 ```
 
 ## `Quote`
+> PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment instruments you selected. Here's how to pay us, and how to let us pay you (using paymentPresentationRequestJwt and/or paymentInstructions), when you're ready to execute the Quote. This quote expires at X time."
+
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `rfqId`          | string         | Y        | The identifier of the RFQ request this quote is responding to.|
-| `quoteId`          | string         | Y        | The identifier of this quote.|
 | `expiryTime`     | datetime         | Y        | When this quote expires.|
 | `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote in counter currency.|
 | `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
-| `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) |
+| `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) in JWT string format|
+| `paymentInstructions`     | PaymentInstructions   | Y        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment must be performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
 
-PFI -> Alice: "OK, here's your Quote that describes how much base currency you will receive based on your RFQ. Here's the total fee associated with the payment instruments you selected, and here is the paymentPresentationRequestJwt you can use to send in your payment instruments in, when you're ready to execute the Quote."
+### `PaymentInstructions`
+| field            | data type | required | description                                                                                          |
+| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `payin` | PaymentInstruction    | N        | Link or Instruction describing how to pay the PFI. |
+| `payout` | PaymentInstruction    | N        | Link or Instruction describing how to get paid by the PFI|
+
+### `PaymentInstruction`
+| field            | data type | required | description                                                                                          |
+| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `link` | PaymentInstruction    | N        | Link to allow Alice to pay PFI, or be paid by the PFI |
+| `instruction` | PaymentInstruction    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI|
+
+
 ```json
 {
-  "rfqId": "1",
-  "quoteId": "2",
   "expiryTime": "2023-04-14T12:12:12Z",
-  "totalFee": 1.00,
+  "totalFee": 2.00,
   "amount": 0.000383,
-  "paymentPresentationRequestJwt": "/* Payin and payout instrument presentation requests in one, in JWT string format */"
+  "paymentPresentationRequestJwt": "eyJhbGc...EWfNnAw",
+  "paymentInstructions": {
+    "payin": {
+      "link": "stripe.com/xyz"
+    }
+  }
 }
-
 ```
 
 ## `Order`
+> Alice -> PFI: "Let's execute the Quote and turn it into an Order. Here are my payment instruments in the form of verifiable presentation, built against the paymentPresentationRequestJwt in the Quote."
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `orderId`   | string | Y        | A unique identifier for the Order being submitted |
-| `quoteId` | string      | Y        | Identifier referencing the Quote to create the Order|
-| `paymentVerifiablePresentation` | VerifiablePresentation      | Y        | VerifiablePresentation that meets the specification per paymentPresentationRequest in the Quote. |
+| `paymentVerifiablePresentationJwt` | string      | Y        | VerifiablePresentation that meets the specification per paymentPresentationRequest in the Quote, in JWT string format. |
 
-Alice -> PFI: "Let's execute the Quote and turn it into an Order. Here are my payment instruments in the form of verifiable presentation, built against the paymentPresentationRequest in the Quote."
 ```json
 {
-    "orderId": 32432,
-    "quoteId": 2,
-    "paymentVerifiablePresentation": { /* Alice's Debit Card and Bitcoin VC in Verifiable Presentation format  */}
+  "paymentVerifiablePresentationJwt": "..."
 }
 ```
 
 ## `OrderStatus`
+> PFI -> Alice: "Here's the status of your order."
 
 | field             | data type   | required | description                                                                             |
 | ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `orderId`   | string | Y        | A unique identifier for the Order that was submitted |
 | `orderStatus` | enum      | Y        | Current status of Order that's being executed |
 
-PFI -> Alice: "Here's the status of your order."
 ```json
 {
-    "orderId": 32432,
-    "orderStatus": "PENDING"
+  "orderStatus": "PENDING"
 }
 ```
+
+## Fields that may change in future versions of the schema
+- `pair` in `Offering` object: there's a discussion on whether to stick to this pair convention, or to split it out to 2 fields - base and counter currency.
+- `fee` in `Offering` object: the way PFIs assess fees for a given offering, as well as for specific payment methods will become more complex over time. Currently, there's only 1 field in the fee object, `flatFee`.
+- `expiryTime` in `Offering` object: this field will likely be added in future versions to ensure that PFIs can advertise the most up-to-date offerings, and to ensure that Quote price is not a vast departure from the corresponding Offering.
+- `paymentInstructions` in `Quote` object: this object is currently in place to ensure that a PFI that cannot accept raw payinInstrument object as a VC (i.e. plaintext values) for PCI compliance reasons, and therefore need to use a 3rd party payment processor to execute payment "out-of-band". There's still more thoughts that need to form around whether this is a good long-term solution, or if something like Proof of Payment VC issued by Payment Processor, or use of a smart contract would be more appropriate.
+- `min/max` at the top level of `Offering` or specific to each `payin/outInstrument`: it's possible that we may want to specify `min/max` amount depending on each payment instrument
 
 # Sequence Diagram
 
