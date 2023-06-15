@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "lib": [
+      "DOM",
+      "ES6"
+    ],
+    "allowJs": true,
+    "target": "es6",
+    "module": "ESNext",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "dist/types",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true
+  },
+  "include": [
+    "./src/main.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}
