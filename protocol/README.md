@@ -4,7 +4,7 @@ Currently non normative.
 
 # Message Structure
 
-This is a high level description of the message structure. In certainl implementations, some fields may be ommitted as they are part of some external envelope when transmitting on the wire as a message payload (for example - `threadID` is part of a DWN message (aka `contextId`), or DIDComm message, or could be a HTTP header). 
+This is a high level description of the message structure. In certain implementations, some fields may be omitted as they are part of some external envelope when transmitting on the wire as a message payload (for example - `threadID` is part of a DWN message (aka `contextId`), or DIDComm message, or could be a HTTP header). 
 
 In any case, PFIs implementing this protocol should consider the fields below.
 
@@ -100,7 +100,7 @@ There's an explicit directionality baked into the `pair` naming convention, whic
   "payinInstrument": {
     "kind": "DEBIT_CARD"
   },
-  "payoutInnstrument": {
+  "payoutInstrument": {
     "kind": "BTC_ADDRESS"
   }
 }
@@ -126,8 +126,8 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 ### `PaymentInstruction`
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `link` | PaymentInstruction    | N        | Link to allow Alice to pay PFI, or be paid by the PFI |
-| `instruction` | PaymentInstruction    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI|
+| `link` | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI |
+| `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI|
 
 
 ```json
