@@ -1,0 +1,276 @@
+{
+    "definitions": {
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "contextId": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "createdTime": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "id",
+                "contextId",
+                "from",
+                "to",
+                "dateCreated"
+            ]
+        },
+        "offering": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "pair": {
+                    "type": "string"
+                },
+                "unitPrice": {
+                    "type": "number"
+                },
+                "baseFee": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "string"
+                },
+                "max": {
+                    "type": "string"
+                },
+                "presentationRequestJwt": {
+                    "type": "string"
+                },
+                "payinInstruments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/paymentInstrument"
+                    }
+                },
+                "payoutInstruments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/paymentInstrument"
+                    }
+                }
+            },
+            "required": [
+                "description",
+                "pair",
+                "unitPrice",
+                "min",
+                "max",
+                "presentationRequestJwt",
+                "payinInstruments",
+                "payoutInstruments"
+            ]
+        },
+        "rfq": {
+            "type": "object",
+            "properties": {
+                "pair": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "string"
+                },
+                "verifiablePresentationJwt": {
+                    "type": "string"
+                },
+                "payinInstrument": {
+                    "$ref": "#/definitions/paymentInstrument"
+                },
+                "payoutInstrument": {
+                    "$ref": "#/definitions/paymentInstrument"
+                }
+            },
+            "required": [
+                "pair",
+                "amount",
+                "verifiablePresentationJwt",
+                "payinInstrument",
+                "payoutInstrument"
+            ]
+        },
+        "quote": {
+            "type": "object",
+            "properties": {
+                "expiryTime": {
+                    "type": "number"
+                },
+                "totalFee": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "string"
+                },
+                "paymentPresentationRequestJwt": {
+                    "type": "string"
+                },
+                "paymentInstructions": {
+                    "$ref": "#/definitions/paymentInstructions"
+                }
+            },
+            "required": [
+                "expiryTime",
+                "totalFee",
+                "amount",
+                "paymentPresentationRequestJwt",
+                "paymentInstructions"
+            ]
+        },
+        "order": {
+            "type": "object",
+            "properties": {
+                "paymentVerifiablePresentationJwt": {
+                    "type": "string"
+                },
+                "required": [
+                    "paymentVerifiablePresentationJwt"
+                ]
+            }
+        },
+        "orderStatus": {
+            "type": "object",
+            "properties": {
+                "orderStatus": {
+                    "type": {
+                        "enum": [
+                            "PENDING"
+                        ]
+                    }
+                },
+                "required": [
+                    "orderStatus"
+                ]
+            }
+        },
+        "paymentInstrument": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "enum": [
+                        "DEBIT_CARD",
+                        "BITCOIN_ADDRESS"
+                    ]
+                },
+                "fee": {
+                    "type": "object"
+                }
+            },
+            "required": [
+                "kind"
+            ]
+        },
+        "paymentInstructions": {
+            "type": "object",
+            "properties": {
+                "payin": {
+                    "$ref": "#/definitions/paymentInstruction"
+                },
+                "payout": {
+                    "$ref": "#/definitions/paymentInstruction"
+                }
+            }
+        },
+        "paymentInstruction": {
+            "type": "object",
+            "properties": {
+                "link": {
+                    "type": "string"
+                },
+                "instruction": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/definitions/metadata"
+        },
+        {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "enum": [
+                        "offering",
+                        "rfq",
+                        "quote",
+                        "order",
+                        "orderStatus"
+                    ]
+                }
+            }
+        },
+        {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "required": [
+                        "body"
+                    ],
+                    "properties": {
+                        "body": {
+                            "$ref": "#/definitions/offering"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "body"
+                    ],
+                    "properties": {
+                        "body": {
+                            "$ref": "#/definitions/rfq"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "body"
+                    ],
+                    "properties": {
+                        "body": {
+                            "$ref": "#/definitions/quote"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "body"
+                    ],
+                    "properties": {
+                        "body": {
+                            "$ref": "#/definitions/order"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "body"
+                    ],
+                    "properties": {
+                        "body": {
+                            "$ref": "#/definitions/orderStatus"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
