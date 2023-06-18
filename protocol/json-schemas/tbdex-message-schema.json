@@ -17,6 +17,9 @@
                 },
                 "createdTime": {
                     "type": "number"
+                },
+                "expiryTime": {
+                    "type": "number"
                 }
             },
             "required": [
@@ -134,26 +137,25 @@
             "properties": {
                 "paymentVerifiablePresentationJwt": {
                     "type": "string"
-                },
-                "required": [
-                    "paymentVerifiablePresentationJwt"
-                ]
-            }
+                }
+            },
+            "required": [
+                "paymentVerifiablePresentationJwt"
+            ]
         },
         "orderStatus": {
             "type": "object",
             "properties": {
                 "orderStatus": {
-                    "type": {
-                        "enum": [
-                            "PENDING"
-                        ]
-                    }
-                },
-                "required": [
-                    "orderStatus"
-                ]
-            }
+                    "enum": [
+                        "PENDING",
+                        "COMPLETED"
+                    ]
+                }
+            },
+            "required": [
+                "orderStatus"
+            ]
         },
         "paymentInstrument": {
             "type": "object",
