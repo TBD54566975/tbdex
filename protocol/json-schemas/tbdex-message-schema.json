@@ -202,27 +202,17 @@
             "$ref": "#/definitions/metadata"
         },
         {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "enum": [
-                        "offering",
-                        "rfq",
-                        "quote",
-                        "order",
-                        "orderStatus"
-                    ]
-                }
-            }
-        },
-        {
             "oneOf": [
                 {
                     "type": "object",
                     "required": [
+                        "type",
                         "body"
                     ],
                     "properties": {
+                        "type": {
+                            "const": "offering"
+                        },
                         "body": {
                             "$ref": "#/definitions/offering"
                         }
@@ -231,9 +221,13 @@
                 {
                     "type": "object",
                     "required": [
+                        "type",
                         "body"
                     ],
                     "properties": {
+                        "type": {
+                            "const": "rfq"
+                        },
                         "body": {
                             "$ref": "#/definitions/rfq"
                         }
@@ -253,9 +247,13 @@
                 {
                     "type": "object",
                     "required": [
+                        "type",
                         "body"
                     ],
                     "properties": {
+                        "type": {
+                            "const": "order"
+                        },
                         "body": {
                             "$ref": "#/definitions/order"
                         }
@@ -264,9 +262,13 @@
                 {
                     "type": "object",
                     "required": [
+                        "type",
                         "body"
                     ],
                     "properties": {
+                        "type": {
+                            "const": "orderStatus"
+                        },
                         "body": {
                             "$ref": "#/definitions/orderStatus"
                         }
