@@ -12,14 +12,13 @@ Every TBDex message contains the following fields:
 
 | Field         | Data Type     | Required (y/n) | Description                                                                                                                           |
 | ------------- | ------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`          | `string`      | Y              | The message ID                                                                                                                        |
-| `contextId`    | `string`      | Y              | The context ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
-| `from`        | `string`      | Y              | The sender's DID                                                                                                                      |
-| `to`          | `string`      | Y              | The recipient's DID                                                                                                                   |
-| `type`        | `string`      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
-| `body`        | `JSON Object` | Y              | The actual message content. the fields within `body` must adhere to the fields expected for the given message type                    |
-| `createdTime` | `long`        | Y              | The creation time of the message. Expressed as seconds since the Epoch                                                                |
-| `expiresTime` | `long`        | N              | The time after which this message should be considered as expired. Expressed as seconds since the Epoch                               |
+| `id`          | string      | Y              | The message ID                                                                                                                        |
+| `contextId`    | string      | Y              | The context ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
+| `from`        | string      | Y              | The sender's DID                                                                                                                      |
+| `to`          | string      | Y              | The recipient's DID                                                                                                                   |
+| `type`        | string      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
+| `body`        | JSON Object | Y              | The actual message content. the fields within `body` must adhere to the fields expected for the given message type                   |
+| `createdTime` | datetime        | Y              | The creation time of the message. Expressed in ISO8601 compliant string.|
 
 
 # ID for each message types
@@ -111,7 +110,7 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `expiryTime`     | datetime         | Y        | When this quote expires.|
+| `expiryTime`     | datetime         | Y        | When this quote expires. Expressed in ISO8601 compliant string.|
 | `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote in counter currency.|
 | `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
 | `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) in JWT string format|
