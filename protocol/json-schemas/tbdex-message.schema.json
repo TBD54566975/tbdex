@@ -1,5 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://tbdex.io/tbdex-message.schema.json",
     "title": "tbDEX Message",
     "definitions": {
         "metadata": {
@@ -18,10 +19,8 @@
                     "type": "string"
                 },
                 "createdTime": {
-                    "type": "number"
-                },
-                "expiryTime": {
-                    "type": "number"
+                    "type": "string",
+                    "format": "date-time"
                 }
             },
             "required": [
@@ -29,7 +28,7 @@
                 "contextId",
                 "from",
                 "to",
-                "dateCreated"
+                "createdTime"
             ]
         },
         "offering": {
@@ -111,7 +110,8 @@
             "type": "object",
             "properties": {
                 "expiryTime": {
-                    "type": "number"
+                    "type": "string",
+                    "format": "date-time"
                 },
                 "totalFee": {
                     "type": "string"
@@ -151,7 +151,8 @@
                 "orderStatus": {
                     "enum": [
                         "PENDING",
-                        "COMPLETED"
+                        "COMPLETED",
+                        "FAILED"
                     ]
                 }
             },
