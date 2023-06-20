@@ -43,7 +43,7 @@ export interface Offering {
 export interface PaymentInstrument {
   kind: "DEBIT_CARD" | "BITCOIN_ADDRESS"
   fee?: {
-    [k: string]: unknown
+    flatFee?: string
   }
 }
 export interface Rfq {
