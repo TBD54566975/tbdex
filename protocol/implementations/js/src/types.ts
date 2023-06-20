@@ -9,6 +9,7 @@ export type TbDEXMessage = Metadata &
         body: Rfq
       }
     | {
+        type: "quote",
         body: Quote
       }
     | {
