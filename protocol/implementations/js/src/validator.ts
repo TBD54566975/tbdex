@@ -2,7 +2,7 @@ import Ajv from 'ajv';
 
 import tbdexMessage from '../../../json-schemas/tbdex-message.schema.json' assert { type: 'json' };
 
-const validator = new Ajv.default();
+const validator = new Ajv();
 validator.addSchema(tbdexMessage, 'tbdex-message');
 
 export const SchemaName = 'tbdex-message';
