@@ -13,7 +13,8 @@
     "declarationMap": true,
     "declarationDir": "dist/types",
     "moduleResolution": "NodeNext",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "include": [
     "./src",

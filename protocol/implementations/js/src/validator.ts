@@ -1,8 +1,8 @@
 import Ajv from 'ajv';
 
-import tbdexMessage from '../../../../json-schemas/tbdex-message.schema.json' assert { type: 'json' };
+import tbdexMessage from '../../../json-schemas/tbdex-message.schema.json' assert { type: 'json' };
 
-const validator = new Ajv();
+const validator = new Ajv.default();
 validator.addSchema(tbdexMessage, 'tbdex-message');
 
 export const SchemaName = 'tbdex-message';

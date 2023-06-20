@@ -1,4 +1,4 @@
-import { TbDex } from '../types'
+import { TbDex } from './types.js'
 
 type Metadata = {
     createdTime: string,
