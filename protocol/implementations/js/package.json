@@ -44,7 +44,18 @@
       "types": "./dist/types/main.d.ts"
     }
   },
-  "dependencies": {},
+  "browser": {
+    "./dist/esm/main.mjs": "./dist/browser.mjs",
+    "./dist/cjs/main.cjs": "./dist/browser.js",
+    "types": "./dist/types/main.d.ts"
+  },
+  "keywords": [],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "ajv": "8.12.0"
+  },
   "devDependencies": {
     "@playwright/test": "1.34.3",
     "@types/eslint": "8.37.0",
