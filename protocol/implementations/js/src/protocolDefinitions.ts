@@ -100,7 +100,7 @@ export const pfiProtocolDefinition = {
             // PFI is sending OUT quotes. no one should be writing Quotes to PFIs.
             'Quote': {
                 '$actions': [],
-                // PFI who received an RFQ/Quote (i.e. Alice) can write Order to PFI's DWN
+                // only Alice, who received an RFQ/Quote, can write Order to PFI's DWN
                 // no one can read Order from PFI's DWN (except the PFI itself)
                 'Order': {
                     '$actions': [
