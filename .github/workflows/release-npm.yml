@@ -3,6 +3,8 @@ name: Release to NPM Registry
 on:
   release:
     types: [created]
+  
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # Allow only one concurrent deployment,but do NOT cancel in-progress runs as
