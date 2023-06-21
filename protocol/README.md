@@ -79,7 +79,7 @@ There's an explicit directionality baked into the `pair` naming convention, whic
   }]
 }
 ```
-## `RequestForQuote`
+## `RequestForQuote (RFQ for short)`
 > Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much USD I want to trade for BTC. Here's the payment instrument I intend to pay you USD with, and here's the payment instrument I expect you to pay me BTC in."
 
 | field            | data type | required | description                                                                                          |
