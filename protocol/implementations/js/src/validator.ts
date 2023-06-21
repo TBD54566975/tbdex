@@ -27,7 +27,6 @@ export function validateMessage(payload: any): void {
     const [errorObj] = validateFn.errors;
     let { instancePath, message } = errorObj;
 
-    console.log(`${ instancePath ?? SchemaName}: ${ message }`);
     throw new SchemaValidationError(`${instancePath ?? SchemaName}: ${message}`);
 }
 

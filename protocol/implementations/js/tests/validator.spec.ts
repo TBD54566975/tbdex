@@ -21,7 +21,7 @@ const validMessage = {
             {
                 "kind": "DEBIT_CARD",
                 "fee": {
-                    "flatFee": 1.0
+                    "flatFee": "1.0"
                 }
             }
         ],
