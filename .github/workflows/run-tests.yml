@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: cd into js directory
+        run: cd protocol/implementations/js
+
       - name: Report known vulnerabilities
         run: npm audit
 
