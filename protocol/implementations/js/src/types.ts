@@ -1,26 +1,9 @@
-export type TbDEXMessage = Metadata &
-  (
-    | {
-        type: "offering"
-        body: Offering
-      }
-    | {
-        type: "rfq"
-        body: Rfq
-      }
-    | {
-        type: "quote",
-        body: Quote
-      }
-    | {
-        type: "order"
-        body: Order
-      }
-    | {
-        type: "orderStatus"
-        body: OrderStatus
-      }
-  )
+export type MessageType<M extends keyof MessageTypes> = MessageTypes[M];
+
+export type TbDEXMessage<T extends keyof MessageTypes> = Metadata & {
+  type: T;
+  body: MessageTypes[T];
+}
 
 export interface Metadata {
   id: string
@@ -29,6 +12,15 @@ export interface Metadata {
   to: string
   createdTime: string
 }
+
+export type MessageTypes = {
+  offering: Offering,
+  rfq: Rfq,
+  quote: Quote,
+  order: Order,
+  orderStatus: OrderStatus
+}
+
 export interface Offering {
   description: string
   pair: string
@@ -40,12 +32,19 @@ export interface Offering {
   payinInstruments: PaymentInstrument[]
   payoutInstruments: PaymentInstrument[]
 }
+
 export interface PaymentInstrument {
-  kind: "DEBIT_CARD" | "BITCOIN_ADDRESS"
+  kind: PaymentInstrumentKind,
   fee?: {
     flatFee?: string
   }
 }
+
+export enum PaymentInstrumentKind {
+  DEBIT_CARD,
+  BITCOIN_ADDRESS
+}
+
 export interface Rfq {
   pair: string
   amount: string
@@ -72,5 +71,11 @@ export interface Order {
   paymentVerifiablePresentationJwt: string
 }
 export interface OrderStatus {
-  orderStatus: "PENDING" | "COMPLETED" | "FAILED"
+  orderStatus: Status
+}
+
+export enum Status {
+  PENDING,
+  COMPLETED,
+  FAILED
 }
