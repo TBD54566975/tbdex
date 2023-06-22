@@ -57,7 +57,7 @@ jobs:
           echo "Published Version: $PUBLISHED_VERSION"
 
           # Fetch the version in the GitHub repo's package.json file.
-          REPO_VERSION=$(node -p "require('./protocol/implementations/js/package.json').version")
+          REPO_VERSION=$(node -p "require('./package.json').version")
           echo "REPO_VERSION=$REPO_VERSION" >> $GITHUB_ENV
           echo "Repo Version: $REPO_VERSION"
 
