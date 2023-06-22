@@ -8,19 +8,19 @@
     "allowJs": true,
     "target": "es6",
     "module": "ESNext",
+    "outDir": "dist/esm",
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,
     "declarationDir": "dist/types",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true
   },
   "include": [
-    "./src/main.ts",
+    "./src",
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "build"
+    "build",
   ]
 }
