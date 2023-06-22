@@ -31,7 +31,6 @@ module.exports = {
       'single',
       { 'allowTemplateLiterals': true }
     ],
-    'semi'                              : ['error', 'always'],
     'indent'                            : ['error', 2],
     'no-unused-vars'                    : 'off',
     'prefer-const'                      : 'off',
@@ -46,7 +45,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/no-explicit-any' : 'off',
-    '@typescript-eslint/semi': ['error', 'never'],
+    '@typescript-eslint/semi'            : ['error', 'never'],
     'no-trailing-spaces'                 : ['error'],
   }
-};
+}
