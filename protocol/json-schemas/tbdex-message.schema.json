@@ -239,9 +239,13 @@
                 {
                     "type": "object",
                     "required": [
+                        "type",
                         "body"
                     ],
                     "properties": {
+                        "type": {
+                            "const": "quote"
+                        },
                         "body": {
                             "$ref": "#/definitions/quote"
                         }

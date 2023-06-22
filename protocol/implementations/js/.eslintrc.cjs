@@ -46,6 +46,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/no-explicit-any' : 'off',
+    '@typescript-eslint/semi': ['error', 'never'],
     'no-trailing-spaces'                 : ['error'],
   }
 };
