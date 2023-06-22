@@ -22,6 +22,7 @@ export function validateMessage(payload: any): void {
     return
   }
 
+  // TODO modify default, return all errors
   // AJV is configured by default to stop validating after the 1st error is encountered which means
   // there will only ever be one error;
   const [errorObj] = validateFn.errors

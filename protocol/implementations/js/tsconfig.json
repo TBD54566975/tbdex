@@ -12,7 +12,6 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "dist/types",
-    "outDir": "dist",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "resolveJsonModule": true

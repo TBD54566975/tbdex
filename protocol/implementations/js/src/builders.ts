@@ -1,52 +1,36 @@
-import { TbDEXMessage } from './types.js'
+import { MessageTypes, TbDEXMessage } from './types.js'
+import {ulid} from 'ulidx'
 
-/**
- * The rfq is the first in the message chain, so it sets the contextId with its own id rather than deriving from the last message
- */
-export function createRfqMessage(id: string, to: string, from: string, rfq: TbDex.RFQ): TbDEXMessage<'rfq'> {
+// maybe extract this somewhere?
+const ID_NAMESPACE = 'tbdex'
+
+function createId(messageType: string): string {
+  return `${ID_NAMESPACE}:${messageType}:${ulid()}`
+}
+
+export function createMessage<Type extends keyof MessageTypes>(to: string, from: string, body: MessageTypes[Type], messageType: Type,): TbDEXMessage<Type> {
+  // TODO could validate that type is Offering or RFQ, since they start chains or are one off types
+  const id = createId(messageType)
   return {
     id          : id,
-    type        : 'rfq',
-    body        : rfq,
-    createdTime : new Date().toISOString(),
     contextId   : id,
-    from        : from,
-    to          : to,
-  }
-}
-
-export function wrapperFrom<MessageType extends keyof TbDex.MessageTypes>(message: TbDex.Message<MessageType>): Metadata {
-  // TODO probably a nicer way to write this?
-  const { to, from, contextId } = message
-  return {
     createdTime : new Date().toISOString(),
     to          : to,
     from        : from,
-    contextId   : contextId
+    type        : messageType,
+    body        : body,
   }
 }
 
-export function createQuoteMessage(id: string, quote: TbDex.Quote, last: TbDex.Message<'rfq'>): TbDex.Message<'quote'> {
+export function createMessageFrom<Type extends keyof MessageTypes, LastType extends keyof MessageTypes>(body: MessageTypes[Type], messageType: Type, lastMessage: TbDEXMessage<LastType>): TbDEXMessage<Type> {
+  const { to, from, contextId } = lastMessage
   return {
-    id   : id,
-    type : 'quote',
-    body : quote,
-    ...wrapperFrom(last)
+    id          : createId(messageType),
+    contextId   : contextId,
+    createdTime : new Date().toISOString(),
+    to          : to,
+    from        : from,
+    type        : messageType,
+    body        : body,
   }
 }
-
-// attempt to make a generic version, issue around converting type to a string to use in the return object
-// export function createMessage<MessageType extends keyof TbDex.MessageTypes, LastType extends keyof TbDex.MessageTypes>(id: string, body: MessageType, last: TbDex.Message<LastType>): TbDex.Message<MessageType> {
-//     const metadata = last ? wrapperFrom(last) : {
-//         createdTime: new Date().toISOString(),
-//         contextId: id,
-//         from: "from-did",
-//         to: "to-did"
-//      }
-//     return {
-//         id: id,
-//         type: "rfq",
-//         body: body,
-//         ...metadata
-//     }
-// }

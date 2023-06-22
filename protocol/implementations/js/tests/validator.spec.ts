@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'chai'
 
 import { SchemaValidationError, validateMessage } from '../src/validator.js'
 
@@ -43,7 +43,7 @@ const mismatchedBody = {
   'body'        : {
     'orderStatus': 'PENDING'
   }
-};
+}
 
 const invalidType = {
   'id'          : '123',
@@ -100,18 +100,18 @@ const numberAmounts = {
 
 describe('validator', () => {
   it('does not throw if payload is valid', () => {
-    expect(validateMessage(validMessage)).to.not.throw;
+    expect(validateMessage(validMessage)).to.not.throw
   })
   it('throws error if message type does not match body', () => {
-    expect(() => validateMessage(mismatchedBody)).to.throw(SchemaValidationError);
+    expect(() => validateMessage(mismatchedBody)).to.throw(SchemaValidationError)
   })
   it('throws error if unrecognized message type is passed', () => {
-    expect(() => validateMessage(invalidType)).to.throw(SchemaValidationError);
+    expect(() => validateMessage(invalidType)).to.throw(SchemaValidationError)
   })
   it('throws error if amount types are incorrect', () => {
-    expect(() => validateMessage(numberAmounts)).to.throw(SchemaValidationError);
+    expect(() => validateMessage(numberAmounts)).to.throw(SchemaValidationError)
   })
   it('throws error if required fields are missing', () => {
-    expect(() => validateMessage(missingField)).to.throw(SchemaValidationError);
+    expect(() => validateMessage(missingField)).to.throw(SchemaValidationError)
   })
-});
+})
