@@ -24,6 +24,10 @@ Every TBDex message contains the following fields:
 # ID for each message types
 The top-level TBDex `id` will serve as each message type's unique identifier. The message type is indicated with `type` field (i.e. `Offering`, `RFQ`, etc). `contextId` will serve as a way to identify a "thread" of messages sent back and forth between Alice and PFI.
 
+
+# Message Sequence
+![tbDEX messaging sequence](./tbdex_message_sequence.png)
+
 # Message Types
 
 The `body` of each message can be any of the following message types.
