@@ -12,17 +12,21 @@ Every TBDex message contains the following fields:
 
 | Field         | Data Type     | Required (y/n) | Description                                                                                                                           |
 | ------------- | ------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`          | `string`      | Y              | The message ID                                                                                                                        |
-| `contextId`    | `string`      | Y              | The context ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
-| `from`        | `string`      | Y              | The sender's DID                                                                                                                      |
-| `to`          | `string`      | Y              | The recipient's DID                                                                                                                   |
-| `type`        | `string`      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
-| `body`        | `JSON Object` | Y              | The actual message content. the fields within `body` must adhere to the fields expected for the given message type                    |
-| `createdTime` | `datetime`        | Y              | The creation time of the message. Expressed as ISO8601 string                                                                |                               |
+| `id`          | string      | Y              | The message ID                                                                                                                        |
+| `contextId`    | string      | Y              | The context ID. Set by the first message in a thread. A message thread is defined an initial message and its associated replies.       |
+| `from`        | string      | Y              | The sender's DID                                                                                                                      |
+| `to`          | string      | Y              | The recipient's DID                                                                                                                   |
+| `type`        | string      | Y              | The specific message type. Any of the message types documented under the [Message Types](#message-types) section are considered valid |
+| `body`        | JSON Object | Y              | The actual message content. the fields within `body` must adhere to the fields expected for the given message type                   |
+| `createdTime` | datetime        | Y              | The creation time of the message. Expressed as ISO8601|
 
 
 # ID for each message types
 The top-level TBDex `id` will serve as each message type's unique identifier. The message type is indicated with `type` field (i.e. `Offering`, `RFQ`, etc). `contextId` will serve as a way to identify a "thread" of messages sent back and forth between Alice and PFI.
+
+
+# Message Sequence
+![tbDEX messaging sequence](./tbdex_message_sequence.png)
 
 # Message Types
 
@@ -110,7 +114,7 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `expiryTime`     | datetime         | Y        | When this quote expires.|
+| `expiryTime`     | datetime         | Y        | When this quote expires. Expressed as ISO8601|
 | `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote in counter currency.|
 | `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
 | `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) in JWT string format|
