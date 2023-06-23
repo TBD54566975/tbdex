@@ -110,7 +110,7 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `expiryTime`     | datetime         | Y        | When this quote expires. Expressed in ISO8601|
+| `expiryTime`     | datetime         | Y        | When this quote expires. Expressed as ISO8601|
 | `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote in counter currency.|
 | `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
 | `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) in JWT string format|
