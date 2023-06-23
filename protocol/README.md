@@ -25,12 +25,11 @@ Every TBDex message contains the following fields:
 The top-level TBDex `id` will serve as each message type's unique identifier. The message type is indicated with `type` field (i.e. `Offering`, `RFQ`, etc). `contextId` will serve as a way to identify a "thread" of messages sent back and forth between Alice and PFI.
 
 
-# Message Sequence
-![tbDEX messaging sequence](./tbdex_message_sequence.png)
+# tbDEX conversation sequence
+![tbDEX conversation sequence](./tbdex_message_sequence.png)
 
-# Message Types
-
-The `body` of each message can be any of the following message types.
+# Resource Types
+Note: tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `id`, `contextId`, etc as above. A tbdex resource is published for anyone to read.
 
 ## `Offering`
 > PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD. Here are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me USD, and what payment instruments I can use to pay you BTC."
@@ -46,6 +45,8 @@ The `body` of each message can be any of the following message types.
 | `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
 | `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
 | `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
+| `createdTime` | datetime        | Y              | The creation time of the resource. Expressed as ISO8601|
+
 
 ### Note on base and counter currency in `pair`
 There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is **selling**. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is **buying** the Counter Currency). In trading terms, the PFI's side is always "SELL". 
@@ -80,9 +81,14 @@ There's an explicit directionality baked into the `pair` naming convention, whic
   }],
   "payoutInstruments": [{
     "kind": "BTC_ADDRESS"
-  }]
+  }],
+  "createdTime": "2023-06-23T11:23:41Z"
 }
 ```
+
+# Message Types
+The `body` of each message can be any of the following message types.
+
 ## `RequestForQuote (RFQ for short)`
 > Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much USD I want to trade for BTC. Here's the payment instrument I intend to pay you USD with, and here's the payment instrument I expect you to pay me BTC in."
 
