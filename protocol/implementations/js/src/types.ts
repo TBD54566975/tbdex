@@ -21,6 +21,31 @@ export type MessageTypes = {
   orderStatus: OrderStatus
 }
 
+export interface Offering {
+  description: string
+  pair: string
+  unitPrice: string
+  baseFee?: string
+  min: string
+  max: string
+  presentationRequestJwt: string
+  payinInstruments: PaymentInstrument[]
+  payoutInstruments: PaymentInstrument[]
+  createdTime: string
+}
+
+export interface PaymentInstrument {
+  kind: PaymentInstrumentKind,
+  fee?: {
+    flatFee?: string
+  }
+}
+
+export enum PaymentInstrumentKind {
+  DEBIT_CARD,
+  BITCOIN_ADDRESS
+}
+
 export interface Rfq {
   pair: string
   amount: string
