@@ -14,7 +14,6 @@ export interface Metadata {
 }
 
 export type MessageTypes = {
-  offering: Offering,
   rfq: Rfq,
   quote: Quote,
   order: Order,
@@ -31,6 +30,7 @@ export interface Offering {
   presentationRequestJwt: string
   payinInstruments: PaymentInstrument[]
   payoutInstruments: PaymentInstrument[]
+  createdTime: string
 }
 
 export interface PaymentInstrument {
