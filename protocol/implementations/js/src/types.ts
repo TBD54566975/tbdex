@@ -21,31 +21,6 @@ export type MessageTypes = {
   orderStatus: OrderStatus
 }
 
-export interface Offering {
-  description: string
-  pair: string
-  unitPrice: string
-  baseFee?: string
-  min: string
-  max: string
-  presentationRequestJwt: string
-  payinInstruments: PaymentInstrument[]
-  payoutInstruments: PaymentInstrument[]
-  createdTime: string
-}
-
-export interface PaymentInstrument {
-  kind: PaymentInstrumentKind,
-  fee?: {
-    flatFee?: string
-  }
-}
-
-export enum PaymentInstrumentKind {
-  DEBIT_CARD,
-  BITCOIN_ADDRESS
-}
-
 export interface Rfq {
   pair: string
   amount: string
@@ -81,16 +56,11 @@ export enum Status {
   FAILED
 }
 
-export type ResourceType<R extends keyof ResourceTypes> = ResourceTypes[R];
-
-export type ResourceTypes = {
+export type Resources = {
   offering: Offering
 }
 
-export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>;
-
 export interface Offering {
-  id: string
   description: string
   pair: string
   unitPrice: string

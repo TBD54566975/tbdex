@@ -31,64 +31,9 @@ Every TBDex message contains the following fields:
 # ID for each message types
 The top-level TBDex `id` will serve as each message type's unique identifier. The message type is indicated with `type` field (i.e. `Quote`, `RFQ`, etc). `threadId` will serve as a way to identify a "thread" of messages sent back and forth between Alice and PFI.
 
+# Message Types
+The `body` of each message can be any of the following message types.
 
-# tbDEX conversation sequence
-![tbDEX conversation sequence](./tbdex_message_sequence.png)
-
-# Resource Types
-Note: tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `id`, `contextId`, etc as above. A tbdex resource is published for anyone to read.
-
-## `Offering`
-> PFI -> Alice: "Here's what I can offer if you want to buy BTC with USD. Here are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me USD, and what payment instruments I can use to pay you BTC."
-
-| field            | data type | required | description                                                                                          |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `description` | string    | Y        | Brief description of what is being offered.|
-| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
-| `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
-| `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which Payment Instruments are used |
-| `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
-| `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
-| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
-| `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
-| `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
-
-### Note on base and counter currency in `pair`
-There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is **selling**. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is **buying** the Counter Currency). In trading terms, the PFI's side is always "SELL". 
-
-### `PaymentInstrument`
-| field            | data type | required | description                                                                                          |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `kind` | enum    | Y        | Type of payment instrument (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `fee` | object    | N        | Optional fee associated with using this kind of payment instrument.|
-
-
-```json
-{
-  "description": "Buy BTC with USD!",
-  "pair": "BTC_USD",
-  "unitPrice": 27000.00,
-  "baseFee": 1.00,
-  "min": 10.00,
-  "max": 100.00,
-  "presentationRequestJwt": "eyJhb...MIDw",
-  "payinInstruments": [{
-    "kind": "DEBIT_CARD",
-    "fee": {
-      "flatFee": 1.00
-    }
-  },
-  {
-    "kind": "CREDIT_CARD",
-    "fee": {
-      "flatFee": 4.00
-    }
-  }],
-  "payoutInstruments": [{
-    "kind": "BTC_ADDRESS"
-  }]
-}
-```
 ## `RequestForQuote (RFQ for short)`
 > Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much USD I want to trade for BTC. Here's the payment instrument I intend to pay you USD with, and here's the payment instrument I expect you to pay me BTC in."
 
