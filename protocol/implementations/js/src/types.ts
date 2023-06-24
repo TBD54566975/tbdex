@@ -56,11 +56,16 @@ export enum Status {
   FAILED
 }
 
-export type Resources = {
+export type ResourceType<R extends keyof ResourceTypes> = ResourceTypes[R];
+
+export type ResourceTypes = {
   offering: Offering
 }
 
+export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>;
+
 export interface Offering {
+  id: string
   description: string
   pair: string
   unitPrice: string
