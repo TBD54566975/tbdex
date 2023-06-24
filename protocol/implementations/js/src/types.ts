@@ -1,11 +1,11 @@
 export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 
-export type TbDEXMessage<T extends keyof MessageTypes> = Metadata & {
+export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
   type: T;
   body: MessageTypes[T];
 }
 
-export interface Metadata {
+export interface MessageMetadata {
   id: string
   contextId: string
   from: string
@@ -18,31 +18,6 @@ export type MessageTypes = {
   quote: Quote,
   order: Order,
   orderStatus: OrderStatus
-}
-
-export interface Offering {
-  description: string
-  pair: string
-  unitPrice: string
-  baseFee?: string
-  min: string
-  max: string
-  presentationRequestJwt: string
-  payinInstruments: PaymentInstrument[]
-  payoutInstruments: PaymentInstrument[]
-  createdTime: string
-}
-
-export interface PaymentInstrument {
-  kind: PaymentInstrumentKind,
-  fee?: {
-    flatFee?: string
-  }
-}
-
-export enum PaymentInstrumentKind {
-  DEBIT_CARD,
-  BITCOIN_ADDRESS
 }
 
 export interface Rfq {
@@ -78,4 +53,33 @@ export enum Status {
   PENDING,
   COMPLETED,
   FAILED
+}
+
+export type Resources = {
+  offering: Offering
+}
+
+export interface Offering {
+  description: string
+  pair: string
+  unitPrice: string
+  baseFee?: string
+  min: string
+  max: string
+  presentationRequestJwt: string
+  payinInstruments: PaymentInstrument[]
+  payoutInstruments: PaymentInstrument[]
+  createdTime: string
+}
+
+export interface PaymentInstrument {
+  kind: PaymentInstrumentKind,
+  fee?: {
+    flatFee?: string
+  }
+}
+
+export enum PaymentInstrumentKind {
+  DEBIT_CARD,
+  BITCOIN_ADDRESS
 }
