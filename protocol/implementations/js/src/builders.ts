@@ -1,4 +1,4 @@
-import { MessageTypes, TbDEXMessage } from './types.js'
+import { MessageType, MessageTypes, Metadata, TbDEXMessage } from './types.js'
 import {ulid} from 'ulidx'
 
 // maybe extract this somewhere?
@@ -9,7 +9,7 @@ function createId(messageType: string): string {
 }
 
 export function createMessage<Type extends keyof MessageTypes>(to: string, from: string, body: MessageTypes[Type], messageType: Type,): TbDEXMessage<Type> {
-  // TODO could validate that type is Offering or RFQ, since they start chains or are one off types
+  // TODO could validate that type is Offering or RFQ, since they start chains or are one off (no replies)
   const id = createId(messageType)
   return {
     id          : id,
@@ -33,4 +33,33 @@ export function createMessageFrom<Type extends keyof MessageTypes, LastType exte
     type        : messageType,
     body        : body,
   }
+}
+
+
+export type CreateMessageOpts<T extends keyof MessageTypes> = Partial<Metadata> & {
+  from: string,
+  to: string,
+  messageType: T,
+  body: MessageType<T>,
+}
+
+export function createMessage2<T extends keyof MessageTypes>(opts: CreateMessageOpts<T>): TbDEXMessage<T> {
+  if (messageType )
+  const {to, from, messageType, body} = opts
+  const id = opts.id ?? createId(opts.messageType)
+
+  var contextId 
+  if( !opts.contextId && messageType in ['rfq', 'offering']) {
+    contextId = id
+  }
+  return {
+    id          : opts.id ?? createId(opts.messageType),
+    contextId   : opts.contextId ?? ,
+    createdTime : new Date().toISOString(),
+    type : messageType        ,
+    to          ,
+    from        ,
+    body        ,
+  }
+  console.log(opts)
 }
