@@ -7,7 +7,8 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 
 export interface MessageMetadata {
   id: string
-  contextId: string
+  threadId: string
+  parentId: string
   from: string
   to: string
   createdTime: string
@@ -55,11 +56,16 @@ export enum Status {
   FAILED
 }
 
-export type Resources = {
+export type ResourceType<R extends keyof ResourceTypes> = ResourceTypes[R];
+
+export type ResourceTypes = {
   offering: Offering
 }
 
+export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>;
+
 export interface Offering {
+  id: string
   description: string
   pair: string
   unitPrice: string
