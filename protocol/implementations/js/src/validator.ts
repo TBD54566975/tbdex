@@ -1,7 +1,7 @@
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 
-import tbdexMessage from '../../json-schemas/tbdex-message.schema.json'
+import tbdexMessage from '../../json-schemas/tbdex-message.schema.json' assert { type: 'json' }
 
 const validator = new Ajv.default()
 addFormats.default(validator)
