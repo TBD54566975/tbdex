@@ -44,7 +44,11 @@
       "types": "./dist/types/main.d.ts"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "ajv": "8.12.0",
+    "ajv-formats": "2.1.1",
+    "ulidx": "2.0.0"
+  },
   "devDependencies": {
     "@playwright/test": "1.34.3",
     "@types/eslint": "8.37.0",

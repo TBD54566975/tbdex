@@ -7,16 +7,17 @@
     ],
     "allowJs": true,
     "target": "es6",
-    "module": "ESNext",
+    "module": "esnext",
     "outDir": "dist/esm",
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "dist/types",
     "moduleResolution": "NodeNext",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "include": [
-    "./src",
+    "./src"
   ],
   "exclude": [
     "node_modules",
