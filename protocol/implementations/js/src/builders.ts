@@ -1,7 +1,14 @@
 import { MessageType, MessageTypes, TbDEXMessage } from './types.js'
 import {ulid} from 'ulidx'
 
+/**
+ * Get the keys of T without any keys of U.
+ */
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
+
+/**
+ * Restrict using either only the keys of T or only the keys of U.
+ */
 type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U
 
 type NewThreadOpts = {
