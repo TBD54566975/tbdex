@@ -1,6 +1,5 @@
 {
   "extends": "../tsconfig.json",
-  "module": "esnext",
   "compilerOptions": {
     "outDir": "compiled",
     "declarationDir": "compiled/types",
