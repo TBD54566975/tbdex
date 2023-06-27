@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Offering, Quote, Rfq, PaymentInstrumentKind } from '../src/types.js'
+import { Offering, Quote, Rfq, PaymentMethodKind } from '../src/types.js'
 import { createMessage } from '../src/builders.js'
 
 describe('Message builder', () => {
@@ -11,8 +11,8 @@ describe('Message builder', () => {
       min                    : '0',
       max                    : '1000',
       presentationRequestJwt : 'testjwt',
-      payinInstruments       : [],
-      payoutInstruments      : []
+      payinMethods           : [],
+      payoutMethods          : []
     }
 
     const actual = createMessage({
@@ -30,10 +30,10 @@ describe('Message builder', () => {
       amount                    : '1000',
       verifiablePresentationJwt : 'fake-jwt',
       payinInstrument           : {
-        kind: PaymentInstrumentKind.DEBIT_CARD
+        kind: PaymentMethodKind.DEBIT_CARD
       },
       payoutInstrument: {
-        kind: PaymentInstrumentKind.BITCOIN_ADDRESS
+        kind: PaymentMethodKind.BITCOIN_ADDRESS
       }
     }
 
