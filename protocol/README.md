@@ -8,6 +8,68 @@ Messages form exchanges between users and PFIs.
 ## Resources
 A tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `to`, `threadId`, etc as above. A tbdex resource is published for anyone to read and generally used as a part of the discovery process by users.
 
+# Resource Types
+
+## `Offering`
+> PFI -> world: "Here are the exchanges that my PFI offers. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me the base currency, and what payment instruments I can use to pay you the counter currency."
+
+| field            | data type | required | description                                                                                          |
+| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `id` | string    | Y        | Unique identifier for this offering|
+| `description` | string    | Y        | Brief description of what is being offered.|
+| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
+| `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
+| `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which Payment Instruments are used |
+| `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
+| `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
+| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
+| `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
+| `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
+| `createdTime` | datetime        | Y              | The creation time of the resource. Expressed as ISO8601|
+
+
+### Note on base and counter currency in `pair`
+There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is **selling**. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is **buying** the Counter Currency). In trading terms, the PFI's side is always "SELL". 
+
+### `PaymentInstrument`
+| field            | data type | required | description                                                                                          |
+| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `kind` | enum    | Y        | Type of payment instrument (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
+| `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the VCs needed to use this PaymentInstrument in JWT string format|
+| `fee` | object    | N        | Optional fee associated with using this kind of payment instrument.|
+
+
+```json
+{
+  "description": "Buy BTC with USD!",
+  "pair": "BTC_USD",
+  "unitPrice": 27000.00,
+  "baseFee": 1.00,
+  "min": 10.00,
+  "max": 100.00,
+  "presentationRequestJwt": "eyJhb...MIDw",
+  "payinInstruments": [{
+    "paymentPresentationRequestJwt": "eyJhb...MIDw",
+    "kind": "DEBIT_CARD",
+    "fee": {
+      "flatFee": 1.00
+    }
+  },
+  {
+    "paymentPresentationRequestJwt": "xyz...12as",
+    "kind": "CREDIT_CARD",
+    "fee": {
+      "flatFee": 4.00
+    }
+  }],
+  "payoutInstruments": [{
+    "paymentPresentationRequestJwt": "abc...IDsx",
+    "kind": "BTC_ADDRESS"
+  }],
+  "createdTime": "2023-06-23T11:23:41Z"
+}
+```
+
 # Message Structure
 
 This is a high level description of the message structure. In certain implementations, some fields may be omitted as they are part of some external envelope when transmitting on the wire as a message payload (for example - `record.threadID` is part of a DWN message, or DIDComm message, or could be a HTTP header). 
@@ -42,6 +104,7 @@ The `body` of each message can be any of the following message types.
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `amount` | string    | Y        | Amount of counter currency you want to spend in order to receive base currency|
 | `verifiablePresentationJwt` | string    | Y        | VerifiablePresentation that meets the specification per PresentationRequest in the Offering, in JWT string format |
+| `paymentVerifiablePresentationJwt` | string      | Y        | VerifiablePresentation that meets the specification per paymentPresentationRequest in the Offering, in JWT string format. |
 | `payinInstrument`   | PaymentInstrument       | Y        | Specify which payment instrument to send counter currency. |
 | `payoutInstrument`   | PaymentInstrument       | Y        | Specify which payment instrument to receive base currency. |
 
@@ -51,6 +114,7 @@ The `body` of each message can be any of the following message types.
   "pair": "BTC_USD",
   "amount": 10.00,
   "verifiablePresentationJwt": "",
+  "paymentVerifiablePresentationJwt": "",
   "payinInstrument": {
     "kind": "DEBIT_CARD"
   },
@@ -61,14 +125,13 @@ The `body` of each message can be any of the following message types.
 ```
 
 ## `Quote`
-> PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment instruments you selected. Here's how to pay us, and how to let us pay you (using paymentPresentationRequestJwt and/or paymentInstructions), when you're ready to execute the Quote. This quote expires at X time."
+> PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment instruments you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
 | `expiryTime`     | datetime         | Y        | When this quote expires. Expressed as ISO8601|
 | `totalFee`     | string         | Y        | Total fee (base + paymentInstrument specific) included in quote in counter currency.|
 | `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
-| `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the payment instrument needed to execute this Quote (with payment kind indicated per the RFQ) in JWT string format|
 | `paymentInstructions`     | PaymentInstructions   | Y        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment must be performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
 
 ### `PaymentInstructions`
@@ -89,25 +152,11 @@ The `body` of each message can be any of the following message types.
   "expiryTime": "2023-04-14T12:12:12Z",
   "totalFee": 2.00,
   "amount": 0.000383,
-  "paymentPresentationRequestJwt": "eyJhbGc...EWfNnAw",
   "paymentInstructions": {
     "payin": {
       "link": "stripe.com/xyz"
     }
   }
-}
-```
-
-## `Order`
-> Alice -> PFI: "Let's execute the Quote and turn it into an Order. Here are my payment instruments in the form of verifiable presentation, built against the paymentPresentationRequestJwt in the Quote."
-
-| field             | data type   | required | description                                                                             |
-| ----------------- | ----------- | -------- | --------------------------------------------------------------------------------------- |
-| `paymentVerifiablePresentationJwt` | string      | Y        | VerifiablePresentation that meets the specification per paymentPresentationRequest in the Quote, in JWT string format. |
-
-```json
-{
-  "paymentVerifiablePresentationJwt": "..."
 }
 ```
 
@@ -133,67 +182,6 @@ The `body` of each message can be any of the following message types.
 
 
 # tbDEX conversation sequence
-![tbDEX conversation sequence](./tbdex_message_sequence.png)
-
-# Resource Types
-
-## `Offering`
-> PFI -> world: "Here are the exchanges that my PFI offers. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment instruments you can use to pay me the base currency, and what payment instruments I can use to pay you the counter currency."
-
-| field            | data type | required | description                                                                                          |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `id` | string    | Y        | Unique identifier for this offering|
-| `description` | string    | Y        | Brief description of what is being offered.|
-| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
-| `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
-| `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which Payment Instruments are used |
-| `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
-| `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
-| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
-| `payinInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
-| `payoutInstruments`   | list[PaymentInstrument]    | Y        |  A list of payment instruments the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
-| `createdTime` | datetime        | Y              | The creation time of the resource. Expressed as ISO8601|
-
-
-### Note on base and counter currency in `pair`
-There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is **selling**. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is **buying** the Counter Currency). In trading terms, the PFI's side is always "SELL". 
-
-### `PaymentInstrument`
-| field            | data type | required | description                                                                                          |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `kind` | enum    | Y        | Type of payment instrument (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `fee` | object    | N        | Optional fee associated with using this kind of payment instrument.|
-
-
-```json
-{
-  "description": "Buy BTC with USD!",
-  "pair": "BTC_USD",
-  "unitPrice": 27000.00,
-  "baseFee": 1.00,
-  "min": 10.00,
-  "max": 100.00,
-  "presentationRequestJwt": "eyJhb...MIDw",
-  "payinInstruments": [{
-    "kind": "DEBIT_CARD",
-    "fee": {
-      "flatFee": 1.00
-    }
-  },
-  {
-    "kind": "CREDIT_CARD",
-    "fee": {
-      "flatFee": 4.00
-    }
-  }],
-  "payoutInstruments": [{
-    "kind": "BTC_ADDRESS"
-  }],
-  "createdTime": "2023-06-23T11:23:41Z"
-}
-```
-
-# Sequence Diagram
 
 ```mermaid
 sequenceDiagram
@@ -206,7 +194,6 @@ sequenceDiagram
 	PFIn->>Alice: Offering
   Alice->>PFI1: RequestForQuote (RFQ)
   PFI1->>Alice: Quote
-  Alice->>PFI1: Order
   PFI1->>Alice: OrderStatus
 ```
 
