@@ -1,4 +1,4 @@
-export type MessageType<M extends keyof MessageTypes> = MessageTypes[M];
+export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 
 export type TbDEXMessage<T extends keyof MessageTypes> = Metadata & {
   type: T;
