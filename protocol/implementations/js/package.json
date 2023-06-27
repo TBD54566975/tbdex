@@ -66,6 +66,7 @@
     "karma-mocha": "2.0.1",
     "karma-mocha-reporter": "2.2.5",
     "karma-webkit-launcher": "2.1.0",
+    "mkdirp": "3.0.1",
     "mocha": "10.2.0",
     "node-stdlib-browser": "1.2.0",
     "rimraf": "4.4.0",

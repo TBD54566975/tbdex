@@ -1,34 +1,33 @@
-import Ajv from 'ajv'
-import addFormats from 'ajv-formats'
-
-import tbdexMessage from '../../json-schemas/tbdex-message.schema.json' assert { type: 'json' }
-
-const validator = new Ajv.default()
-addFormats.default(validator)
-validator.addSchema(tbdexMessage, 'tbdex-message')
-
-export const SchemaName = 'tbdex-message'
+import * as precompiledValidators from '../generated/precompiled-validators.js'
 
 export function validateMessage(payload: any): void {
-  const validateFn = validator.getSchema(SchemaName)
-
-  if (!validateFn) {
-    throw new Error(`schema for ${SchemaName} not found.`)
-  }
-
+  let validateFn = (precompiledValidators as any)['tbdexMessage']
   validateFn(payload)
 
-  if (!validateFn.errors) {
-    return
+  if (validateFn.errors) {
+    // TODO modify default, return all errors
+    // AJV is configured by default to stop validating after the 1st error is encountered which means
+    // there will only ever be one error;
+    const [errorObj] = validateFn.errors
+    let { instancePath, message } = errorObj
+
+    throw new SchemaValidationError(`${instancePath ?? 'tbDEXMessage'}: ${message}`)
   }
 
-  // TODO modify default, return all errors
-  // AJV is configured by default to stop validating after the 1st error is encountered which means
-  // there will only ever be one error;
-  const [errorObj] = validateFn.errors
-  let { instancePath, message } = errorObj
+  validateFn = (precompiledValidators as any)[payload['type']]
+  validateFn(payload['body'])
 
-  throw new SchemaValidationError(`${instancePath ?? SchemaName}: ${message}`)
+  if (validateFn.errors) {
+    // TODO modify default, return all errors
+    // AJV is configured by default to stop validating after the 1st error is encountered which means
+    // there will only ever be one error;
+    const [errorObj] = validateFn.errors
+    const { instancePath, message } = errorObj
+
+    throw new SchemaValidationError(`${instancePath ?? 'tbDEXMessage'}: ${message}`)
+  }
+
+
 }
 
 export class SchemaValidationError extends Error { }

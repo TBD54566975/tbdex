@@ -13,7 +13,8 @@ module.exports = {
   },
   ignorePatterns: [
     'dist',
-    'tests/compiled'
+    'tests/compiled',
+    'generated'
   ],
   rules: {
     'key-spacing': [
