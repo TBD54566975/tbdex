@@ -6,7 +6,7 @@ Currently non normative.
 ## Messages
 Messages form exchanges between users and PFIs. 
 ## Resources
-A tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `to`, `threadId`, etc as above. A tbdex resource is published for anyone to read and generally used as a part of the discovery process by users.
+A tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `to`, `threadId`, etc. A tbdex resource is published for anyone to read and generally used as a part of the discovery process by users.
 
 # Resource Types
 
