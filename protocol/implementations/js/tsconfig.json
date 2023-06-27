@@ -18,7 +18,6 @@
   },
   "include": [
     "./src",
-    "../json-schemas"
   ],
   "exclude": [
     "node_modules",
