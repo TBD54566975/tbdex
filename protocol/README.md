@@ -22,7 +22,7 @@ A tbDEX resource is not a tbDEX message. i.e. it does not follow the message str
 | `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which payment methods are used |
 | `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
 | `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
-| `presentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
+| `kycPresentationRequestJwt`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
 | `payinMethods`   | list[PaymentMethod]    | Y        |  A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
 | `payoutMethods`   | list[PaymentMethod]    | Y        |  A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
 | `createdTime` | datetime        | Y              | The creation time of the resource. Expressed as ISO8601|
@@ -103,7 +103,7 @@ The `body` of each message can be any of the following message types.
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `amount` | string    | Y        | Amount of counter currency you want to spend in order to receive base currency|
-| `verifiablePresentationJwt` | string    | Y        | VerifiablePresentation that meets the specification per PresentationRequest in the Offering, in JWT string format |
+| `kycVerifiablePresentationJwt` | string    | Y        | VerifiablePresentation that meets the specification per PresentationRequest in the Offering, in JWT string format |
 | `payinMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to send counter currency. |
 | `payoutMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to receive base currency. |
 
@@ -117,7 +117,7 @@ The `body` of each message can be any of the following message types.
 {
   "pair": "BTC_USD",
   "amount": 10.00,
-  "verifiablePresentationJwt": "",
+  "kycVerifiablePresentationJwt": "",
   "payinInstrument": {
     "kind": "DEBIT_CARD",
     "paymentVerifiablePresentationJwt": ""
