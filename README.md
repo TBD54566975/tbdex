@@ -29,7 +29,7 @@ A tbDEX resource is not a tbDEX message. i.e. it does not follow the message str
 | `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which payment methods are used |
 | `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
 | `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
-| `kycRequirements`   | string    | Y        |  PresentationRequest in JWT string format which describes the credential needed to choose this offer.|
+| `kycRequirements`   | string    | Y        |  PresentationDefinition in JWT string format which describes the credential needed to choose this offer.|
 | `payinMethods`   | list[PaymentMethod]    | Y        |  A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
 | `payoutMethods`   | list[PaymentMethod]    | Y        |  A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
 | `createdTime` | datetime        | Y              | The creation time of the resource. Expressed as ISO8601|
@@ -42,7 +42,7 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `kind` | enum    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `paymentPresentationRequestJwt`     | string   | Y        | PresentationRequest that describes the VCs needed to use this PaymentMethod in JWT string format|
+| `paymentPresentationDefinitionJwt`     | string   | Y        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format|
 | `fee` | object    | N        | Optional fee associated with using this kind of payment method.|
 
 
@@ -56,21 +56,21 @@ There's an explicit directionality baked into the `pair` naming convention, whic
   "max": 100.00,
   "kycRequirements": "eyJhb...MIDw",
   "payinInstruments": [{
-    "paymentPresentationRequestJwt": "eyJhb...MIDw",
+    "paymentPresentationDefinitionJwt": "eyJhb...MIDw",
     "kind": "DEBIT_CARD",
     "fee": {
       "flatFee": 1.00
     }
   },
   {
-    "paymentPresentationRequestJwt": "xyz...12as",
+    "paymentPresentationDefinitionJwt": "xyz...12as",
     "kind": "CREDIT_CARD",
     "fee": {
       "flatFee": 4.00
     }
   }],
   "payoutInstruments": [{
-    "paymentPresentationRequestJwt": "abc...IDsx",
+    "paymentPresentationDefinitionJwt": "abc...IDsx",
     "kind": "BTC_ADDRESS"
   }],
   "createdTime": "2023-06-23T11:23:41Z"
@@ -110,7 +110,7 @@ The `body` of each message can be any of the following message types.
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
 | `amount` | string    | Y        | Amount of counter currency you want to spend in order to receive base currency|
-| `kycProof` | string    | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationRequest in the Offering|
+| `kycProof` | string    | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering|
 | `payinMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to send counter currency. |
 | `payoutMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to receive base currency. |
 
@@ -118,7 +118,7 @@ The `body` of each message can be any of the following message types.
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `kind` | enum    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `paymentVerifiablePresentationJwt`     | string   | Y        | VerifiablePresentation that meets the specification per paymentPresentationRequest in the Offering, in JWT string format.|
+| `paymentVerifiablePresentationJwt`     | string   | Y        | VerifiablePresentation that meets the specification per paymentPresentationDefinition in the Offering, in JWT string format.|
 
 ```json
 {
