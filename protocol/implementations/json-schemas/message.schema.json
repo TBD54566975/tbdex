@@ -22,8 +22,7 @@
         "description": "The recipient's DID"
       },
       "type": {
-        "type": "string",
-        "enum": ["rfq", "quote"],
+        "enum": ["offering", "rfq", "quote", "order", "orderStatus"],
         "description": "The specific message type. Any of the message types documented under the Message Types section are considered valid"
       },
       "body": {
