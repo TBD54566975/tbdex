@@ -5,8 +5,8 @@ import { SchemaValidationError, validateMessage } from '../src/validator.js'
 const validMessage = {
   'id'          : '123',
   'contextId'   : '123',
-  'from'        : 'test',
-  'to'          : 'test',
+  'from'        : 'did:swanky:alice',
+  'to'          : 'did:swanky:pfi',
   'createdTime' : '2023-04-14T12:12:12Z',
   'type'        : 'offering',
   'body'        : {
@@ -36,8 +36,8 @@ const validMessage = {
 const mismatchedBody = {
   'id'          : '123',
   'contextId'   : '123',
-  'from'        : 'test',
-  'to'          : 'test',
+  'from'        : 'did:swanky:alice',
+  'to'          : 'did:swanky:pfi',
   'createdTime' : '2023-04-14T12:12:12Z',
   'type'        : 'rfq',
   'body'        : {
@@ -48,9 +48,9 @@ const mismatchedBody = {
 const invalidType = {
   'id'          : '123',
   'contextId'   : '123',
-  'from'        : 'test',
-  'to'          : 'test',
-  'dateCreated' : 123,
+  'from'        : 'did:swanky:alice',
+  'to'          : 'did:swanky:pfi',
+  'createdTime' : 'whateva',
   'type'        : 'blah',
   'body'        : {
     'orderStatus': 'PENDING'
@@ -60,8 +60,8 @@ const invalidType = {
 const missingField = {
   'id'          : '123',
   'contextId'   : '123',
-  'from'        : 'test',
-  'to'          : 'test',
+  'from'        : 'did:swanky:alice',
+  'to'          : 'did:swanky:pfi',
   'createdTime' : '2023-04-14T12:12:12Z',
   'type'        : 'order',
   'body'        : {}
@@ -70,8 +70,8 @@ const missingField = {
 const numberAmounts = {
   'id'          : '123',
   'contextId'   : '123',
-  'from'        : 'test',
-  'to'          : 'test',
+  'from'        : 'did:swanky:alice',
+  'to'          : 'did:swanky:pfi',
   'createdTime' : '2023-04-14T12:12:12Z',
   'type'        : 'offering',
   'body'        : {
@@ -103,15 +103,39 @@ describe('validator', () => {
     expect(validateMessage(validMessage)).to.not.throw
   })
   it('throws error if message type does not match body', () => {
-    expect(() => validateMessage(mismatchedBody)).to.throw(SchemaValidationError)
+    try {
+      validateMessage(mismatchedBody)
+      expect.fail()
+    } catch(e) {
+      expect(e).to.be.instanceOf(SchemaValidationError)
+      expect(e.message).to.include('required')
+    }
   })
   it('throws error if unrecognized message type is passed', () => {
-    expect(() => validateMessage(invalidType)).to.throw(SchemaValidationError)
+    try {
+      validateMessage(invalidType)
+      expect.fail()
+    } catch(e) {
+      expect(e).to.be.instanceOf(SchemaValidationError)
+      expect(e.message).to.include('allowed values')
+    }
   })
   it('throws error if amount types are incorrect', () => {
-    expect(() => validateMessage(numberAmounts)).to.throw(SchemaValidationError)
+    try {
+      validateMessage(numberAmounts)
+      expect.fail()
+    } catch(e) {
+      expect(e).to.be.instanceOf(SchemaValidationError)
+      expect(e.message).to.include('must be')
+    }
   })
   it('throws error if required fields are missing', () => {
-    expect(() => validateMessage(missingField)).to.throw(SchemaValidationError)
+    try {
+      validateMessage(missingField)
+      expect.fail()
+    } catch(e) {
+      expect(e).to.be.instanceOf(SchemaValidationError)
+      expect(e.message).to.include('required')
+    }
   })
 })

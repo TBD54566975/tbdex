@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tbdex.io/offering.schema.json",
+  "type": "object",
+  "required": [
+    "description",
+    "pair",
+    "unitPrice",
+    "min",
+    "max",
+    "presentationRequestJwt",
+    "payinInstruments",
+    "payoutInstruments"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "pair": {
+      "type": "string"
+    },
+    "unitPrice": {
+      "type": "string"
+    },
+    "baseFee": {
+      "type": "string"
+    },
+    "min": {
+      "type": "string"
+    },
+    "max": {
+      "type": "string"
+    },
+    "presentationRequestJwt": {
+      "type": "string"
+    },
+    "payinInstruments": {
+      "type": "array",
+      "items": {
+        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstrument"
+      }
+    },
+    "payoutInstruments": {
+      "type": "array",
+      "items": {
+        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstrument"
+      }
+    }
+  }
+}

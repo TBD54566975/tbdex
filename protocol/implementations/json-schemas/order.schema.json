@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tbdex.io/order.schema.json",
+  "type": "object",
+  "required": [
+    "paymentVerifiablePresentationJwt"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "paymentVerifiablePresentationJwt": {
+      "type": "string"
+    }
+  }
+}
