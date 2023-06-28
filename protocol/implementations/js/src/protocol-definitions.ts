@@ -29,9 +29,8 @@ export const aliceProtocolDefinition = {
   structure: {
     // alice sends RFQs, not receives them
     RFQ: {
-      $actions : [],
       // whoever received the RFQ that Alice sent, can write back a Quote to Alice
-      Quote    : {
+      Quote: {
         $actions: [
           {
             who : 'recipient',
@@ -41,9 +40,8 @@ export const aliceProtocolDefinition = {
         ],
         // alice sends Orders, not receives them
         Order: {
-          $actions    : [],
           // whoever received the order that Alice sent in response to a Quote in response to an RFQ, can write back an OrderStatus to Alice.
-          OrderStatus : {
+          OrderStatus: {
             $actions: [
               {
                 who : 'recipient',
@@ -99,10 +97,9 @@ export const pfiProtocolDefinition = {
       ],
       // PFI is sending OUT quotes. no one should be writing Quotes to PFIs.
       Quote: {
-        $actions : [],
         // only Alice, who received an RFQ/Quote, can write Order to PFIs DWN
         // no one can read Order from PFIs DWN (except the PFI itself)
-        Order    : {
+        Order: {
           $actions: [
             {
               who : 'recipient',
@@ -111,9 +108,7 @@ export const pfiProtocolDefinition = {
             }
           ],
           // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
-          OrderStatus: {
-            $actions: []
-          }
+          OrderStatus: { }
         }
       }
     }
