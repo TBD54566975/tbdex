@@ -27,12 +27,14 @@ export type CreateMessageOpts<T extends keyof MessageTypes, U extends keyof Mess
 
 export function createMessage<T extends keyof MessageTypes, U extends keyof MessageTypes>(opts: CreateMessageOpts<T, U>): TbDEXMessage<T> {
   const id = createId(opts.type)
-  const contextId = opts.last?.contextId ?? id
+  const threadId = opts.last?.threadId ?? id
+  const parentId = opts.last?.id ?? null
   const {type, body} = opts
 
   return {
     id,
-    contextId,
+    threadId,
+    parentId,
     createdTime : new Date().toISOString(),
     type,
     body,

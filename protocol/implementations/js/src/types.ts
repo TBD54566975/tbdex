@@ -6,7 +6,7 @@ export type ResourceTypes = {
 
 export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>
 
-export interface Offering  {
+export interface Offering {
   id: string
   description: string
   pair: string
@@ -59,17 +59,22 @@ export interface Rfq {
   pair: string
   amount: string
   verifiablePresentationJwt: string
-  paymentVerifiablePresentationJwt: string
-  payinInstrument: PaymentMethod
-  payoutInstrument: PaymentMethod
+  payinInstrument: PaymentMethodResponse
+  payoutInstrument: PaymentMethodResponse
 }
+
+export interface PaymentMethodResponse {
+  kind: PaymentMethodKind,
+  paymentVerifiablePresentationJwt: string
+}
+
 export interface Quote {
   expiryTime: string
   totalFee: string
   amount: string
-  paymentPresentationRequestJwt: string
   paymentInstructions: PaymentInstructions
 }
+
 export interface PaymentInstructions {
   payin?: PaymentInstruction
   payout?: PaymentInstruction

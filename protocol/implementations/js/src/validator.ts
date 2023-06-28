@@ -3,7 +3,7 @@ import addFormats from 'ajv-formats'
 
 import tbdexMessage from '../../json-schemas/tbdex-message.schema.json' assert { type: 'json' }
 
-const validator = new Ajv.default()
+const validator = new Ajv.default({ allErrors: true })
 addFormats.default(validator)
 validator.addSchema(tbdexMessage, 'tbdex-message')
 
@@ -22,13 +22,13 @@ export function validateMessage(payload: any): void {
     return
   }
 
-  // TODO modify default, return all errors
-  // AJV is configured by default to stop validating after the 1st error is encountered which means
-  // there will only ever be one error;
-  const [errorObj] = validateFn.errors
-  let { instancePath, message } = errorObj
+  const errorMessages = []
+  for (let error of validateFn.errors) {
+    const errorMessage = `${error.instancePath ?? SchemaName}: ${error.message}`
+    errorMessages.push(errorMessage)
+  }
 
-  throw new SchemaValidationError(`${instancePath ?? SchemaName}: ${message}`)
+  throw new SchemaValidationError(errorMessages.join(', '))
 }
 
 export class SchemaValidationError extends Error { }
