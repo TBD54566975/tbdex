@@ -3,7 +3,7 @@ import type { ErrorObject } from 'ajv'
 import * as compiledValidators from '../generated/compiled-validators.js'
 
 /**
- * 2-phased validation. validates the outer message first and then validates the body based on the value of payload.type
+ * 2-phased validation. validates the outer message first and then validates the body based on the value of `payload.type`
  * @param payload - the payload to validate
  */
 export function validateMessage(payload: any): void {
