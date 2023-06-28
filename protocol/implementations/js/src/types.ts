@@ -59,8 +59,8 @@ export interface Rfq {
   pair: string
   amount: string
   verifiablePresentationJwt: string
-  payinInstrument: PaymentMethodResponse
-  payoutInstrument: PaymentMethodResponse
+  payinMethod: PaymentMethodResponse
+  payoutMethod: PaymentMethodResponse
 }
 
 export interface PaymentMethodResponse {
