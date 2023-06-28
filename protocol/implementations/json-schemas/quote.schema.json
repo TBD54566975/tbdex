@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tbdex.io/quote.schema.json",
+  "type": "object",
+  "required": [
+    "expiryTime",
+    "totalFee",
+    "amount",
+    "paymentPresentationRequestJwt",
+    "paymentInstructions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "expiryTime": {
+      "type": "string"
+    },
+    "totalFee": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "string"
+    },
+    "paymentPresentationRequestJwt": {
+      "type": "string"
+    },
+    "paymentInstructions": {
+      "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstructions"
+    }
+  }
+}
