@@ -79,9 +79,9 @@
     "compile-validators": "rimraf generated && node build/compile-validators.js",
     "build:esm": "rimraf dist/esm dist/types && npx tsc -p tsconfig.json",
     "build:cjs": "rimraf dist/cjs && npx tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
-    "build:browser": "rimraf dist/browser.mjs dist/browser.js && npm run compile-validators && node build/bundles.js",
+    "build:browser": "rimraf dist/browser.mjs dist/browser.js && node build/bundles.js",
     "test:node": "rimraf tests/compiled && npm run compile-validators && tsc -p tests/tsconfig.json && mocha",
-    "test:browser": "karma start karma.conf.cjs",
+    "test:browser": "npm run compile-validators && karma start karma.conf.cjs",
     "build": "npm run clean && npm run compile-validators && npm run build:esm && npm run build:cjs && npm run build:browser",
     "lint": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "eslint . --ext .ts --fix"
