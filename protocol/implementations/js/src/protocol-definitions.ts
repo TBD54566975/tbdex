@@ -37,7 +37,7 @@ export const aliceProtocolDefinition = {
           $actions: [
             {
               who : 'recipient',
-              of  : 'RFQ/Quote',
+              of  : 'RFQ',
               can : 'write'
             }
           ]
@@ -83,8 +83,7 @@ export const pfiProtocolDefinition = {
       // PFI is sending OUT quotes. no one should be writing Quotes to PFIs.
       Quote: {
         // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
-        OrderStatus: {
-        }
+        OrderStatus: { }
       }
     }
   }
