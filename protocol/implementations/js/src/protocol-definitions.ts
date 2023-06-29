@@ -13,12 +13,6 @@ export const aliceProtocolDefinition = {
         'application/json'
       ]
     },
-    Order: {
-      schema      : 'https://tbd.website/protocols/tbdex/Order',
-      dataFormats : [
-        'application/json'
-      ]
-    },
     OrderStatus: {
       schema      : 'https://tbd.website/protocols/tbdex/OrderStatus',
       dataFormats : [
@@ -39,17 +33,14 @@ export const aliceProtocolDefinition = {
           }
         ],
         // alice sends Orders, not receives them
-        Order: {
-          // whoever received the order that Alice sent in response to a Quote in response to an RFQ, can write back an OrderStatus to Alice.
-          OrderStatus: {
-            $actions: [
-              {
-                who : 'recipient',
-                of  : 'RFQ/Quote/Order',
-                can : 'write'
-              }
-            ]
-          }
+        OrderStatus: {
+          $actions: [
+            {
+              who : 'recipient',
+              of  : 'RFQ/Quote',
+              can : 'write'
+            }
+          ]
         }
       }
     }
@@ -68,12 +59,6 @@ export const pfiProtocolDefinition = {
     },
     Quote: {
       schema      : 'https://tbd.website/protocols/tbdex/Quote',
-      dataFormats : [
-        'application/json'
-      ]
-    },
-    Order: {
-      schema      : 'https://tbd.website/protocols/tbdex/Order',
       dataFormats : [
         'application/json'
       ]
@@ -97,18 +82,8 @@ export const pfiProtocolDefinition = {
       ],
       // PFI is sending OUT quotes. no one should be writing Quotes to PFIs.
       Quote: {
-        // only Alice, who received an RFQ/Quote, can write Order to PFIs DWN
-        // no one can read Order from PFIs DWN (except the PFI itself)
-        Order: {
-          $actions: [
-            {
-              who : 'recipient',
-              of  : 'RFQ/Quote',
-              can : 'write'
-            }
-          ],
-          // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
-          OrderStatus: { }
+        // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
+        OrderStatus: {
         }
       }
     }

@@ -1,39 +1,46 @@
 import { expect } from 'chai'
-import { Offering, Quote, Rfq, PaymentInstrumentKind } from '../src/types.js'
+import { Quote, Rfq, PaymentMethodKind } from '../src/types.js'
 import { createMessage } from '../src/builders.js'
 
-describe('Message builder', () => {
-  it('can build an offering', () => {
-    const offering: Offering = {
-      description            : 'test offering',
-      pair                   : 'USD_BTC',
-      unitPrice              : '100',
-      min                    : '0',
-      max                    : '1000',
-      presentationRequestJwt : 'testjwt',
-      payinInstruments       : [],
-      payoutInstruments      : []
+describe('messages builders', () => {
+  it('can build an rfq', () => {
+    const rfq: Rfq = {
+      baseCurrency  : 'BTC',
+      quoteCurrency : 'USD',
+      amount        : '1000',
+      kycProof      : 'fake-jwt',
+      payinMethod   : {
+        kind                             : PaymentMethodKind.DEBIT_CARD,
+        paymentVerifiablePresentationJwt : ''
+      },
+      payoutMethod: {
+        kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
+        paymentVerifiablePresentationJwt : ''
+      }
     }
 
     const actual = createMessage({
       to   : 'alice-did',
       from : 'pfi-did',
-      type : 'offering',
-      body : offering
+      type : 'rfq',
+      body : rfq
     })
 
-    expect(actual.body).to.equal(offering)
+    expect(actual.body).to.equal(rfq)
   })
   it('builds the expected message for an existing thread', () => {
     const rfq: Rfq = {
-      pair                      : 'USD_BTC',
-      amount                    : '1000',
-      verifiablePresentationJwt : 'fake-jwt',
-      payinInstrument           : {
-        kind: PaymentInstrumentKind.DEBIT_CARD
+      baseCurrency  : 'BTC',
+      quoteCurrency : 'USD',
+      amount        : '1000',
+      kycProof      : 'fake-jwt',
+      payinMethod   : {
+        kind                             : PaymentMethodKind.DEBIT_CARD,
+        paymentVerifiablePresentationJwt : 'fake-debitcard-jwt'
       },
-      payoutInstrument: {
-        kind: PaymentInstrumentKind.BITCOIN_ADDRESS
+      payoutMethod: {
+        kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
+        paymentVerifiablePresentationJwt : 'fake-btcaddress-jwt'
       }
     }
 
@@ -45,14 +52,13 @@ describe('Message builder', () => {
     })
 
     const quote: Quote = {
-      expiryTime                    : new Date().toISOString(),
-      totalFee                      : '100',
-      amount                        : '1000',
-      paymentPresentationRequestJwt : '',
-      paymentInstructions           : {payin: {link: 'fake.link.com'}}
+      expiryTime          : new Date().toISOString(),
+      totalFee            : '100',
+      amount              : '1000',
+      paymentInstructions : {payin: {link: 'fake.link.com'}}
     }
 
-    const {from, to, contextId} = createMessage({
+    const {from, to, threadId, parentId} = createMessage({
       last : rfqMessage,
       type : 'quote',
       body : quote
@@ -60,6 +66,7 @@ describe('Message builder', () => {
 
     expect(from).to.equal(rfqMessage.from)
     expect(to).to.equal(rfqMessage.to)
-    expect(contextId).to.equal(rfqMessage.contextId)
+    expect(threadId).to.equal(rfqMessage.threadId)
+    expect(parentId).to.equal(rfqMessage.id)
   })
 })

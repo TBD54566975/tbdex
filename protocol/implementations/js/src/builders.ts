@@ -1,5 +1,5 @@
 import { MessageType, MessageTypes, TbDEXMessage } from './types.js'
-import {ulid} from 'ulidx'
+import { createTbdexId } from './id.js'
 
 /**
  * Get the keys of T without any keys of U.
@@ -26,24 +26,19 @@ export type CreateMessageOpts<T extends keyof MessageTypes, U extends keyof Mess
 }
 
 export function createMessage<T extends keyof MessageTypes, U extends keyof MessageTypes>(opts: CreateMessageOpts<T, U>): TbDEXMessage<T> {
-  const id = createId(opts.type)
-  const contextId = opts.last?.contextId ?? id
+  const id = createTbdexId(opts.type)
+  const threadId = opts.last?.threadId ?? id
+  const parentId = opts.last?.id ?? null
   const {type, body} = opts
 
   return {
     id,
-    contextId,
+    threadId,
+    parentId,
     createdTime : new Date().toISOString(),
     type,
     body,
     to          : opts.to ?? opts.last.to,
     from        : opts.from ?? opts.last.from,
   }
-}
-
-// maybe extract this somewhere?
-const ID_NAMESPACE = 'tbdex'
-
-function createId<T extends keyof MessageTypes>(messageType: T): string {
-  return `${ID_NAMESPACE}:${messageType}:${ulid()}`
 }
