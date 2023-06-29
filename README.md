@@ -3,17 +3,18 @@
 ## Introduction
 
 The central aim of this repo is to act as a playground that is set up for us to easily test the ideas we come up with as we iterate our way to what we hope is a robust protocol. Specifically, this repo is focused on fleshing out:
-  - tbDEX message schemas/formats
+  - tbDEX message schemas
     - What types of messages do Alice and a PFI send to one another?
     - What do these messages contain?
     - What does the state machine look like for a thread of tbDEX messages?
-  - A mock PFI implementation that works with DIDs and "web5"
+  - Implementations of tbDEX message types in various languages
 
 # tbDEX Types
-## Messages
-Messages form exchanges between users and PFIs. 
 ## Resources
 A tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `to`, `threadId`, etc. A tbdex resource is published for anyone to read and generally used as a part of the discovery process by users.
+
+## Messages
+Messages form exchanges between users and PFIs. 
 
 # Resource Types
 
@@ -25,7 +26,7 @@ A tbDEX resource is not a tbDEX message. i.e. it does not follow the message str
 | `id` | string    | Y        | Unique identifier for this offering|
 | `description` | string    | Y        | Brief description of what is being offered.|
 | `baseCurrency` | string | Y | Currency that the PFI is selling. |
-| `quoteCurrency` | string | Currency that the PFI is accepting as payment for `baseCurrency`. |
+| `quoteCurrency` | string | Y | Currency that the PFI is accepting as payment for `baseCurrency`. |
 | `unitPrice` | string    | Y        | How much `quoteCurrency` is required for PFI to sell 1 unit of `baseCurrency`.|
 | `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which payment methods are used |
 | `min`   | string       | Y        | Minimum amount of quote currency that the counterparty (Alice) must submit in order to qualify for this offering.|
@@ -37,13 +38,13 @@ A tbDEX resource is not a tbDEX message. i.e. it does not follow the message str
 
 
 ## Note on `baseCurrency` and `quoteCurrency`
-Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always "SELL".
+Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency)
 
-### `PaymentMethod`
+### `Offering.PaymentMethod`
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `kind` | enum    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `paymentPresentationDefinitionJwt`     | string   | Y        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format|
+| `kind` | enum    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)|
+| `paymentPresentationDefinitionJwt`     | string   | N        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format|
 | `fee` | object    | N        | Optional fee associated with using this kind of payment method.|
 
 
@@ -58,22 +59,19 @@ Base Currency is the currency that the PFI is **selling**. Quote currency is the
   "max": 100.00,
   "kycRequirements": "eyJhb...MIDw",
   "payinInstruments": [{
-    "paymentPresentationDefinitionJwt": "eyJhb...MIDw",
     "kind": "DEBIT_CARD",
+    "paymentPresentationDefinitionJwt": "eyJhb...MIDw",
     "fee": {
       "flatFee": 1.00
     }
   },
   {
-    "paymentPresentationDefinitionJwt": "xyz...12as",
-    "kind": "CREDIT_CARD",
-    "fee": {
-      "flatFee": 4.00
-    }
+    "kind": "SQUARE_PAY",
+    "paymentPresentationDefinitionJwt": null,
   }],
   "payoutInstruments": [{
-    "paymentPresentationDefinitionJwt": "abc...IDsx",
-    "kind": "BTC_ADDRESS"
+    "kind": "BTC_ADDRESS",
+    "paymentPresentationDefinitionJwt": "abc...IDsx"
   }],
   "createdTime": "2023-06-23T11:23:41Z"
 }
@@ -105,8 +103,8 @@ The top-level TBDex `id` will serve as each message type's unique identifier. Th
 # Message Types
 The `body` of each message can be any of the following message types.
 
-## `RequestForQuote (RFQ for short)`
-> Alice -> PFI: "OK, that offering looks good. I want a Quote against that Offering, and here is how much USD I want to trade for BTC. Here's the payment method I intend to pay you USD with, and here's the payment method I expect you to pay me BTC in."
+## `RFQ (Request For Quote)`
+> Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD I want to trade for BTC. Here is my proof of KYC, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
@@ -117,25 +115,24 @@ The `body` of each message can be any of the following message types.
 | `payinMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to send quote currency. |
 | `payoutMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to receive base currency. |
 
-### `PaymentMethodResponse`
+### `RFQ.PaymentMethodResponse`
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `kind` | enum    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`)|
-| `paymentVerifiablePresentationJwt`     | string   | Y        | VerifiablePresentation that meets the specification per paymentPresentationDefinition in the Offering, in JWT string format.|
+| `kind` | enum    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)|
+| `paymentVerifiablePresentationJwt`     | string   | N        | VerifiablePresentation in JWT string format that meets the specification per paymentPresentationDefinition in the Offering.|
 
 ```json
 {
-  "pfi_currency": "BTC",
-  "user_currency": "USD",
+  "baseCurrency": "BTC",
+  "quoteCurrency": "USD",
   "amount": 10.00,
   "kycProof": "eyJhbGci...hs4ALYCA",
   "payinInstrument": {
-    "kind": "DEBIT_CARD",
-    "paymentVerifiablePresentationJwt": ""
+    "kind": "SQUARE_PAY"
   },
   "payoutInstrument": {
     "kind": "BTC_ADDRESS",
-    "paymentVerifiablePresentationJwt": ""
+    "paymentVerifiablePresentationJwt": "eyJhb...AZRLhs4ALYCA"
   }
 }
 ```
@@ -148,15 +145,15 @@ The `body` of each message can be any of the following message types.
 | `expiryTime`     | datetime         | Y        | When this quote expires. Expressed as ISO8601|
 | `totalFee`     | string         | Y        | Total fee (base + PaymentMethod specific) included in quote in quote currency.|
 | `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for quote currency `amount` in the original RFQ|
-| `paymentInstructions`     | PaymentInstructions   | Y        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment must be performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
+| `paymentInstructions`     | PaymentInstructions   | N        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment is performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
 
-### `PaymentInstructions`
+### `Quote.PaymentInstructions`
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `payin` | PaymentInstruction    | N        | Link or Instruction describing how to pay the PFI. |
 | `payout` | PaymentInstruction    | N        | Link or Instruction describing how to get paid by the PFI|
 
-### `PaymentInstruction`
+### `Quote.PaymentInstructions.PaymentInstruction`
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `link` | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI |
@@ -170,7 +167,7 @@ The `body` of each message can be any of the following message types.
   "amount": 0.000383,
   "paymentInstructions": {
     "payin": {
-      "link": "stripe.com/xyz"
+      "link": "square-pay.com?for=alice&amount=10"
     }
   }
 }
