@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Quote, Rfq, PaymentMethodKind } from '../src/types.js'
 import { createMessage } from '../src/builders.js'
 
-describe('Message builder', () => {
+describe('messages builders', () => {
   it('can build an rfq', () => {
     const rfq: Rfq = {
       baseCurrency  : 'BTC',

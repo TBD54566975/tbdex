@@ -37,9 +37,10 @@ export enum PaymentMethodKind {
 
 export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 
-export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
-  type: T
-  body: MessageTypes[T]
+export type MessageTypes = {
+  rfq: Rfq,
+  quote: Quote,
+  orderStatus: OrderStatus
 }
 
 export interface MessageMetadata {
@@ -51,10 +52,9 @@ export interface MessageMetadata {
   createdTime: string
 }
 
-export type MessageTypes = {
-  rfq: Rfq,
-  quote: Quote,
-  orderStatus: OrderStatus
+export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
+  type: T
+  body: MessageTypes[T]
 }
 
 export interface Rfq {
