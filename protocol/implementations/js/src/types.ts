@@ -9,12 +9,13 @@ export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>
 export interface Offering {
   id: string
   description: string
-  pair: string
+  baseCurrency: string
+  quoteCurrency: string
   unitPrice: string
   baseFee?: string
   min: string
   max: string
-  presentationRequestJwt: string
+  kycRequirements: string
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
   createdTime: string
@@ -22,7 +23,7 @@ export interface Offering {
 
 export interface PaymentMethod {
   kind: PaymentMethodKind,
-  paymentPresentationRequestJwt: string
+  paymentPresentationRequestJwt?: string
   fee?: {
     flatFee?: string
   }
@@ -30,7 +31,8 @@ export interface PaymentMethod {
 
 export enum PaymentMethodKind {
   DEBIT_CARD,
-  BITCOIN_ADDRESS
+  BITCOIN_ADDRESS,
+  SQUARE_PAY
 }
 
 export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
@@ -56,23 +58,24 @@ export type MessageTypes = {
 }
 
 export interface Rfq {
-  pair: string
+  baseCurrency: string
+  quoteCurrency: string
   amount: string
-  verifiablePresentationJwt: string
+  kycProof: string
   payinMethod: PaymentMethodResponse
   payoutMethod: PaymentMethodResponse
 }
 
 export interface PaymentMethodResponse {
   kind: PaymentMethodKind,
-  paymentVerifiablePresentationJwt: string
+  paymentVerifiablePresentationJwt?: string
 }
 
 export interface Quote {
   expiryTime: string
   totalFee: string
   amount: string
-  paymentInstructions: PaymentInstructions
+  paymentInstructions?: PaymentInstructions
 }
 
 export interface PaymentInstructions {

@@ -1,17 +1,18 @@
 import { PaymentMethodKind, TbDEXResource, MessageMetadata, TbDEXMessage, Status } from './src/types.js'
 
 const _offering: TbDEXResource<'offering'> = {
-  id                     : '123',
-  description            : 'Buy BTC with USD!',
-  pair                   : 'BTC_USD',
-  unitPrice              : '27000.00',
-  baseFee                : '1.00',
-  min                    : '10.00',
-  max                    : '1000.00',
+  id              : '123',
+  description     : 'Buy BTC with USD!',
+  baseCurrency    : 'BTC',
+  quoteCurrency   : 'USD',
+  unitPrice       : '27000.00',
+  baseFee         : '1.00',
+  min             : '10.00',
+  max             : '1000.00',
   // here's what we want to see in your KYC VC (full name, dob)
   // maybe this is a sanctions VC? or maybe this is a silly VC that says 'send me a selfie'
-  presentationRequestJwt : 'eyJhb...MIDw',
-  payinMethods           : [{
+  kycRequirements : 'eyJhb...MIDw',
+  payinMethods    : [{
     kind                          : PaymentMethodKind.DEBIT_CARD,
     // here's how to present your debit card info
     paymentPresentationRequestJwt : 'ey...IAbZ',
@@ -42,14 +43,15 @@ const _rfq: TbDEXMessage<'rfq'> = {
   ..._metadata,
   type : 'rfq',
   body : {
-    pair                      : 'BTC_USD',
-    amount                    : '10.00',
-    verifiablePresentationJwt : 'eyJApQf...wqfVkg', // heres my KYC VC
-    payinInstrument           : {
+    baseCurrency  : 'BTC',
+    quoteCurrency : 'USD',
+    amount        : '10.00',
+    kycProof      : 'eyJApQf...wqfVkg', // heres my KYC VC
+    payinMethod   : {
       kind                             : PaymentMethodKind.DEBIT_CARD,
       paymentVerifiablePresentationJwt : 'fdsafjdla'
     },
-    payoutInstrument: {
+    payoutMethod: {
       kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
       paymentVerifiablePresentationJwt : 'rewhiroew'
     }
