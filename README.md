@@ -18,25 +18,26 @@ A tbDEX resource is not a tbDEX message. i.e. it does not follow the message str
 # Resource Types
 
 ## `Offering`
-> PFI -> world: "Here are the exchanges that my PFI offers. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the counter currency."
+> PFI -> world: "Here are the exchanges that my PFI offers. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | `id` | string    | Y        | Unique identifier for this offering|
 | `description` | string    | Y        | Brief description of what is being offered.|
-| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
-| `unitPrice` | string    | Y        | Price of 1 unit of base currency denominated in counter currency.|
+| `baseCurrency` | string | Y | Currency that the PFI is selling. |
+| `quoteCurrency` | string | Currency that the PFI is accepting as payment for `baseCurrency`. |
+| `unitPrice` | string    | Y        | How much `quoteCurrency` is required for PFI to sell 1 unit of `baseCurrency`.|
 | `baseFee`   | string       | N        | Optional base fee associated with this offering, regardless of which payment methods are used |
-| `min`   | string       | Y        | Minimum amount of counter currency that the counterparty (Alice) must submit in order to qualify for this offering.|
-| `max`   | string       | Y        | Maximum amount of counter currency that the counterparty (Alice) can submit in order to qualify for this offering.|
+| `min`   | string       | Y        | Minimum amount of quote currency that the counterparty (Alice) must submit in order to qualify for this offering.|
+| `max`   | string       | Y        | Maximum amount of quote currency that the counterparty (Alice) can submit in order to qualify for this offering.|
 | `kycRequirements`   | string    | Y        |  PresentationDefinition in JWT string format which describes the credential needed to choose this offer.|
 | `payinMethods`   | list[PaymentMethod]    | Y        |  A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering.|
 | `payoutMethods`   | list[PaymentMethod]    | Y        |  A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering.|
 | `createdTime` | datetime        | Y              | The creation time of the resource. Expressed as ISO8601|
 
 
-### Note on base and counter currency in `pair`
-There's an explicit directionality baked into the `pair` naming convention, which is `BaseCurrency_CounterCurrency`. Base Currency is the currency that the PFI is **selling**. Counter Currency is the currency that the PFI is willing to accept to sell the base currency (in other words, PFI is **buying** the Counter Currency). In trading terms, the PFI's side is always "SELL". 
+## Note on `baseCurrency` and `quoteCurrency`
+Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always "SELL".
 
 ### `PaymentMethod`
 | field            | data type | required | description                                                                                          |
@@ -49,7 +50,8 @@ There's an explicit directionality baked into the `pair` naming convention, whic
 ```json
 {
   "description": "Buy BTC with USD!",
-  "pair": "BTC_USD",
+  "baseCurrency": "BTC",
+  "quoteCurrency": "USD",
   "unitPrice": 27000.00,
   "baseFee": 1.00,
   "min": 10.00,
@@ -108,10 +110,11 @@ The `body` of each message can be any of the following message types.
 
 | field            | data type | required | description                                                                                          |
 | ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `pair` | string    | Y        | The currency pair being offered, in the format of `basecurrency_countercurrency`.|
-| `amount` | string    | Y        | Amount of counter currency you want to spend in order to receive base currency|
+| `baseCurrency` | string | Y | Currency that the PFI is selling. |
+| `quoteCurrency` | string | Currency that the PFI is accepting as payment for `baseCurrency`. |
+| `amount` | string    | Y        | Amount of quote currency you want to spend in order to receive base currency|
 | `kycProof` | string    | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering|
-| `payinMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to send counter currency. |
+| `payinMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to send quote currency. |
 | `payoutMethod`   | PaymentMethodResponse       | Y        | Specify which payment method to receive base currency. |
 
 ### `PaymentMethodResponse`
@@ -122,7 +125,8 @@ The `body` of each message can be any of the following message types.
 
 ```json
 {
-  "pair": "BTC_USD",
+  "pfi_currency": "BTC",
+  "user_currency": "USD",
   "amount": 10.00,
   "kycProof": "eyJhbGci...hs4ALYCA",
   "payinInstrument": {
@@ -142,8 +146,8 @@ The `body` of each message can be any of the following message types.
 | field            | data type   | required | description                                                   |
 | ---------------- | ----------- | -------- | ------------------------------------------------------------- |
 | `expiryTime`     | datetime         | Y        | When this quote expires. Expressed as ISO8601|
-| `totalFee`     | string         | Y        | Total fee (base + PaymentMethod specific) included in quote in counter currency.|
-| `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for counter currency `amount` in the original RFQ|
+| `totalFee`     | string         | Y        | Total fee (base + PaymentMethod specific) included in quote in quote currency.|
+| `amount`     | string         | Y        | Amount of base currency that the PFI is willing to sell in exchange for quote currency `amount` in the original RFQ|
 | `paymentInstructions`     | PaymentInstructions   | Y        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment must be performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
 
 ### `PaymentInstructions`
@@ -186,7 +190,6 @@ The `body` of each message can be any of the following message types.
 ```
 
 ## Fields that may change in future versions of the schema
-- `pair` in `Offering` object: there's a discussion on whether to stick to this pair convention, or to split it out to 2 fields - base and counter currency.
 - `fee` in `Offering` object: the way PFIs assess fees for a given offering, as well as for specific payment methods will become more complex over time. Currently, there's only 1 field in the fee object, `flatFee`.
 - `expiryTime` in `Offering` object: this field will likely be added in future versions to ensure that PFIs can advertise the most up-to-date offerings, and to ensure that Quote price is not a vast departure from the corresponding Offering.
 - `paymentInstructions` in `Quote` object: this object is currently in place to ensure that a PFI that cannot accept raw payinInstrument object as a VC (i.e. plaintext values) for PCI compliance reasons, and therefore need to use a 3rd party payment processor to execute payment "out-of-band". There's still more thoughts that need to form around whether this is a good long-term solution, or if something like Proof of Payment VC issued by Payment Processor, or use of a smart contract would be more appropriate.
