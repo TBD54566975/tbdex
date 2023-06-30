@@ -46,7 +46,7 @@ export type MessageTypes = {
 export interface MessageMetadata {
   id: string
   threadId: string
-  parentId: string
+  parentId?: string
   from: string
   to: string
   createdTime: string

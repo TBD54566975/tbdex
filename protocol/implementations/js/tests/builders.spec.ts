@@ -27,6 +27,7 @@ describe('messages builders', () => {
     })
 
     expect(actual.body).to.equal(rfq)
+    expect(actual.parentId).to.be.null
   })
   it('builds the expected message for an existing thread', () => {
     const rfq: Rfq = {
