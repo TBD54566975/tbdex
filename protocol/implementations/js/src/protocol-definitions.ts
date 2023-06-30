@@ -32,11 +32,11 @@ export const aliceProtocolDefinition = {
             can : 'write'
           }
         ],
-        // alice sends Orders, not receives them
+        // OrderStatus can be written to Alice's DWN by someone who wrote RFQ/Quote (i.e. PFI)
         OrderStatus: {
           $actions: [
             {
-              who : 'recipient',
+              who : 'author',
               of  : 'RFQ/Quote',
               can : 'write'
             }
@@ -83,8 +83,7 @@ export const pfiProtocolDefinition = {
       // PFI is sending OUT quotes. no one should be writing Quotes to PFIs.
       Quote: {
         // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
-        OrderStatus: {
-        }
+        OrderStatus: { }
       }
     }
   }
