@@ -5,11 +5,10 @@ import { createMessage } from '../src/builders.js'
 describe('messages builders', () => {
   it('can build an rfq', () => {
     const rfq: Rfq = {
-      baseCurrency  : 'BTC',
-      quoteCurrency : 'USD',
-      amount        : '1000',
-      kycProof      : 'fake-jwt',
-      payinMethod   : {
+      offeringId  : '123',
+      amount      : '1000',
+      kycProof    : 'fake-jwt',
+      payinMethod : {
         kind                             : PaymentMethodKind.DEBIT_CARD,
         paymentVerifiablePresentationJwt : ''
       },
@@ -31,11 +30,10 @@ describe('messages builders', () => {
   })
   it('builds the expected message for an existing thread', () => {
     const rfq: Rfq = {
-      baseCurrency  : 'BTC',
-      quoteCurrency : 'USD',
-      amount        : '1000',
-      kycProof      : 'fake-jwt',
-      payinMethod   : {
+      offeringId  : '123',
+      amount      : '1000',
+      kycProof    : 'fake-jwt',
+      payinMethod : {
         kind                             : PaymentMethodKind.DEBIT_CARD,
         paymentVerifiablePresentationJwt : 'fake-debitcard-jwt'
       },

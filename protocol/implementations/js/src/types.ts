@@ -58,8 +58,7 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 }
 
 export interface Rfq {
-  baseCurrency: string
-  quoteCurrency: string
+  offeringId: string,
   amount: string
   kycProof: string
   payinMethod: PaymentMethodResponse
