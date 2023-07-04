@@ -1,5 +1,6 @@
+import type { Quote, Rfq } from '../src/types.js'
+
 import { expect } from 'chai'
-import { Quote, Rfq, PaymentMethodKind } from '../src/types.js'
 import { createMessage } from '../src/builders.js'
 
 describe('messages builders', () => {
@@ -9,11 +10,11 @@ describe('messages builders', () => {
       amount      : '1000',
       kycProof    : 'fake-jwt',
       payinMethod : {
-        kind                             : PaymentMethodKind.DEBIT_CARD,
+        kind                             : 'DEBIT_CARD',
         paymentVerifiablePresentationJwt : ''
       },
       payoutMethod: {
-        kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
+        kind                             : 'BITCOIN_ADDRESS',
         paymentVerifiablePresentationJwt : ''
       }
     }
@@ -34,11 +35,11 @@ describe('messages builders', () => {
       amount      : '1000',
       kycProof    : 'fake-jwt',
       payinMethod : {
-        kind                             : PaymentMethodKind.DEBIT_CARD,
+        kind                             : 'DEBIT_CARD',
         paymentVerifiablePresentationJwt : 'fake-debitcard-jwt'
       },
       payoutMethod: {
-        kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
+        kind                             : 'BITCOIN_ADDRESS',
         paymentVerifiablePresentationJwt : 'fake-btcaddress-jwt'
       }
     }
