@@ -33,7 +33,7 @@ export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 
 export type MessageTypes = {
   rfq: Rfq
-  quote: Quote
+  quoteResponse: QuoteResponse
   orderStatus: OrderStatus
 }
 
@@ -64,11 +64,18 @@ export interface PaymentMethodResponse {
   paymentVerifiablePresentationJwt?: string
 }
 
+export type QuoteResponse = XOR<Quote, QuoteError>
+
 export interface Quote {
   expiryTime: string
   totalFee: string
   amount: string
   paymentInstructions?: PaymentInstructions
+}
+
+export interface QuoteError {
+  // add some sort of error enum too? i.e MALFORMED_RFQ, CIRCLE_ERROR, SQUARE_ERROR
+  details: string
 }
 
 export interface PaymentInstructions {
@@ -89,3 +96,13 @@ export enum Status {
   COMPLETED,
   FAILED
 }
+
+/**
+ * Get the keys of T without any keys of U.
+ */
+export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
+
+/**
+ * Restrict using either only the keys of T or only the keys of U.
+ */
+export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U
