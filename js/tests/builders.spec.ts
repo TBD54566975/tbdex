@@ -1,4 +1,4 @@
-import type { Quote, QuoteError, QuoteResponse, Rfq } from '../src/types.js'
+import type { QuoteResponse, Rfq } from '../src/types.js'
 
 import { expect } from 'chai'
 import { createMessage } from '../src/builders.js'
@@ -58,15 +58,16 @@ describe('messages builders', () => {
       paymentInstructions: { payin: { link: 'fake.link.com' } },
     }
 
-    const { from, to, threadId, parentId } = createMessage({
+    const { from, to, threadId, parentId, body } = createMessage({
       last: rfqMessage,
       type: 'quoteResponse',
-      body: quote
+      body: { quote }
     })
 
     expect(from).to.equal(rfqMessage.from)
     expect(to).to.equal(rfqMessage.to)
     expect(threadId).to.equal(rfqMessage.threadId)
     expect(parentId).to.equal(rfqMessage.id)
+    expect(body.error).to.be.undefined
   })
 })

@@ -67,15 +67,19 @@ export interface PaymentMethodResponse {
 export type QuoteResponse = XOR<Quote, QuoteError>
 
 export interface Quote {
-  expiryTime: string
-  totalFee: string
-  amount: string
-  paymentInstructions?: PaymentInstructions
+  quote: {
+    expiryTime: string
+    totalFee: string
+    amount: string
+    paymentInstructions?: PaymentInstructions
+  }
 }
 
 export interface QuoteError {
-  // add some sort of error enum too? i.e MALFORMED_RFQ, CIRCLE_ERROR, SQUARE_ERROR
-  details: string
+  error: {
+    // add some sort of error enum too? i.e MALFORMED_RFQ, CIRCLE_ERROR, SQUARE_ERROR
+    details: string
+  }
 }
 
 export interface PaymentInstructions {
