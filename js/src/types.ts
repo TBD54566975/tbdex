@@ -33,7 +33,8 @@ export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 
 export type MessageTypes = {
   rfq: Rfq
-  quoteResponse: QuoteResponse
+  quote: Quote
+  close: Close
   orderStatus: OrderStatus
 }
 
@@ -52,7 +53,7 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 }
 
 export interface Rfq {
-  offeringId: string,
+  offeringId: string
   amount: string
   kycProof: string
   payinMethod: PaymentMethodResponse
@@ -64,22 +65,15 @@ export interface PaymentMethodResponse {
   paymentVerifiablePresentationJwt?: string
 }
 
-export type QuoteResponse = XOR<Quote, QuoteError>
-
 export interface Quote {
-  quote: {
-    expiryTime: string
-    totalFee: string
-    amount: string
-    paymentInstructions?: PaymentInstructions
-  }
+  expiryTime: string
+  totalFee: string
+  amount: string
+  paymentInstructions?: PaymentInstructions
 }
 
-export interface QuoteError {
-  error: {
-    // add some sort of error enum too? i.e MALFORMED_RFQ, CIRCLE_ERROR, SQUARE_ERROR
-    details: string
-  }
+export interface Close {
+  reason?: string
 }
 
 export interface PaymentInstructions {
