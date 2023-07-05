@@ -108,8 +108,7 @@ The `body` of each message can be any of the following message types.
 
 | field           | data type             | required                                                          | description                                                                                                         |
 | --------------- | --------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `baseCurrency`  | string                | Y                                                                 | Currency that the PFI is selling.                                                                                   |
-| `quoteCurrency` | string                | Currency that the PFI is accepting as payment for `baseCurrency`. |
+| `offeringId`  | string                | Y                                                                 | Offering which Alice would like to get a quote for                                                                                   |
 | `amount`        | string                | Y                                                                 | Amount of quote currency you want to spend in order to receive base currency                                        |
 | `kycProof`      | string                | Y                                                                 | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
 | `payinMethod`   | PaymentMethodResponse | Y                                                                 | Specify which payment method to send quote currency.                                                                |
@@ -187,6 +186,12 @@ _Alternatively, in the case of an error_
 | field                 | data type           | required | description                                                                                                                                                                                                     |
 | --------------------- | ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `details`          | string            | Y        | Message describing the error                                                                                                                                                                   |
+
+```json
+{
+  "details": "OfferingId: tbdex:offering:blah could not be found"
+}
+```
 
 
 ## `OrderStatus`
