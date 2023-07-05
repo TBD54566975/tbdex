@@ -22,24 +22,18 @@ export interface Offering {
 }
 
 export interface PaymentMethod {
-  kind: PaymentMethodKind,
+  kind: string
   paymentPresentationRequestJwt?: string
   fee?: {
     flatFee?: string
   }
 }
 
-export enum PaymentMethodKind {
-  DEBIT_CARD,
-  BITCOIN_ADDRESS,
-  SQUARE_PAY
-}
-
 export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 
 export type MessageTypes = {
-  rfq: Rfq,
-  quote: Quote,
+  rfq: Rfq
+  quote: Quote
   orderStatus: OrderStatus
 }
 
@@ -66,7 +60,7 @@ export interface Rfq {
 }
 
 export interface PaymentMethodResponse {
-  kind: PaymentMethodKind,
+  kind: string
   paymentVerifiablePresentationJwt?: string
 }
 
