@@ -137,9 +137,19 @@ The `body` of each message can be any of the following message types.
 }
 ```
 
-## `Quote`
+## `QuoteResponse`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
+_Alternatively, in the case of an error_
+
+> PFI -> Alice: "Whoops, I wasn't able to generate a quote. Here's an error message explaining why."
+
+| field    | data type          | required | description                                               |
+| -------- | ------------------ | -------- | --------------------------------------------------------- |
+| `quote`  | Quote | N        | Quote, if the RFQ was successful        |
+| `error` | QuoteError | N        | Error, if the RFQ was not successful |
+
+### `QuoteResponse.Quote`
 | field                 | data type           | required | description                                                                                                                                                                                                     |
 | --------------------- | ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `expiryTime`          | datetime            | Y        | When this quote expires. Expressed as ISO8601                                                                                                                                                                   |
@@ -147,13 +157,13 @@ The `body` of each message can be any of the following message types.
 | `amount`              | string              | Y        | Amount of base currency that the PFI is willing to sell in exchange for quote currency `amount` in the original RFQ                                                                                             |
 | `paymentInstructions` | PaymentInstructions | N        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment is performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
 
-### `Quote.PaymentInstructions`
+#### `QuoteResponse.Quote.PaymentInstructions`
 | field    | data type          | required | description                                               |
 | -------- | ------------------ | -------- | --------------------------------------------------------- |
 | `payin`  | PaymentInstruction | N        | Link or Instruction describing how to pay the PFI.        |
 | `payout` | PaymentInstruction | N        | Link or Instruction describing how to get paid by the PFI |
 
-### `Quote.PaymentInstructions.PaymentInstruction`
+#### `Quote.PaymentInstructions.PaymentInstruction`
 | field         | data type | required | description                                                               |
 | ------------- | --------- | -------- | ------------------------------------------------------------------------- |
 | `link`        | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI                     |
@@ -172,6 +182,12 @@ The `body` of each message can be any of the following message types.
   }
 }
 ```
+
+### `QuoteResponse.QuoteError`
+| field                 | data type           | required | description                                                                                                                                                                                                     |
+| --------------------- | ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `details`          | string            | Y        | Message describing the error                                                                                                                                                                   |
+
 
 ## `OrderStatus`
 > PFI -> Alice: "Here's the status of your order."
