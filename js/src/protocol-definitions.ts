@@ -7,8 +7,8 @@ export const aliceProtocolDefinition = {
         'application/json'
       ]
     },
-    Quote: {
-      schema      : 'https://tbd.website/protocols/tbdex/Quote',
+    QuoteResponse: {
+      schema      : 'https://tbd.website/protocols/tbdex/QuoteResponse',
       dataFormats : [
         'application/json'
       ]
@@ -23,8 +23,8 @@ export const aliceProtocolDefinition = {
   structure: {
     // alice sends RFQs, not receives them
     RFQ: {
-      // whoever received the RFQ that Alice sent, can write back a Quote to Alice
-      Quote: {
+      // whoever received the RFQ that Alice sent, can write back a QuoteResponse to Alice
+      QuoteResponse: {
         $actions: [
           {
             who : 'recipient',
@@ -32,12 +32,12 @@ export const aliceProtocolDefinition = {
             can : 'write'
           }
         ],
-        // OrderStatus can be written to Alice's DWN by someone who wrote RFQ/Quote (i.e. PFI)
+        // OrderStatus can be written to Alice's DWN by someone who wrote RFQ/QuoteResponse (i.e. PFI)
         OrderStatus: {
           $actions: [
             {
               who : 'author',
-              of  : 'RFQ/Quote',
+              of  : 'RFQ/QuoteResponse',
               can : 'write'
             }
           ]
@@ -57,8 +57,8 @@ export const pfiProtocolDefinition = {
         'application/json'
       ]
     },
-    Quote: {
-      schema      : 'https://tbd.website/protocols/tbdex/Quote',
+    QuoteResponse: {
+      schema      : 'https://tbd.website/protocols/tbdex/QuoteResponse',
       dataFormats : [
         'application/json'
       ]
@@ -80,8 +80,8 @@ export const pfiProtocolDefinition = {
           can : 'write'
         }
       ],
-      // PFI is sending OUT quotes. no one should be writing Quotes to PFIs.
-      Quote: {
+      // PFI is sending OUT quote responses. no one should be writing QuoteResponse to PFIs.
+      QuoteResponse: {
         // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
         OrderStatus: { }
       }
