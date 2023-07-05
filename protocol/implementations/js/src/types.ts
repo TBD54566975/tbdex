@@ -23,7 +23,7 @@ export interface Offering {
 
 export interface PaymentMethod {
   kind: string
-  paymentPresentationRequestJwt?: string
+  paymentPresentationDefinitionJwt?: string
   fee?: {
     flatFee?: string
   }

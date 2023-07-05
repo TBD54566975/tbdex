@@ -52,7 +52,7 @@
                 "max": {
                     "type": "string"
                 },
-                "presentationRequestJwt": {
+                "presentationDefinitionJwt": {
                     "type": "string"
                 },
                 "payinInstruments": {
@@ -74,7 +74,7 @@
                 "unitPrice",
                 "min",
                 "max",
-                "presentationRequestJwt",
+                "presentationDefinitionJwt",
                 "payinInstruments",
                 "payoutInstruments"
             ]
@@ -119,7 +119,7 @@
                 "amount": {
                     "type": "string"
                 },
-                "paymentPresentationRequestJwt": {
+                "paymentpresentationDefinitionJwt": {
                     "type": "string"
                 },
                 "paymentInstructions": {
@@ -130,7 +130,7 @@
                 "expiryTime",
                 "totalFee",
                 "amount",
-                "paymentPresentationRequestJwt",
+                "paymentpresentationDefinitionJwt",
                 "paymentInstructions"
             ]
         },
