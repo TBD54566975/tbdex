@@ -15,7 +15,7 @@ jobs:
   security-audit:
     defaults:
       run:
-        working-directory: protocol/implementations/js
+        working-directory: js
         shell: bash
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +33,7 @@ jobs:
   test-with-node:
     defaults:
       run:
-        working-directory: protocol/implementations/js
+        working-directory: js
         shell: bash
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
     # Run browser tests using macOS so that WebKit tests don't fail under a Linux environment
     defaults:
       run:
-        working-directory: protocol/implementations/js
+        working-directory: js
         shell: bash
     runs-on: macos-latest
     steps:
