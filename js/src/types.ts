@@ -11,10 +11,10 @@ export interface Offering {
   description: string
   baseCurrency: string
   quoteCurrency: string
-  unitPrice: string
-  baseFee?: string
-  min: string
-  max: string
+  unitPriceCents: string
+  baseFeeCents?: string
+  minCents: string
+  maxCents: string
   kycRequirements: string
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
@@ -54,7 +54,7 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 
 export interface Rfq {
   offeringId: string
-  amount: string
+  amountCents: string
   kycProof: string
   payinMethod: PaymentMethodResponse
   payoutMethod: PaymentMethodResponse
@@ -67,8 +67,8 @@ export interface PaymentMethodResponse {
 
 export interface Quote {
   expiryTime: string
-  totalFee: string
-  amount: string
+  totalFeeCents: string
+  amountCents: string
   paymentInstructions?: PaymentInstructions
 }
 
