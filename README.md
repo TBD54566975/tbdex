@@ -1,6 +1,29 @@
-# tbDEX Protocol 
+# tbDEX Protocol <!-- omit in toc -->
 
-## Introduction
+- [Introduction](#introduction)
+- [tbDEX Types](#tbdex-types)
+  - [Resources](#resources)
+  - [Messages](#messages)
+- [Resource Types](#resource-types)
+  - [`Offering`](#offering)
+  - [Note on `baseCurrency` and `quoteCurrency`](#note-on-basecurrency-and-quotecurrency)
+    - [`Offering.PaymentMethod`](#offeringpaymentmethod)
+- [Message Structure](#message-structure)
+- [ID for each message types](#id-for-each-message-types)
+- [Message Types](#message-types)
+  - [`RFQ (Request For Quote)`](#rfq-request-for-quote)
+    - [`RFQ.PaymentMethodResponse`](#rfqpaymentmethodresponse)
+  - [`Close`](#close)
+  - [`Quote`](#quote)
+    - [`Quote.PaymentInstructions`](#quotepaymentinstructions)
+    - [`Quote.PaymentInstructions.PaymentInstruction`](#quotepaymentinstructionspaymentinstruction)
+  - [`OrderStatus`](#orderstatus)
+  - [Fields that may change in future versions of the schema](#fields-that-may-change-in-future-versions-of-the-schema)
+- [tbDEX conversation sequence](#tbdex-conversation-sequence)
+- [Resources](#resources-1)
+
+
+# Introduction
 
 The central aim of this repo is to act as a playground that is set up for us to easily test the ideas we come up with as we iterate our way to what we hope is a robust protocol. Specifically, this repo is focused on fleshing out:
   - tbDEX message schemas
@@ -21,17 +44,17 @@ Messages form exchanges between users and PFIs.
 ## `Offering`
 > PFI -> world: "Here are the exchanges that my PFI offers. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
 
-| field             | data type           | required | description                                                                                                                          |
+| field              | data type           | required | description                                                                                                                          |
 | ----------------- | ------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`              | string              | Y        | Unique identifier for this offering                                                                                                  |
+| `id`              | string              | Y        | Unique identifier for this offering                                                                                                   |
 | `description`     | string              | Y        | Brief description of what is being offered.                                                                                          |
 | `baseCurrency`    | string              | Y        | Currency that the PFI is selling.                                                                                                    |
 | `quoteCurrency`   | string              | Y        | Currency that the PFI is accepting as payment for `baseCurrency`.                                                                    |
-| `unitPrice`       | string              | Y        | How much `quoteCurrency` is required for PFI to sell 1 unit of `baseCurrency`.                                                       |
-| `baseFee`         | string              | N        | Optional base fee associated with this offering, regardless of which payment methods are used                                        |
-| `min`             | string              | Y        | Minimum amount of quote currency that the counterparty (Alice) must submit in order to qualify for this offering.                    |
-| `max`             | string              | Y        | Maximum amount of quote currency that the counterparty (Alice) can submit in order to qualify for this offering.                     |
-| `kycRequirements` | string              | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                              |
+| `unitPriceDollars`| string              | Y        | How much `quoteCurrency` is required for PFI to sell 1  unit of `baseCurrency`.                                                      |
+| `baseFeeDollars`  | string              | N        | Optional base fee associated with this offering, regardless of which payment methods are used                                        |
+| `minDollars`      | string              | Y        | Minimum amount of quote currency that the counterparty (Alice) must submit in order to qualify for this offering.                    |
+| `maxDollars`      | string              | Y        | Maximum amount of quote currency that the counterparty (Alice) can submit in order to qualify for this offering.                     |
+| `kycRequirements` | string              | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                               |
 | `payinMethods`    | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`   | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
 | `createdTime`     | datetime            | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
@@ -41,11 +64,11 @@ Messages form exchanges between users and PFIs.
 Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency)
 
 ### `Offering.PaymentMethod`
-| field                              | data type | required | description                                                                                         |
+| field                               | data type | required | description                                                                                         |
 | ---------------------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------- |
 | `kind`                             | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                         |
-| `paymentPresentationDefinitionJwt` | string    | N        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format |
-| `fee`                              | object    | N        | Optional fee associated with using this kind of payment method.                                     |
+| `paymentPresentationDefinitionJwt`  | string    | N        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format  |
+| `fee       `                       | object    | N        | Optional fee associated with using this kind of payment method.                                     |
 
 
 ```json
@@ -53,16 +76,16 @@ Base Currency is the currency that the PFI is **selling**. Quote currency is the
   "description": "Buy BTC with USD!",
   "baseCurrency": "BTC",
   "quoteCurrency": "USD",
-  "unitPrice": 27000.00,
-  "baseFee": 1.00,
-  "min": 10.00,
-  "max": 100.00,
+  "unitPriceDollars": 27000.00,
+  "baseFeeDollars": 1.00,
+  "minDollars": 10.00,
+  "maxDollars": 100.00,
   "kycRequirements": "eyJhb...MIDw",
   "payinInstruments": [{
     "kind": "DEBIT_CARD",
     "paymentPresentationDefinitionJwt": "eyJhb...MIDw",
     "fee": {
-      "flatFee": 1.00
+      "flatFee": 100
     }
   },
   {
@@ -106,26 +129,25 @@ The `body` of each message can be any of the following message types.
 ## `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD I want to trade for BTC. Here is my proof of KYC, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field           | data type             | required                                                          | description                                                                                                         |
-| --------------- | --------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `baseCurrency`  | string                | Y                                                                 | Currency that the PFI is selling.                                                                                   |
-| `quoteCurrency` | string                | Currency that the PFI is accepting as payment for `baseCurrency`. |
-| `amount`        | string                | Y                                                                 | Amount of quote currency you want to spend in order to receive base currency                                        |
-| `kycProof`      | string                | Y                                                                 | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
-| `payinMethod`   | PaymentMethodResponse | Y                                                                 | Specify which payment method to send quote currency.                                                                |
-| `payoutMethod`  | PaymentMethodResponse | Y                                                                 | Specify which payment method to receive base currency.                                                              |
+| field           | data type             | required | description                                                                                                         |
+| -------------- | --------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `offeringId`   | string                | Y        | Offering which Alice would like to get a quote for                                                                  |
+| `amountCents`  | string                | Y        | Amount (cents) of quote currency you want to spend in order to receive base currency                                |
+| `kycProof`     | string                | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering    |
+| `payinMethod`  | PaymentMethodResponse | Y        | Specify which payment method to send quote currency.                                                                |
+| `payoutMethod` | PaymentMethodResponse | Y        | Specify which payment method to receive base currency.                                                              |
 
 ### `RFQ.PaymentMethodResponse`
 | field                              | data type | required | description                                                                                                                 |
-| ---------------------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                             | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                 |
-| `paymentVerifiablePresentationJwt` | string    | N        | VerifiablePresentation in JWT string format that meets the specification per paymentPresentationDefinition in the Offering. |
+| --------------------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `kind`                            | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                 |
+| `paymentVerifiablePresentationJwt` | string    | N        | VerifiablePresentation in JWT string format that meets the specification per paymentPresentationDefinition in the Offering.    |
 
 ```json
 {
   "baseCurrency": "BTC",
   "quoteCurrency": "USD",
-  "amount": 10.00,
+  "amountCents": 1000,
   "kycProof": "eyJhbGci...hs4ALYCA",
   "payinInstrument": {
     "kind": "SQUARE_PAY"
@@ -137,24 +159,35 @@ The `body` of each message can be any of the following message types.
 }
 ```
 
+## `Close`
+> Alice -> PFI: "Not interested anymore." or "oops sent by accident"
+
+> PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)"
+
+a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
+
+| Field    | Data Type | Required | Description                                      |
+| -------- | --------- | -------- | ------------------------------------------------ |
+| `reason` | string    | N        | an explanation of why the thread is being closed |
+
 ## `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
-| field                 | data type           | required | description                                                                                                                                                                                                     |
+| field                  | data type           | required |description      |
 | --------------------- | ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `expiryTime`          | datetime            | Y        | When this quote expires. Expressed as ISO8601                                                                                                                                                                   |
 | `totalFee`            | string              | Y        | Total fee (base + PaymentMethod specific) included in quote in quote currency.                                                                                                                                  |
-| `amount`              | string              | Y        | Amount of base currency that the PFI is willing to sell in exchange for quote currency `amount` in the original RFQ                                                                                             |
+| `amountCents`         | string              | Y        | Amount (cents) of base currency that the PFI is willing to sell in exchange for quote currency `amountCents` in the original RFQ                                                                                             |
 | `paymentInstructions` | PaymentInstructions | N        | Object that describes how to pay the PFI, and how to get paid by the PFI, in the instances where payment is performed "out-of-band" (e.g. PFI cannot be both a merchant and a payment processor simultaneously) |
 
 ### `Quote.PaymentInstructions`
-| field    | data type          | required | description                                               |
+| field     | data type          | required | description                                               |
 | -------- | ------------------ | -------- | --------------------------------------------------------- |
 | `payin`  | PaymentInstruction | N        | Link or Instruction describing how to pay the PFI.        |
 | `payout` | PaymentInstruction | N        | Link or Instruction describing how to get paid by the PFI |
 
 ### `Quote.PaymentInstructions.PaymentInstruction`
-| field         | data type | required | description                                                               |
+| field          | data type | required | description                                                               |
 | ------------- | --------- | -------- | ------------------------------------------------------------------------- |
 | `link`        | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI                     |
 | `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI |
@@ -163,8 +196,8 @@ The `body` of each message can be any of the following message types.
 ```json
 {
   "expiryTime": "2023-04-14T12:12:12Z",
-  "totalFee": 2.00,
-  "amount": 0.000383,
+  "totalFee": 200,
+  "amount": 383,
   "paymentInstructions": {
     "payin": {
       "link": "square-pay.com?for=alice&amount=10"
@@ -172,6 +205,7 @@ The `body` of each message can be any of the following message types.
   }
 }
 ```
+
 
 ## `OrderStatus`
 > PFI -> Alice: "Here's the status of your order."

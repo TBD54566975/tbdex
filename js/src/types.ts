@@ -11,10 +11,10 @@ export interface Offering {
   description: string
   baseCurrency: string
   quoteCurrency: string
-  unitPrice: string
-  baseFee?: string
-  min: string
-  max: string
+  unitPriceDollars: string
+  baseFeeDollars?: string
+  minDollars: string
+  maxDollars: string
   kycRequirements: string
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
@@ -23,7 +23,7 @@ export interface Offering {
 
 export interface PaymentMethod {
   kind: string
-  paymentPresentationRequestJwt?: string
+  paymentPresentationDefinitionJwt?: string
   fee?: {
     flatFee?: string
   }
@@ -34,6 +34,7 @@ export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
 export type MessageTypes = {
   rfq: Rfq
   quote: Quote
+  close: Close
   orderStatus: OrderStatus
 }
 
@@ -52,8 +53,8 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 }
 
 export interface Rfq {
-  offeringId: string,
-  amount: string
+  offeringId: string
+  amountCents: string
   kycProof: string
   payinMethod: PaymentMethodResponse
   payoutMethod: PaymentMethodResponse
@@ -66,9 +67,13 @@ export interface PaymentMethodResponse {
 
 export interface Quote {
   expiryTime: string
-  totalFee: string
-  amount: string
+  totalFeeCents: string
+  amountCents: string
   paymentInstructions?: PaymentInstructions
+}
+
+export interface Close {
+  reason?: string
 }
 
 export interface PaymentInstructions {
@@ -89,3 +94,13 @@ export enum Status {
   COMPLETED,
   FAILED
 }
+
+/**
+ * Get the keys of T without any keys of U.
+ */
+export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
+
+/**
+ * Restrict using either only the keys of T or only the keys of U.
+ */
+export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U

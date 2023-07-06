@@ -5,10 +5,10 @@
   "required": [
     "description",
     "pair",
-    "unitPrice",
-    "min",
-    "max",
-    "presentationRequestJwt",
+    "unitPriceDollars",
+    "minDollars",
+    "maxDollars",
+    "presentationDefinitionJwt",
     "payinInstruments",
     "payoutInstruments"
   ],
@@ -20,19 +20,19 @@
     "pair": {
       "type": "string"
     },
-    "unitPrice": {
+    "unitPriceDollars": {
       "type": "string"
     },
-    "baseFee": {
+    "baseFeeDollars": {
       "type": "string"
     },
-    "min": {
+    "minDollars": {
       "type": "string"
     },
-    "max": {
+    "maxDollars": {
       "type": "string"
     },
-    "presentationRequestJwt": {
+    "presentationDefinitionJwt": {
       "type": "string"
     },
     "payinInstruments": {

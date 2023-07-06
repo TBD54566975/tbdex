@@ -10,14 +10,14 @@ const validMessage = {
   'createdTime' : '2023-04-14T12:12:12Z',
   'type'        : 'offering',
   'body'        : {
-    'description'            : 'Buy BTC with USD!',
-    'pair'                   : 'BTC_USD',
-    'unitPrice'              : '27000.0',
-    'baseFee'                : '1.00',
-    'min'                    : '10.00',
-    'max'                    : '1000.00',
-    'presentationRequestJwt' : 'eyJhb...MIDw',
-    'payinInstruments'       : [
+    'description'               : 'Buy BTC with USD!',
+    'pair'                      : 'BTC_USD',
+    'unitPriceDollars'                 : '27000.0',
+    'baseFeeDollars'                   : '1.00',
+    'minDollars'                       : '10.00',
+    'maxDollars'                       : '1000.00',
+    'presentationDefinitionJwt' : 'eyJhb...MIDw',
+    'payinInstruments'          : [
       {
         'kind' : 'DEBIT_CARD',
         'fee'  : {
@@ -75,14 +75,14 @@ const numberAmounts = {
   'createdTime' : '2023-04-14T12:12:12Z',
   'type'        : 'offering',
   'body'        : {
-    'description'            : 'Buy BTC with USD!',
-    'pair'                   : 'BTC_USD',
-    'unitPrice'              : 27000.0,
-    'baseFee'                : 1.00,
-    'min'                    : 10.00,
-    'max'                    : 1000.00,
-    'presentationRequestJwt' : 'eyJhb...MIDw',
-    'payinInstruments'       : [
+    'description'               : 'Buy BTC with USD!',
+    'pair'                      : 'BTC_USD',
+    'unitPriceDollars'                 : 27000.0,
+    'baseFeeDollars'                   : 1.00,
+    'minDollars'                       : 10.00,
+    'maxDollars'                       : 1000.00,
+    'presentationDefinitionJwt' : 'eyJhb...MIDw',
+    'payinInstruments'          : [
       {
         'kind' : 'DEBIT_CARD',
         'fee'  : {
@@ -106,7 +106,7 @@ describe('validator', () => {
     try {
       validateMessage(mismatchedBody)
       expect.fail()
-    } catch(e) {
+    } catch (e) {
       expect(e).to.be.instanceOf(SchemaValidationError)
       expect(e.message).to.include('required')
     }
@@ -115,7 +115,7 @@ describe('validator', () => {
     try {
       validateMessage(invalidType)
       expect.fail()
-    } catch(e) {
+    } catch (e) {
       expect(e).to.be.instanceOf(SchemaValidationError)
       expect(e.message).to.include('allowed values')
     }
@@ -124,7 +124,7 @@ describe('validator', () => {
     try {
       validateMessage(numberAmounts)
       expect.fail()
-    } catch(e) {
+    } catch (e) {
       expect(e).to.be.instanceOf(SchemaValidationError)
       expect(e.message).to.include('must be')
     }
@@ -133,7 +133,7 @@ describe('validator', () => {
     try {
       validateMessage(missingField)
       expect.fail()
-    } catch(e) {
+    } catch (e) {
       expect(e).to.be.instanceOf(SchemaValidationError)
       expect(e.message).to.include('required')
     }
