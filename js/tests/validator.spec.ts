@@ -12,10 +12,10 @@ const validMessage = {
   'body'        : {
     'description'               : 'Buy BTC with USD!',
     'pair'                      : 'BTC_USD',
-    'unitPrice'                 : '27000.0',
-    'baseFee'                   : '1.00',
-    'min'                       : '10.00',
-    'max'                       : '1000.00',
+    'unitPriceDollars'                 : '27000.0',
+    'baseFeeDollars'                   : '1.00',
+    'minDollars'                       : '10.00',
+    'maxDollars'                       : '1000.00',
     'presentationDefinitionJwt' : 'eyJhb...MIDw',
     'payinInstruments'          : [
       {
@@ -77,10 +77,10 @@ const numberAmounts = {
   'body'        : {
     'description'               : 'Buy BTC with USD!',
     'pair'                      : 'BTC_USD',
-    'unitPrice'                 : 27000.0,
-    'baseFee'                   : 1.00,
-    'min'                       : 10.00,
-    'max'                       : 1000.00,
+    'unitPriceDollars'                 : 27000.0,
+    'baseFeeDollars'                   : 1.00,
+    'minDollars'                       : 10.00,
+    'maxDollars'                       : 1000.00,
     'presentationDefinitionJwt' : 'eyJhb...MIDw',
     'payinInstruments'          : [
       {

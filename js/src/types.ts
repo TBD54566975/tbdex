@@ -11,10 +11,10 @@ export interface Offering {
   description: string
   baseCurrency: string
   quoteCurrency: string
-  unitPriceCents: string
-  baseFeeCents?: string
-  minCents: string
-  maxCents: string
+  unitPriceDollars: string
+  baseFeeDollars?: string
+  minDollars: string
+  maxDollars: string
   kycRequirements: string
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
