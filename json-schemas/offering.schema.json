@@ -8,9 +8,9 @@
     "unitPriceDollars",
     "minDollars",
     "maxDollars",
-    "presentationDefinitionJwt",
-    "payinInstruments",
-    "payoutInstruments"
+    "kycRequirements",
+    "payinMethods",
+    "payoutMethods"
   ],
   "additionalProperties": false,
   "properties": {
@@ -32,19 +32,19 @@
     "maxDollars": {
       "type": "string"
     },
-    "presentationDefinitionJwt": {
-      "type": "string"
+    "kycRequirements": {
+      "type": "object"
     },
-    "payinInstruments": {
+    "payinMethods": {
       "type": "array",
       "items": {
-        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstrument"
+        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentMethod"
       }
     },
-    "payoutInstruments": {
+    "payoutMethods": {
       "type": "array",
       "items": {
-        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstrument"
+        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentMethod"
       }
     }
   }

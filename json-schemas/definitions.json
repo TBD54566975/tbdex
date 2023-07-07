@@ -7,7 +7,7 @@
       "type": "string",
       "pattern": "^did:([a-z0-9]+):((?:(?:[a-zA-Z0-9._-]|(?:%[0-9a-fA-F]{2}))*:)*((?:[a-zA-Z0-9._-]|(?:%[0-9a-fA-F]{2}))+))((;[a-zA-Z0-9_.:%-]+=[a-zA-Z0-9_.:%-]*)*)(\/[^#?]*)?([?][^#]*)?(#.*)?$"
     },
-    "paymentInstrument": {
+    "paymentMethod": {
       "type": "object",
       "required": ["kind"],
       "additionalProperties": false,
@@ -16,6 +16,22 @@
           "type": "string"
         },
         "fee": {
+          "type": "object"
+        },
+        "requiredPaymentDetails": {
+          "type": "object"
+        }
+      }
+    },
+    "selectedPaymentMethod": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "paymentDetails": {
           "type": "object"
         }
       }

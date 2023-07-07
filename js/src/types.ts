@@ -1,3 +1,9 @@
+import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
+import type { Schema as JsonSchema } from 'ajv'
+
+export type { PresentationDefinitionV2, JsonSchema }
+
+
 export type ResourceType<R extends keyof ResourceTypes> = ResourceTypes[R]
 
 export type ResourceTypes = {
@@ -15,7 +21,7 @@ export interface Offering {
   baseFeeDollars?: string
   minDollars: string
   maxDollars: string
-  kycRequirements: string
+  kycRequirements: PresentationDefinitionV2
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
   createdTime: string
@@ -23,7 +29,7 @@ export interface Offering {
 
 export interface PaymentMethod {
   kind: string
-  paymentPresentationDefinitionJwt?: string
+  requiredPaymentDetails?: JsonSchema
   fee?: {
     flatFee?: string
   }
@@ -62,9 +68,10 @@ export interface Rfq {
 
 export interface PaymentMethodResponse {
   kind: string
-  paymentVerifiablePresentationJwt?: string
+  paymentDetails?: {
+    [key: string]: any
+  }
 }
-
 export interface Quote {
   expiryTime: string
   totalFeeCents: string
@@ -90,9 +97,9 @@ export interface OrderStatus {
 }
 
 export enum Status {
-  PENDING,
-  COMPLETED,
-  FAILED
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED'
 }
 
 /**
