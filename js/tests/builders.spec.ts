@@ -1,4 +1,4 @@
-import type { Quote, Rfq, TbDEXMessage } from '../src/types.js'
+import { type Quote, type Rfq, type TbDEXMessage, PaymentMethodKind } from '../src/types.js'
 
 import { expect } from 'chai'
 import { createMessage } from '../src/builders.js'
@@ -10,10 +10,10 @@ describe('messages builders', () => {
       amountCents : '1000',
       kycProof    : 'fake-jwt',
       payinMethod : {
-        kind: 'APPLE_PAY',
+        kind: PaymentMethodKind.APPLE_PAY,
       },
       payoutMethod: {
-        kind           : 'BITCOIN_ADDRESS',
+        kind           : PaymentMethodKind.BTC_ADDRESS,
         paymentDetails : {
           btcAddress: 'abcd123'
         }
@@ -36,10 +36,10 @@ describe('messages builders', () => {
       amountCents : '1000',
       kycProof    : 'fake-jwt',
       payinMethod : {
-        kind: 'CASHAPP_PAY',
+        kind: PaymentMethodKind.APPLE_PAY,
       },
       payoutMethod: {
-        kind           : 'BITCOIN_ADDRESS',
+        kind           : PaymentMethodKind.BTC_ADDRESS,
         paymentDetails : {
           btcAddress: 'abcd123'
         }

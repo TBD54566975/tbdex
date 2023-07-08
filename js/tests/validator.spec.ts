@@ -1,4 +1,3 @@
-import type { Offering } from '../src/types.js'
 import { expect } from 'chai'
 import { SchemaValidationError, validateMessage } from '../src/validator.js'
 

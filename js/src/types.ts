@@ -67,11 +67,19 @@ export interface Rfq {
 }
 
 export interface PaymentMethodResponse {
-  kind: string
+  kind: PaymentMethodKind
   paymentDetails?: {
     [key: string]: any
   }
 }
+
+export enum PaymentMethodKind {
+  BTC_ADDRESS = 'BTC_ADDRESS',
+  DEBIT_CARD = 'DEBIT_CARD',
+  APPLE_PAY = 'APPLE_PAY',
+  CASHAPP_PAY= 'CASHAPP_PAY'
+}
+
 export interface Quote {
   expiryTime: string
   totalFeeCents: string
@@ -97,9 +105,13 @@ export interface OrderStatus {
 }
 
 export enum Status {
-  PENDING = 'PENDING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED'
+  CLOSED = 'CLOSED', // PFI or Customer-initiated closing
+  PAYIN_INITIATED = 'PAYIN_INITIATED',
+  PAYIN_FAILED = 'PAYIN_FAILED',
+  PAYIN_COMPLETED = 'PAYIN_COMPLETED',
+  PAYOUT_INITIATED = 'PAYOUT_INITIATED',
+  PAYOUT_FAILED = 'PAYOUT_FAILED',
+  PAYOUT_COMPLETED = 'PAYOUT_COMPLETED',
 }
 
 /**
