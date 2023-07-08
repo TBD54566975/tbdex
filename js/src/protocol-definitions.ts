@@ -54,9 +54,9 @@ export const aliceProtocolDefinition = {
           }
         ],
         // Alice _or_ the PFI can Close/End the thread here.
-        Close: CloseRules,
+        Close       : CloseRules,
         // OrderStatus can be written to Alice's DWN by someone who wrote RFQ/QuoteResponse (i.e. PFI)
-        OrderStatus: {
+        OrderStatus : {
           $actions: [
             {
               who : 'author',
@@ -112,13 +112,13 @@ export const pfiProtocolDefinition = {
         }
       ],
       // Alice _or_ the PFI can Close/End the thread here.
-      Close: CloseRules,
+      Close : CloseRules,
       // PFI is sending OUT quote responses. no one should be writing QuoteResponse to PFIs.
-      Quote: {
+      Quote : {
         // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
-        OrderStatus: { },
+        OrderStatus : { },
         // Alice _or_ the PFI can Close/End the thread here.
-        Close: CloseRules
+        Close       : CloseRules
       }
     }
   }

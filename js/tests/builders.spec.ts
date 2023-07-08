@@ -1,4 +1,4 @@
-import type { Quote, Rfq, TbDEXMessage } from '../src/types.js'
+import { type Quote, type Rfq, type TbDEXMessage, PaymentMethodKind } from '../src/types.js'
 
 import { expect } from 'chai'
 import { createMessage } from '../src/builders.js'
@@ -6,24 +6,25 @@ import { createMessage } from '../src/builders.js'
 describe('messages builders', () => {
   it('can build an rfq', () => {
     const rfq: Rfq = {
-      offeringId: '123',
-      amountCents: '1000',
-      kycProof: 'fake-jwt',
-      payinMethod: {
-        kind: 'DEBIT_CARD',
-        paymentVerifiablePresentationJwt: ''
+      offeringId  : '123',
+      amountCents : '1000',
+      kycProof    : 'fake-jwt',
+      payinMethod : {
+        kind: PaymentMethodKind.APPLE_PAY,
       },
       payoutMethod: {
-        kind: 'BITCOIN_ADDRESS',
-        paymentVerifiablePresentationJwt: ''
+        kind           : PaymentMethodKind.BTC_ADDRESS,
+        paymentDetails : {
+          btcAddress: 'abcd123'
+        }
       }
     }
 
     const actual = createMessage({
-      to: 'alice-did',
-      from: 'pfi-did',
-      type: 'rfq',
-      body: rfq
+      to   : 'alice-did',
+      from : 'pfi-did',
+      type : 'rfq',
+      body : rfq
     })
 
     expect(actual.body).to.equal(rfq)
@@ -31,37 +32,38 @@ describe('messages builders', () => {
   })
   it('builds the expected message for an existing thread', () => {
     const rfq: Rfq = {
-      offeringId: '123',
-      amountCents: '1000',
-      kycProof: 'fake-jwt',
-      payinMethod: {
-        kind: 'DEBIT_CARD',
-        paymentVerifiablePresentationJwt: 'fake-debitcard-jwt'
+      offeringId  : '123',
+      amountCents : '1000',
+      kycProof    : 'fake-jwt',
+      payinMethod : {
+        kind: PaymentMethodKind.APPLE_PAY,
       },
       payoutMethod: {
-        kind: 'BITCOIN_ADDRESS',
-        paymentVerifiablePresentationJwt: 'fake-btcaddress-jwt'
+        kind           : PaymentMethodKind.BTC_ADDRESS,
+        paymentDetails : {
+          btcAddress: 'abcd123'
+        }
       }
     }
 
     const rfqMessage: TbDEXMessage<'rfq'> = createMessage({
-      to: 'pfi-did',
-      from: 'alice-did',
-      type: 'rfq',
-      body: rfq
+      to   : 'pfi-did',
+      from : 'alice-did',
+      type : 'rfq',
+      body : rfq
     })
 
     const quote: Quote = {
-      expiryTime: new Date().toISOString(),
-      totalFeeCents: '100',
-      amountCents: '1000',
-      paymentInstructions: { payin: { link: 'fake.link.com' } },
+      expiryTime          : new Date().toISOString(),
+      totalFeeCents       : '100',
+      amountCents         : '1000',
+      paymentInstructions : { payin: { link: 'fake.link.com' } },
     }
 
     const { from, to, threadId, parentId } = createMessage({
-      last: rfqMessage,
-      type: 'quote',
-      body: quote
+      last : rfqMessage,
+      type : 'quote',
+      body : quote
     })
 
     expect(from).to.equal(rfqMessage.from)

@@ -6,7 +6,6 @@
     "expiryTime",
     "totalFee",
     "amount",
-    "paymentpresentationDefinitionJwt",
     "paymentInstructions"
   ],
   "additionalProperties": false,
@@ -18,9 +17,6 @@
       "type": "string"
     },
     "amount": {
-      "type": "string"
-    },
-    "paymentpresentationDefinitionJwt": {
       "type": "string"
     },
     "paymentInstructions": {

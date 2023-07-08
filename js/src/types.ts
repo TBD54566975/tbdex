@@ -1,3 +1,9 @@
+import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
+import type { Schema as JsonSchema } from 'ajv'
+
+export type { PresentationDefinitionV2, JsonSchema }
+
+
 export type ResourceType<R extends keyof ResourceTypes> = ResourceTypes[R]
 
 export type ResourceTypes = {
@@ -15,7 +21,7 @@ export interface Offering {
   baseFeeDollars?: string
   minDollars: string
   maxDollars: string
-  kycRequirements: string
+  kycRequirements: PresentationDefinitionV2
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
   createdTime: string
@@ -23,7 +29,7 @@ export interface Offering {
 
 export interface PaymentMethod {
   kind: string
-  paymentPresentationDefinitionJwt?: string
+  requiredPaymentDetails?: JsonSchema
   fee?: {
     flatFee?: string
   }
@@ -61,8 +67,17 @@ export interface Rfq {
 }
 
 export interface PaymentMethodResponse {
-  kind: string
-  paymentVerifiablePresentationJwt?: string
+  kind: PaymentMethodKind
+  paymentDetails?: {
+    [key: string]: any
+  }
+}
+
+export enum PaymentMethodKind {
+  BTC_ADDRESS = 'BTC_ADDRESS',
+  DEBIT_CARD = 'DEBIT_CARD',
+  APPLE_PAY = 'APPLE_PAY',
+  CASHAPP_PAY= 'CASHAPP_PAY'
 }
 
 export interface Quote {
@@ -90,9 +105,13 @@ export interface OrderStatus {
 }
 
 export enum Status {
-  PENDING,
-  COMPLETED,
-  FAILED
+  CLOSED = 'CLOSED', // PFI or Customer-initiated closing
+  PAYIN_INITIATED = 'PAYIN_INITIATED',
+  PAYIN_FAILED = 'PAYIN_FAILED',
+  PAYIN_COMPLETED = 'PAYIN_COMPLETED',
+  PAYOUT_INITIATED = 'PAYOUT_INITIATED',
+  PAYOUT_FAILED = 'PAYOUT_FAILED',
+  PAYOUT_COMPLETED = 'PAYOUT_COMPLETED',
 }
 
 /**

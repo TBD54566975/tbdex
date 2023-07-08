@@ -5,9 +5,9 @@
   "required": [
     "pair",
     "amount",
-    "verifiablePresentationJwt",
-    "payinInstrument",
-    "payoutInstrument"
+    "KycProof",
+    "payinMethod",
+    "payoutMethod"
   ],
   "additionalProperties": false,
   "properties": {
@@ -17,14 +17,14 @@
     "amount": {
       "type": "string"
     },
-    "verifiablePresentationJwt": {
+    "kycProof": {
       "type": "string"
     },
-    "payinInstrument": {
-      "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstrument"
+    "payinMethod": {
+      "$ref": "https://tbdex.io/definitions.json#/definitions/selectedPaymentMethod"
     },
-    "payoutInstrument": {
-      "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstrument"
+    "payoutMethod": {
+      "$ref": "https://tbdex.io/definitions.json#/definitions/selectedPaymentMethod"
     }
   }
 }
