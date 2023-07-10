@@ -34,6 +34,12 @@ export const aliceProtocolDefinition = {
         'application/json'
       ]
     },
+    Order: {
+      schema      : 'https://tbd.website/protocols/tbdex/Order',
+      dataFormats : [
+        'application/json'
+      ]
+    },
     OrderStatus: {
       schema      : 'https://tbd.website/protocols/tbdex/OrderStatus',
       dataFormats : [
@@ -54,16 +60,25 @@ export const aliceProtocolDefinition = {
           }
         ],
         // Alice _or_ the PFI can Close/End the thread here.
-        Close: CloseRules,
-        // OrderStatus can be written to Alice's DWN by someone who wrote RFQ/QuoteResponse (i.e. PFI)
-        OrderStatus: {
+        Close : CloseRules,
+        Order : {
           $actions: [
             {
-              who : 'author',
+              who : 'recipient',
               of  : 'RFQ/Quote',
               can : 'write'
             }
-          ]
+          ],
+          // OrderStatus can be written to Alice's DWN by someone who wrote RFQ/QuoteResponse (i.e. PFI)
+          OrderStatus: {
+            $actions: [
+              {
+                who : 'recipient',
+                of  : 'RFQ/Quote/Order',
+                can : 'write'
+              }
+            ]
+          }
         }
       },
       // Alice _or_ the PFI can Close/End the thread here.
@@ -94,6 +109,12 @@ export const pfiProtocolDefinition = {
         'application/json'
       ]
     },
+    Order: {
+      schema      : 'https://tbd.website/protocols/tbdex/Order',
+      dataFormats : [
+        'application/json'
+      ]
+    },
     OrderStatus: {
       schema      : 'https://tbd.website/protocols/tbdex/OrderStatus',
       dataFormats : [
@@ -112,13 +133,15 @@ export const pfiProtocolDefinition = {
         }
       ],
       // Alice _or_ the PFI can Close/End the thread here.
-      Close: CloseRules,
+      Close : CloseRules,
       // PFI is sending OUT quote responses. no one should be writing QuoteResponse to PFIs.
-      Quote: {
-        // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
-        OrderStatus: { },
+      Quote : {
         // Alice _or_ the PFI can Close/End the thread here.
-        Close: CloseRules
+        Close : CloseRules,
+        Order : {
+          // PFI is sending OUT OrderStatus. no one should be writing OrderStatus to PFIs.
+          OrderStatus: { },
+        }
       }
     }
   }

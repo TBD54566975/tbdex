@@ -35,6 +35,7 @@ export type MessageTypes = {
   rfq: Rfq
   quote: Quote
   close: Close
+  order: Order
   orderStatus: OrderStatus
 }
 
@@ -70,6 +71,10 @@ export interface Quote {
   totalFeeCents: string
   amountCents: string
   paymentInstructions?: PaymentInstructions
+}
+
+export interface Order {
+  empty: string
 }
 
 export interface Close {
