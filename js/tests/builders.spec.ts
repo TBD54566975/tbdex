@@ -56,7 +56,8 @@ describe('messages builders', () => {
     const quote: Quote = {
       expiryTime          : new Date().toISOString(),
       totalFeeCents       : '100',
-      amountCents         : '1000',
+      targetAmountCents   : '1000',
+      targetCurrency      : 'BTC',
       paymentInstructions : { payin: { link: 'fake.link.com' } },
     }
 

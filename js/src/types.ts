@@ -83,7 +83,8 @@ export enum PaymentMethodKind {
 export interface Quote {
   expiryTime: string
   totalFeeCents: string
-  amountCents: string
+  targetAmountCents: string
+  targetCurrency: string
   paymentInstructions?: PaymentInstructions
 }
 
