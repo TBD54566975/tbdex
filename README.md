@@ -64,11 +64,11 @@ Messages form exchanges between users and PFIs.
 Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency)
 
 ### `Offering.PaymentMethod`
-| field                               | data type | required | description                                                                                         |
+| field                              | data type | required | description                                                                                         |
 | ---------------------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------- |
 | `kind`                             | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                         |
-| `paymentPresentationDefinitionJwt`  | string    | N        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format  |
-| `fee       `                       | object    | N        | Optional fee associated with using this kind of payment method.                                     |
+| `paymentPresentationDefinitionJwt` | string    | N        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format |
+| `feeSubunits`                      | string    | N        | Optional fee associated with using this kind of payment method in the smallest currency delineation |
 
 
 ```json
@@ -84,9 +84,7 @@ Base Currency is the currency that the PFI is **selling**. Quote currency is the
   "payinInstruments": [{
     "kind": "DEBIT_CARD",
     "paymentPresentationDefinitionJwt": "eyJhb...MIDw",
-    "fee": {
-      "flatFee": 100
-    }
+    "feeSubunits": "100"
   },
   {
     "kind": "SQUARE_PAY",
@@ -221,7 +219,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 ```
 
 ## Fields that may change in future versions of the schema
-- `fee` in `Offering` object: the way PFIs assess fees for a given offering, as well as for specific payment methods will become more complex over time. Currently, there's only 1 field in the fee object, `flatFee`.
+- `feeSubunits` in `PaymentMethod` object: the way PFIs assess fees for a given offering, as well as for specific payment methods will become more complex over time. Currently, `feeSubunits` is a string.
 - `expiryTime` in `Offering` object: this field will likely be added in future versions to ensure that PFIs can advertise the most up-to-date offerings, and to ensure that Quote price is not a vast departure from the corresponding Offering.
 - `paymentInstructions` in `Quote` object: this object is currently in place to ensure that a PFI that cannot accept raw payinInstrument object as a VC (i.e. plaintext values) for PCI compliance reasons, and therefore need to use a 3rd party payment processor to execute payment "out-of-band". There's still more thoughts that need to form around whether this is a good long-term solution, or if something like Proof of Payment VC issued by Payment Processor, or use of a smart contract would be more appropriate.
 - `min/max` at the top level of `Offering` or specific to each `payin/outInstrument`: it's possible that we may want to specify `min/max` amount depending on each payment method
