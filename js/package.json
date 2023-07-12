@@ -1,6 +1,6 @@
 {
   "name": "@tbd54566975/tbdex",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "type": "module",
   "description": "Library that includes type definitions for tbdex messages",
   "license": "Apache-2.0",
@@ -51,7 +51,7 @@
   "dependencies": {
     "ajv": "8.12.0",
     "ulidx": "2.0.0",
-    "@sphereon/pex-models": "2.0.2"
+    "@sphereon/pex-models": "2.0.3"
   },
   "devDependencies": {
     "@playwright/test": "1.34.3",
