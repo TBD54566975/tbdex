@@ -1,6 +1,6 @@
 {
   "name": "@tbd54566975/tbdex",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "type": "module",
   "description": "Library that includes type definitions for tbdex messages",
   "license": "Apache-2.0",
@@ -23,6 +23,10 @@
     {
       "name": "Phoebe Lew",
       "url": "https://github.com/phoebe-lew"
+    },
+    {
+      "name": "Ethan Lee",
+      "url": "https://github.com/ethan-tbd"
     }
   ],
   "files": [

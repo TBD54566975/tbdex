@@ -1,32 +1,80 @@
-import { TbDEXResource, MessageMetadata, TbDEXMessage, Status, Quote } from './src/types.js'
+import { TbDEXResource, MessageMetadata, TbDEXMessage, Status, PresentationDefinitionV2 } from './src/types.js'
 
-// const _offering: TbDEXResource<'offering'> = {
-//   id              : '123',
-//   description     : 'Buy BTC with USD!',
-//   baseCurrency    : 'BTC',
-//   quoteCurrency   : 'USD',
-//   unitPrice       : '27000.00',
-//   baseFee         : '1.00',
-//   min             : '10.00',
-//   max             : '1000.00',
-//   // here's what we want to see in your KYC VC (full name, dob)
-//   // maybe this is a sanctions VC? or maybe this is a silly VC that says 'send me a selfie'
-//   kycRequirements : 'eyJhb...MIDw',
-//   payinMethods    : [{
-//     kind                             : PaymentMethodKind.DEBIT_CARD,
-//     // here's how to present your debit card info
-//     paymentpresentationDefinitionJwt : 'ey...IAbZ',
-//     fee                              : {
-//       flatFee: '1.00'
-//     }
-//   }],
-//   payoutMethods: [{
-//     kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
-//     // how to present your BTC address info
-//     paymentpresentationDefinitionJwt : 'ey...EbqW',
-//   }],
-//   createdTime: '2023-06-27T12:34:56Z'
-// }
+
+const presentationDefinition: PresentationDefinitionV2 = {
+  'id'                : '2eddf25f-f79f-4105-ac81-544c988f6d78',
+  'name'              : 'Core Personal Identity Claims',
+  'purpose'           : 'Claims for PFI to evaluate Alice',
+  'input_descriptors' : [
+    {
+      'id'          : '707585e4-3d74-49e7-b21e-a8e1cbf8e31b',
+      'purpose'     : 'Claims for PFI to evaluate Alice',
+      'constraints' : {
+        'subject_is_issuer' : 'required',
+        'fields'            : [
+          {
+            'path'   : ['$.credentialSubject.givenName'],
+            'filter' : {
+              'type': 'string'
+            }
+          },
+          {
+            'path'   : ['$.credentialSubject.familyName'],
+            'filter' : {
+              'type': 'string'
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+
+const btcPaymentSchema = {
+  '$schema'  : 'http://json-schema.org/draft-07/schema#',
+  'title'    : 'BTC Required Payment Details',
+  'type'     : 'object',
+  'required' : [
+    'btcAddress'
+  ],
+  'additionalProperties' : false,
+  'properties'           : {
+    'btcAddress': {
+      'description' : 'The address you wish to receive BTC in',
+      'type'        : 'string'
+    }
+  }
+}
+
+const _offering: TbDEXResource<'offering'> = {
+  id                    : '123',
+  description           : 'Buy BTC with USD!',
+  quoteUnitsPerBaseUnit : '27000.00',
+  baseCurrency          : {
+    currencyCode : 'BTC',
+    minSubunit   : '1000',
+    maxSubunit   : '100000000'
+  },
+  quoteCurrency: {
+    currencyCode : 'USD',
+    minSubunit   : '1000',
+    maxSubunit   : '1000'
+  },
+  kycRequirements: {
+    id                : 'kyc',
+    input_descriptors : [presentationDefinition]
+  },
+  payinMethods: [{
+    kind        : 'CASHAPP_PAY',
+    feeSubunits : '100'
+  }],
+  payoutMethods: [{
+    kind                   : 'BTC_ADDRESS',
+    requiredPaymentDetails : btcPaymentSchema,
+  }],
+  createdTime: '2023-06-27T12:34:56Z'
+}
+
 
 
 const _metadata: MessageMetadata = {
@@ -35,40 +83,47 @@ const _metadata: MessageMetadata = {
   parentId    : 'rgsrew',
   from        : 'did:ion:fdsjaklfdsa',
   to          : 'did:ion:teuwoipew',
-  createdTime : '2023-06-26T12:34:31Z'
+  createdTime : '2023-06-26T12:34:56Z'
 }
 
 
-// const _rfq: TbDEXMessage<'rfq'> = {
-//   ..._metadata,
-//   type : 'rfq',
-//   body : {
-//     baseCurrency  : 'BTC',
-//     quoteCurrency : 'USD',
-//     amount        : '10.00',
-//     kycProof      : 'eyJApQf...wqfVkg', // heres my KYC VC
-//     payinMethod   : {
-//       kind                             : PaymentMethodKind.DEBIT_CARD,
-//       paymentVerifiablePresentationJwt : 'fdsafjdla'
-//     },
-//     payoutMethod: {
-//       kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
-//       paymentVerifiablePresentationJwt : 'rewhiroew'
-//     }
-//   }
+const _rfq: TbDEXMessage<'rfq'> = {
+  ..._metadata,
+  type : 'rfq',
+  body : {
+    offeringId          : '1',
+    quoteAmountSubunits : '1000',
+    kycProof            : 'eyJApQf...wqfVkg', // KYC VP in JWT format
+    payinMethod         : {
+      kind: 'CASHAPP_PAY'
+    },
+    payoutMethod: {
+      kind           : 'BTC_ADDRESS',
+      paymentDetails : {
+        btcAddress: 'bc1dahklrjeaklf'
+      }
+    }
+  }
 
-// }
+}
 
 const _quote: TbDEXMessage<'quote'> = {
   ..._metadata,
   type : 'quote',
   body : {
-    expiryTime          : '2023-04-14T12:12:12Z',
-    totalFee            : '2.00',
-    amount              : '0.000383',
-    paymentInstructions : {
+    expiryTime : '2023-06-26T12:44:56Z',
+    base       : {
+      currencyCode   : 'BTC',
+      amountSubunits : '33333'
+    },
+    quote: {
+      currencyCode   : 'USD',
+      amountSubunits : '1000',
+      feeSubunits    : '100'
+    },
+    paymentInstructions: {
       payin: {
-        link: 'stripe.com?for=alice&amount=10'
+        link: 'cashapp-pay.com?for=alice&amount=10'
       }
     }
   }
@@ -79,38 +134,6 @@ const _status: TbDEXMessage<'orderStatus'> = {
   ..._metadata,
   type : 'orderStatus',
   body : {
-    orderStatus: Status.PENDING
+    orderStatus: Status.PAYIN_INITIATED
   }
-}
-
-
-const offering1: TbDEXResource<'offering'>  = {
-  'baseCurrency': {
-    'currencyCode': 'BTC',
-  },
-  'quoteCurrency': {
-    'currencyCode': 'USD'
-  },
-  'kycRequirements': {},
-  'payinMethods': [{
-    'kind': 'APPLE_PAY',
-    'feeSubunits': '300'
-  }],
-  'payoutMethods': [{
-    'kind': 'BTC_ADDRESS'
-  }],
-  'createdTime': 'happy time',
-}
-
-const quote1: Quote = {
-  'base': {
-    'currencyCode': 'BTC',
-    'amountSubunits': '10 MEELYON SATS',
-  },
-  'quote': {
-    'currencyCode': 'USD',
-    'amountSubunits': '29_000_000_000',
-    'feeSubunits': '300'
-  },
-  'expiryTime': 'sad time'
 }

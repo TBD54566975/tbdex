@@ -1,4 +1,4 @@
-import { type Quote, type Rfq, type TbDEXMessage, PaymentMethodKind } from '../src/types.js'
+import { type Quote, type Rfq, type TbDEXMessage } from '../src/types.js'
 
 import { expect } from 'chai'
 import { createMessage } from '../src/builders.js'
@@ -6,14 +6,14 @@ import { createMessage } from '../src/builders.js'
 describe('messages builders', () => {
   it('can build an rfq', () => {
     const rfq: Rfq = {
-      offeringId  : '123',
-      amountCents : '1000',
-      kycProof    : 'fake-jwt',
-      payinMethod : {
-        kind: PaymentMethodKind.APPLE_PAY,
+      offeringId          : '123',
+      quoteAmountSubunits : '1000',
+      kycProof            : 'fake-jwt',
+      payinMethod         : {
+        kind: 'APPLE_PAY',
       },
       payoutMethod: {
-        kind           : PaymentMethodKind.BTC_ADDRESS,
+        kind           : 'BTC_ADDRESS',
         paymentDetails : {
           btcAddress: 'abcd123'
         }
@@ -32,14 +32,14 @@ describe('messages builders', () => {
   })
   it('builds the expected message for an existing thread', () => {
     const rfq: Rfq = {
-      offeringId  : '123',
-      amountCents : '1000',
-      kycProof    : 'fake-jwt',
-      payinMethod : {
-        kind: PaymentMethodKind.APPLE_PAY,
+      offeringId          : '123',
+      quoteAmountSubunits : '1000',
+      kycProof            : 'fake-jwt',
+      payinMethod         : {
+        kind: 'APPLE_PAY',
       },
       payoutMethod: {
-        kind           : PaymentMethodKind.BTC_ADDRESS,
+        kind           : 'BTC_ADDRESS',
         paymentDetails : {
           btcAddress: 'abcd123'
         }
@@ -54,10 +54,17 @@ describe('messages builders', () => {
     })
 
     const quote: Quote = {
-      expiryTime          : new Date().toISOString(),
-      totalFeeCents       : '100',
-      amountCents         : '1000',
-      paymentInstructions : { payin: { link: 'fake.link.com' } },
+      expiryTime : new Date().toISOString(),
+      base       : {
+        currencyCode   : 'BTC',
+        amountSubunits : '33333'
+      },
+      quote: {
+        currencyCode   : 'USD',
+        amountSubunits : '1000',
+        feeSubunits    : '100'
+      },
+      paymentInstructions: { payin: { link: 'fake.link.com' } },
     }
 
     const { from, to, threadId, parentId } = createMessage({

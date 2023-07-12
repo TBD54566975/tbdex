@@ -29,7 +29,9 @@ export type Offering = {
   payoutMethods: PaymentMethod[]
   createdTime: string
 }
+
 export interface PaymentMethod {
+  // valid kind strings: 'CASHAPP_PAY', 'APPLE_PAY', 'BTC_ADDRESS'
   kind: string
   requiredPaymentDetails?: JsonSchema
   feeSubunits?: string
