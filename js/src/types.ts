@@ -12,27 +12,27 @@ export type ResourceTypes = {
 
 export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>
 
-export interface Offering {
+export type CurrencyDetails = {
+  currencyCode: string
+  minSubunit?: string
+  maxSubunit?: string
+}
+
+export type Offering = {
   id: string
   description: string
-  baseCurrency: string
-  quoteCurrency: string
-  unitPriceDollars: string
-  baseFeeDollars?: string
-  minDollars: string
-  maxDollars: string
+  quoteUnitsPerBaseUnit: string
+  baseCurrency: CurrencyDetails
+  quoteCurrency: CurrencyDetails
   kycRequirements: PresentationDefinitionV2
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
   createdTime: string
 }
-
 export interface PaymentMethod {
   kind: string
   requiredPaymentDetails?: JsonSchema
-  fee?: {
-    flatFee?: string
-  }
+  feeSubunits?: string
 }
 
 export type MessageType<M extends keyof MessageTypes> = MessageTypes[M]
@@ -60,30 +60,31 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 
 export interface Rfq {
   offeringId: string
-  amountCents: string
+  quoteAmountSubunits: string
   kycProof: string
   payinMethod: PaymentMethodResponse
   payoutMethod: PaymentMethodResponse
 }
 
 export interface PaymentMethodResponse {
-  kind: PaymentMethodKind
+  kind: string
   paymentDetails?: {
     [key: string]: any
   }
 }
 
-export enum PaymentMethodKind {
-  BTC_ADDRESS = 'BTC_ADDRESS',
-  DEBIT_CARD = 'DEBIT_CARD',
-  APPLE_PAY = 'APPLE_PAY',
-  CASHAPP_PAY= 'CASHAPP_PAY'
-}
-
 export interface Quote {
   expiryTime: string
-  totalFeeCents: string
-  amountCents: string
+  base: {
+    currencyCode: string
+    amountSubunits: string
+    feeSubunits?: string
+  }
+  quote: {
+    currencyCode: string
+    amountSubunits: string
+    feeSubunits?: string
+  }
   paymentInstructions?: PaymentInstructions
 }
 

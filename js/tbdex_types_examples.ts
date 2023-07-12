@@ -1,32 +1,32 @@
-import { PaymentMethodKind, TbDEXResource, MessageMetadata, TbDEXMessage, Status } from './src/types.js'
+import { TbDEXResource, MessageMetadata, TbDEXMessage, Status, Quote } from './src/types.js'
 
-const _offering: TbDEXResource<'offering'> = {
-  id              : '123',
-  description     : 'Buy BTC with USD!',
-  baseCurrency    : 'BTC',
-  quoteCurrency   : 'USD',
-  unitPrice       : '27000.00',
-  baseFee         : '1.00',
-  min             : '10.00',
-  max             : '1000.00',
-  // here's what we want to see in your KYC VC (full name, dob)
-  // maybe this is a sanctions VC? or maybe this is a silly VC that says 'send me a selfie'
-  kycRequirements : 'eyJhb...MIDw',
-  payinMethods    : [{
-    kind                             : PaymentMethodKind.DEBIT_CARD,
-    // here's how to present your debit card info
-    paymentpresentationDefinitionJwt : 'ey...IAbZ',
-    fee                              : {
-      flatFee: '1.00'
-    }
-  }],
-  payoutMethods: [{
-    kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
-    // how to present your BTC address info
-    paymentpresentationDefinitionJwt : 'ey...EbqW',
-  }],
-  createdTime: '2023-06-27T12:34:56Z'
-}
+// const _offering: TbDEXResource<'offering'> = {
+//   id              : '123',
+//   description     : 'Buy BTC with USD!',
+//   baseCurrency    : 'BTC',
+//   quoteCurrency   : 'USD',
+//   unitPrice       : '27000.00',
+//   baseFee         : '1.00',
+//   min             : '10.00',
+//   max             : '1000.00',
+//   // here's what we want to see in your KYC VC (full name, dob)
+//   // maybe this is a sanctions VC? or maybe this is a silly VC that says 'send me a selfie'
+//   kycRequirements : 'eyJhb...MIDw',
+//   payinMethods    : [{
+//     kind                             : PaymentMethodKind.DEBIT_CARD,
+//     // here's how to present your debit card info
+//     paymentpresentationDefinitionJwt : 'ey...IAbZ',
+//     fee                              : {
+//       flatFee: '1.00'
+//     }
+//   }],
+//   payoutMethods: [{
+//     kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
+//     // how to present your BTC address info
+//     paymentpresentationDefinitionJwt : 'ey...EbqW',
+//   }],
+//   createdTime: '2023-06-27T12:34:56Z'
+// }
 
 
 const _metadata: MessageMetadata = {
@@ -39,25 +39,25 @@ const _metadata: MessageMetadata = {
 }
 
 
-const _rfq: TbDEXMessage<'rfq'> = {
-  ..._metadata,
-  type : 'rfq',
-  body : {
-    baseCurrency  : 'BTC',
-    quoteCurrency : 'USD',
-    amount        : '10.00',
-    kycProof      : 'eyJApQf...wqfVkg', // heres my KYC VC
-    payinMethod   : {
-      kind                             : PaymentMethodKind.DEBIT_CARD,
-      paymentVerifiablePresentationJwt : 'fdsafjdla'
-    },
-    payoutMethod: {
-      kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
-      paymentVerifiablePresentationJwt : 'rewhiroew'
-    }
-  }
+// const _rfq: TbDEXMessage<'rfq'> = {
+//   ..._metadata,
+//   type : 'rfq',
+//   body : {
+//     baseCurrency  : 'BTC',
+//     quoteCurrency : 'USD',
+//     amount        : '10.00',
+//     kycProof      : 'eyJApQf...wqfVkg', // heres my KYC VC
+//     payinMethod   : {
+//       kind                             : PaymentMethodKind.DEBIT_CARD,
+//       paymentVerifiablePresentationJwt : 'fdsafjdla'
+//     },
+//     payoutMethod: {
+//       kind                             : PaymentMethodKind.BITCOIN_ADDRESS,
+//       paymentVerifiablePresentationJwt : 'rewhiroew'
+//     }
+//   }
 
-}
+// }
 
 const _quote: TbDEXMessage<'quote'> = {
   ..._metadata,
@@ -81,4 +81,36 @@ const _status: TbDEXMessage<'orderStatus'> = {
   body : {
     orderStatus: Status.PENDING
   }
+}
+
+
+const offering1: TbDEXResource<'offering'>  = {
+  'baseCurrency': {
+    'currencyCode': 'BTC',
+  },
+  'quoteCurrency': {
+    'currencyCode': 'USD'
+  },
+  'kycRequirements': {},
+  'payinMethods': [{
+    'kind': 'APPLE_PAY',
+    'feeSubunits': '300'
+  }],
+  'payoutMethods': [{
+    'kind': 'BTC_ADDRESS'
+  }],
+  'createdTime': 'happy time',
+}
+
+const quote1: Quote = {
+  'base': {
+    'currencyCode': 'BTC',
+    'amountSubunits': '10 MEELYON SATS',
+  },
+  'quote': {
+    'currencyCode': 'USD',
+    'amountSubunits': '29_000_000_000',
+    'feeSubunits': '300'
+  },
+  'expiryTime': 'sad time'
 }
