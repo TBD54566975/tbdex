@@ -1,5 +1,6 @@
 import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
 import type { Schema as JsonSchema } from 'ajv'
+import type {TypeID} from 'typeid-js'
 
 export type { PresentationDefinitionV2, JsonSchema }
 
@@ -18,7 +19,7 @@ export type CurrencyDetails = {
 }
 
 export type Offering = {
-  id: string
+  id: TypeID<'offering'>
   description: string
   quoteUnitsPerBaseUnit: string
   baseCurrency: CurrencyDetails
@@ -46,8 +47,7 @@ export type MessageTypes = {
 }
 
 export interface MessageMetadata {
-  id: string
-  threadId: string
+  threadId: string // technically this has to be an rfq id because that's how you start a thread
   parentId?: string
   from: string
   to: string
@@ -55,12 +55,13 @@ export interface MessageMetadata {
 }
 
 export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
+  id: TypeID<T>
   type: T
   body: MessageTypes[T]
 }
 
 export interface Rfq {
-  offeringId: string
+  offeringId: TypeID<'offering'>
   quoteAmountSubunits: string
   kycProof: string
   payinMethod: PaymentMethodResponse

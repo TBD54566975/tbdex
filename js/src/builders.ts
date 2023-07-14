@@ -1,5 +1,5 @@
 import { MessageType, MessageTypes, TbDEXMessage, XOR } from './types.js'
-import { createTbdexId } from './id.js'
+import { typeid } from 'typeid-js'
 
 type NewThreadOpts = {
   from: string,
@@ -16,19 +16,19 @@ export type CreateMessageOpts<T extends keyof MessageTypes, U extends keyof Mess
 }
 
 export function createMessage<T extends keyof MessageTypes, U extends keyof MessageTypes>(opts: CreateMessageOpts<T, U>): TbDEXMessage<T> {
-  const id = createTbdexId(opts.type)
-  const threadId = opts.last?.threadId ?? id
-  const parentId = opts.last?.id ?? null
+  const id = typeid(opts.type)
+  const threadId = opts.last?.threadId ?? id.toString()
+  const parentId = opts.last?.id.toString() ?? undefined
   const {type, body} = opts
 
   return {
     id,
     threadId,
     parentId,
+    to          : opts.to ?? opts.last.to,
+    from        : opts.from ?? opts.last.from,
     createdTime : new Date().toISOString(),
     type,
     body,
-    to          : opts.to ?? opts.last.to,
-    from        : opts.from ?? opts.last.from,
   }
 }

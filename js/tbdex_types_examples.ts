@@ -1,5 +1,5 @@
 import { TbDEXResource, MessageMetadata, TbDEXMessage, Status, PresentationDefinitionV2 } from './src/types.js'
-
+import {typeid} from 'typeid-js'
 
 const presentationDefinition: PresentationDefinitionV2 = {
   'id'                : '2eddf25f-f79f-4105-ac81-544c988f6d78',
@@ -47,7 +47,7 @@ const btcPaymentSchema = {
 }
 
 const _offering: TbDEXResource<'offering'> = {
-  id                    : '123',
+  id                    : typeid('offering'),
   description           : 'Buy BTC with USD!',
   quoteUnitsPerBaseUnit : '27000.00',
   baseCurrency          : {
@@ -78,7 +78,6 @@ const _offering: TbDEXResource<'offering'> = {
 
 
 const _metadata: MessageMetadata = {
-  id          : '123',
   threadId    : 'fdsal',
   parentId    : 'rgsrew',
   from        : 'did:ion:fdsjaklfdsa',
@@ -89,9 +88,10 @@ const _metadata: MessageMetadata = {
 
 const _rfq: TbDEXMessage<'rfq'> = {
   ..._metadata,
+  id   : typeid('rfq'),
   type : 'rfq',
   body : {
-    offeringId          : '1',
+    offeringId          : typeid('offering'),
     quoteAmountSubunits : '1000',
     kycProof            : 'eyJApQf...wqfVkg', // KYC VP in JWT format
     payinMethod         : {
@@ -104,11 +104,11 @@ const _rfq: TbDEXMessage<'rfq'> = {
       }
     }
   }
-
 }
 
 const _quote: TbDEXMessage<'quote'> = {
   ..._metadata,
+  id   : typeid('quote'),
   type : 'quote',
   body : {
     expiryTime : '2023-06-26T12:44:56Z',
@@ -132,6 +132,7 @@ const _quote: TbDEXMessage<'quote'> = {
 
 const _status: TbDEXMessage<'orderStatus'> = {
   ..._metadata,
+  id   : typeid('orderStatus'),
   type : 'orderStatus',
   body : {
     orderStatus: Status.PAYIN_INITIATED
