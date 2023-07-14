@@ -44,21 +44,17 @@ Messages form exchanges between users and PFIs.
 ## `Offering`
 > PFI -> world: "Here are the exchanges that my PFI offers. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
 
-| field              | data type           | required | description                                                                                                                          |
-| ----------------- | ------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`              | string              | Y        | Unique identifier for this offering                                                                                                   |
-| `description`     | string              | Y        | Brief description of what is being offered.                                                                                          |
-| `baseCurrency`    | string              | Y        | Currency that the PFI is selling.                                                                                                    |
-| `quoteCurrency`   | string              | Y        | Currency that the PFI is accepting as payment for `baseCurrency`.                                                                    |
-| `unitPriceDollars`| string              | Y        | How much `quoteCurrency` is required for PFI to sell 1  unit of `baseCurrency`.                                                      |
-| `baseFeeDollars`  | string              | N        | Optional base fee associated with this offering, regardless of which payment methods are used                                        |
-| `minDollars`      | string              | Y        | Minimum amount of quote currency that the counterparty (Alice) must submit in order to qualify for this offering.                    |
-| `maxDollars`      | string              | Y        | Maximum amount of quote currency that the counterparty (Alice) can submit in order to qualify for this offering.                     |
-| `kycRequirements` | string              | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                               |
-| `payinMethods`    | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
-| `payoutMethods`   | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
-| `createdTime`     | datetime            | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
-
+| field                   | data type           | required | description                                                                                                                          |
+| ----------------------- | ------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`                    | string              | Y        | Unique identifier for this offering                                                                                                  |
+| `description`           | string              | Y        | Brief description of what is being offered.                                                                                          |
+| `quoteUnitsPerBaseUnit` | string              | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
+| `baseCurrency`          | string              | Y        | Currency that the PFI is selling.                                                                                                    |
+| `quoteCurrency`         | string              | Y        | Currency that the PFI is accepting as payment for `baseCurrency`.                                                                    |
+| `kycRequirements`       | string              | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                              |
+| `payinMethods`          | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
+| `payoutMethods`         | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
+| `createdTime`           | datetime            | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
 
 ## Note on `baseCurrency` and `quoteCurrency`
 Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency)
@@ -67,32 +63,45 @@ Base Currency is the currency that the PFI is **selling**. Quote currency is the
 | field                              | data type | required | description                                                                                         |
 | ---------------------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------- |
 | `kind`                             | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                         |
-| `paymentPresentationDefinitionJwt` | string    | N        | PresentationDefinition that describes the VCs needed to use this PaymentMethod in JWT string format |
+| `requiredPaymentDetails`           | string    | N        | Details of the VCs required to use this payment in json-schema format                               |
 | `feeSubunits`                      | string    | N        | Optional fee associated with using this kind of payment method in the smallest currency delineation |
 
 
 ```json
 {
+  "id": "tbdex:offering:123456",
   "description": "Buy BTC with USD!",
+  "quoteUnitsPerBaseUnit": "29000",
   "baseCurrency": "BTC",
   "quoteCurrency": "USD",
-  "unitPriceDollars": 27000.00,
-  "baseFeeDollars": 1.00,
-  "minDollars": 10.00,
-  "maxDollars": 100.00,
   "kycRequirements": "eyJhb...MIDw",
-  "payinInstruments": [{
+  "payinMethods": [{
     "kind": "DEBIT_CARD",
-    "paymentPresentationDefinitionJwt": "eyJhb...MIDw",
+    "requiredPaymentDetails": "eyJhb...MIDw",
     "feeSubunits": "100"
   },
   {
     "kind": "SQUARE_PAY",
-    "paymentPresentationDefinitionJwt": null,
+    "feeSubunits": "100"
   }],
-  "payoutInstruments": [{
+  "payoutMethods": [{
     "kind": "BTC_ADDRESS",
-    "paymentPresentationDefinitionJwt": "abc...IDsx"
+    "requiredPaymentDetails": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BTC Required Payment Details",
+      "type": "object",
+      "required": [
+        "btcAddress"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "btcAddress": {
+	  "description": "The address you wish to receive BTC in",
+	  "type": "string"
+	}
+      }
+    }
+    "feeSubunits": "100"
   }],
   "createdTime": "2023-06-23T11:23:41Z"
 }
