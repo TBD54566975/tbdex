@@ -3,7 +3,6 @@ import type { Schema as JsonSchema } from 'ajv'
 
 export type { PresentationDefinitionV2, JsonSchema }
 
-
 export type ResourceType<R extends keyof ResourceTypes> = ResourceTypes[R]
 
 export type ResourceTypes = {
@@ -14,8 +13,8 @@ export type TbDEXResource<R extends keyof ResourceTypes> = ResourceType<R>
 
 export type CurrencyDetails = {
   currencyCode: string
-  minSubunit?: string
-  maxSubunit?: string
+  minSubunits?: string
+  maxSubunits?: string
 }
 
 export type Offering = {

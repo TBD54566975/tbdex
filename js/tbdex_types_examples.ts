@@ -52,13 +52,13 @@ const _offering: TbDEXResource<'offering'> = {
   quoteUnitsPerBaseUnit : '27000.00',
   baseCurrency          : {
     currencyCode : 'BTC',
-    minSubunit   : '1000',
-    maxSubunit   : '100000000'
+    minSubunits  : '1000',
+    maxSubunits  : '100000000'
   },
   quoteCurrency: {
     currencyCode : 'USD',
-    minSubunit   : '1000',
-    maxSubunit   : '1000'
+    minSubunits  : '1000',
+    maxSubunits  : '1000'
   },
   kycRequirements: {
     id                : 'kyc',
