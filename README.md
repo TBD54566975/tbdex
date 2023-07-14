@@ -49,8 +49,8 @@ Messages form exchanges between users and PFIs.
 | `id`                    | string              | Y        | Unique identifier for this offering                                                                                                  |
 | `description`           | string              | Y        | Brief description of what is being offered.                                                                                          |
 | `quoteUnitsPerBaseUnit` | string              | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
-| `baseCurrency`          | string              | Y        | Currency that the PFI is selling.                                                                                                    |
-| `quoteCurrency`         | string              | Y        | Currency that the PFI is accepting as payment for `baseCurrency`.                                                                    |
+| `baseCurrency`          | CurrencyDetails              | Y        | Details about the currency that the PFI is selling.                                                                                                    |
+| `quoteCurrency`         | CurrencyDetails              | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                                    |
 | `kycRequirements`       | string              | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                              |
 | `payinMethods`          | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`         | list[PaymentMethod] | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
@@ -58,6 +58,13 @@ Messages form exchanges between users and PFIs.
 
 ## Note on `baseCurrency` and `quoteCurrency`
 Base Currency is the currency that the PFI is **selling**. Quote currency is the currency that the PFI is willing to accept to sell the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency)
+
+### `Offering.CurrencyDetails`
+| field                              | data type | required | description                                                                                         |
+| ---------------------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------- |
+| `currencyCode`          | string    | Y        | ISO 3166 currency code string                         |
+| `minSubunits`           | string    | N        | Minimum amount of currency that the offer is valid for                               |
+| `maxSubunits`           | string    | N        | Maximum amount of currency that the offer is valid for |
 
 ### `Offering.PaymentMethod`
 | field                              | data type | required | description                                                                                         |
@@ -72,8 +79,14 @@ Base Currency is the currency that the PFI is **selling**. Quote currency is the
   "id": "tbdex:offering:123456",
   "description": "Buy BTC with USD!",
   "quoteUnitsPerBaseUnit": "29000",
-  "baseCurrency": "BTC",
-  "quoteCurrency": "USD",
+  "baseCurrency": {
+    "currencyCode" : "BTC",
+  },
+  "quoteCurrency":  {
+    "currencyCode" : "USD",
+    "minSubunits"  : "1000",
+    "maxSubunits"  : "1000"
+  },
   "kycRequirements": "eyJhb...MIDw",
   "payinMethods": [{
     "kind": "DEBIT_CARD",
@@ -96,9 +109,9 @@ Base Currency is the currency that the PFI is **selling**. Quote currency is the
       "additionalProperties": false,
       "properties": {
         "btcAddress": {
-	  "description": "The address you wish to receive BTC in",
-	  "type": "string"
-	}
+	      "description": "The address you wish to receive BTC in",
+	      "type": "string"
+	      }
       }
     }
     "feeSubunits": "100"
