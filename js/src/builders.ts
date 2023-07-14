@@ -18,7 +18,7 @@ export type CreateMessageOpts<T extends keyof MessageTypes, U extends keyof Mess
 export function createMessage<T extends keyof MessageTypes, U extends keyof MessageTypes>(opts: CreateMessageOpts<T, U>): TbDEXMessage<T> {
   const id = typeid(opts.type)
   const threadId = opts.last?.threadId ?? id.toString()
-  const parentId = opts.last?.id.toString() ?? null
+  const parentId = opts.last?.id.toString() ?? undefined
   const {type, body} = opts
 
   return {
