@@ -49,9 +49,10 @@
     }
   },
   "dependencies": {
+    "@sphereon/pex-models": "2.0.3",
     "ajv": "8.12.0",
-    "ulidx": "2.0.0",
-    "@sphereon/pex-models": "2.0.3"
+    "typeid-js": "^0.3.0",
+    "ulidx": "2.0.0"
   },
   "devDependencies": {
     "@playwright/test": "1.34.3",

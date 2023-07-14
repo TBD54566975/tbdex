@@ -1,12 +1,13 @@
 import { type Quote, type Rfq, type TbDEXMessage } from '../src/types.js'
 
 import { expect } from 'chai'
+import { typeid } from 'typeid-js'
 import { createMessage } from '../src/builders.js'
 
 describe('messages builders', () => {
   it('can build an rfq', () => {
     const rfq: Rfq = {
-      offeringId          : '123',
+      offeringId          : typeid('offering'),
       quoteAmountSubunits : '1000',
       kycProof            : 'fake-jwt',
       payinMethod         : {
@@ -32,7 +33,7 @@ describe('messages builders', () => {
   })
   it('builds the expected message for an existing thread', () => {
     const rfq: Rfq = {
-      offeringId          : '123',
+      offeringId          : typeid('offering'),
       quoteAmountSubunits : '1000',
       kycProof            : 'fake-jwt',
       payinMethod         : {
@@ -76,6 +77,6 @@ describe('messages builders', () => {
     expect(from).to.equal(rfqMessage.from)
     expect(to).to.equal(rfqMessage.to)
     expect(threadId).to.equal(rfqMessage.threadId)
-    expect(parentId).to.equal(rfqMessage.id)
+    expect(parentId).to.equal(rfqMessage.id.toString())
   })
 })
