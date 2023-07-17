@@ -68,7 +68,7 @@ describe('messages builders', () => {
       paymentInstructions: { payin: { link: 'fake.link.com' } },
     }
 
-    const { from, to, threadId, parentId } = createMessage({
+    const { from, to, threadId, parentId, id } = createMessage({
       last : rfqMessage,
       type : 'quote',
       body : quote
@@ -78,5 +78,6 @@ describe('messages builders', () => {
     expect(to).to.equal(rfqMessage.to)
     expect(threadId).to.equal(rfqMessage.threadId)
     expect(parentId).to.equal(rfqMessage.id.toString())
+    expect(id.toString()).to.contain('quote_')
   })
 })

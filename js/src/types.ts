@@ -43,7 +43,7 @@ export type MessageTypes = {
   rfq: Rfq
   quote: Quote
   close: Close
-  orderStatus: OrderStatus
+  orderstatus: OrderStatus
 }
 
 export interface MessageMetadata {
