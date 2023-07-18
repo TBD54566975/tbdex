@@ -74,8 +74,8 @@ describe('messages builders', () => {
       body : quote
     })
 
-    expect(from).to.equal(rfqMessage.from)
-    expect(to).to.equal(rfqMessage.to)
+    expect(from).to.equal(rfqMessage.to)
+    expect(to).to.equal(rfqMessage.from)
     expect(threadId).to.equal(rfqMessage.threadId)
     expect(parentId).to.equal(rfqMessage.id.toString())
     expect(id.toString()).to.contain('quote_')
