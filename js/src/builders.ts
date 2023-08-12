@@ -1,5 +1,5 @@
 import { MessageType, MessageTypes, TbDEXMessage, XOR } from './types.js'
-import { typeid, type TypeID } from 'typeid-js'
+import { typeid } from 'typeid-js'
 
 type NewThreadOpts = {
   from: string,
