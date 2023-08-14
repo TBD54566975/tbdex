@@ -36,6 +36,16 @@ The central aim of this repo is to act as a playground that is set up for us to 
 ## Resources
 A tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `to`, `threadId`, etc. A tbdex resource is published for anyone to read and generally used as a part of the discovery process by users.
 
+## Jargon decoder
+
+Quick explanation of terms used. 
+
+* PFI -> Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in a specified country (eg pesos as cash). 
+* KYC -> Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.
+* payin -> a method or technology used for the originator of a transaction to transmit funds.
+* payout -> a method used by the recipient of funds to receive them.
+
+
 ## Messages
 Messages form exchanges between users and PFIs. 
 
