@@ -62,7 +62,7 @@ Quick explanation of terms used.
 | quote currency | TODO: fill out                                                                                                                                                     |
 
 > **Note**
-> _Base_ currency is the currency that the PFI is **selling**. Whereas _Quote) currency is the currency that the PFI is willing to accept to _in exchange for_ the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency). In other other words, _Base_ currency is the currency that alice will _receive_. _Quote_ currency is the currency that the PFI will _receive_
+> _Base_ currency is the currency that the PFI is **selling**. Whereas _Quote_ currency is the currency that the PFI is willing to accept to _in exchange for_ the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency). In other other words, _Base_ currency is the currency that alice will _receive_. _Quote_ currency is the currency that the PFI will _receive_
 
 # tbDEX Types
 ## Resources
