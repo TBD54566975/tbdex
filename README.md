@@ -65,10 +65,14 @@ Quick explanation of terms used.
 > _Base_ currency is the currency that the PFI is **selling**. Whereas _Quote_ currency is the currency that the PFI is willing to accept to _in exchange for_ the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency). In other other words, _Base_ currency is the currency that alice will _receive_. _Quote_ currency is the currency that the PFI will _receive_
 
 # tbDEX Types
+The tbDEX protocol consists of two concepts: _Resources_ and _Messages_. 
+
 ## Resources
-A tbDEX resource is not a tbDEX message. i.e. it does not follow the message structure, and therefore does not include fields like `to`, `threadId`, etc. A tbdex resource is published for anyone to read and generally used as a part of the discovery process.
+tbDEX Resources are published by PFIs for anyone to read and generally used as a part of the discovery process.
 
 ### `Offering`
+an `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
+
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
 
 | field                   | data type                             | required | description                                                                                                                          |
