@@ -7,13 +7,14 @@
     - [`Offering`](#offering)
       - [`CurrencyDetails`](#currencydetails)
       - [`PaymentMethod`](#paymentmethod)
+      - [Example](#example)
     - [`Reputation`](#reputation)
   - [Messages](#messages)
     - [Fields](#fields)
       - [`metadata`](#metadata)
       - [`data`](#data)
       - [`private`](#private)
-        - [Example](#example)
+        - [Example](#example-1)
       - [`signature`](#signature)
         - [Header](#header)
           - [Supported `alg`s](#supported-algs)
@@ -80,11 +81,11 @@ an `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `id`                    | string                                | Y        | Unique identifier for this offering                                                                                                  |
 | `description`           | string                                | Y        | Brief description of what is being offered.                                                                                          |
 | `quoteUnitsPerBaseUnit` | string                                | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
-| `baseCurrency`          | `[CurrencyDetails](#currencydetails)` | Y        | Details about the currency that the PFI is selling.                                                                                  |
-| `quoteCurrency`         | `[CurrencyDetails](#currencydetails)` | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                  |
+| `baseCurrency`          | [`CurrencyDetails`](#currencydetails) | Y        | Details about the currency that the PFI is selling.                                                                                  |
+| `quoteCurrency`         | [`CurrencyDetails`](#currencydetails) | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                  |
 | `kycRequirements`       | string                                | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                              |
-| `payinMethods`          | `[PaymentMethod](#paymentmethod)[]`   | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
-| `payoutMethods`         | `[PaymentMethod](#paymentmethod)[]`   | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
+| `payinMethods`          | [`PaymentMethod[]`](#paymentmethod)   | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
+| `payoutMethods`         | [`PaymentMethod[]`](#paymentmethod)   | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
 | `createdTime`           | datetime                              | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
 
 #### `CurrencyDetails`
@@ -102,6 +103,7 @@ an `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `feeSubunits`            | string                                  | N        | The fee expressed in the quote currency's sub units to make use of this payment method            |
 
 
+#### Example
 ```json
 {
   "id": "tbdex:offering:123456",
@@ -378,12 +380,12 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 #### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
-| field                 | data type                                   | required | description                                                                                               |
-| --------------------- | ------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| `expiryTime`          | datetime                                    | Y        | When this quote expires. Expressed as ISO8601                                                             |
-| `base`                | [`QuoteDetails`](#quotedetails)             | Y        | the amount of _base_ currency that Alice will receive                                                     |
-| `quote`               | [`QuoteDetails`](#quotedetails)             | Y        | the amount of _quote_ currency that the PFI will receive                                                  |
-| `paymentInstructions` | [PaymentInstructions](#paymentinstructions) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
+| field                 | data type                                     | required | description                                                                                               |
+| --------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `expiryTime`          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
+| `base`                | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _base_ currency that Alice will receive                                                     |
+| `quote`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _quote_ currency that the PFI will receive                                                  |
+| `paymentInstructions` | [`PaymentInstructions`](#paymentinstructions) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 
 ##### `QuoteDetails`
