@@ -1,0 +1,302 @@
+# tbDEX PFI RESTful API <!-- omit in toc -->
+
+- [Introduction](#introduction)
+- [Status](#status)
+- [Discoverability](#discoverability)
+- [Error Responses](#error-responses)
+- [Query Params](#query-params)
+  - [Pagination](#pagination)
+    - [Example](#example)
+- [Idempotency](#idempotency)
+- [Offerings](#offerings)
+  - [List Offerings](#list-offerings)
+    - [Description](#description)
+    - [Endpoint](#endpoint)
+    - [Query Params](#query-params-1)
+    - [Response](#response)
+- [Threads](#threads)
+  - [Submit RFQ](#submit-rfq)
+    - [Endpoint](#endpoint-1)
+    - [Request Body](#request-body)
+    - [Response](#response-1)
+    - [Errors](#errors)
+  - [Get Quote](#get-quote)
+    - [Endpoint](#endpoint-2)
+    - [Response](#response-2)
+    - [Response Body](#response-body)
+  - [Submit Order](#submit-order)
+    - [Endpoint](#endpoint-3)
+    - [Order Request Body](#order-request-body)
+    - [Response](#response-3)
+    - [Errors](#errors-1)
+  - [Submit Close](#submit-close)
+    - [Description](#description-1)
+    - [Endpoint](#endpoint-4)
+    - [Request Body](#request-body-1)
+    - [Response](#response-4)
+    - [Errors](#errors-2)
+  - [Get Thread](#get-thread)
+    - [Description](#description-2)
+    - [Authentication](#authentication)
+    - [Endpoint](#endpoint-5)
+    - [Query Params](#query-params-2)
+    - [Response](#response-5)
+  - [List Threads](#list-threads)
+    - [Description](#description-3)
+    - [Endpoint](#endpoint-6)
+    - [Response](#response-6)
+    - [Query Params](#query-params-3)
+- [References](#references)
+
+
+# Introduction
+This specification defines a REST API that can be hosted by an individual PFI to participate in tbDEX
+
+# Status
+Version: Draft
+
+> [!NOTE]
+> The status of this specification will continue to be **Draft** until there are two separate PFIs deployed to production 
+
+# Discoverability
+> [!NOTE] TODO: Fill out
+
+# Error Responses
+* An error response is one whose status code is `>= 400`.
+* If present, the body of an error response will conform to the following:
+
+| Field              | Description                                                                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`               | A unique identifier for this particular occurrence of the problem.                                                                                                                                     |
+| `status`           | The HTTP status code applicable to this problem, expressed as a string value. This SHOULD be provided.                                                                                                 |
+| `code`             | An application-specific error code, expressed as a string value.                                                                                                                                       |
+| `title`            | A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.                                               |
+| `detail`           | A human-readable explanation specific to this occurrence of the problem. Like `title`, this field’s value can be localized.                                                                            |
+| `source`           | An object containing references to the primary source of the error. It should include the `pointer`, `parameter`, or `header` members or be omitted.                                                   |
+| `source.pointer`   | A JSON Pointer to the value in the request document that caused the error. This MUST point to a value in the request document that exists; if it doesn’t, the client SHOULD simply ignore the pointer. |
+| `source.parameter` | A string indicating which URI query parameter caused the error.                                                                                                                                        |
+| `source.header`    | A string indicating the name of a single request header which caused the error.                                                                                                                        |
+| `meta`             | A meta object containing non-standard meta-information about the error.                                                                                                                                |
+
+
+```typescript
+type ErrorObject = {
+  id?: string
+  status: string
+  code?: string
+  title?: string
+  detail?: string
+  source?: {
+    pointer?: string
+    parameter?: string
+    header?: string
+  }
+  meta?: Record<string, any>
+}
+
+type ErrorResponseBody = {
+  errors: Error[]
+}
+```
+
+---
+
+# Query Params
+Query parameters, also known as query strings, are a way to send additional information to the server as part of a URL. They allow clients to provide specific input or customize the server's response. Query parameters typically follow the main URL and start with a `?` character. They consist of key-value pairs, and multiple pairs can be separated by `&` characters
+
+Query params are supported by many of the `GET /${resource}` endpoints in the following ways
+
+* Simple Example: `?simple=field`
+* Same Field; Multiple Values: `field=value&field=anotherValue`
+
+## Pagination
+Pagination is supported using the following query params:
+
+| Param          | Description                                                                 | Default |
+| -------------- | --------------------------------------------------------------------------- | ------- |
+| `page[offset]` | Specifies the starting position from where the records should be retrieved. | `0`     |
+| `page[limit]`  | Specifies the maximum number of records to be retrieved.                    | `10`    |
+
+### Example
+`/?page[offset]=0&page[limit]=10`
+
+---
+
+# Idempotency
+The IDs of individual tbDEX messages are used as idempotency keys
+
+---
+
+# Offerings
+
+The [`Offering`](../README.md#offering) resource is used to convey the currency pairs a PFI is _offering_. It includes information about payment methods and associated fees.
+
+## List Offerings
+
+### Description
+Used to fetch offerings from a PFI
+
+### Endpoint
+`GET /offerings`
+
+### Query Params
+| Param              | Description                                                                                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `baseCurrency`     | The primary currency listed in a currency pair, representing the unit being traded. **This is the currency that Alice will be _receiving_**                        |
+| `quoteCurrency`    | The secondary currency listed in a currency pair, indicating its value in relation to the base currency. **This is the currency that the PFI will be _receiving_** |
+| `payinMethodKind`  | The payin method Alice wishes to use to provide quote currency                                                                                                     |
+| `payoutMethodKind` | The payout method Alice wishes to use to receive base currency                                                                                                     |
+| `id`               | Query for a specific offering                                                                                                                                      |
+
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `200: OK`          | `Offering[]`          |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+---
+
+# Threads
+A thread is a series of linked tbDEX messages between Alice and a PFI for a single exchange. A thread can be created by submitting an RFQ.
+
+## Submit RFQ
+
+### Endpoint
+`POST /threads/:thread_id/rfq`
+
+### Request Body
+> [!IMPORTANT]
+> See RFQ structure [here](../README.md#rfq-request-for-quote)
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+### Errors
+| Status | Description            |
+| ------ | ---------------------- |
+| 400    | Validation error(s)    |
+| 400    | Failed Signature Check |
+| 404    | Thread not found       |
+| 409    | RFQ already exists     |
+| 409    | Thread already exists  |
+
+## Get Quote
+### Endpoint
+`GET /threads/:thread_id/?messageType=quote`
+
+### Response
+| Status             | Body                              |
+| ------------------ | --------------------------------- |
+| `200: OK`          | `{ data: TbdexMessage<Quote>[] }` |
+| `400: Bad Request` | `{ errors: Error[] }`             |
+
+### Response Body
+> [!IMPORTANT]
+> See Quote structure [here](../README.md#quote)
+
+## Submit Order
+
+### Endpoint
+`POST /threads/:thread_id/order`
+
+### Order Request Body
+> [!IMPORTANT]
+> See Order structure [here](../README.md#order)
+
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+### Errors
+| Status | Description                                                             |
+| ------ | ----------------------------------------------------------------------- |
+| 400    | Failed Signature Check                                                  |
+| 404    | Thread not found                                                        |
+| 409    | Order already exists                                                    |
+| 409    | Order not allowed (e.g. bc thread was closed or bc no quote exists yet) |
+
+## Submit Close
+
+### Description
+Closes the thread. Indicates that Alice is no longer interested
+
+### Endpoint
+`POST /threads/:thread_id/close`
+
+### Request Body
+> [!IMPORTANT]
+> See Close structure [here](../README.md#close)
+
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+### Errors
+| Status | Description            |
+| ------ | ---------------------- |
+| 400    | Failed Signature Check |
+| 404    | Thread not found       |
+| 409    | Close not allowed      |
+
+---
+
+## Get Thread
+
+### Description
+Retrieves the thread specified by ID and messageType
+
+### Authentication
+
+### Endpoint
+`GET /threads/:id`
+
+
+### Query Params
+| Param         | Description                   |
+| ------------- | ----------------------------- |
+| `messageType` | filters the messages returned |
+
+
+### Response
+
+| Status             | Body                       |
+| ------------------ | -------------------------- |
+| `200: OK`          | `{ data: TbdexMessage[] }` |
+| `400: Bad Request` | `{ errors: Error[] }`      |
+| `404: Not Found`   | N/A                        |
+
+---
+
+## List Threads
+
+### Description
+Returns an array containing IDs of threads started by the requesting DID
+
+### Endpoint
+`GET /threads`
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `200: OK.     `    | `{ data: string[]}`   |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+### Query Params
+
+| Param | Description      |
+| ----- | ---------------- |
+| sort  | field to sort by |
+
+
+# References
+* JSON:API spec: https://jsonapi.org/format/

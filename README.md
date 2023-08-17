@@ -1,6 +1,5 @@
 # tbDEX Protocol <!-- omit in toc -->
 
-- [Introduction](#introduction)
 - [Jargon Decoder](#jargon-decoder)
 - [tbDEX Types](#tbdex-types)
   - [Resources](#resources)
@@ -39,16 +38,6 @@
   - [Fields that may change in future versions of the schema](#fields-that-may-change-in-future-versions-of-the-schema)
 - [tbDEX conversation sequence](#tbdex-conversation-sequence)
 - [Resources](#resources-1)
-
-
-# Introduction
-
-The central aim of this repo is to act as a playground that is set up for us to easily test the ideas we come up with as we iterate our way to what we hope is a robust protocol. Specifically, this repo is focused on fleshing out:
-  - tbDEX message schemas
-    - What types of messages do Alice and a PFI send to one another?
-    - What do these messages contain?
-    - What does the state machine look like for a thread of tbDEX messages?
-  - Implementations of tbDEX message types in various languages
 
 
 # Jargon Decoder
@@ -154,7 +143,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 ### `Reputation`
 A set of Verifiable Credentials _issued_ to the PFI that can be consumed by any interested party in order to assess the reputability of the respective PFI.
 
-> **Note**
+> [!NOTE]
 > TODO: Fill out
 
 ## Messages
