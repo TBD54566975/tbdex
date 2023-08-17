@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { SchemaValidationError, validateMessage } from '../src/validator.js'
 
-const exampleKycRequirements = {
+const exampleVcRequirements = {
   'id'                : 'test-pd-id',
   'name'              : 'simple PD',
   'purpose'           : 'i am a smol PD',
@@ -36,7 +36,7 @@ const validMessage = {
     'baseFeeDollars'   : '1.00',
     'minDollars'       : '10.00',
     'maxDollars'       : '1000.00',
-    'kycRequirements'  : {},
+    'vcRequirements'   : {},
     'payinMethods'     : [
       {
         'kind' : 'DEBIT_CARD',
@@ -98,7 +98,7 @@ const numberAmounts = {
   'baseFeeDollars'   : 1.00,
   'minDollars'       : 10.00,
   'maxDollars'       : 1000.00,
-  'kycRequirements'  : exampleKycRequirements,
+  'vcRequirements'   : exampleVcRequirements,
   'payinMethods'     : [
     {
       'kind' : 'DEBIT_CARD',

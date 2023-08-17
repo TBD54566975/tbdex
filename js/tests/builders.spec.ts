@@ -9,7 +9,7 @@ describe('messages builders', () => {
     const rfq: Rfq = {
       offeringId          : typeid('offering'),
       quoteAmountSubunits : '1000',
-      kycProof            : 'fake-jwt',
+      vcs                 : 'fake-jwt',
       payinMethod         : {
         kind: 'APPLE_PAY',
       },
@@ -35,7 +35,7 @@ describe('messages builders', () => {
     const rfq: Rfq = {
       offeringId          : typeid('offering'),
       quoteAmountSubunits : '1000',
-      kycProof            : 'fake-jwt',
+      vcs                 : 'fake-jwt',
       payinMethod         : {
         kind: 'APPLE_PAY',
       },

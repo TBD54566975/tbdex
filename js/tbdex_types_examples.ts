@@ -60,7 +60,7 @@ const _offering: TbDEXResource<'offering'> = {
     minSubunits  : '1000',
     maxSubunits  : '1000'
   },
-  kycRequirements: {
+  vcRequirements: {
     id                : 'kyc',
     input_descriptors : [presentationDefinition]
   },
@@ -93,7 +93,7 @@ const _rfq: TbDEXMessage<'rfq'> = {
   body : {
     offeringId          : typeid('offering'),
     quoteAmountSubunits : '1000',
-    kycProof            : 'eyJApQf...wqfVkg', // KYC VP in JWT format
+    vcs                 : 'eyJApQf...wqfVkg', // KYC VP in JWT format
     payinMethod         : {
       kind: 'CASHAPP_PAY'
     },

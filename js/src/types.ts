@@ -24,7 +24,7 @@ export type Offering = {
   quoteUnitsPerBaseUnit: string
   baseCurrency: CurrencyDetails
   quoteCurrency: CurrencyDetails
-  kycRequirements: PresentationDefinitionV2
+  vcRequirements: PresentationDefinitionV2
   payinMethods: PaymentMethod[]
   payoutMethods: PaymentMethod[]
   createdTime: string
@@ -63,7 +63,7 @@ export type TbDEXMessage<T extends keyof MessageTypes> = MessageMetadata & {
 export interface Rfq {
   offeringId: TypeID<'offering'>
   quoteAmountSubunits: string
-  kycProof: string
+  vcs: string
   payinMethod: PaymentMethodResponse
   payoutMethod: PaymentMethodResponse
 }
