@@ -59,11 +59,9 @@ Quick explanation of terms used.
 | KYC            | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
 | payin          | a method or technology used for the originator of a transaction to transmit funds.                                                                                 |
 | payout         | a method used by the recipient of funds to receive them. e.g. Mobile Money                                                                                         |
-| base currency  | TODO: fill out                                                                                                                                                     |
-| quote currency | TODO: fill out                                                                                                                                                     |
+| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency.                                                                                                                                                     |
+| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency.                                                                                                                                                     |
 
-> **Note**
-> _Base_ currency is the currency that the PFI is **selling**. Whereas _Quote_ currency is the currency that the PFI is willing to accept to _in exchange for_ the base currency. In other words, PFI is **buying** the quote currency. In trading terms, the PFI's side is always `SELL` (selling base currency). Conversely, Alice's side is always `BUY` (buying base currency). In other other words, _Base_ currency is the currency that alice will _receive_. _Quote_ currency is the currency that the PFI will _receive_
 
 # tbDEX Types
 The tbDEX protocol consists of two concepts: _Resources_ and _Messages_. 
@@ -83,10 +81,10 @@ an `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `quoteUnitsPerBaseUnit` | string                                | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
 | `baseCurrency`          | [`CurrencyDetails`](#currencydetails) | Y        | Details about the currency that the PFI is selling.                                                                                  |
 | `quoteCurrency`         | [`CurrencyDetails`](#currencydetails) | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                  |
-| `kycRequirements`       | string                                | Y        | PresentationDefinition in JWT string format which describes the credential needed to choose this offer.                              |
+| `vcRequirements`       | string                                | Y        | PresentationDefinition in JWT string format which describes the credential(s) needed to choose this offer.                              |
 | `payinMethods`          | [`PaymentMethod[]`](#paymentmethod)   | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`         | [`PaymentMethod[]`](#paymentmethod)   | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
-| `createdTime`           | datetime                              | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
+| `createdAt`            | datetime                              | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
 
 #### `CurrencyDetails`
 | field          | data type | required | description                                            |
@@ -117,7 +115,7 @@ an `Offering` is used by the PFI to describe a currency pair they have to _offer
     "minSubunits"  : "1000",
     "maxSubunits"  : "1000"
   },
-  "kycRequirements": "eyJhb...MIDw",
+  "vcRequirements": "eyJhb...MIDw",
   "payinMethods": [{
     "kind": "DEBIT_CARD",
     "requiredPaymentDetails": "eyJhb...MIDw",
@@ -146,7 +144,7 @@ an `Offering` is used by the PFI to describe a currency pair they have to _offer
     }
     "feeSubunits": "100"
   }],
-  "createdTime": "2023-06-23T11:23:41Z"
+  "createdAt": "2023-06-23T11:23:41Z"
 }
 ```
 
@@ -180,12 +178,9 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 | `kind`        | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                        |
 | `id`          | Y              | The message's ID                                                                          |
 | `threadId`    | Y              | ID for a "thread" of messages between Alice <-> PFI. Set by the first message in a thread |
-| `parentId`    | N              | the ID of the most recent message in a thread                                             |
-| `dateCreated` | Y              | ISO 8601                                                                                  |
+| `parentId`    | N              | the ID of the most recent message in a thread. `null` for the first message in a thread   |
+| `createdAt`   | Y              | ISO 8601                                                                                  |
 
-
-> **Note** 
-> **TODO**: decide on what to do about `parentId` when the message is an rfq. set to `null`? remove it?
 
 #### `data`
 The actual message content. This will _always_ be a JSON object. 
@@ -203,14 +198,14 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
 > **Note**
 > Rationale behind the `private` JSON object matching the structure of `data` is to simplify programmatic hash evaluation using JSONPath to pluck the respective hash from `data`. **NOTE**: we should try this to make sure it's actually "easy"
 
-##### Example
+##### Example Usage in RFQ message
 
 ```json
 {
   "data": {
     "offeringId": <OFFERING_ID>,
     "quoteAmountSubunits": "STR_VALUE",
-    "credentials": <PRESENTATION_SUBMISSION_HASH>, <---- hash
+    "vcs": <PRESENTATION_SUBMISSION_HASH>, <---- hash
     "payinMethod": {
       "kind": "BTC_ADDRESS",
       "paymentDetails": <OBJ_HASH> <---- hash
@@ -221,7 +216,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
     }
   },
   "private": {
-    "credentials": <PRESENTATION_SUBMISSION>, <---- actual
+    "vcs": <PRESENTATION_SUBMISSION>, <---- actual
     "payinMethod": {
       "paymentDetails": <OBJ> <---- actual
     },
@@ -313,13 +308,13 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 
 ### Message Kinds
 #### `RFQ (Request For Quote)`
-> Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD I want to trade for BTC. Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
+> Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (quote currency) I want to trade for BTC (base currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
 | field                 | data type                                         | required | description                                                                                                         |
 | --------------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
 | `offeringId`          | string                                            | Y        | Offering which Alice would like to get a quote for                                                                  |
 | `quoteAmountSubunits` | string                                            | Y        | Amount of quote currency you want to spend in order to receive base currency                                        |
-| `kycProof`            | string                                            | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
+| `vcs`            | string                                            | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
 | `payinMethod`         | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send quote currency.                                                                |
 | `payoutMethod`        | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive base currency.                                                              |
 
@@ -338,12 +333,12 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
     "id": "abcd123",
     "threadId": <RFQ_ID>,
     "parentId": null,
-    "dateCreated": "ISO_8601"
+    "createdAt": "ISO_8601"
   },
   "data": {
     "offeringId": <OFFERING_ID>,
     "quoteAmountSubunits": "STR_VALUE",
-    "credentials": <PRESENTATION_SUBMISSION_HASH>,
+    "vcs": <PRESENTATION_SUBMISSION_HASH>,
     "payinMethod": {
       "kind": "BTC_ADDRESS",
       "paymentDetails": <OBJ_HASH>
@@ -355,7 +350,7 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
   },
   "signature": "COMPACT_JWS",
   "private": {
-    "credentials": <PRESENTATION_SUBMISSION>,
+    "vcs": <PRESENTATION_SUBMISSION>,
     "payinMethod": {
       "paymentDetails": <OBJ>
     },
@@ -377,12 +372,15 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 | -------- | --------- | -------- | ------------------------------------------------ |
 | `reason` | string    | N        | an explanation of why the thread is being closed |
 
+> **Note**
+> Include a section that explains rules around when a Close can/can't be sent. Can Alice close after having sent an Order message, effectively accepting the quote?
+
 #### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
 | field                 | data type                                     | required | description                                                                                               |
 | --------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| `expiryTime`          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
+| `expiresAt `          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
 | `base`                | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _base_ currency that Alice will receive                                                     |
 | `quote`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _quote_ currency that the PFI will receive                                                  |
 | `paymentInstructions` | [`PaymentInstructions`](#paymentinstructions) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
@@ -411,14 +409,55 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 | `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI |
 
 
-> **Note**
-> TODO: Include Quote example
+```json
+{
+  "metadata": {
+    "from": "did:ex:pfi",
+    "to": "did:ex:alice",
+    "kind": "quote",
+    "id": "abcd123",
+    "threadId": <RFQ_ID>,
+    "parentId": <RFQ_ID>,
+    "createdAt": "ISO_8601"
+  },
+  "data": {
+    "expiresAt": "ISO_8601",
+    "paymentInstructions": null,
+    "base": {
+      "currencyCode": "BTC",
+      "amountSubunits": "3",
+      "feeSubunits": "0",
+    },
+    "quote": {
+      "currencyCode": "USD",
+      "amountSubunits": "100_00",
+      "feeSubunits": "0",
+    },
+  },
+  "signature": "COMPACT_JWS",
+}
+```
 
 
 #### `Order`
+> Alice -> PFI: I'm happy with the quote and I want to execute the transaction"
 
-> **Note**
-> TODO: Fill out
+
+```json
+{
+  "metadata": {
+    "from": "did:ex:alice",
+    "to": "did:ex:pfi",
+    "kind": "order",
+    "id": "abcd123",
+    "threadId": <RFQ_ID>,
+    "parentId": <QUOTE_ID>,
+    "createdAt": "ISO_8601"
+  },
+  "data": {},
+  "signature": "COMPACT_JWS",
+}
+```
 
 #### `OrderStatus`
 > PFI -> Alice: "Here's the status of your order."
@@ -431,9 +470,22 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 | ------------- | --------- | -------- | --------------------------------------------- |
 | `orderStatus` | string    | Y        | Current status of Order that's being executed |
 
+
 ```json
 {
-  "orderStatus": "PENDING"
+  "metadata": {
+    "from": "did:ex:pfi",
+    "to": "did:ex:alice",
+    "kind": "orderStatus",
+    "id": "abcd123",
+    "threadId": <RFQ_ID>,
+    "parentId": <ORDER_ID> || <ORDER_STATUS_ID>,
+    "createdAt": "ISO_8601"
+  },
+  "data": {
+    "orderStatus": "PENDING"
+  },
+  "signature": "COMPACT_JWS",
 }
 ```
 
