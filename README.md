@@ -57,20 +57,20 @@ Quick explanation of terms used.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | PFI            | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
 | KYC            | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
-| payin          | a method or technology used for the originator of a transaction to transmit funds.                                                                                 |
-| payout         | a method used by the recipient of funds to receive them. e.g. Mobile Money                                                                                         |
-| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency.                                                                                                                                                     |
-| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency.                                                                                                                                                     |
+| payin          | a method/technology used by the sender to transmit funds to the PFI.                                                                                 |
+| payout         | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                                         |
+| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                                                                                                     |
+| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                                                                                                                                     |
 
 
 # tbDEX Types
 The tbDEX protocol consists of two concepts: _Resources_ and _Messages_. 
 
 ## Resources
-tbDEX Resources are published by PFIs for anyone to read and generally used as a part of the discovery process.
+tbDEX Resources are published by PFIs for anyone to read and generally used as a part of the discovery process. They are not part of the message exchange, i.e Alice cannot reply to a Resource.
 
 ### `Offering`
-an `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
+An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
 
