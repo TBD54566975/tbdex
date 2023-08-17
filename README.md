@@ -4,17 +4,18 @@
 - [Jargon Decoder](#jargon-decoder)
 - [tbDEX Types](#tbdex-types)
   - [Resources](#resources)
-    - [`Offering`](#offering)
-      - [`CurrencyDetails`](#currencydetails)
-      - [`PaymentMethod`](#paymentmethod)
-      - [Example](#example)
+    - [Resource Kinds](#resource-kinds)
+      - [`Offering`](#offering)
+        - [`CurrencyDetails`](#currencydetails)
+        - [`PaymentMethod`](#paymentmethod)
+        - [Example](#example)
     - [`Reputation`](#reputation)
   - [Messages](#messages)
     - [Fields](#fields)
       - [`metadata`](#metadata)
       - [`data`](#data)
       - [`private`](#private)
-        - [Example](#example-1)
+        - [Example Usage in RFQ message](#example-usage-in-rfq-message)
       - [`signature`](#signature)
         - [Header](#header)
           - [Supported `alg`s](#supported-algs)
@@ -57,10 +58,10 @@ Quick explanation of terms used.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | PFI            | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
 | KYC            | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
-| payin          | a method/technology used by the sender to transmit funds to the PFI.                                                                                 |
-| payout         | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                                         |
-| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                                                                                                     |
-| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                                                                                                                                     |
+| payin          | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
+| payout         | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
+| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                             |
+| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                              |
 
 
 # tbDEX Types
@@ -69,7 +70,9 @@ The tbDEX protocol consists of two concepts: _Resources_ and _Messages_.
 ## Resources
 tbDEX Resources are published by PFIs for anyone to read and generally used as a part of the discovery process. They are not part of the message exchange, i.e Alice cannot reply to a Resource.
 
-### `Offering`
+### Resource Kinds
+
+#### `Offering`
 An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
@@ -81,19 +84,19 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `quoteUnitsPerBaseUnit` | string                                | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
 | `baseCurrency`          | [`CurrencyDetails`](#currencydetails) | Y        | Details about the currency that the PFI is selling.                                                                                  |
 | `quoteCurrency`         | [`CurrencyDetails`](#currencydetails) | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                  |
-| `vcRequirements`       | string                                | Y        | PresentationDefinition in JWT string format which describes the credential(s) needed to choose this offer.                              |
+| `vcRequirements`        | string                                | Y        | PresentationDefinition in JWT string format which describes the credential(s) needed to choose this offer.                           |
 | `payinMethods`          | [`PaymentMethod[]`](#paymentmethod)   | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`         | [`PaymentMethod[]`](#paymentmethod)   | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
-| `createdAt`            | datetime                              | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
+| `createdAt`             | datetime                              | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
 
-#### `CurrencyDetails`
+##### `CurrencyDetails`
 | field          | data type | required | description                                            |
 | -------------- | --------- | -------- | ------------------------------------------------------ |
 | `currencyCode` | string    | Y        | ISO 3166 currency code string                          |
 | `minSubunits`  | string    | N        | Minimum amount of currency that the offer is valid for |
 | `maxSubunits`  | string    | N        | Maximum amount of currency that the offer is valid for |
 
-#### `PaymentMethod`
+##### `PaymentMethod`
 | field                    | data type                               | required | description                                                                                       |
 | ------------------------ | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
@@ -101,7 +104,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `feeSubunits`            | string                                  | N        | The fee expressed in the quote currency's sub units to make use of this payment method            |
 
 
-#### Example
+##### Example
 ```json
 {
   "id": "tbdex:offering:123456",
@@ -171,15 +174,15 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field         | Required (Y/N) | Description                                                                               |
-| ------------- | -------------- | ----------------------------------------------------------------------------------------- |
-| `from`        | Y              | The sender's DID                                                                          |
-| `to`          | Y              | the recipient's DID                                                                       |
-| `kind`        | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                        |
-| `id`          | Y              | The message's ID                                                                          |
-| `threadId`    | Y              | ID for a "thread" of messages between Alice <-> PFI. Set by the first message in a thread |
-| `parentId`    | N              | the ID of the most recent message in a thread. `null` for the first message in a thread   |
-| `createdAt`   | Y              | ISO 8601                                                                                  |
+| Field       | Required (Y/N) | Description                                                                               |
+| ----------- | -------------- | ----------------------------------------------------------------------------------------- |
+| `from`      | Y              | The sender's DID                                                                          |
+| `to`        | Y              | the recipient's DID                                                                       |
+| `kind`      | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                        |
+| `id`        | Y              | The message's ID                                                                          |
+| `threadId`  | Y              | ID for a "thread" of messages between Alice <-> PFI. Set by the first message in a thread |
+| `parentId`  | N              | the ID of the most recent message in a thread. `null` for the first message in a thread   |
+| `createdAt` | Y              | ISO 8601                                                                                  |
 
 
 #### `data`
@@ -314,7 +317,7 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 | --------------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
 | `offeringId`          | string                                            | Y        | Offering which Alice would like to get a quote for                                                                  |
 | `quoteAmountSubunits` | string                                            | Y        | Amount of quote currency you want to spend in order to receive base currency                                        |
-| `vcs`            | string                                            | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
+| `vcs`                 | string                                            | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
 | `payinMethod`         | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send quote currency.                                                                |
 | `payoutMethod`        | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive base currency.                                                              |
 
