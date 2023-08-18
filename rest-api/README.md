@@ -105,27 +105,6 @@ PFIs can become publicly discoverable by advertising their API endpoint as a [Se
 | `source.header`    | A string indicating the name of a single request header which caused the error.                                                                                                                        |
 | `meta`             | A meta object containing non-standard meta-information about the error.                                                                                                                                |
 
-
-```typescript
-type ErrorObject = {
-  id?: string
-  status: string
-  code?: string
-  title?: string
-  detail?: string
-  source?: {
-    pointer?: string
-    parameter?: string
-    header?: string
-  }
-  meta?: Record<string, any>
-}
-
-type ErrorResponseBody = {
-  errors: Error[]
-}
-```
-
 ---
 
 # Query Params
