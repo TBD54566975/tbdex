@@ -172,7 +172,7 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 
 
 ### `data`
-The actual message content. This will _always_ be a JSON object. 
+The actual message content. This will _always_ be a JSON object. The [Message Kinds section](#message-kinds) specifies the content for each individual message type
 
 
 ### `private`
