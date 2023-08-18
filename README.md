@@ -1,6 +1,3 @@
-# tbDEX Protocol <!-- omit in toc -->
-
-
 # Introduction <!-- omit in toc -->
 tbDEX is a protocol for discovering liquidity and exchanging assets (such as fiat money, real world goods, stablecoins or bitcoin) when the existence of social trust is an intractable element of managing transaction risk. The tbDEX protocol utilizes decentralized identitifers (DID) and verifiable credentials (VCs) to establish the provenance of identity in the real world. The protocol has no opinion on anonymity as a feature or consequence of transactions. Instead, it allows willing counterparties to negotiate and establish the minimum information acceptable for an exchange.
 
@@ -17,6 +14,8 @@ Version: Draft
 >
 > This repo is currently under construction 🚧. The protocol specified in this README and the [RESTful API specification](./rest-api) are up to date but the [`js`](./js) lib is not. We'll be moving that to its own repo within the coming days. This repo will be repurposed to house specifications only. 
 
+
+# Table of Contents <!-- omit in toc -->
 - [Resources](#resources)
   - [Resource Kinds](#resource-kinds)
     - [`Offering`](#offering)
