@@ -4,6 +4,19 @@
 >
 > This repo is currently under construction 🚧. The protocol specified in this README and the [RESTful API specification](./rest-api) are up to date but the [`js`](./js) lib is not. We'll be moving that to its own repo within the coming days. This repo will be repurposed to house specifications only. 
 
+
+# Introduction <!-- omit in toc -->
+This specification defines the message and resource formats that make up the [tbDEX protocol](https://tbdex.io/whitepaper.pdf).
+
+tbDEX is a protocol for discovering liquidity and exchanging assets (such as fiat money, real world goods, stablecoins or bitcoin) when the existence of social trust is an intractable element of managing transaction risk. The tbDEX protocol facilitates decentralized networks of exchange between assets by providing a framework for establishing social trust, utilizing decentralized identity (DID) and verifiable credentials (VCs) to establish the provenance of identity in the real world. The protocol has no opinion on anonymity as a feature or consequence of transactions. Instead, it allows willing counterparties to negotiate and establish the minimum information acceptable for the exchange. Moreover, it provides the infrastructure necessary to create a ubiquity of on-ramps and off-ramps directly between the fiat and decentralized financial systems without the need for centralized intermediaries and trust brokers. This makes digital currencies and decentralized financial services more accessible to everyone.
+
+# Status <!-- omit in toc -->
+Version: Draft
+
+> [!NOTE]
+> 
+> This specification will continue to be in a **Draft** state until there are two separate PFIs deployed and providing liquidity to individuals or other institutions
+
 - [tbDEX Types](#tbdex-types)
   - [Resources](#resources)
     - [Resource Kinds](#resource-kinds)

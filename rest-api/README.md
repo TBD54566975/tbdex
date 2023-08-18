@@ -1,7 +1,16 @@
 # tbDEX PFI RESTful API <!-- omit in toc -->
 
-- [Introduction](#introduction)
-- [Status](#status)
+# Introduction <!-- omit in toc -->
+This specification defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX
+
+# Status <!-- omit in toc -->
+Version: Draft
+
+> [!NOTE]
+> 
+> This specification will continue to be in a **Draft** state until there are two separate PFIs deployed and providing liquidity to individuals or other institutions
+
+
 - [Discoverability](#discoverability)
   - [Example](#example)
 - [Error Responses](#error-responses)
@@ -52,16 +61,6 @@
     - [Response](#response-6)
     - [Query Params](#query-params-3)
 - [References](#references)
-
-
-# Introduction
-This specification defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX
-
-# Status
-Version: Draft
-
-> [!NOTE]
-> The status of this specification will continue to be **Draft** until there are two separate PFIs deployed to production 
 
 # Discoverability
 PFIs can become publicly discoverable by advertising their API endpoint as a [Service](https://www.w3.org/TR/did-core/#services) within their DID Document. In order to increase the likelihood of being discovered The `service` entry **SHOULD** include the following properties:
