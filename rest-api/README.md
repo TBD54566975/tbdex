@@ -10,7 +10,7 @@ Version: Draft
 > 
 > This specification will continue to be in a **Draft** state until there are two separate PFIs deployed and providing liquidity to individuals or other institutions
 
-
+# Table of Contents <!-- omit in toc -->
 - [Discoverability](#discoverability)
   - [Example](#example)
 - [Error Responses](#error-responses)
