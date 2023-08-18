@@ -13,11 +13,15 @@
   - [List Offerings](#list-offerings)
     - [Description](#description)
     - [Endpoint](#endpoint)
+    - [Authentication](#authentication)
+    - [Authorization](#authorization)
     - [Query Params](#query-params-1)
     - [Response](#response)
 - [Threads](#threads)
   - [Submit RFQ](#submit-rfq)
     - [Endpoint](#endpoint-1)
+    - [Authentication](#authentication-1)
+    - [Authorization](#authorization-1)
     - [Request Body](#request-body)
     - [Response](#response-1)
     - [Errors](#errors)
@@ -38,7 +42,7 @@
     - [Errors](#errors-2)
   - [Get Thread](#get-thread)
     - [Description](#description-2)
-    - [Authentication](#authentication)
+    - [Authentication](#authentication-2)
     - [Endpoint](#endpoint-5)
     - [Query Params](#query-params-2)
     - [Response](#response-5)
@@ -164,6 +168,12 @@ Used to fetch offerings from a PFI
 ### Endpoint
 `GET /offerings`
 
+### Authentication
+No authentication required.
+
+### Authorization
+No authorization required. Offerings are publicly accessible
+
 ### Query Params
 | Param              | Description                                                                                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -189,6 +199,11 @@ A thread is a series of linked tbDEX messages between Alice and a PFI for a sing
 
 ### Endpoint
 `POST /threads/:thread_id/rfq`
+
+### Authentication
+Refer to [Signature Verification Section]() of the tbDEX spec  
+### Authorization
+No Authorization required to submit an RFQ
 
 ### Request Body
 > [!IMPORTANT]
@@ -281,6 +296,7 @@ Closes the thread. Indicates that Alice is no longer interested
 Retrieves the thread specified by ID and messageType
 
 ### Authentication
+N/A
 
 ### Endpoint
 `GET /threads/:id`
