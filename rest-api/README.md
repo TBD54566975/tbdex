@@ -3,10 +3,11 @@
 - [Introduction](#introduction)
 - [Status](#status)
 - [Discoverability](#discoverability)
+  - [Example](#example)
 - [Error Responses](#error-responses)
 - [Query Params](#query-params)
   - [Pagination](#pagination)
-    - [Example](#example)
+    - [Example](#example-1)
 - [Idempotency](#idempotency)
 - [Offerings](#offerings)
   - [List Offerings](#list-offerings)
@@ -50,7 +51,7 @@
 
 
 # Introduction
-This specification defines a REST API that can be hosted by an individual PFI to participate in tbDEX
+This specification defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX
 
 # Status
 Version: Draft
@@ -59,7 +60,30 @@ Version: Draft
 > The status of this specification will continue to be **Draft** until there are two separate PFIs deployed to production 
 
 # Discoverability
-> [!NOTE] TODO: Fill out
+PFIs can become publicly discoverable by advertising their API endpoint as a [Service](https://www.w3.org/TR/did-core/#services) within their DID Document. In order to increase the likelihood of being discovered The `service` entry **SHOULD** include the following properties:
+
+| Property          | Value                                                         |
+| ----------------- | ------------------------------------------------------------- |
+| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services) |
+| `type`            | `PFI`                                                         |
+| `serviceEndpoint` | PFI's publicly addressable API endpoint                       |
+
+
+## Example
+```json
+{
+  "id": "did:example:pfi",
+  "service": [{
+    "id":"#pfi",
+    "type": "PFI",
+    "serviceEndpoint": "https://pfi.organization.com"
+  }]
+}
+```
+
+> [!NOTE]
+>
+> _Decentralized_ discoverability is dependent upon whether the underlying [verifiable registry](https://www.w3.org/TR/did-core/#dfn-verifiable-data-registry) of the selected [DID Method](https://www.w3.org/TR/did-core/#methods) is crawlable
 
 # Error Responses
 * An error response is one whose status code is `>= 400`.
@@ -135,6 +159,7 @@ The [`Offering`](../README.md#offering) resource is used to convey the currency 
 
 ### Description
 Used to fetch offerings from a PFI
+
 
 ### Endpoint
 `GET /offerings`
