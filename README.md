@@ -1,6 +1,9 @@
 # tbDEX Protocol <!-- omit in toc -->
 
-- [Jargon Decoder](#jargon-decoder)
+> [!WARNING]
+>
+> This repo is currently under construction 🚧. The protocol specified in this README and the [RESTful API specification](./rest-api) are up to date but the [`js`](./js) lib is not. We'll be moving that to its own repo within the coming days. This repo will be repurposed to house specifications only. 
+
 - [tbDEX Types](#tbdex-types)
   - [Resources](#resources)
     - [Resource Kinds](#resource-kinds)
@@ -37,20 +40,8 @@
       - [`OrderStatus`](#orderstatus)
   - [Fields that may change in future versions of the schema](#fields-that-may-change-in-future-versions-of-the-schema)
 - [tbDEX conversation sequence](#tbdex-conversation-sequence)
+- [Jargon Decoder](#jargon-decoder)
 - [Resources](#resources-1)
-
-
-# Jargon Decoder
-Quick explanation of terms used. 
-
-| Term           | Definition                                                                                                                                                         |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| PFI            | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
-| KYC            | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
-| payin          | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
-| payout         | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
-| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                             |
-| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                              |
 
 
 # tbDEX Types
@@ -507,6 +498,17 @@ sequenceDiagram
   PFI1->>Alice: OrderStatus
 ```
 
+# Jargon Decoder
+Quick explanation of terms used. 
+
+| Term           | Definition                                                                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| PFI            | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
+| KYC            | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
+| payin          | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
+| payout         | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
+| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                             |
+| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                              |
 
 # Resources
 
