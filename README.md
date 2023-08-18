@@ -51,7 +51,7 @@ Version: Draft
     - [`OrderStatus`](#orderstatus)
 - [tbDEX conversation sequence](#tbdex-conversation-sequence)
 - [Jargon Decoder](#jargon-decoder)
-- [Resources](#resources-1)
+- [Additional Resources](#additional-resources)
 
 # Resources
 tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process. They are not part of the message exchange, i.e Alice cannot reply to a Resource.
@@ -510,7 +510,7 @@ Quick explanation of terms used.
 | base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                             |
 | quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                              |
 
-# Resources
+# Additional Resources
 
 | Resource Name                                                                                    | Description                                                                   |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
