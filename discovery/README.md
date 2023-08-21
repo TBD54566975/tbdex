@@ -14,23 +14,46 @@ For a PFI to be discoverable, it must publish a DID Document with a service endp
         type: 'PFI',
         serviceEndpoint: 'https://pfi.mic4.com',
       }
-```      
+```    
 
-### Optional currency pair declaration
+This will exposes a REST API at the serviceEndpoint which can be used to discover the PFI's capabilities and offers, make RFQs and tranact.
 
-To help clients find the right PFI for their needs, a PFI may also declare what currency pairs they are able to offer:
+### Service Endpoint options
+
+If it possible to use a did URI as the serviceEndpoint itself, for example:
 
 ```json
       {
         id:'pfi',
-        'type': 'PFI',
-        'serviceEndpoint': 'https://pfi.mic4.com AUD-USD,AUD-TZN,USD-BTC',
-      },
-```
+        type: 'PFI',
+        serviceEndpoint: 'did:web:pfi.mic.com',
+      }
+```   
 
-This is a comma seperated list of source-target currency pairs which a client may choose to use to display following the serviceEndpoint. The PFI has a formal offer protocol but this can be used to accelerate the discovery process without needing to use the offer protocol if there are many PFIs discovered.
+In this case, resolving the DID will return a DID Document with a serviceEndpoint of type "PFI" as above. This could allow registration of one did method to allow discovery (via ION) via another did method (say web) hosted by the PFI.
 
-# Examples
+### Extensions to PFI service endpoints
+
+In future it may be possible to use other types or transports to communicate with a PFI, for example DecentralizedWebNode type. Nte There MUST be only one pfi id service endpoint per document (the did specification will enforce this). 
+
+```json
+      {
+        id:'pfi',
+        type: 'DecentralizedWebNode',
+        serviceEndpoint: 'did:ion:abcd1234',
+      }
+```   
+
+
+## Discovery with ION
+
+One of the uses of the ION did method can be to allow discovery of types of DIDs, in particular PFIs.
+Using a did:ion type of `1669` (this number because: 16=P, 6=F, 9=I) means that all PFIs can advertise themselves in a permissionless and decentralized and uncensorable way using the ION did method.
+
+This does not require that the PFI runs or uses an ION node, or a did:ion method exclusively, as described above the PFI can register a did:ion which has a serviceEndpoint of did:web and then use that to advertise its PFI serviceEndpoint via .well-known/did.json on their website (ie just register their precence with ION once).
+
+
+# Registering a PFI with the ION network
 
 To test out the example code included here, you will need to install the dependencies:
 
@@ -39,14 +62,16 @@ npm install @decentralized-identity/ion-tools
 ```
 
 
-## Sample usage
+## Discovering PFIs
 
 ```node discover.mjs```
 
 This will provide a list of PFIs. This uses a did:ion type of `1669` (this number because: 16=P, 6=F, 9=I) to find all PFIs (and check they have a PFI type serviceEndpoint)
 
-This is example code in javascript which can run in any environment, but could be implemented in any language.
+This is example code in javascript which can run in any environment, but could be implemented in any language. This would typically be used by an app looking for PFIs to transact with.
 
+
+## Registering a PFI
 
 ```node create-and-anchor.mjs```
 
@@ -54,6 +79,12 @@ A PFI will create a did (at least once) and may choose to anchor it. This is exa
 
 This will create a new DID and anchor it permanently to the bitcoin blockchain via sidetree and ION. The DID (including private key) will be saved in a json file in the same directory.
 
+## Registering a PFI uses did:web
 
+You don't have to use ION with your PFI to register its availability, you can instead use this script and register your PFI with a did:web method which is hosted on your website.
+
+```node create-and-anchor-web.mjs```
+
+Similar to the above, but uses a did:web as the sericeEndpoint, which is allowed as did:web is itself a URI.
 
 

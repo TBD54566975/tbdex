@@ -18,14 +18,9 @@ let did = new DID({
     ],
     services: [
       {
-        id: 'domain-1',
-        type: 'LinkedDomains',
-        serviceEndpoint: 'https://foo.example.com'
-      },
-      {
         id:'pfi',
         'type': 'PFI',
-        'serviceEndpoint': 'https://pfi.mic4.com',
+        'serviceEndpoint': 'did:web:pfi.mic4.com',
       },
     ]
   }
