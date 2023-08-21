@@ -168,7 +168,7 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 | `id`        | Y              | The message's ID                                                                          |
 | `threadId`  | Y              | ID for a "thread" of messages between Alice <-> PFI. Set by the first message in a thread |
 | `parentId`  | N              | the ID of the most recent message in a thread. `null` for the first message in a thread   |
-| `createdAt` | Y              | ISO 8601                                                                                  |
+| `timestamp` | Y              | ISO 8601                                                                                  |
 
 
 ### `data`
@@ -382,7 +382,9 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 | `amountSubunits` |           | Y        | The amount of currency expressed in the smallest respective unit |
 | `feeSubunits`    | string    | N        | The amount paid in fees                                          |
 
-> **Note**
+
+> [!NOTE]
+> 
 > Include a section that explains `feeSubunits`. Does `amountSubUnits` _include_ `feeSubunits` or does `amountSubunits + feeSubunits = totalSubunits`?
 
 #### `PaymentInstructions`
