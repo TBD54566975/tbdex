@@ -1,26 +1,66 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tbdex.io/quote.schema.json",
+  "definitions": {
+    "QuoteDetails": {
+      "type": "object",
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "ISO 3166 currency code string"
+        },
+        "amountSubunits": {
+          "type": "string",
+          "description": "The amount of currency expressed in the smallest respective unit"
+        },
+        "feeSubunits": {
+          "type": "string",
+          "description": "The amount paid in fees"
+        }
+      },
+      "required": ["currencyCode", "amountSubunits", "feeSubunits"]
+    },
+    "PaymentInstruction": {
+      "type": "object",
+      "properties": {
+        "link": {
+          "type": "string",
+          "description": "Link to allow Alice to pay PFI, or be paid by the PFI"
+        },
+        "instruction": {
+          "type": "string",
+          "description": "Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI"
+        }
+      }
+    },
+    "PaymentInstructions": {
+      "type": "object",
+      "properties": {
+        "payin": {
+          "$ref": "#/definitions/PaymentInstruction"
+        },
+        "payout": {
+          "$ref": "#/definitions/PaymentInstruction"
+        }
+      }
+    }
+  },
   "type": "object",
-  "required": [
-    "expiryTime",
-    "totalFee",
-    "amount",
-    "paymentInstructions"
-  ],
-  "additionalProperties": false,
   "properties": {
-    "expiryTime": {
-      "type": "string"
+    "expiresAt": {
+      "type": "string",
+      "description": "When this quote expires. Expressed as ISO8601",
+      "format": "date-time"
     },
-    "totalFee": {
-      "type": "string"
+    "base": {
+      "$ref": "#/definitions/QuoteDetails"
     },
-    "amount": {
-      "type": "string"
+    "quote": {
+      "$ref": "#/definitions/QuoteDetails"
     },
     "paymentInstructions": {
-      "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstructions"
+      "$ref": "#/definitions/PaymentInstructions"
     }
-  }
+  },
+  "required": ["expiresAt", "base", "quote", "paymentInstructions"]
 }

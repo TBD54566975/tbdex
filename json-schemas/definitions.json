@@ -6,57 +6,6 @@
     "did": {
       "type": "string",
       "pattern": "^did:([a-z0-9]+):((?:(?:[a-zA-Z0-9._-]|(?:%[0-9a-fA-F]{2}))*:)*((?:[a-zA-Z0-9._-]|(?:%[0-9a-fA-F]{2}))+))((;[a-zA-Z0-9_.:%-]+=[a-zA-Z0-9_.:%-]*)*)(\/[^#?]*)?([?][^#]*)?(#.*)?$"
-    },
-    "paymentMethod": {
-      "type": "object",
-      "required": ["kind"],
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "type": "string"
-        },
-        "fee": {
-          "type": "object"
-        },
-        "requiredPaymentDetails": {
-          "type": "object"
-        }
-      }
-    },
-    "selectedPaymentMethod": {
-      "type": "object",
-      "required": ["kind"],
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "type": "string"
-        },
-        "paymentDetails": {
-          "type": "object"
-        }
-      }
-    },
-    "paymentInstruction": {
-      "type": "object",
-      "properties": {
-        "link": {
-          "type": "string"
-        },
-        "instruction": {
-          "type": "string"
-        }
-      }
-    },
-    "paymentInstructions": {
-      "type": "object",
-      "properties": {
-        "payin": {
-          "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstruction"
-        },
-        "payout": {
-          "$ref": "https://tbdex.io/definitions.json#/definitions/paymentInstruction"
-        }
-      }
     }
   }
 }

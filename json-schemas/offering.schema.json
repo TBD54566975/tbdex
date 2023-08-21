@@ -1,51 +1,91 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tbdex.io/offering.schema.json",
+  "definitions": {
+    "CurrencyDetails": {
+      "type": "object",
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "ISO 3166 currency code string"
+        },
+        "minSubunits": {
+          "type": "string",
+          "description": "Minimum amount of currency that can be requested"
+        },
+        "maxSubunits": {
+          "type": "string",
+          "description": "Maximum amount of currency that can be requested"
+        }
+      },
+      "required": ["currencyCode", "minSubunits", "maxSubunits"]
+    },
+    "PaymentMethod": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "The type of payment method. e.g. BITCOIN_ADDRESS, DEBIT_CARD, etc."
+        },
+        "requiredPaymentDetails": {
+          "type": "object",
+          "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"
+        }
+      },
+      "required": ["kind", "requiredPaymentDetails"]
+    }
+  },
   "type": "object",
-  "required": [
-    "description",
-    "pair",
-    "unitPriceDollars",
-    "minDollars",
-    "maxDollars",
-    "kycRequirements",
-    "payinMethods",
-    "payoutMethods"
-  ],
-  "additionalProperties": false,
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for a given offering"
+    },
     "description": {
-      "type": "string"
+      "type": "string",
+      "description": "Brief description of what is being offered."
     },
-    "pair": {
-      "type": "string"
+    "quoteUnitsPerBaseUnit": {
+      "type": "string",
+      "description": "Number of quote currency units for one base currency unit (i.e 290000 USD for 1 BTC)"
     },
-    "unitPriceDollars": {
-      "type": "string"
+    "baseCurrency": {
+      "$ref": "#/definitions/CurrencyDetails"
     },
-    "baseFeeDollars": {
-      "type": "string"
-    },
-    "minDollars": {
-      "type": "string"
-    },
-    "maxDollars": {
-      "type": "string"
-    },
-    "kycRequirements": {
-      "type": "object"
+    "quoteCurrency": {
+      "$ref": "#/definitions/CurrencyDetails"
     },
     "payinMethods": {
       "type": "array",
       "items": {
-        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentMethod"
+        "$ref": "#/definitions/PaymentMethod"
       }
     },
     "payoutMethods": {
       "type": "array",
       "items": {
-        "$ref": "https://tbdex.io/definitions.json#/definitions/paymentMethod"
+        "$ref": "#/definitions/PaymentMethod"
       }
+    },
+    "vcRequirements": {
+      "type": "object",
+      "description": "PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "ISO8601 formatted string representing the creation time",
+      "format": "date-time"
     }
-  }
+  },
+  "required": [
+    "id",
+    "description",
+    "quoteUnitsPerBaseUnit",
+    "baseCurrency",
+    "quoteCurrency",
+    "payinMethods",
+    "payoutMethods",
+    "vcRequirements",
+    "createdAt"
+  ]
 }
