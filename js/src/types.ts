@@ -4,7 +4,7 @@ import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
 export type Resource = {
   /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
   metadata: ResourceMetadata
-  /** The actual message content */
+  /** The actual resource content */
   data: unknown
   /** signature that verifies that authenticity and integrity of a message */
   signature: string
@@ -31,8 +31,6 @@ export type ResourceKind = 'offering'
  * order to fulfill that offer.
  */
 export type Offering = {
-  /** Unique identifier for a given offering */
-  id: string
   /** Brief description of what is being offered. */
   description: string
   /** Number of quote currency units for one base currency unit (i.e 290000 USD for 1 BTC) */
