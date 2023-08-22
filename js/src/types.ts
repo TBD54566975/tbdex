@@ -63,8 +63,8 @@ export type MessageMetadata = {
   kind: MessageKind
   /** the message id */
   id: string
-  /** ID for a "thread" of messages between Alice <-> PFI. Set by the first message in a thread */
-  threadId: string
+  /** ID for an "exchange" of messages between Alice <-> PFI. Uses the id of the RFQ that initiated the exchange */
+  exchangeId: string
   /** ISO8601 */
   timestamp: string
 }
@@ -79,8 +79,8 @@ export type Rfq = {
   offeringId: string
   /** Amount of quote currency you want to spend in order to receive base currency */
   quoteAmountSubunits: string
-  /** Presentation Submission that fulfills the requirements included in the respective Offering */
-  vcs: string
+  /** JWS of Presentation Submission that fulfills the requirements included in the respective Offering */
+  vcJws: string
   /** Selected payment method that Alice will use to send the listed quote currency to the PFI. */
   payinMethod: SelectedPaymentMethod
 
@@ -91,8 +91,8 @@ export type Rfq = {
 export type SelectedPaymentMethod = {
   /** Type of payment method e.g. BTC_ADDRESS, DEBIT_CARD, MOMO_MPESA */
   kind: string
-  /** An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema */
-  paymentDetails: Record<string, any>
+  /** A JWS of the object containing the properties defined in the respective Offering's requiredPaymentDetails json schema */
+  paymentDetailsJws: string
 }
 
 /**
@@ -135,7 +135,7 @@ export type PaymentInstruction = {
 
 /**
  * Message sent by the PFI to Alice to convey the current status of an order. There can be many OrderStatus
- * messages in a given Thread
+ * messages in a given Exchange
  */
 export type OrderStatus = {
   /** Current status of Order that's being executed (e.g. PROCESSING, COMPLETED, FAILED etc.) */
@@ -146,6 +146,6 @@ export type OrderStatus = {
  * a Close can be sent by Alice or the PFI as a reply to an RFQ or a Quote
  */
 export type Close = {
-  /** an explanation of why the thread is being closed */
+  /** an explanation of why the exchange is being closed */
   reason?: string
 }
