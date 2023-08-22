@@ -42,6 +42,7 @@ class Rfq {
     constructor(rfqOpts: RfqOpts) {
         this.offeringId = rfqOpts.offeringId
         this.quoteAmountSubunits = rfqOpts.quoteAmountSubunits
+        // Should we also support passing in a presentation submission and forming the JWS for the caller?
         this.vcJws = rfqOpts.vcJws
         this.payinMethod = {
             paymentDetailsJws: this.hash(rfqOpts.payinMethod.paymentDetails),
@@ -151,8 +152,11 @@ class Message {
         this.signature = this.hashMe()
     }
 
+    /**
+     * json string -> message object 
+     */
     static fromString(messageString: string) {
-        // validate against json schema
+        // TODO: validate against json schema
         const object = JSON.parse(messageString)
     }
 
