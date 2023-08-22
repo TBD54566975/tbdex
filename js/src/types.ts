@@ -154,6 +154,11 @@ export type PaymentInstruction = {
 }
 
 /**
+ * Message sent by Alice to the PFI to accept a Quote
+ */
+export type Order = {}
+
+/**
  * Message sent by the PFI to Alice to convey the current status of an order. There can be many OrderStatus
  * messages in a given Exchange
  */
