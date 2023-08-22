@@ -1,6 +1,30 @@
 import type { Schema as JsonSchema } from 'ajv'
 import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
 
+export type Resource = {
+  /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
+  metadata: ResourceMetadata
+  /** The actual message content */
+  data: unknown
+  /** signature that verifies that authenticity and integrity of a message */
+  signature: string
+}
+
+export type ResourceMetadata = {
+  /** The PFI's DID */
+  pfi: string
+  /** the resource kind (e.g. Offering) */
+  kind: ResourceKind
+  /** the resource id */
+  id: string
+  /** When the resource was created at. Expressed as ISO8601 */
+  createdAt: string
+  /** When the resource was last updated. Expressed as ISO8601 */
+  updatedAt: string
+}
+
+export type ResourceKind = 'offering'
+
 /**
  * An Offering is used by the PFI to describe a currency pair they have to offer
  * including the requirements, conditions, and constraints in
@@ -23,8 +47,6 @@ export type Offering = {
   payoutMethods: PaymentMethod[]
   /** PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote. */
   vcRequirements: PresentationDefinitionV2
-  /** ISO8601 */
-  createdAt: string
 }
 
 export type CurrencyDetails = {
@@ -65,8 +87,8 @@ export type MessageMetadata = {
   id: string
   /** ID for an "exchange" of messages between Alice <-> PFI. Uses the id of the RFQ that initiated the exchange */
   exchangeId: string
-  /** ISO8601 */
-  timestamp: string
+  /** Message creation time. Expressed as ISO8601 */
+  createdAt: string
 }
 
 export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderStatus' | 'close'
