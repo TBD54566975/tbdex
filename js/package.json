@@ -50,8 +50,11 @@
   },
   "dependencies": {
     "@sphereon/pex-models": "2.0.3",
+    "@web5/common": "0.1.1-alpha-20230823-44789a4",
+    "@web5/crypto": "0.1.6-alpha-20230823-44789a4",
     "ajv": "8.12.0",
-    "typeid-js": "^0.3.0",
+    "typeid-js": "0.3.0",
+    "cbor-x": "1.5.4",
     "ulidx": "2.0.0"
   },
   "devDependencies": {
