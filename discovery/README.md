@@ -6,7 +6,7 @@ This part of the protocol shows how this can be done in a decentralized fashion.
 
 ## Service Endpoints
 
-For a PFI to be discoverable, it must publish a DID Document with a service endpoint of type "PFI" at a minimum (from serviceEndpoints section of DID Document):
+In general it is recommended for a PFI to be discoverable, it SHOULD publish a DID Document with a service endpoint of type "PFI" at a minimum (from serviceEndpoints section of DID Document):
 
 ```json
       {
@@ -16,7 +16,7 @@ For a PFI to be discoverable, it must publish a DID Document with a service endp
       }
 ```    
 
-This will exposes a REST API at the serviceEndpoint which can be used to discover the PFI's capabilities and offers, make RFQs and tranact.
+This will expose a REST API at the serviceEndpoint which can be used to discover the PFI's capabilities and offers, make RFQs and tranact.
 
 ### Service Endpoint options
 
@@ -30,21 +30,9 @@ If it possible to use a did URI as the serviceEndpoint itself, for example:
       }
 ```   
 
-In this case, resolving the DID will return a DID Document with a serviceEndpoint of type "PFI" as above. This could allow registration of one did method to allow discovery (via ION) via another did method (say web) hosted by the PFI.
+In this case, resolving the serviceEndpoint DID should return a DID Document with a serviceEndpoint with an id of "PFI" as above. This could allow registration of one did method to allow discovery (via ION) via another did method (say web) hosted by the PFI.
 
-### Extensions to PFI service endpoints
-
-In future it may be possible to use other types or transports to communicate with a PFI, for example DecentralizedWebNode type. Nte There MUST be only one pfi id service endpoint per document (the did specification will enforce this). 
-
-```json
-      {
-        id:'pfi',
-        type: 'DecentralizedWebNode',
-        serviceEndpoint: 'did:ion:abcd1234',
-      }
-```   
-
-
+   
 ## Discovery with ION
 
 One of the uses of the ION did method can be to allow discovery of types of DIDs, in particular PFIs.
@@ -79,12 +67,12 @@ A PFI will create a did (at least once) and may choose to anchor it. This is exa
 
 This will create a new DID and anchor it permanently to the bitcoin blockchain via sidetree and ION. The DID (including private key) will be saved in a json file in the same directory.
 
-## Registering a PFI uses did:web
+## Registering a PFI that uses did:web
 
 You don't have to use ION with your PFI to register its availability, you can instead use this script and register your PFI with a did:web method which is hosted on your website.
 
 ```node create-and-anchor-web.mjs```
 
-Similar to the above, but uses a did:web as the sericeEndpoint, which is allowed as did:web is itself a URI.
+Similar to the above, but uses a did:web as the serviceEndpoint, which is allowed as did:web is itself a URI.
 
 
