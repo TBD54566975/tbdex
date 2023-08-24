@@ -27,8 +27,7 @@
         },
         "timestamp": {
           "type": "string",
-          "description": "ISO8601 formatted string representing the timestamp",
-          "format": "date-time"
+          "description": "ISO8601 formatted string representing the timestamp"
         }
       },
       "required": ["from", "to", "kind", "id", "threadId", "timestamp"]

@@ -14,8 +14,9 @@ import path from 'node:path'
 import url from 'node:url'
 
 import Ajv from 'ajv'
-import { mkdirp } from 'mkdirp'
 import standaloneCode from 'ajv/dist/standalone/index.js'
+
+import { mkdirp } from 'mkdirp'
 
 import definitions from '../../json-schemas/definitions.json' assert { type: 'json' }
 import resource from '../../json-schemas/resource.schema.json' assert { type: 'json' }

@@ -49,8 +49,7 @@
   "properties": {
     "expiresAt": {
       "type": "string",
-      "description": "When this quote expires. Expressed as ISO8601",
-      "format": "date-time"
+      "description": "When this quote expires. Expressed as ISO8601"
     },
     "base": {
       "$ref": "#/definitions/QuoteDetails"

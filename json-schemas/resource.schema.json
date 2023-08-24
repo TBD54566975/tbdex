@@ -21,12 +21,10 @@
         },
         "createdAt": {
           "type": "string",
-          "format": "date-time",
           "description": "When the resource was created at. Expressed as ISO8601"
         },
         "updatedAt": {
           "type": "string",
-          "format": "date-time",
           "description": "When the resource was last updated. Expressed as ISO8601"
         }
       },

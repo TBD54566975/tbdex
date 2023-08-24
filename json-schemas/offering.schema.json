@@ -73,8 +73,7 @@
     },
     "createdAt": {
       "type": "string",
-      "description": "ISO8601 formatted string representing the creation time",
-      "format": "date-time"
+      "description": "ISO8601 formatted string representing the creation time"
     }
   },
   "required": [
