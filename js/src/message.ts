@@ -15,11 +15,13 @@ import { Rfq, Quote, Order, OrderStatus, Close } from './message-kinds/index.js'
 
 type MessageKindClass = Rfq | Quote | Order | OrderStatus | Close
 
-type MessageOptions = {
-  metadata: Omit<MessageMetadata, 'id' |'kind' | 'createdAt' | 'exchangeId'> & { exchangeId?: string }
-  data: MessageKindClass
-}
+type MetadataOptions = Omit<MessageMetadata, 'id' |'kind' | 'createdAt'>
 
+type MessageOptions<T extends MessageKindClass> = {
+  data: T
+  metadata: T extends Rfq ? Omit<MetadataOptions, 'exchangeId'> : MetadataOptions
+  private?: T extends Rfq ? Record<string, any> : never
+}
 
 export class Message {
   private message: Partial<MessageModel>
@@ -53,7 +55,7 @@ export class Message {
     }
   }
 
-  static create(options: MessageOptions) {
+  static create<T extends MessageKindClass>(options: MessageOptions<T>) {
     const metadata: Partial<MessageMetadata> = {
       ...options.metadata,
       id        : typeid(options.data.kind).toString(),
@@ -61,10 +63,8 @@ export class Message {
       createdAt : new Date().toISOString()
     }
 
-    if (!options.metadata.exchangeId && options.data.kind === 'rfq') {
+    if (options.data.kind === 'rfq') {
       metadata.exchangeId = metadata.id
-    } else {
-      throw new Error('exchangeId is required')
     }
 
     const message: Partial<MessageModel> = {
