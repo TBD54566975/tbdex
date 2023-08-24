@@ -20,9 +20,10 @@ const rfq = new Rfq({
 })
 
 const message = Message.create({
-  metadata: {
-    from : 'did:ex:alice',
-    to   : 'did:ex:pfi',
+  data     : rfq,
+  metadata : {
+    from : 'okee',
+    to   : 'woohoo'
   },
-  data: rfq,
+  private: {}
 })
