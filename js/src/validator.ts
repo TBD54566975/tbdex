@@ -27,7 +27,7 @@ function handleValidationError(errors: ErrorObject[]) {
   const [errorObj]: ErrorObject[] = errors
   let { instancePath, message, params } = errorObj
 
-  instancePath ||= 'tbDEXMessage'
+  instancePath ||= 'message'
 
   // if an error occurs for a property with an enum type, the default error is "must have one of the allowed types."
   // which is... unhelpful. `params.allowedValues` includes the allowed values. add this to the message if it exists
