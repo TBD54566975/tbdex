@@ -1,7 +1,7 @@
 import type { Schema as JsonSchema } from 'ajv'
 import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
 
-export type Resource = {
+export type ResourceModel = {
   /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
   metadata: ResourceMetadata
   /** The actual resource content */
@@ -30,7 +30,7 @@ export type ResourceKind = 'offering'
  * including the requirements, conditions, and constraints in
  * order to fulfill that offer.
  */
-export type Offering = {
+export type OfferingModel = {
   /** Brief description of what is being offered. */
   description: string
   /** Number of quote currency units for one base currency unit (i.e 290000 USD for 1 BTC) */
@@ -63,7 +63,7 @@ export type PaymentMethod = {
   requiredPaymentDetails: JsonSchema
 }
 
-export type Message = {
+export type MessageModel = {
   /** The metadata object contains fields about the message and is present in every tbdex message. */
   metadata: MessageMetadata
   /** The actual message content */
@@ -94,13 +94,13 @@ export type MessageSignature = string
 export type Private = Record<string, any>
 
 
-export type Rfq = {
+export type RfqModel = {
   /** Offering which Alice would like to get a quote for */
   offeringId: string
   /** Amount of quote currency you want to spend in order to receive base currency */
   quoteAmountSubunits: string
-  /** JWS of Presentation Submission that fulfills the requirements included in the respective Offering */
-  vcJws: string
+  /** Presentation Submission VP that fulfills the requirements included in the respective Offering */
+  vcs: string
   /** Selected payment method that Alice will use to send the listed quote currency to the PFI. */
   payinMethod: SelectedPaymentMethod
 
@@ -111,15 +111,15 @@ export type Rfq = {
 export type SelectedPaymentMethod = {
   /** Type of payment method e.g. BTC_ADDRESS, DEBIT_CARD, MOMO_MPESA */
   kind: string
-  /** A JWS of the object containing the properties defined in the respective Offering's requiredPaymentDetails json schema */
-  paymentDetailsJws: string
+  /** An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema */
+  paymentDetails: Record<string, any>
 }
 
 /**
  * Message sent by the PFI in response to an RFQ. Includes a locked-in price that the PFI is willing to honor until
  * the quote expires
  */
-export type Quote = {
+export type QuoteModel = {
   /** When this quote expires. Expressed as ISO8601 */
   expiresAt: string
   /** the amount of base currency that Alice will receive */
@@ -156,13 +156,13 @@ export type PaymentInstruction = {
 /**
  * Message sent by Alice to the PFI to accept a Quote
  */
-export type Order = {}
+export type OrderModel = {}
 
 /**
  * Message sent by the PFI to Alice to convey the current status of an order. There can be many OrderStatus
  * messages in a given Exchange
  */
-export type OrderStatus = {
+export type OrderStatusModel = {
   /** Current status of Order that's being executed (e.g. PROCESSING, COMPLETED, FAILED etc.) */
   orderStatus: string
 }
@@ -170,7 +170,8 @@ export type OrderStatus = {
 /**
  * a Close can be sent by Alice or the PFI as a reply to an RFQ or a Quote
  */
-export type Close = {
+export type CloseModel = {
   /** an explanation of why the exchange is being closed */
   reason?: string
 }
+

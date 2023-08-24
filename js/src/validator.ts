@@ -3,20 +3,17 @@ import type { ErrorObject } from 'ajv'
 import * as compiledValidators from '../generated/compiled-validators.js'
 
 /**
- * 2-phased validation. validates the outer message first and then validates the body based on the value of `payload.type`
+ * validates the payload against a json schema identified by name
  * @param payload - the payload to validate
  */
-export function validateMessage(payload: any): void {
-  let validateFn = (compiledValidators as any)['tbdexMessage']
-  validateFn(payload)
+export function validate(payload: any, schemaName: string): void {
+  let validateFn = (compiledValidators as any)[schemaName]
 
-  if (validateFn.errors) {
-    handleValidationError(validateFn.errors)
+  if (!validateFn) {
+    throw new Error(`no validator found for ${schemaName}`)
   }
 
-  // select the appropriate validator based on the value of `payload.type`
-  validateFn = (compiledValidators as any)[payload['type']]
-  validateFn(payload['body'])
+  validateFn(payload)
 
   if (validateFn.errors) {
     handleValidationError(validateFn.errors)
@@ -36,7 +33,5 @@ function handleValidationError(errors: ErrorObject[]) {
   // which is... unhelpful. `params.allowedValues` includes the allowed values. add this to the message if it exists
   message = params.allowedValues ? `${message} - ${params.allowedValues.join(', ')}` : message
 
-  throw new SchemaValidationError(`${instancePath}: ${message}`)
+  throw new Error(`${instancePath}: ${message}`)
 }
-
-export class SchemaValidationError extends Error { }

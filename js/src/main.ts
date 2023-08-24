@@ -1,3 +1,5 @@
+export * from './resource-kinds/index.js'
+export * from './message-kinds/index.js'
+export * from './resource.js'
+export * from './message.js'
 export * from './types.js'
-export * from './validator.js'
-export * from './dwn-protocol-definitions.js'
