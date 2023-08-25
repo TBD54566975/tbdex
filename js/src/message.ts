@@ -159,7 +159,7 @@ export class Message {
     const base64urlEncodedJwsPayload = Convert.object(jwsPayload).toBase64Url()
 
     const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
-    const toSignBytes = new TextEncoder().encode(toSign)
+    const toSignBytes = Convert.string(toSign).toUint8Array()
 
     const { signer, options } = signers[privateKeyJwk.alg]
     const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk })
