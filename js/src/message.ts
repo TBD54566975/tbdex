@@ -1,3 +1,4 @@
+import type { PrivateKeyJwk, CryptoAlgorithm, Web5Crypto } from '@web5/crypto'
 import type {
   OrderStatusModel,
   MessageMetadata,
@@ -9,7 +10,10 @@ import type {
 } from './types.js'
 
 import { typeid } from 'typeid-js'
+import { Convert } from '@web5/common'
+import { EcdsaAlgorithm, EdDsaAlgorithm, Jose } from '@web5/crypto'
 
+import { hash } from './crypto.js'
 import { validate } from './validator.js'
 import { Rfq, Quote, Order, OrderStatus, Close } from './message-kinds/index.js'
 
@@ -22,13 +26,30 @@ type MessageOptions<T extends MessageKindClass> = {
   private?: T extends Rfq ? Record<string, any> : never
 }
 
+type SignerValue<T extends Algorithm> = {
+  signer: CryptoAlgorithm,
+  options?: T
+}
+
+const signers: { [alg: string]: SignerValue<Web5Crypto.EcdsaOptions | Web5Crypto.EdDsaOptions> } = {
+  'ES256K': {
+    signer  : new EcdsaAlgorithm(),
+    options : { name: 'secp256k1', hash: 'SHA-256' }
+  },
+  'EdDSA': {
+    signer  : new EdDsaAlgorithm(),
+    options : { name: 'EdDSA' }
+  }
+}
+
 export class Message {
   private message: Partial<MessageModel>
   private _data: MessageKindClass
 
   constructor(jsonMessage: Partial<MessageModel>, data?: MessageKindClass) {
-    Message.validate(jsonMessage)
     this.message = jsonMessage
+
+    // Message.validate(jsonMessage)
 
     if (data) {
       this._data = data
@@ -105,9 +126,11 @@ export class Message {
    * @param jsonMessage - the message to validate
    */
   static validate(jsonMessage: any): void {
+    // validate the message structure
     validate(jsonMessage, 'message')
 
     // TODO: decide whether validating the data property should go into the respective message kind classes
+    // validate the value of `data`
     validate(jsonMessage['data'], jsonMessage['metadata']['kind'])
   }
 
@@ -118,11 +141,33 @@ export class Message {
     // TODO: implement
   }
 
+
   /**
    * signs the message and sets the signature property
+   * @param privateKeyJwk - the key to sign with
+   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
+   *              when resolving the sender's DID
    */
-  sign(): void {
-    // TODO: implement
+  async sign(privateKeyJwk: PrivateKeyJwk, kid: string): Promise<void> {
+    const jwsHeader = { alg: privateKeyJwk.alg, kid }
+    const jwsPayload = {
+      metadata : hash(this.metadata),
+      data     : hash(this.data.toJSON())
+    }
+
+    const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
+    const base64urlEncodedJwsPayload = Convert.object(jwsPayload).toBase64Url()
+
+    const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
+    const toSignBytes = new TextEncoder().encode(toSign)
+
+    const { signer, options } = signers[privateKeyJwk.alg]
+    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk })
+
+    const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
+    const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
+
+    this.message.signature = `${toSign}.${base64UrlEncodedSignature}`
   }
 
   /** the message id */
@@ -153,6 +198,11 @@ export class Message {
   /** Message creation time. Expressed as ISO8601 */
   get createdAt() {
     return this.message.metadata.createdAt
+  }
+
+  /** The metadata object contains fields about the message and is present in every tbdex message. */
+  get metadata() {
+    return this.message.metadata
   }
 
   /** the message kind's content */

@@ -6,7 +6,7 @@
       "ES6"
     ],
     "allowJs": true,
-    "target": "es6",
+    "target": "esnext",
     "module": "esnext",
     "outDir": "dist/esm",
     "declaration": true,
