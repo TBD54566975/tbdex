@@ -49,6 +49,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any' : 'off',
     '@typescript-eslint/semi'            : ['error', 'never'],
+    '@typescript-eslint/ban-ts-comment'  : 'off',
     'no-trailing-spaces'                 : ['error'],
   }
 }
