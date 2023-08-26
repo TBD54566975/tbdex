@@ -268,22 +268,22 @@ Closes the thread. Indicates that Alice is no longer interested
 
 ---
 
-## Get Thread
+## Get Exchanges
 
 ### Description
-Retrieves the thread specified by ID and messageType
+Retrieves the messages specified by ID and messageType
 
 ### Authentication
-N/A
+Uses DID authn via Bearer token in header.
 
 ### Endpoint
-`GET /threads/:id`
+`GET /exchanges/:id`
 
 
 ### Query Params
 | Param         | Description                   |
 | ------------- | ----------------------------- |
-| `messageType` | filters the messages returned |
+| `messageType` | filters the messages returned  |
 
 
 ### Response
@@ -293,28 +293,36 @@ N/A
 | `200: OK`          | `{ data: TbdexMessage[] }` |
 | `400: Bad Request` | `{ errors: Error[] }`      |
 | `404: Not Found`   | N/A                        |
+| `403: Forbidden`   | N/A                        |
 
 ---
 
-## List Threads
+## List Exchanges
 
 ### Description
-Returns an array containing IDs of threads started by the requesting DID
+Returns an array containing IDs of exchanges started by the requesting DID
+
+### Authentication
+Uses DID authn via Bearer token in header.
 
 ### Endpoint
-`GET /threads`
+`GET /exchanges`
 
 ### Response
 | Status             | Body                  |
 | ------------------ | --------------------- |
-| `200: OK.     `    | `{ data: string[]}`   |
+| `200: OK.     `    | `{ data: tbdexMessage[][] }`   | 
 | `400: Bad Request` | `{ errors: Error[] }` |
+| `404: Not Found`   | N/A                   |
+| `403: Forbidden`   | N/A                   |
 
 ### Query Params
 
 | Param | Description      |
 | ----- | ---------------- |
 | sort  | field to sort by |
+| id  | exchange id(s) to return |
+
 
 
 # References
