@@ -26,7 +26,7 @@ Version: Draft
     - [Authorization](#authorization)
     - [Query Params](#query-params-1)
     - [Response](#response)
-- [Threads](#threads)
+- [Exchanges](#exchanges)
   - [Submit RFQ](#submit-rfq)
     - [Endpoint](#endpoint-1)
     - [Authentication](#authentication-1)
@@ -49,14 +49,15 @@ Version: Draft
     - [Request Body](#request-body-1)
     - [Response](#response-4)
     - [Errors](#errors-2)
-  - [Get Thread](#get-thread)
+  - [Get Exchange (DESCOPED)](#get-exchange-descoped)
     - [Description](#description-2)
     - [Authentication](#authentication-2)
     - [Endpoint](#endpoint-5)
     - [Query Params](#query-params-2)
     - [Response](#response-5)
-  - [List Threads](#list-threads)
+  - [List Exchanges](#list-exchanges)
     - [Description](#description-3)
+    - [Authentication](#authentication-3)
     - [Endpoint](#endpoint-6)
     - [Response](#response-6)
     - [Query Params](#query-params-3)
@@ -170,13 +171,13 @@ No authorization required. Offerings are publicly accessible
 
 ---
 
-# Threads
-A thread is a series of linked tbDEX messages between Alice and a PFI for a single exchange. A thread can be created by submitting an RFQ.
+# Exchanges
+An exchange is a series of linked tbDEX messages between Alice and a PFI for a single exchange. An exchange can be created by submitting an RFQ.
 
 ## Submit RFQ
 
 ### Endpoint
-`POST /threads/:thread_id/rfq`
+`POST /exchanges/:exchange_id/rfq`
 
 ### Authentication
 Refer to [Signature Verification Section]() of the tbDEX spec  
@@ -194,17 +195,17 @@ No Authorization required to submit an RFQ
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description            |
-| ------ | ---------------------- |
-| 400    | Validation error(s)    |
-| 400    | Failed Signature Check |
-| 404    | Thread not found       |
-| 409    | RFQ already exists     |
-| 409    | Thread already exists  |
+| Status | Description             |
+| ------ | ----------------------- |
+| 400    | Validation error(s)     |
+| 400    | Failed Signature Check  |
+| 404    | Exchange not found      |
+| 409    | RFQ already exists      |
+| 409    | Exchange already exists |
 
 ## Get Quote
 ### Endpoint
-`GET /threads/:thread_id/?messageType=quote`
+`GET /exchanges/:exchange_id/?messageType=quote`
 
 ### Response
 | Status             | Body                              |
@@ -219,7 +220,7 @@ No Authorization required to submit an RFQ
 ## Submit Order
 
 ### Endpoint
-`POST /threads/:thread_id/order`
+`POST /exchanges/:exchange_id/order`
 
 ### Order Request Body
 > [!IMPORTANT]
@@ -233,20 +234,20 @@ No Authorization required to submit an RFQ
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description                                                             |
-| ------ | ----------------------------------------------------------------------- |
-| 400    | Failed Signature Check                                                  |
-| 404    | Thread not found                                                        |
-| 409    | Order already exists                                                    |
-| 409    | Order not allowed (e.g. bc thread was closed or bc no quote exists yet) |
+| Status | Description                                                               |
+| ------ | ------------------------------------------------------------------------- |
+| 400    | Failed Signature Check                                                    |
+| 404    | Exchange not found                                                        |
+| 409    | Order already exists                                                      |
+| 409    | Order not allowed (e.g. bc exchange was closed or bc no quote exists yet) |
 
 ## Submit Close
 
 ### Description
-Closes the thread. Indicates that Alice is no longer interested
+Closes the exchange. Indicates that Alice is no longer interested
 
 ### Endpoint
-`POST /threads/:thread_id/close`
+`POST /exchanges/:exchange_id/close`
 
 ### Request Body
 > [!IMPORTANT]
@@ -263,7 +264,7 @@ Closes the thread. Indicates that Alice is no longer interested
 | Status | Description            |
 | ------ | ---------------------- |
 | 400    | Failed Signature Check |
-| 404    | Thread not found       |
+| 404    | Exchange not found     |
 | 409    | Close not allowed      |
 
 ---
@@ -283,7 +284,7 @@ Uses DID authn via Bearer token in header.
 ### Query Params
 | Param         | Description                   |
 | ------------- | ----------------------------- |
-| `messageType` | filters the messages returned  |
+| `messageType` | filters the messages returned |
 
 
 ### Response
@@ -309,19 +310,19 @@ Uses DID authn via Bearer token in header.
 `GET /exchanges`
 
 ### Response
-| Status             | Body                  |
-| ------------------ | --------------------- |
-| `200: OK.     `    | `{ data: { string: tbdexMessage[] } }`   | 
-| `400: Bad Request` | `{ errors: Error[] }` |
-| `404: Not Found`   | N/A                   |
-| `403: Forbidden`   | N/A                   |
+| Status             | Body                                   |
+| ------------------ | -------------------------------------- |
+| `200: OK.     `    | `{ data: { string: tbdexMessage[] } }` |
+| `400: Bad Request` | `{ errors: Error[] }`                  |
+| `404: Not Found`   | N/A                                    |
+| `403: Forbidden`   | N/A                                    |
 
 ### Query Params
 
-| Param | Description      |
-| ----- | ---------------- |
+| Param | Description                    |
+| ----- | ------------------------------ |
 | sort  | field to the tbdex messages by |
-| id  | exchange id(s) to return |
+| id    | exchange id(s) to return       |
 
 
 

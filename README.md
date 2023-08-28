@@ -59,6 +59,9 @@ tbDEX Resources are published by PFIs for anyone to consume and generally used a
 ## Resource Kinds
 
 ### `Offering`
+
+> [!WARNING] > Offering is currently out of date. 
+
 An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
@@ -93,47 +96,103 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 #### Example
 ```json
 {
-  "id": "tbdex:offering:123456",
-  "description": "Buy BTC with USD!",
-  "quoteUnitsPerBaseUnit": "29000",
-  "baseCurrency": {
-    "currencyCode" : "BTC",
+  "metadata": {
+    "from": "did:key:z6MkvejBwUL7ovyLKHMjnJUgpby7zHo81f4GJvqbTk18E3Z6",
+    "id": "offering_01h8ykxvc2fz7s36rpdpzhat29",
+    "kind": "offering",
+    "createdAt": "2023-08-28T17:44:08.834Z"
   },
-  "quoteCurrency":  {
-    "currencyCode" : "USD",
-    "minSubunits"  : "1000",
-    "maxSubunits"  : "1000"
-  },
-  "vcRequirements": "eyJhb...MIDw",
-  "payinMethods": [{
-    "kind": "DEBIT_CARD",
-    "requiredPaymentDetails": "eyJhb...MIDw",
-    "feeSubunits": "100"
-  },
-  {
-    "kind": "SQUARE_PAY",
-    "feeSubunits": "100"
-  }],
-  "payoutMethods": [{
-    "kind": "BTC_ADDRESS",
-    "requiredPaymentDetails": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "BTC Required Payment Details",
-      "type": "object",
-      "required": [
-        "btcAddress"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "btcAddress": {
-	      "description": "The address you wish to receive BTC in",
-	      "type": "string"
-	      }
+  "data": {
+    "description": "Selling BTC for USD",
+    "baseCurrency": {
+      "currencyCode": "BTC",
+      "maxSubunits": "99952611"
+    },
+    "quoteCurrency": {
+      "currencyCode": "USD"
+    },
+    "quoteUnitsPerBaseUnit": "26043.40",
+    "payinMethods": [
+      {
+        "kind": "DEBIT_CARD",
+        "requiredPaymentDetails": {
+          "$schema": "http://json-schema.org/draft-07/schema",
+          "type": "object",
+          "properties": {
+            "cardNumber": {
+              "type": "string",
+              "description": "The 16-digit debit card number",
+              "minLength": 16,
+              "maxLength": 16
+            },
+            "expiryDate": {
+              "type": "string",
+              "description": "The expiry date of the card in MM/YY format",
+              "pattern": "^(0[1-9]|1[0-2])\\/([0-9]{2})$"
+            },
+            "cardHolderName": {
+              "type": "string",
+              "description": "Name of the cardholder as it appears on the card"
+            },
+            "cvv": {
+              "type": "string",
+              "description": "The 3-digit CVV code",
+              "minLength": 3,
+              "maxLength": 3
+            }
+          },
+          "required": [
+            "cardNumber",
+            "expiryDate",
+            "cardHolderName",
+            "cvv"
+          ],
+          "additionalProperties": false
+        }
       }
+    ],
+    "payoutMethods": [
+      {
+        "kind": "BTC_ADDRESS",
+        "requiredPaymentDetails": {
+          "$schema": "http://json-schema.org/draft-07/schema",
+          "type": "object",
+          "properties": {
+            "btcAddress": {
+              "type": "string",
+              "description": "your Bitcoin wallet address"
+            }
+          },
+          "required": [
+            "btcAddress"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "vcRequirements": {
+      "id": "7ce4004c-3c38-4853-968b-e411bafcd945",
+      "input_descriptors": [
+        {
+          "id": "bbdb9b7c-5754-4f46-b63b-590bada959e0",
+          "constraints": {
+            "fields": [
+              {
+                "path": [
+                  "$.type"
+                ],
+                "filter": {
+                  "type": "string",
+                  "const": "YoloCredential"
+                }
+              }
+            ]
+          }
+        }
+      ]
     }
-    "feeSubunits": "100"
-  }],
-  "createdAt": "2023-06-23T11:23:41Z"
+  },
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZlakJ3VUw3b3Z5TEtITWpuSlVncGJ5N3pIbzgxZjRHSnZxYlRrMThFM1o2I3o2TWt2ZWpCd1VMN292eUxLSE1qbkpVZ3BieTd6SG84MWY0R0p2cWJUazE4RTNaNiJ9..NFBgiiZucnRS5GPI2V1X_z52oNt3TbMuRv1MupF25PhstzifrB39yxZs8SK-9FQtYzDraycy-nKn6RoHxqodDw"
 }
 ```
 
@@ -160,15 +219,15 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field        | Required (Y/N) | Description                                                                                 |
-| ------------ | -------------- | ------------------------------------------------------------------------------------------- |
-| `from`       | Y              | The sender's DID                                                                            |
-| `to`         | Y              | the recipient's DID                                                                         |
-| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                          |
-| `id`         | Y              | The message's ID                                                                            |
-| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in a thread |
-| `parentId`   | N              | the ID of the most recent message in a thread. `null` for the first message in a thread     |
-| `timestamp`  | Y              | ISO 8601                                                                                    |
+| Field        | Required (Y/N) | Description                                                                                       |
+| ------------ | -------------- | ------------------------------------------------------------------------------------------------- |
+| `from`       | Y              | The sender's DID                                                                                  |
+| `to`         | Y              | the recipient's DID                                                                               |
+| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                |
+| `id`         | Y              | The message's ID                                                                                  |
+| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange    |
+| `parentId`   | N              | the ID of the most recent message in a exchange. Not present for the first message in an exchange |
+| `timestamp`  | Y              | ISO 8601                                                                                          |
 
 
 ### `data`
@@ -357,9 +416,9 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 
 a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 
-| Field    | Data Type | Required | Description                                      |
-| -------- | --------- | -------- | ------------------------------------------------ |
-| `reason` | string    | N        | an explanation of why the thread is being closed |
+| Field    | Data Type | Required | Description                                        |
+| -------- | --------- | -------- | -------------------------------------------------- |
+| `reason` | string    | N        | an explanation of why the exchange is being closed |
 
 > **Note**
 > Include a section that explains rules around when a Close can/can't be sent. Can Alice close after having sent an Order message, effectively accepting the quote?
@@ -455,7 +514,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 
 
 > **Note**
-> There can be many `OrderStatus` messages in a tbdex thread. 1 for every status change that a PFI wants to inform Alice of.
+> There can be many `OrderStatus` messages in a tbdex exchange. 1 for every status change that a PFI wants to inform Alice of.
 
 | field         | data type | required | description                                   |
 | ------------- | --------- | -------- | --------------------------------------------- |
