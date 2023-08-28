@@ -1,38 +1,59 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://tbdex.io/message.schema.json",
-    "type": "object",
-    "required": ["id", "contextId", "from", "to", "type", "body", "createdTime"],
-    "additionalProperties": false,
-    "properties": {
-      "id": {
-        "type": "string",
-        "description": "The message ID"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "MessageMetadata": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "https://tbdex.io/definitions.json#/definitions/did",
+          "description": "The sender's DID"
+        },
+        "to": {
+          "$ref": "https://tbdex.io/definitions.json#/definitions/did",
+          "description": "The recipient's DID"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["rfq", "quote", "order", "orderStatus", "close"],
+          "description": "The message kind (e.g. rfq, quote)"
+        },
+        "id": {
+          "type": "string",
+          "description": "The message ID"
+        },
+        "exchangeId": {
+          "type": "string",
+          "description": "ID for a 'thread' of messages between Alice <-> PFI. Set by the first message in a thread"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO8601 formatted string representing the timestamp"
+        }
       },
-      "contextId": {
-        "type": "string",
-        "description": "Set by the first message in a thread. A message thread is defined as an initial message and its associated replies."
-      },
-      "from": {
-        "$ref": "https://tbdex.io/definitions.json#/definitions/did",
-        "description": "The sender's DID"
-      },
-      "to": {
-        "$ref": "https://tbdex.io/definitions.json#/definitions/did",
-        "description": "The recipient's DID"
-      },
-      "type": {
-        "enum": ["offering", "rfq", "quote", "order", "orderStatus"],
-        "description": "The specific message type. Any of the message types documented under the Message Types section are considered valid"
-      },
-      "body": {
-        "type": "object",
-        "description": "The actual message content. The fields within `body` must adhere to the fields expected for the given message type"
-      },
-      "createdTime": {
-        "type": "string",
-        "description": "The creation time of the message. Expressed as ISO8601"
-      }
+      "required": ["from", "to", "kind", "id", "exchangeId", "createdAt"]
+    },
+    "Private": {
+      "type": "object",
+      "description": "An ephemeral JSON object used to transmit sensitive data (e.g. PII)"
     }
-  }
-  
+  },
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "$ref": "#/definitions/MessageMetadata"
+    },
+    "data": {
+      "type": "object",
+      "description": "The actual message content"
+    },
+    "signature": {
+      "type": "string",
+      "description": "Signature that verifies the authenticity and integrity of a message"
+    },
+    "private": {
+      "$ref": "#/definitions/Private"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["metadata", "data", "signature"]
+}

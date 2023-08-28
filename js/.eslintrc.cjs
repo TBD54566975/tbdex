@@ -32,7 +32,9 @@ module.exports = {
       'single',
       { 'allowTemplateLiterals': true }
     ],
-    'indent'                            : ['error', 2],
+    'indent': ['error', 2, {
+      'SwitchCase': 1
+    }],
     'no-unused-vars'                    : 'off',
     'prefer-const'                      : 'off',
     '@typescript-eslint/no-unused-vars' : [
@@ -47,6 +49,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any' : 'off',
     '@typescript-eslint/semi'            : ['error', 'never'],
+    '@typescript-eslint/ban-ts-comment'  : 'off',
     'no-trailing-spaces'                 : ['error'],
   }
 }
