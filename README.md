@@ -12,11 +12,15 @@ Version: Draft
 
 > [!WARNING]
 >
-> This repo is currently under construction 🚧. The protocol specified in this README and the [RESTful API specification](./rest-api) are up to date but the [`js`](./js) lib is not. We'll be moving that to its own repo within the coming days. This repo will be repurposed to house specifications only. 
+> This repo is currently under construction 🚧.
 
 
 # Table of Contents <!-- omit in toc -->
 - [Resources](#resources)
+  - [Fields](#fields)
+    - [`metadata`](#metadata)
+    - [`data`](#data)
+    - [`signature`](#signature)
   - [Resource Kinds](#resource-kinds)
     - [`Offering`](#offering)
       - [`CurrencyDetails`](#currencydetails)
@@ -24,12 +28,12 @@ Version: Draft
       - [Example](#example)
     - [`Reputation`](#reputation)
 - [Messages](#messages)
-  - [Fields](#fields)
-    - [`metadata`](#metadata)
-    - [`data`](#data)
+  - [Fields](#fields-1)
+    - [`metadata`](#metadata-1)
+    - [`data`](#data-1)
     - [`private`](#private)
       - [Example Usage in RFQ message](#example-usage-in-rfq-message)
-    - [`signature`](#signature)
+    - [`signature`](#signature-1)
       - [Header](#header)
         - [Supported `alg`s](#supported-algs)
       - [Payload](#payload)
@@ -56,19 +60,42 @@ Version: Draft
 # Resources
 tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process. They are not part of the message exchange, i.e Alice cannot reply to a Resource.
 
+## Fields
+All tbdex resources are JSON objects which can include the following top-level properties:
+
+| Field       | Required (Y/N) | Description                                                           |
+| ----------- | -------------- | --------------------------------------------------------------------- |
+| `metadata`  | Y              | An object containing fields _about_ the resource                      |
+| `data`      | Y              | The actual resource content (e.g. an offering)                        |
+| `signature` | Y              | signature that verifies the authenticity and integrity of the message |
+
+### `metadata`
+The `metadata` object contains fields _about_ the message and is present in _every_ tbdex resource. 
+
+
+| Field       | Required (Y/N) | Description                                 |
+| ----------- | -------------- | ------------------------------------------- |
+| `from`      | Y              | The authors's DID                           |
+| `kind`      | Y              | the `data` property's type. e.g. `offering` |
+| `id`        | Y              | The resource's ID                           |
+| `createdAt` | Y              | ISO 8601 timestamp                          |
+| `updatedAt` | N              | ISO 8601 timestamp                          |
+
+
+### `data`
+The actual resource content. This will _always_ be a JSON object. The [Resource Kinds section](#resource-kinds) specifies the content for each individual resource type
+
+### `signature`
+The `signature` property's value is a compact [JWS](https://datatracker.ietf.org/doc/html/rfc7515).
 ## Resource Kinds
 
 ### `Offering`
-
-> [!WARNING] > Offering is currently out of date. 
-
 An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
 
 | field                   | data type                                                                                                | required | description                                                                                                                          |
 | ----------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`                    | string                                                                                                   | Y        | Unique identifier for this offering                                                                                                  |
 | `description`           | string                                                                                                   | Y        | Brief description of what is being offered.                                                                                          |
 | `quoteUnitsPerBaseUnit` | string                                                                                                   | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
 | `baseCurrency`          | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is selling.                                                                                  |
