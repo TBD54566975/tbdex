@@ -51,7 +51,13 @@ export class Resource {
    * @returns {Resource}
    */
   static async parse(payload: ResourceModel | string) {
-    let jsonResource: ResourceModel = typeof payload === 'string' ? JSON.parse(payload) : payload
+    let jsonResource: ResourceModel
+    try {
+      jsonResource = typeof payload === 'string' ? JSON.parse(payload) : payload
+    } catch(e) {
+      throw new Error(`parse: Failed to parse resource. Error: ${e.message}`)
+    }
+
     await Resource.verify(jsonResource)
 
     return new Resource(jsonResource)

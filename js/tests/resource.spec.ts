@@ -126,7 +126,7 @@ describe('Resource', () => {
         await Resource.parse(';;;)_')
         expect.fail()
       } catch(e) {
-        expect(e.message).to.include('not valid JSON')
+        expect(e.message).to.include('Failed to parse resource')
       }
     })
 

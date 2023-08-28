@@ -72,7 +72,13 @@ export class Message {
    * @returns {Message}
    */
   static async parse(message: MessageModel | string) {
-    let jsonMessage: MessageModel = typeof message === 'string' ? JSON.parse(message): message
+    let jsonMessage: MessageModel
+    try {
+      jsonMessage = typeof message === 'string' ? JSON.parse(message): message
+    } catch(e) {
+      throw new Error(`parse: Failed to parse message. Error: ${e.message}`)
+    }
+
     await Message.verify(jsonMessage)
 
     return new Message(jsonMessage)

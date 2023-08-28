@@ -128,7 +128,7 @@ describe('Message', () => {
         await Message.parse(';;;)_')
         expect.fail()
       } catch(e) {
-        expect(e.message).to.include('not valid JSON')
+        expect(e.message).to.include('Failed to parse message')
       }
     })
 
