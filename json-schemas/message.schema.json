@@ -21,16 +21,16 @@
           "type": "string",
           "description": "The message ID"
         },
-        "threadId": {
+        "exchangeId": {
           "type": "string",
           "description": "ID for a 'thread' of messages between Alice <-> PFI. Set by the first message in a thread"
         },
-        "timestamp": {
+        "createdAt": {
           "type": "string",
           "description": "ISO8601 formatted string representing the timestamp"
         }
       },
-      "required": ["from", "to", "kind", "id", "threadId", "timestamp"]
+      "required": ["from", "to", "kind", "id", "exchangeId", "createdAt"]
     },
     "Private": {
       "type": "object",
@@ -54,5 +54,6 @@
       "$ref": "#/definitions/Private"
     }
   },
+  "additionalProperties": false,
   "required": ["metadata", "data", "signature"]
 }

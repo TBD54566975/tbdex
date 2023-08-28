@@ -11,8 +11,8 @@ export type ResourceModel = {
 }
 
 export type ResourceMetadata = {
-  /** The PFI's DID */
-  pfi: string
+  /** The author's DID */
+  from: string
   /** the resource kind (e.g. Offering) */
   kind: ResourceKind
   /** the resource id */
@@ -20,7 +20,7 @@ export type ResourceMetadata = {
   /** When the resource was created at. Expressed as ISO8601 */
   createdAt: string
   /** When the resource was last updated. Expressed as ISO8601 */
-  updatedAt: string
+  updatedAt?: string
 }
 
 export type ResourceKind = 'offering'
@@ -51,9 +51,9 @@ export type CurrencyDetails = {
   /** ISO 3166 currency code string */
   currencyCode: string
   /** Minimum amount of currency that can be requested */
-  minSubunits: string
+  minSubunits?: string
   /** Maximum amount of currency that can be requested */
-  maxSubunits: string
+  maxSubunits?: string
 }
 
 export type PaymentMethod = {

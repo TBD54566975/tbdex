@@ -1,38 +1,84 @@
-# TS/JS type implementation of tbDEX protocol
+# tbDEX Protocol <!-- omit in toc -->
 
-## How to publish and use new versions of `@tbd54566975/tbdex`:
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development](#development)
+  - [Prerequisites](#prerequisites)
+    - [`node` and `npm`](#node-and-npm)
+  - [Running Tests](#running-tests)
+  - [`npm` scripts](#npm-scripts)
+- [Publishing Releases](#publishing-releases)
 
-1. Check out your branch `git checkout -b ${your_branch_name}`
 
-2. Make changes as necessary in the `src` directory. Open a PR for review.
+# Installation
 
-3. After the PR has been approved, _before_ merging to main, bump the version by running this npm command: `npm version ${major}.${minor}.${patch}`, i.e. `npm version 0.0.3`
+```bash
+npm install @tbd54566975/tbdex
+```
 
-4. Merge the PR. This will run the Github Actions which you can see [here]. You can find the specifics of the workflows in `.github/workflows` folder of this repo.
+# Usage
+TODO: Fill out
 
-5. After merging the PR, navigate to Github's `tags` section of this repo [here](https://github.com/TBD54566975/tbdex-protocol/tags)
+
+# Development
+
+## Prerequisites
+### `node` and `npm`
+This project is using `node v20.3.0` and `npm v9.6.7`. You can verify your `node` and `npm` installation via the terminal:
+
+```
+$ node --version
+v20.3.0
+$ npm --version
+9.6.7
+```
+
+If you don't have `node` installed. Feel free to choose whichever approach you feel the most comfortable with. If you don't have a preferred installation method, i'd recommend using `nvm` (aka node version manager). `nvm` allows you to install and use different versions of node. It can be installed by running `brew install nvm` (assuming that you have homebrew)
+
+Once you have installed `nvm`, install the desired node version with `nvm install vX.Y.Z`.
+
+## Running Tests
+> [!NOTE]
+> 
+> Make sure you have all the [prerequisites](#prerequisites)
+
+0. clone the repo and `cd` into the project directory
+1. Install all project dependencies by running `npm install`
+2. start the test databases using `./scripts/start-databases` (requires Docker)
+3. run tests using `npm run test`
+
+## `npm` scripts
+
+| Script                 | Description                                               |
+| ---------------------- | --------------------------------------------------------- |
+| `npm run clean`        | deletes `dist` dir and compiled tests                     |
+| `npm run test:node`    | runs tests in node runtime                                |
+| `npm run test:browser` | runs tests in headless browsers (chrome, safari, firefox) |
+| `npm run lint`         | runs linter without auto-fixing                           |
+| `npm run lint:fix`     | runs linter and applies automatic fixes wherever possible |
+| `npm run build`        | builds all distributions and dumps them into `dist`       |
+
+# Publishing Releases
+
+> [!NOTE]
+>
+> This section is applicable to core maintainers only
+
+> [!IMPORTANT]
+>
+> be sure to version bump the package in `package.json` _before_ merging a PR
+
+1. After merging the PR, navigate to Github's `tags` section of this repo [here](https://github.com/TBD54566975/tbdex-protocol/tags)
 ![Tags](./images/github_tags.png)
 
-6. Click on `Releases` button and click `Draft a new release`.
+1. Click on `Releases` button and click `Draft a new release`.
 
-7. Click on `Choose a tag`, then create a new tag with the version number matching from step 3. The release title is also the same version number, i.e. `v0.0.3`
+2. Click on `Choose a tag`, then create a new tag with the version number matching from step 3. The release title is also the same version number, i.e. `v0.0.3`
 ![New release](./images/new_release.png)
 
-8. Click `Generate release notes`. This will auto-populate a list of all PRs merged to main since the last release.
+1. Click `Generate release notes`. This will auto-populate a list of all PRs merged to main since the last release.
 ![Generated release notes](./images/generated_release_notes.png)
 
-9. Click `Publish release`, which will kick off the `Release to NPM Registry` action, which you can see [here](https://github.com/TBD54566975/tbdex-protocol/actions/workflows/release-npm.yml)
+1. Click `Publish release`, which will kick off the `Release to NPM Registry` action, which you can see [here](https://github.com/TBD54566975/tbdex-protocol/actions/workflows/release-npm.yml)
 
-10. After the github action is successfully completed, you will have a new version of `@tbd54566975/tbdex` available in the [NPM registry](https://www.npmjs.com/package/@tbd54566975/tbdex).
-
-11. Reference the new version in your package.json under `dependencies`:
-
-```js
-{
-  "name": "your-project",
-  "type": "module",
-  "version": "0.0.1",
-  "dependencies": {
-    "@tbd54566975/tbdex": "^0.0.2",
-...
-```
+2.  After the github action is successfully completed, you will have a new version of `@tbd54566975/tbdex` available in the [NPM registry](https://www.npmjs.com/package/@tbd54566975/tbdex).

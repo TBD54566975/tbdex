@@ -18,7 +18,7 @@
           "description": "Maximum amount of currency that can be requested"
         }
       },
-      "required": ["currencyCode", "minSubunits", "maxSubunits"]
+      "required": ["currencyCode"]
     },
     "PaymentMethod": {
       "type": "object",
@@ -37,10 +37,6 @@
   },
   "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "Unique identifier for a given offering"
-    },
     "description": {
       "type": "string",
       "description": "Brief description of what is being offered."
@@ -70,21 +66,15 @@
     "vcRequirements": {
       "type": "object",
       "description": "PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote."
-    },
-    "createdAt": {
-      "type": "string",
-      "description": "ISO8601 formatted string representing the creation time"
     }
   },
   "required": [
-    "id",
     "description",
     "quoteUnitsPerBaseUnit",
     "baseCurrency",
     "quoteCurrency",
     "payinMethods",
     "payoutMethods",
-    "vcRequirements",
-    "createdAt"
+    "vcRequirements"
   ]
 }

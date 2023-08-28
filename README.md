@@ -160,15 +160,15 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field       | Required (Y/N) | Description                                                                               |
-| ----------- | -------------- | ----------------------------------------------------------------------------------------- |
-| `from`      | Y              | The sender's DID                                                                          |
-| `to`        | Y              | the recipient's DID                                                                       |
-| `kind`      | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                        |
-| `id`        | Y              | The message's ID                                                                          |
-| `threadId`  | Y              | ID for a "thread" of messages between Alice <-> PFI. Set by the first message in a thread |
-| `parentId`  | N              | the ID of the most recent message in a thread. `null` for the first message in a thread   |
-| `timestamp` | Y              | ISO 8601                                                                                  |
+| Field        | Required (Y/N) | Description                                                                                 |
+| ------------ | -------------- | ------------------------------------------------------------------------------------------- |
+| `from`       | Y              | The sender's DID                                                                            |
+| `to`         | Y              | the recipient's DID                                                                         |
+| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                          |
+| `id`         | Y              | The message's ID                                                                            |
+| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in a thread |
+| `parentId`   | N              | the ID of the most recent message in a thread. `null` for the first message in a thread     |
+| `timestamp`  | Y              | ISO 8601                                                                                    |
 
 
 ### `data`
@@ -320,7 +320,7 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
     "to": "did:ex:pfi",
     "kind": "rfq",
     "id": "abcd123",
-    "threadId": <RFQ_ID>,
+    "exchangeId": <RFQ_ID>,
     "parentId": null,
     "createdAt": "ISO_8601"
   },
@@ -407,7 +407,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
     "to": "did:ex:alice",
     "kind": "quote",
     "id": "abcd123",
-    "threadId": <RFQ_ID>,
+    "exchangeId": <RFQ_ID>,
     "parentId": <RFQ_ID>,
     "createdAt": "ISO_8601"
   },
@@ -441,7 +441,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
     "to": "did:ex:pfi",
     "kind": "order",
     "id": "abcd123",
-    "threadId": <RFQ_ID>,
+    "exchangeId": <RFQ_ID>,
     "parentId": <QUOTE_ID>,
     "createdAt": "ISO_8601"
   },
@@ -469,8 +469,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
     "to": "did:ex:alice",
     "kind": "orderStatus",
     "id": "abcd123",
-    "threadId": <RFQ_ID>,
-    "parentId": <ORDER_ID> || <ORDER_STATUS_ID>,
+    "exchangeId": <RFQ_ID>,
     "createdAt": "ISO_8601"
   },
   "data": {

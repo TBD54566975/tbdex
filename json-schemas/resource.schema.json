@@ -6,7 +6,7 @@
     "metadata": {
       "type": "object",
       "properties": {
-        "pfi": {
+        "from": {
           "$ref": "https://tbdex.io/definitions.json#/definitions/did",
           "description": "The PFI's DID"
         },
@@ -28,8 +28,8 @@
           "description": "When the resource was last updated. Expressed as ISO8601"
         }
       },
-      "required": ["pfi", "kind", "id", "createdAt", "updatedAt"],
-      "description": "The metadata object contains fields about the resource and is present in every tbdex resources of all types."
+      "required": ["from", "kind", "id", "createdAt"],
+      "description": "The metadata object contains fields about the resource and is present for every tbdex resources of all types."
     },
     "data": {
       "description": "The actual resource content",
