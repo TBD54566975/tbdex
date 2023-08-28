@@ -3,8 +3,11 @@ import { DidIonMethod, DidKeyMethod } from '@web5/dids'
 import { Rfq } from './message-kinds/index.js'
 import { Offering } from './resource-kinds/index.js'
 
-type DidMethodOptions = 'key' | 'ion'
+export type DidMethodOptions = 'key' | 'ion'
 
+/**
+ * Utility functions for testing purposes
+ */
 export class DevTools {
   /**
    * creates and returns a DID

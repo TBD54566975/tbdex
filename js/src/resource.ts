@@ -7,19 +7,23 @@ import { validate } from './validator.js'
 import { Offering } from './resource-kinds/index.js'
 
 /** Union type of all Resource Classes exported from [resource-kinds](./resource-kinds/index.ts) */
-type ResourceKindClass = Offering
+export type ResourceKindClass = Offering
 
 /**
  * options passed to {@link Resource.create} method
 */
-type CreateResourceOptions = {
+export type CreateResourceOptions = {
   metadata: Omit<ResourceMetadata, 'id' |'kind' | 'createdAt' | 'updatedAt'>
   data: Offering
 }
 
 /** argument passed to {@link Resource} constructor */
-type NewResource = Omit<ResourceModel, 'signature'> & { signature?: string }
+export type NewResource = Omit<ResourceModel, 'signature'> & { signature?: string }
 
+/**
+ * tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process.
+ * They are not part of the message exchange, i.e Alice cannot reply to a Resource.
+ */
 export class Resource {
   private _metadata: ResourceMetadata
   private _data: ResourceKindClass

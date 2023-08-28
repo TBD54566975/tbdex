@@ -16,22 +16,25 @@ import { validate } from './validator.js'
 import { Rfq, Quote, Order, OrderStatus, Close } from './message-kinds/index.js'
 
 /** Union type of all Resource Classes exported from [message-kinds](./message-kinds/index.ts) */
-type MessageKindClass = Rfq | Quote | Order | OrderStatus | Close
+export type MessageKindClass = Rfq | Quote | Order | OrderStatus | Close
 
 /**
  * options passed to {@link Message.create} method
  */
-type CreateMessageOptions<T extends MessageKindClass> = {
+export type CreateMessageOptions<T extends MessageKindClass> = {
   data: T
   metadata: T extends Rfq ? Omit<MetadataOptions, 'exchangeId'> : MetadataOptions
   private?: T extends Rfq ? Record<string, any> : never
 }
 
-type MetadataOptions = Omit<MessageMetadata, 'id' |'kind' | 'createdAt'>
+export type MetadataOptions = Omit<MessageMetadata, 'id' |'kind' | 'createdAt'>
 
 /** argument passed to {@link Message} constructor */
-type NewMessage = Omit<MessageModel, 'signature'> & { signature?: string }
+export type NewMessage = Omit<MessageModel, 'signature'> & { signature?: string }
 
+/**
+ * Messages form exchanges between Alice and a PFI.
+ */
 export class Message {
   private _metadata: MessageMetadata
   private _data: MessageKindClass
