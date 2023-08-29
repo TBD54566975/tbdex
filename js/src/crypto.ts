@@ -1,4 +1,4 @@
-import type { MessageModel, ResourceModel } from './types.js'
+import type { MessageModel, ResourceModel, MessageKind, ResourceKind } from './types.js'
 import type {
   PrivateKeyJwk as Web5PrivateKeyJwk,
   CryptoAlgorithm,
@@ -17,7 +17,7 @@ import { deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
  */
 export type SignOptions = {
   /** the message or resource to sign */
-  entity: MessageModel | ResourceModel,
+  entity: MessageModel<MessageKind> | ResourceModel<ResourceKind>,
   /** the key to sign with */
   privateKeyJwk: Web5PrivateKeyJwk,
   /** the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
@@ -31,7 +31,7 @@ export type SignOptions = {
  */
 export type VerifyOptions = {
   /** the message or resource to verify the signature of */
-  entity: MessageModel | ResourceModel
+  entity: MessageModel<MessageKind> | ResourceModel<ResourceKind>
 }
 
 export class Crypto {

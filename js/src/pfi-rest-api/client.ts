@@ -86,7 +86,6 @@ export class PfiRestClient {
         headers : response.headers,
         errors  : responseBody.errors
       }
-
     }
   }
 
