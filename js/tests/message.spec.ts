@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Convert } from '@web5/common'
 import { DevTools } from '../src/dev-tools.js'
-import { Message, Rfq } from '../src/main.js'
+import { Message, OrderStatus, Rfq } from '../src/main.js'
 
 describe('Message', () => {
   describe('create', () => {
@@ -18,6 +18,24 @@ describe('Message', () => {
       expect(message.id).to.equal(message.exchangeId)
       expect(message.id).to.include('rfq_')
       expect(message.data).to.be.instanceof(Rfq)
+    })
+
+    it('creates a message for an existing thread', async () => {
+      const alice = await DevTools.createDid()
+      const rfq = DevTools.createRfq()
+      const rfqMessage = Message.create({
+        metadata : { from: alice.did, to: 'did:ex:pfi' },
+        data     : rfq
+      })
+
+      const orderStatusMessage = Message.create({
+        metadata : { from: 'did:ex:pfi', to: alice.did, exchangeId: rfqMessage.exchangeId },
+        data     : new OrderStatus({orderStatus: 'test status'})
+      })
+
+      expect(orderStatusMessage.id).to.exist
+      expect(orderStatusMessage.id).to.include('orderstatus')
+      expect(orderStatusMessage.exchangeId).to.equal(rfqMessage.exchangeId)
     })
   })
 
