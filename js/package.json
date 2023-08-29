@@ -51,9 +51,9 @@
   "dependencies": {
     "@noble/hashes": "^1.3.2",
     "@sphereon/pex-models": "2.0.3",
-    "@web5/common": "0.1.1-alpha-20230823-44789a4",
-    "@web5/crypto": "0.1.6-alpha-20230823-44789a4",
-    "@web5/dids": "0.1.9-alpha-20230823-44789a4",
+    "@web5/common": "0.1.1-alpha-20230828-8204a49",
+    "@web5/crypto": "0.1.6-alpha-20230828-8204a49",
+    "@web5/dids": "0.1.9-alpha-20230828-8204a49",
     "ajv": "8.12.0",
     "cbor-x": "1.5.4",
     "typeid-js": "0.3.0",

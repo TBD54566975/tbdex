@@ -1,1 +1,0 @@
-import { DidKeyMethod } from '@web5/dids'
