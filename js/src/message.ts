@@ -143,7 +143,7 @@ export class Message {
       case 'order':
         this._data = new Order(jsonMessage.data as OrderModel)
         break
-      case 'orderStatus':
+      case 'orderstatus':
         this._data = new OrderStatus(jsonMessage.data as OrderStatusModel)
         break
       case 'close':

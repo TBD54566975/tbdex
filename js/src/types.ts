@@ -89,7 +89,7 @@ export type MessageMetadata = {
   createdAt: string
 }
 
-export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderStatus' | 'close'
+export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderstatus' | 'close'
 export type MessageSignature = string
 export type Private = Record<string, any>
 
