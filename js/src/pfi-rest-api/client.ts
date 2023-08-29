@@ -1,12 +1,15 @@
 import type { DataResponse, ErrorDetail, ErrorResponse, HttpResponse } from './types.js'
-import type { MessageModel, ResourceModel } from '../types.js'
+import type { ResourceMetadata, MessageModel, OfferingModel, ResourceModel } from '../types.js'
 import type { MessageKindClass } from '../message.js'
+
+import queryString from 'query-string'
 
 import { utils as didUtils } from '@web5/dids'
 import { resolveDid } from '../did-resolver.js'
 import { Offering } from '../resource-kinds/index.js'
 import { Resource } from '../resource.js'
 import { Message } from '../message.js'
+import { PrivateKeyJwk } from '@web5/crypto'
 
 /**
  * options passed to {@link PfiRestClient.sendMessage} method
@@ -22,7 +25,13 @@ export type SendMessageOptions<T extends MessageKindClass> = {
 export type GetOfferingsOptions = {
   /** the DID of the PFI from whom you want to get offerings */
   pfiDid: string
-  // TODO: include supported query params
+  params?: {
+    /** ISO 3166 currency code string */
+    baseCurrency: OfferingModel['baseCurrency']['currencyCode']
+    /** ISO 3166 currency code string */
+    quoteCurrency: OfferingModel['baseCurrency']['currencyCode']
+    id: ResourceMetadata<any>['id']
+  }
 }
 
 /**
@@ -33,6 +42,7 @@ export type GetExchangeOptions = {
   pfiDid: string
   /** the exchange you want to fetch */
   exchangeId: string
+  privateKeyJwk: PrivateKeyJwk
   // TODO: include privateKeyJwk needed to create authz token
   // TODO: include supported query params
 }
@@ -96,7 +106,8 @@ export class PfiRestClient {
   static async getOfferings(opts: GetOfferingsOptions): Promise<DataResponse<Resource<Offering>[]> | ErrorResponse> {
     const { pfiDid } = opts
     const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(opts.pfiDid)
-    const apiRoute = `${pfiServiceEndpoint}/offerings`
+    const queryParams = queryString.stringify(opts.params)
+    const apiRoute = `${pfiServiceEndpoint}/offerings?${queryParams}`
 
     let response: Response
     try {
