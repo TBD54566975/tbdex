@@ -56,16 +56,6 @@ export class PfiRestClient {
    * @throws if recipient DID does not have a PFI service entry
    */
   static async sendMessage<T extends MessageKindClass>(opts: SendMessageOptions<T>): Promise<HttpResponse | ErrorResponse> {
-    /**
-     * TODO:
-     * call Message.verify on provided message
-     * resolve `metadata.to` DID
-     * find pfi service endpoint in DID Doc
-     * generate fully qualified URL for PFI RESTful API using serviceEndpoint + message.exchangeId + message.kind
-     * send http request using fetch
-     * handle response
-     */
-
     const { message } = opts
     const jsonMessage: MessageModel<T['kind']> = message instanceof Message ? message.toJSON() : message
 
