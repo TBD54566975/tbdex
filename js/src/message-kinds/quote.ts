@@ -9,7 +9,7 @@ export class Quote {
   readonly validNext = new Set<MessageKind>(['order', 'close'])
   readonly kind: MessageKind = 'quote'
 
-  private data: QuoteModel
+  readonly data: QuoteModel
 
   constructor(quoteData: QuoteModel) {
     this.data = quoteData

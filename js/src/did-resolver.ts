@@ -53,8 +53,7 @@ export async function deferenceDidUrl(didUrl: string): Promise<DidResource> {
   // create a set of possible id matches. the DID spec allows for an id to be the entire did#fragment or just #fragment.
   // See: https://www.w3.org/TR/did-core/#relative-did-urls
   // using a set for fast string comparison. DIDs can be lonnng.
-  // TODO: check to see if parsedDid.fragment includes a '#'
-  const idSet = new Set([didUrl, parsedDid.fragment])
+  const idSet = new Set([didUrl, parsedDid.fragment, `#${parsedDid.fragment}`])
 
   for (let vm of verificationMethod) {
     if (idSet.has(vm.id)) {

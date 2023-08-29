@@ -1,20 +1,20 @@
 import type { Schema as JsonSchema } from 'ajv'
 import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
 
-export type ResourceModel = {
+export type ResourceModel<T extends ResourceKind> = {
   /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
-  metadata: ResourceMetadata
+  metadata: ResourceMetadata<T>
   /** The actual resource content */
   data: unknown
   /** signature that verifies that authenticity and integrity of a message */
   signature: string
 }
 
-export type ResourceMetadata = {
+export type ResourceMetadata<T extends ResourceKind> = {
   /** The author's DID */
   from: string
   /** the resource kind (e.g. Offering) */
-  kind: ResourceKind
+  kind: T
   /** the resource id */
   id: string
   /** When the resource was created at. Expressed as ISO8601 */
@@ -23,7 +23,11 @@ export type ResourceMetadata = {
   updatedAt?: string
 }
 
-export type ResourceKind = 'offering'
+export type ResourceKind = keyof ResourceKinds
+export type ResourceKindModel<T extends keyof ResourceKinds> = ResourceKinds[T]
+export type ResourceKinds = {
+  'offering': OfferingModel
+}
 
 /**
  * An Offering is used by the PFI to describe a currency pair they have to offer
@@ -63,24 +67,24 @@ export type PaymentMethod = {
   requiredPaymentDetails: JsonSchema
 }
 
-export type MessageModel = {
+export type MessageModel<T extends MessageKind> = {
   /** The metadata object contains fields about the message and is present in every tbdex message. */
-  metadata: MessageMetadata
+  metadata: MessageMetadata<T>
   /** The actual message content */
-  data: unknown
+  data: MessageKindModel<T>
   /** signature that verifies that authenticity and integrity of a message */
   signature: string
   /** An ephemeral JSON object used to transmit sensitive data (e.g. PII) */
-  private?: Record<string, any>
+  private?: T extends 'rfq' ? Private : never
 }
 
-export type MessageMetadata = {
+export type MessageMetadata<T extends MessageKind> = {
   /** The sender's DID */
   from: string
   /** the recipient's DID */
   to: string
   /** the message kind (e.g. rfq, quote) */
-  kind: MessageKind
+  kind: T
   /** the message id */
   id: string
   /** ID for an "exchange" of messages between Alice <-> PFI. Uses the id of the RFQ that initiated the exchange */
@@ -89,10 +93,16 @@ export type MessageMetadata = {
   createdAt: string
 }
 
-export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderStatus' | 'close'
-export type MessageSignature = string
 export type Private = Record<string, any>
-
+export type MessageKindModel<T extends keyof MessageKinds> = MessageKinds[T]
+export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderStatus' | 'close'
+export type MessageKinds = {
+  'rfq': RfqModel
+  'quote': QuoteModel
+  'order': OrderModel
+  'orderStatus': OrderStatusModel
+  'close': CloseModel
+}
 
 export type RfqModel = {
   /** Offering which Alice would like to get a quote for */

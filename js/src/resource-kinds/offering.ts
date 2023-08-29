@@ -6,7 +6,7 @@ import { OfferingModel, ResourceKind } from '../types.js'
  * order to fulfill that offer.
  */
 export class Offering {
-  private data: OfferingModel
+  readonly data: OfferingModel
   readonly kind: ResourceKind = 'offering'
 
   constructor(offeringData: OfferingModel) {

@@ -9,7 +9,7 @@ export class OrderStatus {
   readonly validNext = new Set<MessageKind>([])
   readonly kind: MessageKind = 'orderStatus'
 
-  private data: OrderStatusModel
+  readonly data: OrderStatusModel
 
   constructor(orderStatusData: OrderStatusModel) {
     this.data = orderStatusData

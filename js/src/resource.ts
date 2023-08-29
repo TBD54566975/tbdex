@@ -1,5 +1,5 @@
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
-import type { ResourceModel, ResourceMetadata, OfferingModel } from './types.js'
+import type { ResourceModel, ResourceMetadata, ResourceKind, OfferingModel } from './types.js'
 
 import { typeid } from 'typeid-js'
 import { Crypto } from './crypto.js'
@@ -12,37 +12,37 @@ export type ResourceKindClass = Offering
 /**
  * options passed to {@link Resource.create} method
 */
-export type CreateResourceOptions = {
-  metadata: Omit<ResourceMetadata, 'id' |'kind' | 'createdAt' | 'updatedAt'>
-  data: Offering
+export type CreateResourceOptions<T extends ResourceKindClass> = {
+  metadata: Omit<ResourceMetadata<T['kind']>, 'id' |'kind' | 'createdAt' | 'updatedAt'>
+  data: T
 }
 
 /** argument passed to {@link Resource} constructor */
-export type NewResource = Omit<ResourceModel, 'signature'> & { signature?: string }
+export type NewResource<T extends ResourceKind> = Omit<ResourceModel<T>, 'signature'> & { signature?: string }
 
 /**
  * tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process.
  * They are not part of the message exchange, i.e Alice cannot reply to a Resource.
  */
-export class Resource {
-  private _metadata: ResourceMetadata
-  private _data: ResourceKindClass
+export class Resource<T extends ResourceKindClass> {
+  private _metadata: ResourceMetadata<T['kind']>
+  private _data: T['data']
   private _signature: string
 
-  static create(options: CreateResourceOptions) {
-    const metadata: ResourceMetadata = {
+  static create<T extends ResourceKindClass>(options: CreateResourceOptions<T>) {
+    const metadata = {
       ...options.metadata,
       id        : typeid(options.data.kind).toString(),
       kind      : options.data.kind,
       createdAt : new Date().toISOString()
-    }
+    } as ResourceMetadata<T['kind']>
 
-    const resource: NewResource = {
+    const resource = {
       metadata,
       data: options.data.toJSON()
-    }
+    } as NewResource<T['kind']>
 
-    return new Resource(resource, options.data)
+    return new Resource(resource)
   }
 
   /**
@@ -50,8 +50,8 @@ export class Resource {
    * @param payload - the resource to parse. can either be an object or a string
    * @returns {Resource}
    */
-  static async parse(payload: ResourceModel | string) {
-    let jsonResource: ResourceModel
+  static async parse<T extends ResourceKind>(payload: ResourceModel<T> | string) {
+    let jsonResource: ResourceModel<T>
     try {
       jsonResource = typeof payload === 'string' ? JSON.parse(payload) : payload
     } catch(e) {
@@ -68,8 +68,8 @@ export class Resource {
    * @throws if the message is invalid
    * @throws see {@link Crypto.verify}
    */
-  static async verify(resource: Resource | ResourceModel) {
-    let jsonResource: ResourceModel = resource instanceof Resource ? resource.toJSON() : resource
+  static async verify<T extends ResourceKindClass>(resource: Resource<T> | ResourceModel<T['kind']>) {
+    let jsonResource: ResourceModel<T['kind']> = resource instanceof Resource ? resource.toJSON() : resource
 
     Resource.validate(jsonResource)
     await Crypto.verify({ entity: jsonResource })
@@ -98,14 +98,9 @@ export class Resource {
    * @param data - `resource.data` as a ResourceKind class instance. can be passed in as an optimization if class instance
    * is present in calling scope
    */
-  constructor(jsonResource: NewResource, data?: ResourceKindClass) {
+  constructor(jsonResource: NewResource<T['kind']>) {
     this._metadata = jsonResource.metadata
     this._signature = jsonResource.signature // may be undefined
-
-    if (data) {
-      this._data = data
-      return
-    }
 
     switch(jsonResource.metadata.kind) {
       case 'offering':
@@ -135,10 +130,10 @@ export class Resource {
   /**
    * returns the message as a json object. Automatically used by {@link JSON.stringify} method.
    */
-  toJSON(): ResourceModel {
+  toJSON(): ResourceModel<T['kind']> {
     return {
       metadata  : this.metadata,
-      data      : this.data.toJSON(),
+      data      : this.data,
       signature : this.signature
     }
   }
