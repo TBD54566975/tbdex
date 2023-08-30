@@ -11,7 +11,8 @@ import * as cbor from 'cbor-x'
 import { sha256 } from '@noble/hashes/sha256'
 import { Convert } from '@web5/common'
 import { EcdsaAlgorithm, EdDsaAlgorithm, Jose } from '@web5/crypto'
-import { deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
+import { DidResource, deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
+import { DidDocument, VerificationMethod } from '@web5/dids'
 
 /**
  * options passed to {@link Crypto.sign}
@@ -104,34 +105,6 @@ export class Crypto {
   }
 
   /**
-   * signs the message as a compact jws with nonce
-   * @param privateKeyJwk - the key to sign with
-   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
-   *              when dereferencing the signer's DID
-   * @returns the compact JWS
-   */
-  static async token(opts: TokenOptions) {
-    const { timestamp: jwsPayload, privateKeyJwk, kid } = opts
-
-    const jwsHeader: JwsHeader = { alg: privateKeyJwk.alg as PrivateKeyJwk['alg'], kid }
-    const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
-
-    const base64urlEncodedJwsPayload = Crypto.hash(jwsPayload)
-
-    const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
-    const toSignBytes = Convert.string(toSign).toUint8Array()
-
-    const { signer, options } = signers[privateKeyJwk.alg]
-    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
-
-    const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
-    const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
-
-    // compact JWS
-    return `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}.${base64UrlEncodedSignature}`
-  }
-
-  /**
    * verifies the cryptographic integrity of the message or resource's signature
    * @param opts - verification options
    * @throws if no signature present on the message or resource
@@ -208,6 +181,34 @@ export class Crypto {
   }
 
   /**
+   * signs the message as a compact jws with nonce
+   * @param privateKeyJwk - the key to sign with
+   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
+   *              when dereferencing the signer's DID
+   * @returns the compact JWS
+   */
+  static async token(opts: TokenOptions): Promise<string> {
+    const { timestamp, privateKeyJwk, kid } = opts
+
+    const jwsHeader: JwsHeader = { alg: privateKeyJwk.alg as PrivateKeyJwk['alg'], kid }
+    const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
+
+    const base64urlEncodedJwsPayload = Convert.object({ 'timestamp': timestamp}).toBase64Url()
+
+    const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
+    const toSignBytes = Convert.string(toSign).toUint8Array()
+
+    const { signer, options } = signers[privateKeyJwk.alg]
+    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
+
+    const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
+    const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
+
+    // compact JWS
+    return `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}.${base64UrlEncodedSignature}`
+  }
+
+  /**
    * verifies the cryptographic integrity of the bearer token (JWS)
    * @param opts - verification options
    * @throws if no signature present on the message or resource
@@ -217,7 +218,7 @@ export class Crypto {
    * @throws if signer's DID Document does not have the necessary verification method
    * @throws if the verification method does not include a publicKeyJwk
    */
-  static async verifyToken(opts: VerifyTokenOptions) {
+  static async verifyToken(opts: VerifyTokenOptions): Promise<void> {
     const { token } = opts
 
     if (!token) {
@@ -237,6 +238,42 @@ export class Crypto {
     }
 
     const verificationMethod = await deferenceDidUrl(jwsHeader.kid as string)
+
+    console.log(`verification method: ${JSON.stringify(verificationMethod)}`)
+    // for did key this returns:
+    // {
+    //   "id": "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg",
+    //   "verificationMethod": [
+    //     {
+    //       "id": "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg",
+    //       "type": "JsonWebKey2020",
+    //       "controller": "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg",
+    //       "publicKeyJwk": {
+    //         "alg": "EdDSA",
+    //         "crv": "Ed25519",
+    //         "kty": "OKP",
+    //         "x": "sQd1T582SpbmqRseIKiSxgjbK1LR0Nva-EbhzKuyOHk"
+    //       }
+    //     }
+    //   ],
+    //   "authentication": [
+    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
+    //   ],
+    //   "assertionMethod": [
+    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
+    //   ],
+    //   "capabilityInvocation": [
+    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
+    //   ],
+    //   "capabilityDelegation": [
+    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
+    //   ],
+    //   "@context": [
+    //     "https://www.w3.org/ns/did/v1",
+    //     "https://w3id.org/security/suites/jws-2020/v1"
+    //   ]
+    // }
+
     if (!isVerificationMethod(verificationMethod)) { // ensure that appropriate verification method was found
       throw new Error('Token verification failed: Expected kid in JWS header to dereference to a DID Document Verification Method')
     }

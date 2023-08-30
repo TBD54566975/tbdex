@@ -118,7 +118,7 @@ export class PfiRestClient {
    * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
    *              when dereferencing the signer's DID
    */
-  async getBearerToken(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<string> {
+  static async bearerToken(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<string> {
     const token = await Crypto.token({ timestamp: new Date().toISOString() , privateKeyJwk, kid })
 
     return token
@@ -129,7 +129,7 @@ export class PfiRestClient {
    * @throws if the token is invalid
    * @throws see {@link Crypto.verify}
    */
-  async verify(bearerToken: string) {
+  static async verify(bearerToken: string): Promise<void> {
     await Crypto.verifyToken({ token: bearerToken })
   }
 }

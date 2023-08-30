@@ -15,6 +15,47 @@ export const DidResolver = new Web5DidResolver({
 export async function resolveDid(did: string): Promise<DidDocument> {
   const { didResolutionMetadata, didDocument } = await DidResolver.resolve(did)
 
+  console.log(JSON.stringify(await DidResolver.resolve(did)))
+  // no didresolution metadata, get this back instead:
+  // {
+  //   "@context": "https://w3id.org/did-resolution/v1",
+  //   "didDocument": {
+  //     "id": "did:ion:EiB_LMRZGHzGFX4LC1g8eObOUGY9ZlWdXHsBFpOyhheAzQ:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJkd24tc2lnIiwicHVibGljS2V5SndrIjp7ImNydiI6IkVkMjU1MTkiLCJrdHkiOiJPS1AiLCJ4IjoiS09QT2owSmRNWU41c0MyT0RjZzMySVAtcjNLell3dENWelZUckUwN24wdyJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiSnNvbldlYktleTIwMjAifV0sInNlcnZpY2VzIjpbXX19XSwidXBkYXRlQ29tbWl0bWVudCI6IkVpQVdKYWlZYWFHYllrMWFET0JXSmhJb2Rnd1ozNW41RzdXN0dhaHUtV1dfbGcifSwic3VmZml4RGF0YSI6eyJkZWx0YUhhc2giOiJFaURyMmQzRnVnZDJIM0d6VU1oemN4OWQwZWE5V1hlU3RRMHp3RHFYeUlRVEx3IiwicmVjb3ZlcnlDb21taXRtZW50IjoiRWlCU3c2T3RWRG54eHY1YUs5Z2FjNm1UejRtTlZBaVBkQ2NFQWZsYWVobTI3QSJ9fQ",
+  //     "@context": [
+  //       "https://www.w3.org/ns/did/v1",
+  //       {
+  //         "@base": "did:ion:EiB_LMRZGHzGFX4LC1g8eObOUGY9ZlWdXHsBFpOyhheAzQ:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJkd24tc2lnIiwicHVibGljS2V5SndrIjp7ImNydiI6IkVkMjU1MTkiLCJrdHkiOiJPS1AiLCJ4IjoiS09QT2owSmRNWU41c0MyT0RjZzMySVAtcjNLell3dENWelZUckUwN24wdyJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiSnNvbldlYktleTIwMjAifV0sInNlcnZpY2VzIjpbXX19XSwidXBkYXRlQ29tbWl0bWVudCI6IkVpQVdKYWlZYWFHYllrMWFET0JXSmhJb2Rnd1ozNW41RzdXN0dhaHUtV1dfbGcifSwic3VmZml4RGF0YSI6eyJkZWx0YUhhc2giOiJFaURyMmQzRnVnZDJIM0d6VU1oemN4OWQwZWE5V1hlU3RRMHp3RHFYeUlRVEx3IiwicmVjb3ZlcnlDb21taXRtZW50IjoiRWlCU3c2T3RWRG54eHY1YUs5Z2FjNm1UejRtTlZBaVBkQ2NFQWZsYWVobTI3QSJ9fQ"
+  //       }
+  //     ],
+  //     "service": [],
+  //     "verificationMethod": [
+  //       {
+  //         "id": "#dwn-sig",
+  //         "controller": "did:ion:EiB_LMRZGHzGFX4LC1g8eObOUGY9ZlWdXHsBFpOyhheAzQ:eyJkZWx0YSI6eyJwYXRjaGVzIjpbeyJhY3Rpb24iOiJyZXBsYWNlIiwiZG9jdW1lbnQiOnsicHVibGljS2V5cyI6W3siaWQiOiJkd24tc2lnIiwicHVibGljS2V5SndrIjp7ImNydiI6IkVkMjU1MTkiLCJrdHkiOiJPS1AiLCJ4IjoiS09QT2owSmRNWU41c0MyT0RjZzMySVAtcjNLell3dENWelZUckUwN24wdyJ9LCJwdXJwb3NlcyI6WyJhdXRoZW50aWNhdGlvbiJdLCJ0eXBlIjoiSnNvbldlYktleTIwMjAifV0sInNlcnZpY2VzIjpbXX19XSwidXBkYXRlQ29tbWl0bWVudCI6IkVpQVdKYWlZYWFHYllrMWFET0JXSmhJb2Rnd1ozNW41RzdXN0dhaHUtV1dfbGcifSwic3VmZml4RGF0YSI6eyJkZWx0YUhhc2giOiJFaURyMmQzRnVnZDJIM0d6VU1oemN4OWQwZWE5V1hlU3RRMHp3RHFYeUlRVEx3IiwicmVjb3ZlcnlDb21taXRtZW50IjoiRWlCU3c2T3RWRG54eHY1YUs5Z2FjNm1UejRtTlZBaVBkQ2NFQWZsYWVobTI3QSJ9fQ",
+  //         "type": "JsonWebKey2020",
+  //         "publicKeyJwk": {
+  //           "crv": "Ed25519",
+  //           "kty": "OKP",
+  //           "x": "KOPOj0JdMYN5sC2ODcg32IP-r3KzYwtCVzVTrE07n0w"
+  //         }
+  //       }
+  //     ],
+  //     "authentication": [
+  //       "#dwn-sig"
+  //     ]
+  //   },
+  //   "didDocumentMetadata": {
+  //     "method": {
+  //       "published": false,
+  //       "recoveryCommitment": "EiBSw6OtVDnxxv5aK9gac6mTz4mNVAiPdCcEAflaehm27A",
+  //       "updateCommitment": "EiAWJaiYaaGbYk1aDOBWJhIodgwZ35n5G7W7Gahu-WW_lg"
+  //     },
+  //     "equivalentId": [
+  //       "did:ion:EiB_LMRZGHzGFX4LC1g8eObOUGY9ZlWdXHsBFpOyhheAzQ"
+  //     ]
+  //   }
+  // }
+
   if (didResolutionMetadata.error) {
     throw new Error(`Failed to resolve DID: ${did}. Error: ${didResolutionMetadata.error}`)
   }
