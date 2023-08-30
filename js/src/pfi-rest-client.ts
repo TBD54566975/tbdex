@@ -1,5 +1,7 @@
 import type { MessageModel } from './types.js'
+import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
 
+import { Crypto } from './crypto.js'
 import { Message } from './message.js'
 
 /**
@@ -39,6 +41,10 @@ export type GetExchangesOptions = {
   pfiDid: string
   // TODO: include privateKeyJwk needed to create authz token
   // TODO: include supported query params
+}
+
+export type BearerTokenModel = {
+  timestamp: string
 }
 
 export class PfiRestClient {
@@ -104,5 +110,26 @@ export class PfiRestClient {
      * send http request using fetch
      * handle response
      */
+  }
+
+  /**
+   * generates a jws to be used to authenticate GET requests
+   * @param privateKeyJwk - the key to sign with
+   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
+   *              when dereferencing the signer's DID
+   */
+  async getBearerToken(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<string> {
+    const token = await Crypto.token({ timestamp: new Date().toISOString() , privateKeyJwk, kid })
+
+    return token
+  }
+
+  /**
+   * validates the bearer token and verifies the cryptographic signature
+   * @throws if the token is invalid
+   * @throws see {@link Crypto.verify}
+   */
+  async verify(bearerToken: string) {
+    await Crypto.verifyToken({ token: bearerToken })
   }
 }

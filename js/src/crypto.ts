@@ -1,4 +1,5 @@
 import type { MessageModel, ResourceModel } from './types.js'
+import type { BearerTokenModel } from './pfi-rest-client.js'
 import type {
   PrivateKeyJwk as Web5PrivateKeyJwk,
   CryptoAlgorithm,
@@ -17,7 +18,7 @@ import { deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
  */
 export type SignOptions = {
   /** the message or resource to sign */
-  entity: MessageModel | ResourceModel,
+  entity: MessageModel | ResourceModel
   /** the key to sign with */
   privateKeyJwk: Web5PrivateKeyJwk,
   /** the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
@@ -32,6 +33,27 @@ export type SignOptions = {
 export type VerifyOptions = {
   /** the message or resource to verify the signature of */
   entity: MessageModel | ResourceModel
+}
+
+/**
+ * options passed to {@link Crypto.token}
+ */
+export type TokenOptions = {
+  /** nonce */
+  timestamp: string,
+  /** the key to sign with */
+  privateKeyJwk: Web5PrivateKeyJwk,
+  /** the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
+   * when dereferencing the signer's DID
+   */
+  kid: string
+}
+
+/**
+ * options passed to {@link Crypto.verifyToken}
+ */
+export type VerifyTokenOptions = {
+  token: string
 }
 
 export class Crypto {
@@ -79,6 +101,34 @@ export class Crypto {
 
     // compact JWS with detached content: https://datatracker.ietf.org/doc/html/rfc7515#appendix-F
     return `${base64UrlEncodedJwsHeader}..${base64UrlEncodedSignature}`
+  }
+
+  /**
+   * signs the message as a compact jws with nonce
+   * @param privateKeyJwk - the key to sign with
+   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
+   *              when dereferencing the signer's DID
+   * @returns the compact JWS
+   */
+  static async token(opts: TokenOptions) {
+    const { timestamp: jwsPayload, privateKeyJwk, kid } = opts
+
+    const jwsHeader: JwsHeader = { alg: privateKeyJwk.alg as PrivateKeyJwk['alg'], kid }
+    const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
+
+    const base64urlEncodedJwsPayload = Crypto.hash(jwsPayload)
+
+    const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
+    const toSignBytes = Convert.string(toSign).toUint8Array()
+
+    const { signer, options } = signers[privateKeyJwk.alg]
+    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
+
+    const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
+    const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
+
+    // compact JWS
+    return `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}.${base64UrlEncodedSignature}`
   }
 
   /**
@@ -154,6 +204,68 @@ export class Crypto {
 
     if (!isLegit) {
       throw new Error('Signature verification failed: Integrity mismatch')
+    }
+  }
+
+  /**
+   * verifies the cryptographic integrity of the bearer token (JWS)
+   * @param opts - verification options
+   * @throws if no signature present on the message or resource
+   * @throws if the signature is not a valid compact JWS
+   * @throws if the JWS header does not contain alg and kid
+   * @throws if signer's DID cannot be resolved
+   * @throws if signer's DID Document does not have the necessary verification method
+   * @throws if the verification method does not include a publicKeyJwk
+   */
+  static async verifyToken(opts: VerifyTokenOptions) {
+    const { token } = opts
+
+    if (!token) {
+      throw new Error('Token verification failed: Expected token property to exist')
+    }
+
+    const splitJws = token.split('.')
+    if (splitJws.length !== 3) { // ensure that JWS has 3 parts
+      throw new Error('Token verification failed: Expected valid JWS')
+    }
+
+    const [base64UrlEncodedJwsHeader, base64urlEncodedJwsPayload, base64UrlEncodedSignature] = splitJws
+
+    const jwsHeader = Convert.base64Url(base64UrlEncodedJwsHeader).toObject() as JwsHeader
+    if (!jwsHeader.alg || !jwsHeader.kid) { // ensure that JWS header has required properties
+      throw new Error('Token verification failed: Expected JWS header to contain alg and kid')
+    }
+
+    const verificationMethod = await deferenceDidUrl(jwsHeader.kid as string)
+    if (!isVerificationMethod(verificationMethod)) { // ensure that appropriate verification method was found
+      throw new Error('Token verification failed: Expected kid in JWS header to dereference to a DID Document Verification Method')
+    }
+
+    // will be used to verify signature
+    const { publicKeyJwk } = verificationMethod
+    if (!publicKeyJwk) { // ensure that Verification Method includes public key as a JWK.
+      throw new Error('Token verification failed: Expected kid in JWS header to dereference to a DID Document Verification Method with publicKeyJwk')
+    }
+
+    const signedData = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
+    const signedDataBytes = Convert.string(signedData).toUint8Array()
+
+    const signatureBytes = Convert.base64Url(base64UrlEncodedSignature).toUint8Array()
+
+    const { signer, options } = signers[publicKeyJwk.alg]
+
+    // TODO: remove this monkeypatch once 'ext' is no longer a required property within a jwk passed to `jwkToCryptoKey`
+    const monkeyPatchPublicKeyJwk = {
+      ...publicKeyJwk,
+      ext     : 'true' as const,
+      key_ops : ['verify']
+    }
+
+    const key = await Jose.jwkToCryptoKey({ key: monkeyPatchPublicKeyJwk })
+    const isLegit = signer.verify({ algorithm: options, key, data: signedDataBytes, signature: signatureBytes })
+
+    if (!isLegit) {
+      throw new Error('Token verification failed: Integrity mismatch')
     }
   }
 }
