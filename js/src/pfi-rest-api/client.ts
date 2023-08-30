@@ -1,5 +1,5 @@
 import type { DataResponse, ErrorDetail, ErrorResponse, HttpResponse } from './types.js'
-import type { ResourceMetadata, MessageModel, OfferingModel, ResourceModel } from '../types.js'
+import type { ResourceMetadata, MessageModel, OfferingModel, ResourceModel, MessageKind } from '../types.js'
 import type { MessageKindClass } from '../message.js'
 
 import queryString from 'query-string'
@@ -42,9 +42,8 @@ export type GetExchangeOptions = {
   pfiDid: string
   /** the exchange you want to fetch */
   exchangeId: string
+  /** the private key used to sign the bearer token */
   privateKeyJwk: PrivateKeyJwk
-  // TODO: include privateKeyJwk needed to create authz token
-  // TODO: include supported query params
 }
 
 /**
@@ -105,7 +104,7 @@ export class PfiRestClient {
    */
   static async getOfferings(opts: GetOfferingsOptions): Promise<DataResponse<Resource<Offering>[]> | ErrorResponse> {
     const { pfiDid } = opts
-    const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(opts.pfiDid)
+    const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(pfiDid)
     const queryParams = queryString.stringify(opts.params)
     const apiRoute = `${pfiServiceEndpoint}/offerings?${queryParams}`
 
@@ -115,7 +114,6 @@ export class PfiRestClient {
     } catch(e) {
       throw new Error(`Failed to get offerings from ${pfiDid}. Error: ${e.message}`)
     }
-
 
     const data: Resource<Offering>[] = []
 
@@ -144,16 +142,41 @@ export class PfiRestClient {
    * get a specific exchange from the pfi provided
    * @param _opts - options
    */
-  static getExchange(_opts: GetExchangeOptions) {
-    /**
-     * TODO:
-     * resolve PFI DID
-     * find pfi service endpoint in DID Doc
-     * parse params provided in options into http query params
-     * generate fully qualified URL for PFI RESTful API using serviceEndpoint + message.exchangeId
-     * send http request using fetch
-     * handle response
-     */
+  static async getExchange(opts: GetExchangeOptions): Promise<DataResponse<Message<MessageKindClass>[]> | ErrorResponse> {
+    const { pfiDid, exchangeId, privateKeyJwk } = opts
+    const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(pfiDid)
+    const apiRoute = `${pfiServiceEndpoint}/exchanges/${exchangeId}`
+
+    // TODO: generate Bearer token
+
+    let response: Response
+    try {
+      response = await fetch(apiRoute)
+    } catch(e) {
+      throw new Error(`Failed to get offerings from ${pfiDid}. Error: ${e.message}`)
+    }
+
+    const data: Message<MessageKindClass>[] = []
+
+    if (response.status === 200) {
+      const responseBody = await response.json() as { data: MessageModel<MessageKind>[] }
+      for (let jsonMessage of responseBody.data) {
+        const message = await Message.parse(jsonMessage)
+        data.push(message)
+      }
+
+      return {
+        status  : response.status,
+        headers : response.headers,
+        data    : data
+      }
+    } else {
+      return {
+        status  : response.status,
+        headers : response.headers,
+        errors  : await response.json() as ErrorDetail[]
+      } as ErrorResponse
+    }
   }
 
   /**
@@ -177,7 +200,7 @@ export class PfiRestClient {
    * @param did - the pfi's DID
    */
   static async getPfiServiceEndpoint(did: string) {
-    const didDocument = await resolveDid(`${did}?service=pfi`)
+    const didDocument = await resolveDid(did)
     const [ didService ] = didUtils.getServices({ didDocument, type: 'PFI' })
 
     if (didService?.serviceEndpoint) {
