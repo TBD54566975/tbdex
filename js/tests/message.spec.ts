@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Convert } from '@web5/common'
 import { DevTools } from '../src/dev-tools.js'
-import { Message, OrderStatus, PfiRestClient, Rfq } from '../src/main.js'
+import { Message, OrderStatus, Rfq } from '../src/main.js'
 
 describe('Message', () => {
   describe('create', () => {
@@ -166,18 +166,6 @@ describe('Message', () => {
       const parsedMessage = await Message.parse(jsonMessage)
 
       expect(jsonMessage).to.equal(JSON.stringify(parsedMessage))
-    })
-
-    it.only('test bearer token', async () => {
-      const alice = await DevTools.createDid('ion')
-      const token = await PfiRestClient.bearerToken(alice.keySet.verificationMethodKeys[0].privateKeyJwk, alice.did)
-
-      await PfiRestClient.verify(token)
-
-      // const alicekey = await DevTools.createDid('key')
-      // const keytoken = await PfiRestClient.bearerToken(alicekey.keySet.verificationMethodKeys[0].privateKeyJwk, alicekey.did)
-
-      // await PfiRestClient.verify(keytoken)
     })
   })
 })

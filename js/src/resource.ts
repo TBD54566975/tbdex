@@ -70,9 +70,17 @@ export class Resource {
    */
   static async verify(resource: Resource | ResourceModel) {
     let jsonResource: ResourceModel = resource instanceof Resource ? resource.toJSON() : resource
-
     Resource.validate(jsonResource)
-    await Crypto.verify({ entity: jsonResource })
+
+    // create the payload to sign
+    const toSign = { metadata: jsonResource.metadata, data: jsonResource.data }
+    const hashedToSign = Crypto.hash(toSign)
+
+    const signer = await Crypto.verify({ detachedPayload: hashedToSign, signature: jsonResource.signature })
+
+    if (jsonResource.metadata.from !== signer) { // ensure that DID used to sign matches `from` property in metadata
+      throw new Error('Signature verification failed: Expected DID in kid of JWS header must match metadata.from')
+    }
   }
 
   /**
@@ -121,7 +129,10 @@ export class Resource {
    *              when dereferencing the signer's DID
    */
   async sign(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<void> {
-    this._signature = await Crypto.sign({ entity: this.toJSON(), privateKeyJwk, kid })
+    const toSign = { metadata: this.metadata, data: this.data }
+    const hashedToSign = Crypto.hash(toSign)
+
+    this._signature = await Crypto.sign({ privateKeyJwk, kid, detatchedContent: hashedToSign })
   }
 
   /**

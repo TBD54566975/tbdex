@@ -1,5 +1,3 @@
-import type { MessageModel, ResourceModel } from './types.js'
-import type { BearerTokenModel } from './pfi-rest-client.js'
 import type {
   PrivateKeyJwk as Web5PrivateKeyJwk,
   CryptoAlgorithm,
@@ -11,20 +9,12 @@ import * as cbor from 'cbor-x'
 import { sha256 } from '@noble/hashes/sha256'
 import { Convert } from '@web5/common'
 import { EcdsaAlgorithm, EdDsaAlgorithm, Jose } from '@web5/crypto'
-import { DidResource, deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
-import { DidDocument, VerificationMethod } from '@web5/dids'
+import { deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
 
-/**
- * options passed to {@link Crypto.sign}
- */
 export type SignOptions = {
-  /** the message or resource to sign */
-  entity: MessageModel | ResourceModel
-  /** the key to sign with */
+  detatchedContent?: string,
+  payload?: object,
   privateKeyJwk: Web5PrivateKeyJwk,
-  /** the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
-   * when dereferencing the signer's DID
-   */
   kid: string
 }
 
@@ -33,28 +23,8 @@ export type SignOptions = {
  */
 export type VerifyOptions = {
   /** the message or resource to verify the signature of */
-  entity: MessageModel | ResourceModel
-}
-
-/**
- * options passed to {@link Crypto.token}
- */
-export type TokenOptions = {
-  /** nonce */
-  timestamp: string,
-  /** the key to sign with */
-  privateKeyJwk: Web5PrivateKeyJwk,
-  /** the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
-   * when dereferencing the signer's DID
-   */
-  kid: string
-}
-
-/**
- * options passed to {@link Crypto.verifyToken}
- */
-export type VerifyTokenOptions = {
-  token: string
+  detachedPayload?: string
+  signature: string
 }
 
 export class Crypto {
@@ -75,33 +45,40 @@ export class Crypto {
     return Convert.uint8Array(sha256CborEncodedPayloadBytes).toBase64Url()
   }
 
-  /**
-   * signs the message as a compact jws with detached content and sets the signature property
-   * @param privateKeyJwk - the key to sign with
-   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
-   *              when dereferencing the signer's DID
-   * @returns the compact JWS
-   */
   static async sign(opts: SignOptions) {
-    const { entity, privateKeyJwk, kid } = opts
+    const { privateKeyJwk, kid, payload, detatchedContent } = opts
 
-    const jwsHeader: JwsHeader = { alg: privateKeyJwk.alg as PrivateKeyJwk['alg'], kid }
+    // we can assume 'crv' exists in the JWK because its a required property for Elliptic Curve keys and we only
+    // support Elliptic Curve keys atm. See: https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.1
+    const namedCurve = privateKeyJwk['crv']
+    // `alg`, short for algorithm name, is a required property in a JWS header
+    const algorithmName = crvToAlgMap[namedCurve]
+
+    const jwsHeader: JwsHeader = { alg: algorithmName, kid }
     const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
 
-    const jwsPayload = { metadata: entity.metadata, data: entity.data }
-    const base64urlEncodedJwsPayload = Crypto.hash(jwsPayload)
+    let base64urlEncodedJwsPayload: string
+    if (detatchedContent) {
+      base64urlEncodedJwsPayload = detatchedContent
+    } else {
+      base64urlEncodedJwsPayload = Convert.object(payload).toBase64Url()
+    }
+
+    const { signer, options } = signers[namedCurve]
+    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
 
     const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
     const toSignBytes = Convert.string(toSign).toUint8Array()
 
-    const { signer, options } = signers[privateKeyJwk.alg]
-    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
-
     const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
     const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
 
-    // compact JWS with detached content: https://datatracker.ietf.org/doc/html/rfc7515#appendix-F
-    return `${base64UrlEncodedJwsHeader}..${base64UrlEncodedSignature}`
+    if (detatchedContent) {
+      // compact JWS with detached content: https://datatracker.ietf.org/doc/html/rfc7515#appendix-F
+      return `${base64UrlEncodedJwsHeader}..${base64UrlEncodedSignature}`
+    } else {
+      return `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}.${base64UrlEncodedSignature}`
+    }
   }
 
   /**
@@ -116,31 +93,31 @@ export class Crypto {
    * @throws if signer's DID Document does not have the necessary verification method
    * @throws if the verification method does not include a publicKeyJwk
    */
-  static async verify(opts: VerifyOptions) {
-    const { entity } = opts
+  static async verify(opts: VerifyOptions): Promise<string> {
+    const { signature, detachedPayload } = opts
 
-    if (!entity.signature) {
+    if (!signature) {
       throw new Error('Signature verification failed: Expected signature property to exist')
     }
 
-    const splitJws = entity.signature.split('.')
+    const splitJws = signature.split('.')
     if (splitJws.length !== 3) { // ensure that JWS has 3 parts
       throw new Error('Signature verification failed: Expected valid JWS with detached content')
     }
 
-    const [base64UrlEncodedJwsHeader, detachedPayload, base64UrlEncodedSignature] = splitJws
-    if (detachedPayload.length !== 0) { // ensure that JWS payload is empty
-      throw new Error('Signature verification failed: Expected valid JWS with detached content')
+    let [base64UrlEncodedJwsHeader, base64urlEncodedJwsPayload, base64UrlEncodedSignature] = splitJws
+
+    if (detachedPayload) {
+      if (base64urlEncodedJwsPayload.length !== 0) { // ensure that JWS payload is empty
+        throw new Error('Signature verification failed: Expected valid JWS with detached content')
+      }
+
+      base64urlEncodedJwsPayload = detachedPayload
     }
 
     const jwsHeader = Convert.base64Url(base64UrlEncodedJwsHeader).toObject() as JwsHeader
     if (!jwsHeader.alg || !jwsHeader.kid) { // ensure that JWS header has required properties
       throw new Error('Signature verification failed: Expected JWS header to contain alg and kid')
-    }
-
-    const [did] = (jwsHeader.kid as string).split('#')
-    if (entity.metadata.from !== did) { // ensure that DID used to sign matches `from` property in metadata
-      throw new Error('Signature verification failed: Expected DID in kid of JWS header must match metadata.from')
     }
 
     const verificationMethod = await deferenceDidUrl(jwsHeader.kid as string)
@@ -154,16 +131,15 @@ export class Crypto {
       throw new Error('Signature verification failed: Expected kid in JWS header to dereference to a DID Document Verification Method with publicKeyJwk')
     }
 
-    // create jws payload
-    const jwsPayload = { metadata: entity.metadata, data: entity.data }
-    const base64urlEncodedJwsPayload = Crypto.hash(jwsPayload)
-
     const signedData = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
     const signedDataBytes = Convert.string(signedData).toUint8Array()
 
     const signatureBytes = Convert.base64Url(base64UrlEncodedSignature).toUint8Array()
 
-    const { signer, options } = signers[publicKeyJwk.alg]
+    // we can assume 'crv' exists in the JWK because its a required property for Elliptic Curve keys and we only
+    // support Elliptic Curve keys atm. See: https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.1
+    const namedCurve = publicKeyJwk['crv']
+    const { signer, options } = signers[namedCurve]
 
     // TODO: remove this monkeypatch once 'ext' is no longer a required property within a jwk passed to `jwkToCryptoKey`
     const monkeyPatchPublicKeyJwk = {
@@ -178,146 +154,22 @@ export class Crypto {
     if (!isLegit) {
       throw new Error('Signature verification failed: Integrity mismatch')
     }
-  }
 
-  /**
-   * signs the message as a compact jws with nonce
-   * @param privateKeyJwk - the key to sign with
-   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
-   *              when dereferencing the signer's DID
-   * @returns the compact JWS
-   */
-  static async token(opts: TokenOptions): Promise<string> {
-    const { timestamp, privateKeyJwk, kid } = opts
+    const [did] = (jwsHeader as JwsHeaderParams).kid.split('#')
 
-    const jwsHeader: JwsHeader = { alg: privateKeyJwk.alg as PrivateKeyJwk['alg'], kid }
-    const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
-
-    const base64urlEncodedJwsPayload = Convert.object({ 'timestamp': timestamp}).toBase64Url()
-
-    const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
-    const toSignBytes = Convert.string(toSign).toUint8Array()
-
-    const { signer, options } = signers[privateKeyJwk.alg]
-    const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
-
-    const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
-    const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
-
-    // compact JWS
-    return `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}.${base64UrlEncodedSignature}`
-  }
-
-  /**
-   * verifies the cryptographic integrity of the bearer token (JWS)
-   * @param opts - verification options
-   * @throws if no signature present on the message or resource
-   * @throws if the signature is not a valid compact JWS
-   * @throws if the JWS header does not contain alg and kid
-   * @throws if signer's DID cannot be resolved
-   * @throws if signer's DID Document does not have the necessary verification method
-   * @throws if the verification method does not include a publicKeyJwk
-   */
-  static async verifyToken(opts: VerifyTokenOptions): Promise<void> {
-    const { token } = opts
-
-    if (!token) {
-      throw new Error('Token verification failed: Expected token property to exist')
-    }
-
-    const splitJws = token.split('.')
-    if (splitJws.length !== 3) { // ensure that JWS has 3 parts
-      throw new Error('Token verification failed: Expected valid JWS')
-    }
-
-    const [base64UrlEncodedJwsHeader, base64urlEncodedJwsPayload, base64UrlEncodedSignature] = splitJws
-
-    const jwsHeader = Convert.base64Url(base64UrlEncodedJwsHeader).toObject() as JwsHeader
-    if (!jwsHeader.alg || !jwsHeader.kid) { // ensure that JWS header has required properties
-      throw new Error('Token verification failed: Expected JWS header to contain alg and kid')
-    }
-
-    const verificationMethod = await deferenceDidUrl(jwsHeader.kid as string)
-
-    console.log(`verification method: ${JSON.stringify(verificationMethod)}`)
-    // for did key this returns:
-    // {
-    //   "id": "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg",
-    //   "verificationMethod": [
-    //     {
-    //       "id": "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg",
-    //       "type": "JsonWebKey2020",
-    //       "controller": "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg",
-    //       "publicKeyJwk": {
-    //         "alg": "EdDSA",
-    //         "crv": "Ed25519",
-    //         "kty": "OKP",
-    //         "x": "sQd1T582SpbmqRseIKiSxgjbK1LR0Nva-EbhzKuyOHk"
-    //       }
-    //     }
-    //   ],
-    //   "authentication": [
-    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
-    //   ],
-    //   "assertionMethod": [
-    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
-    //   ],
-    //   "capabilityInvocation": [
-    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
-    //   ],
-    //   "capabilityDelegation": [
-    //     "did:key:z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg#z6MkrNJobE37D7FtRqibHVTasDJQVQDkwZmGnSjK3RRjhKzg"
-    //   ],
-    //   "@context": [
-    //     "https://www.w3.org/ns/did/v1",
-    //     "https://w3id.org/security/suites/jws-2020/v1"
-    //   ]
-    // }
-
-    if (!isVerificationMethod(verificationMethod)) { // ensure that appropriate verification method was found
-      throw new Error('Token verification failed: Expected kid in JWS header to dereference to a DID Document Verification Method')
-    }
-
-    // will be used to verify signature
-    const { publicKeyJwk } = verificationMethod
-    if (!publicKeyJwk) { // ensure that Verification Method includes public key as a JWK.
-      throw new Error('Token verification failed: Expected kid in JWS header to dereference to a DID Document Verification Method with publicKeyJwk')
-    }
-
-    const signedData = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
-    const signedDataBytes = Convert.string(signedData).toUint8Array()
-
-    const signatureBytes = Convert.base64Url(base64UrlEncodedSignature).toUint8Array()
-
-    const { signer, options } = signers[publicKeyJwk.alg]
-
-    // TODO: remove this monkeypatch once 'ext' is no longer a required property within a jwk passed to `jwkToCryptoKey`
-    const monkeyPatchPublicKeyJwk = {
-      ...publicKeyJwk,
-      ext     : 'true' as const,
-      key_ops : ['verify']
-    }
-
-    const key = await Jose.jwkToCryptoKey({ key: monkeyPatchPublicKeyJwk })
-    const isLegit = signer.verify({ algorithm: options, key, data: signedDataBytes, signature: signatureBytes })
-
-    if (!isLegit) {
-      throw new Error('Token verification failed: Integrity mismatch')
-    }
+    return did
   }
 }
 
 // TODO: remove this monkey-patch after https://github.com/TBD54566975/web5-js/pull/175 is merged
 type JwsHeader = Omit<JwsHeaderParams, 'alg'> & { alg: JwsHeaderParams['alg'] | 'EdDSA' }
-type PrivateKeyJwk = Omit<Web5PrivateKeyJwk, 'alg'> & { alg: JwsHeaderParams['alg'] | 'EdDSA' }
-
 /** supported cryptographic algorithms */
 const signers: { [alg: string]: SignerValue<Web5Crypto.EcdsaOptions | Web5Crypto.EdDsaOptions> } = {
-  'ES256K': {
+  'secp256k1': {
     signer  : new EcdsaAlgorithm(),
     options : { name: 'ECDSA', hash: 'SHA-256' }
   },
-  'EdDSA': {
+  'Ed25519': {
     signer  : new EdDsaAlgorithm(),
     options : { name: 'EdDSA' }
   }
@@ -326,4 +178,9 @@ const signers: { [alg: string]: SignerValue<Web5Crypto.EcdsaOptions | Web5Crypto
 type SignerValue<T extends Web5Crypto.Algorithm> = {
   signer: CryptoAlgorithm,
   options?: T
+}
+
+const crvToAlgMap = {
+  'Ed25519'   : 'EdDSA',
+  'secp256k1' : 'ES256K'
 }
