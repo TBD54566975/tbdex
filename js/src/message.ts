@@ -94,7 +94,16 @@ export class Message<T extends MessageKindClass> {
     let jsonMessage: MessageModel<T['kind']> = message instanceof Message ? message.toJSON() : message
 
     Message.validate(jsonMessage)
-    await Crypto.verify({ entity: jsonMessage })
+
+    // create the payload to sign
+    const toSign = { metadata: jsonMessage.metadata, data: jsonMessage.data }
+    const hashedToSign = Crypto.hash(toSign)
+
+    const signer = await Crypto.verify({ detachedPayload: hashedToSign, signature: jsonMessage.signature })
+
+    if (jsonMessage.metadata.from !== signer) { // ensure that DID used to sign matches `from` property in metadata
+      throw new Error('Signature verification failed: Expected DID in kid of JWS header must match metadata.from')
+    }
   }
 
   /**
@@ -153,7 +162,10 @@ export class Message<T extends MessageKindClass> {
    *              when dereferencing the signer's DID
    */
   async sign(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<void> {
-    this._signature = await Crypto.sign({ entity: this.toJSON(), privateKeyJwk, kid })
+    const toSign = { metadata: this.metadata, data: this.data }
+    const hashedToSign = Crypto.hash(toSign)
+
+    this._signature = await Crypto.sign({ privateKeyJwk, kid, detatchedContent: hashedToSign })
   }
 
   /**
