@@ -1,15 +1,5 @@
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
-import type {
-  OrderStatusModel,
-  MessageMetadata,
-  MessageKind,
-  MessageModel,
-  OrderModel,
-  CloseModel,
-  QuoteModel,
-  RfqModel,
-  Private
-} from './types.js'
+import type { MessageMetadata, MessageKind, MessageModel, Private } from './types.js'
 
 import { typeid } from 'typeid-js'
 import { Crypto } from './crypto.js'
@@ -90,7 +80,7 @@ export class Message<T extends MessageKindClass> {
    * @throws if the message is invalid
    * @throws see {@link Crypto.verify}
    */
-  static async verify<T extends MessageKindClass>(message: Message<T> | MessageModel<T['kind']>): Promise<void> {
+  static async verify<T extends MessageKindClass>(message: Message<T> | MessageModel<T['kind']>): Promise<string> {
     let jsonMessage: MessageModel<T['kind']> = message instanceof Message ? message.toJSON() : message
 
     Message.validate(jsonMessage)
@@ -104,6 +94,8 @@ export class Message<T extends MessageKindClass> {
     if (jsonMessage.metadata.from !== signer) { // ensure that DID used to sign matches `from` property in metadata
       throw new Error('Signature verification failed: Expected DID in kid of JWS header must match metadata.from')
     }
+
+    return signer
   }
 
   /**
@@ -131,27 +123,10 @@ export class Message<T extends MessageKindClass> {
    */
   constructor(jsonMessage: NewMessage<T['kind']>) {
     this._metadata = jsonMessage.metadata
+    this._data = jsonMessage.data
 
     if (jsonMessage.signature) {
       this._signature = jsonMessage.signature
-    }
-
-    switch(jsonMessage.metadata.kind) {
-      case 'rfq':
-        this._data = new Rfq(jsonMessage.data as RfqModel)
-        break
-      case 'quote':
-        this._data = new Quote(jsonMessage.data as QuoteModel)
-        break
-      case 'order':
-        this._data = new Order(jsonMessage.data as OrderModel)
-        break
-      case 'orderStatus':
-        this._data = new OrderStatus(jsonMessage.data as OrderStatusModel)
-        break
-      case 'close':
-        this._data = new Close(jsonMessage.data as CloseModel)
-        break
     }
   }
 

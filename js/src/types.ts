@@ -5,7 +5,7 @@ export type ResourceModel<T extends ResourceKind> = {
   /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
   metadata: ResourceMetadata<T>
   /** The actual resource content */
-  data: unknown
+  data: ResourceKindModel<T>
   /** signature that verifies that authenticity and integrity of a message */
   signature: string
 }

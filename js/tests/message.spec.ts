@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Convert } from '@web5/common'
 import { DevTools } from '../src/dev-tools.js'
-import { Message, Rfq } from '../src/main.js'
+import { Message } from '../src/main.js'
 
 describe('Message', () => {
   describe('create', () => {
@@ -17,7 +17,6 @@ describe('Message', () => {
       expect(message.exchangeId).to.exist
       expect(message.id).to.equal(message.exchangeId)
       expect(message.id).to.include('rfq_')
-      expect(message.data).to.be.instanceof(Rfq)
     })
   })
 
@@ -145,7 +144,6 @@ describe('Message', () => {
       await message.sign(privateKeyJwk, kid)
 
       const jsonMessage = JSON.stringify(message)
-      console.log(JSON.stringify(jsonMessage, null, 2))
       const parsedMessage = await Message.parse(jsonMessage)
 
       expect(jsonMessage).to.equal(JSON.stringify(parsedMessage))

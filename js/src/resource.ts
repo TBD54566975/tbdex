@@ -1,5 +1,5 @@
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
-import type { ResourceModel, ResourceMetadata, ResourceKind, OfferingModel } from './types.js'
+import type { ResourceModel, ResourceMetadata, ResourceKind } from './types.js'
 
 import { typeid } from 'typeid-js'
 import { Crypto } from './crypto.js'
@@ -109,12 +109,7 @@ export class Resource<T extends ResourceKindClass> {
   constructor(jsonResource: NewResource<T['kind']>) {
     this._metadata = jsonResource.metadata
     this._signature = jsonResource.signature // may be undefined
-
-    switch(jsonResource.metadata.kind) {
-      case 'offering':
-        this._data = new Offering(jsonResource.data as OfferingModel)
-        break
-    }
+    this._data = jsonResource.data
   }
 
   /**

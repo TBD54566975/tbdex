@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Convert } from '@web5/common'
 import { DevTools } from '../src/dev-tools.js'
-import { Resource, Offering } from '../src/main.js'
+import { Resource } from '../src/main.js'
 
 describe('Resource', () => {
   describe('create', () => {
@@ -15,7 +15,6 @@ describe('Resource', () => {
 
       expect(resource.id).to.exist
       expect(resource.id).to.include('offering_')
-      expect(resource.data).to.be.instanceof(Offering)
     })
   })
 
