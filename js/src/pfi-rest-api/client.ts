@@ -1,3 +1,4 @@
+import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
 import type { DataResponse, ErrorDetail, ErrorResponse, HttpResponse } from './types.js'
 import type { ResourceMetadata, MessageModel, OfferingModel, ResourceModel, MessageKind } from '../types.js'
 import type { MessageKindClass } from '../message.js'
@@ -9,7 +10,7 @@ import { resolveDid } from '../did-resolver.js'
 import { Offering } from '../resource-kinds/index.js'
 import { Resource } from '../resource.js'
 import { Message } from '../message.js'
-import { PrivateKeyJwk } from '@web5/crypto'
+import { Crypto } from '../crypto.js'
 
 /**
  * options passed to {@link PfiRestClient.sendMessage} method
@@ -43,7 +44,7 @@ export type GetExchangeOptions = {
   /** the exchange you want to fetch */
   exchangeId: string
   /** the private key used to sign the bearer token */
-  privateKeyJwk: PrivateKeyJwk
+  privateKeyJwk: Web5PrivateKeyJwk
 }
 
 /**
@@ -208,5 +209,25 @@ export class PfiRestClient {
     } else {
       throw new Error(`${did} has no PFI service entry`)
     }
+  }
+
+  /**
+   * generates a jws to be used to authenticate GET requests
+   * @param privateKeyJwk - the key to sign with
+   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
+   *              when dereferencing the signer's DID
+   */
+  static async generateRequestToken(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<string> {
+    const tokenPayload = { timestamp: new Date().toISOString() }
+    return Crypto.sign({ privateKeyJwk, kid, payload: tokenPayload })
+  }
+
+  /**
+   * validates the bearer token and verifies the cryptographic signature
+   * @throws if the token is invalid
+   * @throws see {@link Crypto.verify}
+   */
+  static async verify(requestToken: string): Promise<string> {
+    return Crypto.verify({ signature: requestToken })
   }
 }

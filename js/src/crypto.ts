@@ -149,7 +149,7 @@ export class Crypto {
     }
 
     const key = await Jose.jwkToCryptoKey({ key: monkeyPatchPublicKeyJwk })
-    const isLegit = signer.verify({ algorithm: options, key, data: signedDataBytes, signature: signatureBytes })
+    const isLegit = await signer.verify({ algorithm: options, key, data: signedDataBytes, signature: signatureBytes })
 
     if (!isLegit) {
       throw new Error('Signature verification failed: Integrity mismatch')

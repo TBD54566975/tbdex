@@ -145,6 +145,7 @@ describe('Message', () => {
       await message.sign(privateKeyJwk, kid)
 
       const jsonMessage = JSON.stringify(message)
+      console.log(JSON.stringify(jsonMessage, null, 2))
       const parsedMessage = await Message.parse(jsonMessage)
 
       expect(jsonMessage).to.equal(JSON.stringify(parsedMessage))
