@@ -11,6 +11,7 @@ import { Convert } from '@web5/common'
 import { EcdsaAlgorithm, EdDsaAlgorithm, Jose } from '@web5/crypto'
 import { deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
 
+/** options passed to {@link Crypto.sign} */
 export type SignOptions = {
   detatchedContent?: string,
   payload?: object,
@@ -27,7 +28,30 @@ export type VerifyOptions = {
   signature: string
 }
 
+type SignerValue<T extends Web5Crypto.Algorithm> = {
+  signer: CryptoAlgorithm,
+  options?: T
+}
+
 export class Crypto {
+  /** supported cryptographic algorithms */
+  static signers: { [alg: string]: SignerValue<Web5Crypto.EcdsaOptions | Web5Crypto.EdDsaOptions> } = {
+    'secp256k1': {
+      signer  : new EcdsaAlgorithm(),
+      options : { name: 'ECDSA', hash: 'SHA-256' }
+    },
+    'Ed25519': {
+      signer  : new EdDsaAlgorithm(),
+      options : { name: 'EdDSA' }
+    }
+  }
+
+  /** map of named curves to cryptographic algorithms. Necessary for JWS/JWK  */
+  static crvToAlgMap = {
+    'Ed25519'   : 'EdDSA',
+    'secp256k1' : 'ES256K'
+  }
+
   /**
    * hashes the payload provided in the following manner:
    * base64url(
@@ -52,7 +76,7 @@ export class Crypto {
     // support Elliptic Curve keys atm. See: https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.1
     const namedCurve = privateKeyJwk['crv']
     // `alg`, short for algorithm name, is a required property in a JWS header
-    const algorithmName = crvToAlgMap[namedCurve]
+    const algorithmName = Crypto.crvToAlgMap[namedCurve]
 
     const jwsHeader: JwsHeader = { alg: algorithmName, kid }
     const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
@@ -64,7 +88,7 @@ export class Crypto {
       base64urlEncodedJwsPayload = Convert.object(payload).toBase64Url()
     }
 
-    const { signer, options } = signers[namedCurve]
+    const { signer, options } = Crypto.signers[namedCurve]
     const key = await Jose.jwkToCryptoKey({ key: privateKeyJwk as Web5PrivateKeyJwk })
 
     const toSign = `${base64UrlEncodedJwsHeader}.${base64urlEncodedJwsPayload}`
@@ -139,7 +163,7 @@ export class Crypto {
     // we can assume 'crv' exists in the JWK because its a required property for Elliptic Curve keys and we only
     // support Elliptic Curve keys atm. See: https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.1
     const namedCurve = publicKeyJwk['crv']
-    const { signer, options } = signers[namedCurve]
+    const { signer, options } = Crypto.signers[namedCurve]
 
     // TODO: remove this monkeypatch once 'ext' is no longer a required property within a jwk passed to `jwkToCryptoKey`
     const monkeyPatchPublicKeyJwk = {
@@ -163,24 +187,3 @@ export class Crypto {
 
 // TODO: remove this monkey-patch after https://github.com/TBD54566975/web5-js/pull/175 is merged
 type JwsHeader = Omit<JwsHeaderParams, 'alg'> & { alg: JwsHeaderParams['alg'] | 'EdDSA' }
-/** supported cryptographic algorithms */
-const signers: { [alg: string]: SignerValue<Web5Crypto.EcdsaOptions | Web5Crypto.EdDsaOptions> } = {
-  'secp256k1': {
-    signer  : new EcdsaAlgorithm(),
-    options : { name: 'ECDSA', hash: 'SHA-256' }
-  },
-  'Ed25519': {
-    signer  : new EdDsaAlgorithm(),
-    options : { name: 'EdDSA' }
-  }
-}
-
-type SignerValue<T extends Web5Crypto.Algorithm> = {
-  signer: CryptoAlgorithm,
-  options?: T
-}
-
-const crvToAlgMap = {
-  'Ed25519'   : 'EdDSA',
-  'secp256k1' : 'ES256K'
-}
