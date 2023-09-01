@@ -66,11 +66,11 @@ Version: Draft
 # Discoverability
 PFIs can become publicly discoverable by advertising their API endpoint as a [Service](https://www.w3.org/TR/did-core/#services) within their DID Document. In order to increase the likelihood of being discovered The `service` entry **SHOULD** include the following properties:
 
-| Property          | Value                                                         |
-| ----------------- | ------------------------------------------------------------- |
-| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services) |
-| `type`            | `PFI`                                                         |
-| `serviceEndpoint` | PFI's publicly addressable API endpoint or DID which has PFIs publicly addressable endpoint                       |
+| Property          | Value                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services)                               |
+| `type`            | `PFI`                                                                                       |
+| `serviceEndpoint` | PFI's publicly addressable API endpoint or DID which has PFIs publicly addressable endpoint |
 If the serviceEndpoint is itself a DID, this did should resolve to a document and then its serviceEndpoints can be examined for the `#pfi` item. 
 
 ## Example
@@ -319,10 +319,9 @@ Uses DID authn via Bearer token in header.
 
 ### Query Params
 
-| Param | Description                    |
-| ----- | ------------------------------ |
-| sort  | field to the tbdex messages by |
-| id    | exchange id(s) to return       |
+| Param | Description              |
+| ----- | ------------------------ |
+| id    | exchange id(s) to return |
 
 
 

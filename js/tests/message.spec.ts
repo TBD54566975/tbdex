@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Convert } from '@web5/common'
 import { DevTools } from '../src/dev-tools.js'
-import { Message, OrderStatus, Rfq } from '../src/main.js'
+import { Message, OrderStatus } from '../src/main.js'
 
 describe('Message', () => {
   describe('create', () => {
@@ -17,7 +17,6 @@ describe('Message', () => {
       expect(message.exchangeId).to.exist
       expect(message.id).to.equal(message.exchangeId)
       expect(message.id).to.include('rfq_')
-      expect(message.data).to.be.instanceof(Rfq)
     })
 
     it('creates a message for an existing thread', async () => {

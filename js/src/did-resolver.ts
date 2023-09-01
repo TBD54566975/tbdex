@@ -15,7 +15,9 @@ export const DidResolver = new Web5DidResolver({
 export async function resolveDid(did: string): Promise<DidDocument> {
   const { didResolutionMetadata, didDocument } = await DidResolver.resolve(did)
 
-  if (didResolutionMetadata.error) {
+  // TODO: remove the '?' after we ask OSE peeps about why DID ION resolution doesn't return didResolutionMetadata
+  // despite being required as per the did-core spec
+  if (didResolutionMetadata?.error) {
     throw new Error(`Failed to resolve DID: ${did}. Error: ${didResolutionMetadata.error}`)
   }
 
@@ -54,7 +56,7 @@ export async function deferenceDidUrl(didUrl: string): Promise<DidResource> {
   // See: https://www.w3.org/TR/did-core/#relative-did-urls
   // using a set for fast string comparison. DIDs can be lonnng.
   // TODO: check to see if parsedDid.fragment includes a '#'
-  const idSet = new Set([didUrl, parsedDid.fragment])
+  const idSet = new Set([didUrl, parsedDid.fragment, `#${parsedDid.fragment}`])
 
   for (let vm of verificationMethod) {
     if (idSet.has(vm.id)) {
@@ -75,5 +77,5 @@ export async function deferenceDidUrl(didUrl: string): Promise<DidResource> {
  * @returns
  */
 export function isVerificationMethod(didResource: DidResource): didResource is VerificationMethod {
-  return 'id' in didResource && 'type' in didResource && 'controller' in didResource
+  return didResource && 'id' in didResource && 'type' in didResource && 'controller' in didResource
 }

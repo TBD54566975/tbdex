@@ -5,7 +5,7 @@ export class Rfq {
   readonly validNext = new Set<MessageKind>(['quote', 'close'])
   readonly kind: MessageKind = 'rfq'
 
-  private data: RfqModel
+  readonly data: RfqModel
 
   constructor(rfq: RfqModel) {
     //! TODO: validate beforehand?

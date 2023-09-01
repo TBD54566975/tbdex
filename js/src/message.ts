@@ -1,14 +1,5 @@
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
-import type {
-  OrderStatusModel,
-  MessageMetadata,
-  MessageModel,
-  OrderModel,
-  CloseModel,
-  QuoteModel,
-  RfqModel,
-  Private
-} from './types.js'
+import type { MessageMetadata, MessageKind, MessageModel, Private } from './types.js'
 
 import { typeid } from 'typeid-js'
 import { Crypto } from './crypto.js'
@@ -23,23 +14,23 @@ export type MessageKindClass = Rfq | Quote | Order | OrderStatus | Close
  */
 export type CreateMessageOptions<T extends MessageKindClass> = {
   data: T
-  metadata: T extends Rfq ? Omit<MetadataOptions, 'exchangeId'> : MetadataOptions
+  metadata: T extends Rfq ? Omit<MetadataOptions<T['kind']>, 'exchangeId'> : MetadataOptions<T['kind']>
   private?: T extends Rfq ? Record<string, any> : never
 }
 
-export type MetadataOptions = Omit<MessageMetadata, 'id' |'kind' | 'createdAt'>
+export type MetadataOptions<T extends MessageKind> = Omit<MessageMetadata<T>, 'id' |'kind' | 'createdAt'>
 
 /** argument passed to {@link Message} constructor */
-export type NewMessage = Omit<MessageModel, 'signature'> & { signature?: string }
+export type NewMessage<T extends MessageKind> = Omit<MessageModel<T>, 'signature'> & { signature?: string }
 
 /**
  * Messages form exchanges between Alice and a PFI.
  */
-export class Message {
-  private _metadata: MessageMetadata
-  private _data: MessageKindClass
+export class Message<T extends MessageKindClass> {
+  private _metadata: MessageMetadata<T['kind']>
+  private _data: T['data']
   private _signature: string
-  private _private: Private
+  private _private?: T['kind'] extends 'rfq' ? Private : never
 
   /**
    * creates a Message using the options provided
@@ -47,23 +38,23 @@ export class Message {
    * @returns {Message}
    */
   static create<T extends MessageKindClass>(options: CreateMessageOptions<T>) {
-    const metadata: Partial<MessageMetadata> = {
+    const metadata = {
       ...options.metadata,
       kind      : options.data.kind,
       id        : typeid(options.data.kind).toString(),
       createdAt : new Date().toISOString()
-    }
+    } as MessageMetadata<T['kind']>
 
     if (options.data.kind === 'rfq') {
       metadata.exchangeId = metadata.id
     }
 
-    const message: NewMessage = {
-      metadata : metadata as MessageMetadata,
+    const message = {
+      metadata : metadata,
       data     : options.data.toJSON(),
-    }
+    } as NewMessage<T['kind']>
 
-    return new Message(message, options.data)
+    return new Message(message)
   }
 
   /**
@@ -71,8 +62,8 @@ export class Message {
    * @param message - the message to parse. can either be an object or a string
    * @returns {Message}
    */
-  static async parse(message: MessageModel | string) {
-    let jsonMessage: MessageModel
+  static async parse<T extends MessageKind>(message: MessageModel<T> | string) {
+    let jsonMessage: MessageModel<T>
     try {
       jsonMessage = typeof message === 'string' ? JSON.parse(message): message
     } catch(e) {
@@ -89,11 +80,22 @@ export class Message {
    * @throws if the message is invalid
    * @throws see {@link Crypto.verify}
    */
-  static async verify(message: Message | MessageModel): Promise<void> {
-    let jsonMessage: MessageModel = message instanceof Message ? message.toJSON() : message
+  static async verify<T extends MessageKindClass>(message: Message<T> | MessageModel<T['kind']>): Promise<string> {
+    let jsonMessage: MessageModel<T['kind']> = message instanceof Message ? message.toJSON() : message
 
     Message.validate(jsonMessage)
-    await Crypto.verify({ entity: jsonMessage })
+
+    // create the payload to sign
+    const toSign = { metadata: jsonMessage.metadata, data: jsonMessage.data }
+    const hashedToSign = Crypto.hash(toSign)
+
+    const signer = await Crypto.verify({ detachedPayload: hashedToSign, signature: jsonMessage.signature })
+
+    if (jsonMessage.metadata.from !== signer) { // ensure that DID used to sign matches `from` property in metadata
+      throw new Error('Signature verification failed: Expected DID in kid of JWS header must match metadata.from')
+    }
+
+    return signer
   }
 
   /**
@@ -117,38 +119,14 @@ export class Message {
    * consumers should use {@link Message.create} to programmatically create messages and
    * {@link Message.parse} to parse stringified messages
    * @param jsonMessage - the message as a json object
-   * @param data - message.data as a MessageKind class instance. can be passed in as an optimization if class instance
-   *               is present in calling scope
    * @returns {Message}
    */
-  constructor(jsonMessage: NewMessage, data?: MessageKindClass) {
+  constructor(jsonMessage: NewMessage<T['kind']>) {
     this._metadata = jsonMessage.metadata
+    this._data = jsonMessage.data
 
     if (jsonMessage.signature) {
       this._signature = jsonMessage.signature
-    }
-
-    if (data) {
-      this._data = data
-      return
-    }
-
-    switch(jsonMessage.metadata.kind) {
-      case 'rfq':
-        this._data = new Rfq(jsonMessage.data as RfqModel)
-        break
-      case 'quote':
-        this._data = new Quote(jsonMessage.data as QuoteModel)
-        break
-      case 'order':
-        this._data = new Order(jsonMessage.data as OrderModel)
-        break
-      case 'orderstatus':
-        this._data = new OrderStatus(jsonMessage.data as OrderStatusModel)
-        break
-      case 'close':
-        this._data = new Close(jsonMessage.data as CloseModel)
-        break
     }
   }
 
@@ -159,7 +137,10 @@ export class Message {
    *              when dereferencing the signer's DID
    */
   async sign(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<void> {
-    this._signature = await Crypto.sign({ entity: this.toJSON(), privateKeyJwk, kid })
+    const toSign = { metadata: this.metadata, data: this.data }
+    const hashedToSign = Crypto.hash(toSign)
+
+    this._signature = await Crypto.sign({ privateKeyJwk, kid, detachedPayload: hashedToSign })
   }
 
   /**
@@ -175,17 +156,42 @@ export class Message {
    * returns the message as a json object. Automatically used by {@link JSON.stringify} method.
    */
   toJSON() {
-    const message: MessageModel = {
+    const message = {
       metadata  : this.metadata,
-      data      : this.data.toJSON(),
+      data      : this.data,
       signature : this.signature
-    }
+    } as MessageModel<T['kind']>
 
     if (this._private) {
       message.private = this._private
     }
 
     return message
+  }
+
+  /** rfq type guard */
+  isRfq(): this is Message<Rfq> {
+    return this.metadata.kind === 'rfq'
+  }
+
+  /** quote type guard */
+  isQuote(): this is Message<Quote> {
+    return this.metadata.kind === 'quote'
+  }
+
+  /** order type guard */
+  isOrder(): this is Message<Order> {
+    return this.metadata.kind === 'order'
+  }
+
+  /** orderStatus type guard */
+  isOrderStatus(): this is Message<OrderStatus> {
+    return this.metadata.kind === 'orderstatus'
+  }
+
+  /** close type guard */
+  isClose(): this is Message<Close> {
+    return this.metadata.kind === 'close'
   }
 
   /** The metadata object contains fields about the message and is present in every tbdex message. */

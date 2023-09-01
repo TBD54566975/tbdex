@@ -8,7 +8,7 @@ export class Close {
   readonly validNext = new Set<MessageKind>([])
   readonly kind: MessageKind = 'close'
 
-  private data: CloseModel
+  readonly data: CloseModel
 
   constructor(closeData: CloseModel) {
     this.data = closeData
