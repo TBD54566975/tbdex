@@ -13,7 +13,7 @@ import { deferenceDidUrl, isVerificationMethod } from './did-resolver.js'
 
 /** options passed to {@link Crypto.sign} */
 export type SignOptions = {
-  detatchedContent?: string,
+  detachedPayload?: string,
   payload?: object,
   privateKeyJwk: Web5PrivateKeyJwk,
   kid: string
@@ -28,6 +28,7 @@ export type VerifyOptions = {
   signature: string
 }
 
+/** used as value for each supported named curved listed in {@link Crypto.signers} */
 type SignerValue<T extends Web5Crypto.Algorithm> = {
   signer: CryptoAlgorithm,
   options?: T
@@ -69,8 +70,12 @@ export class Crypto {
     return Convert.uint8Array(sha256CborEncodedPayloadBytes).toBase64Url()
   }
 
+  /**
+   * signs the payload provided as a compact JWS
+   * @param opts - signing options
+   */
   static async sign(opts: SignOptions) {
-    const { privateKeyJwk, kid, payload, detatchedContent } = opts
+    const { privateKeyJwk, kid, payload, detachedPayload } = opts
 
     // we can assume 'crv' exists in the JWK because its a required property for Elliptic Curve keys and we only
     // support Elliptic Curve keys atm. See: https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.1
@@ -82,8 +87,8 @@ export class Crypto {
     const base64UrlEncodedJwsHeader = Convert.object(jwsHeader).toBase64Url()
 
     let base64urlEncodedJwsPayload: string
-    if (detatchedContent) {
-      base64urlEncodedJwsPayload = detatchedContent
+    if (detachedPayload) {
+      base64urlEncodedJwsPayload = detachedPayload
     } else {
       base64urlEncodedJwsPayload = Convert.object(payload).toBase64Url()
     }
@@ -97,7 +102,7 @@ export class Crypto {
     const signatureBytes = await signer.sign({ key, data: toSignBytes, algorithm: options })
     const base64UrlEncodedSignature = Convert.uint8Array(signatureBytes).toBase64Url()
 
-    if (detatchedContent) {
+    if (detachedPayload) {
       // compact JWS with detached content: https://datatracker.ietf.org/doc/html/rfc7515#appendix-F
       return `${base64UrlEncodedJwsHeader}..${base64UrlEncodedSignature}`
     } else {
@@ -180,7 +185,6 @@ export class Crypto {
     }
 
     const [did] = (jwsHeader as JwsHeaderParams).kid.split('#')
-
     return did
   }
 }

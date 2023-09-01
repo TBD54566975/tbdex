@@ -30,8 +30,8 @@ describe('Crypto', () => {
 
       const token = await Crypto.sign({
         privateKeyJwk,
-        kid              : `${alice.did}#${privateKeyJwk.kid}`,
-        detatchedContent : base64urlEncodedPayload
+        kid             : `${alice.did}#${privateKeyJwk.kid}`,
+        detachedPayload : base64urlEncodedPayload
       })
 
       const did = await Crypto.verify({ signature: token, detachedPayload: base64urlEncodedPayload })

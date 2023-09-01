@@ -140,7 +140,7 @@ export class Message<T extends MessageKindClass> {
     const toSign = { metadata: this.metadata, data: this.data }
     const hashedToSign = Crypto.hash(toSign)
 
-    this._signature = await Crypto.sign({ privateKeyJwk, kid, detatchedContent: hashedToSign })
+    this._signature = await Crypto.sign({ privateKeyJwk, kid, detachedPayload: hashedToSign })
   }
 
   /**
