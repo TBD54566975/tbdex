@@ -186,7 +186,7 @@ export class Message<T extends MessageKindClass> {
 
   /** orderStatus type guard */
   isOrderStatus(): this is Message<OrderStatus> {
-    return this.metadata.kind === 'orderStatus'
+    return this.metadata.kind === 'orderstatus'
   }
 
   /** close type guard */

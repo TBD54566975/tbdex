@@ -95,12 +95,12 @@ export type MessageMetadata<T extends MessageKind> = {
 
 export type Private = Record<string, any>
 export type MessageKindModel<T extends keyof MessageKinds> = MessageKinds[T]
-export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderStatus' | 'close'
+export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderstatus' | 'close'
 export type MessageKinds = {
   'rfq': RfqModel
   'quote': QuoteModel
   'order': OrderModel
-  'orderStatus': OrderStatusModel
+  'orderstatus': OrderStatusModel
   'close': CloseModel
 }
 
