@@ -1,4 +1,6 @@
-# tbDEX Protocol <!-- omit in toc -->
+# tbDEX Protocol JS implementation <!-- omit in toc -->
+
+This is a JS implementation of the tbDEX protocol (actually in typescript).
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -17,7 +19,53 @@ npm install @tbd54566975/tbdex
 ```
 
 # Usage
-TODO: Fill out
+
+Depending on your use case, you will be either building a client that interacts with the tbDEX protocol, or you will be building a server that implements the tbDEX protocol. The following sections will cover both use cases. Note while this is being built out that `tests` provide some reasonable examples to help get you started. `src/types` contain the typescript types if you are using typescript.
+
+## Client
+
+There is a convenience pfi-rest-api implementation you can use, as shown below.
+
+### Getting exchange offerings
+Using modular JS (both client and node): 
+
+```mjs
+// Import the required modules and classes using ESM
+import { PfiRestClient } from "@tbd54566975/tbdex";
+
+// Define the options for the getOfferings method
+const offeringsOptions = {
+  pfiDid: 'did:example:123456789abcdefghi',
+};
+
+// Call the getOfferings method
+PfiRestClient.getOfferings(offeringsOptions).then(response => {
+  if (response.status === 200) {
+    console.log('Offerings:', response.data);
+  } else {
+    console.error('Error fetching offerings:', response.errors);
+  }
+}).catch(error => {
+  console.error('Failed to fetch offerings:', error.message);
+});
+```
+
+This will connect to the participating financtial institution (PFI) specified by its DID, and fetch the offerings (which will contain currency pairs, indicative rates and also requirements for identity verification).
+
+NOTE: This is still a WIP and more convenience methods will be added shortly. 
+
+### Getting Quotes
+
+TODO
+
+### Creating Orders
+
+TODO
+
+## Server
+
+(TODO)
+
 
 
 # Development
