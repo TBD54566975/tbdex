@@ -1,5 +1,5 @@
 import type { Schema as JsonSchema } from 'ajv'
-import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
+import type { PresentationDefinitionV2, PresentationSubmission } from '@sphereon/pex-models'
 
 export type ResourceModel<T extends ResourceKind> = {
   /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
@@ -109,13 +109,15 @@ export type RfqModel = {
   offeringId: string
   /** Amount of quote currency you want to spend in order to receive base currency */
   quoteAmountSubunits: string
-  /** Presentation Submission VP that fulfills the requirements included in the respective Offering */
-  vcs: string
   /** Selected payment method that Alice will use to send the listed quote currency to the PFI. */
   payinMethod: SelectedPaymentMethod
-
   /** Selected payment method that the PFI will use to send the listed base currency to Alice */
   payoutMethod: SelectedPaymentMethod
+  /** Presentation Submission that fulfills the requirements included in the respective Offering */
+  vcs: {
+    presentation_submission: PresentationSubmission
+    claims: string[]
+  }
 }
 
 export type SelectedPaymentMethod = {
@@ -164,9 +166,11 @@ export type PaymentInstruction = {
 }
 
 /**
- * Message sent by Alice to the PFI to accept a Quote
+ * Message sent by Alice to the PFI to accept a Quote. Order is currently an empty object
  */
-export type OrderModel = {}
+export type OrderModel = {
+  [key: string]: never
+}
 
 /**
  * Message sent by the PFI to Alice to convey the current status of an order. There can be many OrderStatus
