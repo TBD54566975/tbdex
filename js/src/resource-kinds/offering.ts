@@ -1,16 +1,28 @@
-import { OfferingModel, ResourceKind } from '../types.js'
+import type { ResourceKindModel, ResourceMetadata } from '../types.js'
+import { Resource } from '../resource.js'
+
+/** options passed to {@link Offering.create} */
+export type CreateOfferingOptions = {
+  data: ResourceKindModel<'offering'>
+  metadata: Omit<ResourceMetadata<'offering'>, 'id' |'kind' | 'createdAt' | 'updatedAt'>
+}
 
 /**
  * An Offering is used by the PFI to describe a currency pair they have to offer
  * including the requirements, conditions, and constraints in
  * order to fulfill that offer.
  */
-export class Offering {
-  readonly data: OfferingModel
-  readonly kind: ResourceKind = 'offering'
+export class Offering extends Resource<'offering'> {
+  static create(opts: CreateOfferingOptions) {
+    const metadata: ResourceMetadata<'offering'> = {
+      ...opts.metadata,
+      kind      : 'offering',
+      id        : Resource.generateId('offering'),
+      createdAt : new Date().toISOString()
+    }
 
-  constructor(offeringData: OfferingModel) {
-    this.data = offeringData
+    const message = { metadata, data: opts.data }
+    return new Offering(message)
   }
 
   /** Brief description of what is being offered. */
@@ -46,9 +58,5 @@ export class Offering {
   /** PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote. */
   get vcRequirements() {
     return this.data.vcRequirements
-  }
-
-  toJSON() {
-    return this.data
   }
 }

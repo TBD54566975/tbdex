@@ -1,17 +1,26 @@
-import { OrderModel, MessageKind } from '../types.js'
+import type { MessageKind, MessageMetadata } from '../types.js'
+import { Message } from '../message.js'
 
-export class Order {
-  /** a set of valid Message kinds that can come after an Order */
+/** options passed to {@link Order.create} */
+export type CreateOrderOptions = {
+  metadata: Omit<MessageMetadata<'order'>, 'id' |'kind' | 'createdAt'>
+  private?: Record<string, any>
+}
+
+export class Order extends Message<'order'> {
   readonly validNext = new Set<MessageKind>(['orderstatus'])
-  readonly kind: MessageKind = 'order'
 
-  readonly data: OrderModel
+  static create(opts: CreateOrderOptions) {
+    const id = Message.generateId('order')
+    const metadata: MessageMetadata<'order'> = {
+      ...opts.metadata,
+      kind       : 'order',
+      id         : id,
+      exchangeId : id,
+      createdAt  : new Date().toISOString()
+    }
 
-  constructor(orderData: OrderModel = {}) {
-    this.data = orderData
-  }
-
-  toJSON() {
-    return this.data
+    const message = { metadata, data: {} }
+    return new Order(message)
   }
 }

@@ -1,7 +1,6 @@
-import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
-import type { DataResponse, ErrorDetail, ErrorResponse, HttpResponse } from './types.js'
 import type { ResourceMetadata, MessageModel, OfferingModel, ResourceModel, MessageKind } from '../types.js'
-import type { MessageKindClass } from '../message.js'
+import type { DataResponse, ErrorDetail, ErrorResponse, HttpResponse } from './types.js'
+import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
 
 import queryString from 'query-string'
 
@@ -15,9 +14,9 @@ import { Crypto } from '../crypto.js'
 /**
  * options passed to {@link PfiRestClient.sendMessage} method
  */
-export type SendMessageOptions<T extends MessageKindClass> = {
+export type SendMessageOptions<T extends MessageKind> = {
   /** the message you want to send */
-  message: Message<T> | MessageModel<T['kind']>
+  message: Message<T> | MessageModel<T>
 }
 
 /**
@@ -65,9 +64,9 @@ export class PfiRestClient {
    * @throws if recipient DID resolution fails
    * @throws if recipient DID does not have a PFI service entry
    */
-  static async sendMessage<T extends MessageKindClass>(opts: SendMessageOptions<T>): Promise<HttpResponse | ErrorResponse> {
+  static async sendMessage<T extends MessageKind>(opts: SendMessageOptions<T>): Promise<HttpResponse | ErrorResponse> {
     const { message } = opts
-    const jsonMessage: MessageModel<T['kind']> = message instanceof Message ? message.toJSON() : message
+    const jsonMessage: MessageModel<T> = message instanceof Message ? message.toJSON() : message
 
     await Message.verify(jsonMessage)
 
@@ -103,7 +102,7 @@ export class PfiRestClient {
    * gets offerings from the pfi provided
    * @param _opts - options
    */
-  static async getOfferings(opts: GetOfferingsOptions): Promise<DataResponse<Resource<Offering>[]> | ErrorResponse> {
+  static async getOfferings(opts: GetOfferingsOptions): Promise<DataResponse<Offering[]> | ErrorResponse> {
     const { pfiDid } = opts
     const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(pfiDid)
     const queryParams = queryString.stringify(opts.params)
@@ -116,7 +115,7 @@ export class PfiRestClient {
       throw new Error(`Failed to get offerings from ${pfiDid}. Error: ${e.message}`)
     }
 
-    const data: Resource<Offering>[] = []
+    const data: Offering[] = []
 
     if (response.status === 200) {
       const responseBody = await response.json() as { data: ResourceModel<'offering'>[] }
@@ -143,7 +142,7 @@ export class PfiRestClient {
    * get a specific exchange from the pfi provided
    * @param _opts - options
    */
-  static async getExchange(opts: GetExchangeOptions): Promise<DataResponse<Message<MessageKindClass>[]> | ErrorResponse> {
+  static async getExchange(opts: GetExchangeOptions): Promise<DataResponse<Message<MessageKind>[]> | ErrorResponse> {
     const { pfiDid, exchangeId, privateKeyJwk } = opts
     const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(pfiDid)
     const apiRoute = `${pfiServiceEndpoint}/exchanges/${exchangeId}`
@@ -157,7 +156,7 @@ export class PfiRestClient {
       throw new Error(`Failed to get offerings from ${pfiDid}. Error: ${e.message}`)
     }
 
-    const data: Message<MessageKindClass>[] = []
+    const data: Message<MessageKind>[] = []
 
     if (response.status === 200) {
       const responseBody = await response.json() as { data: MessageModel<MessageKind>[] }

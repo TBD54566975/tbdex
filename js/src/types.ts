@@ -1,5 +1,8 @@
 import type { Schema as JsonSchema } from 'ajv'
-import type { PresentationDefinitionV2, PresentationSubmission } from '@sphereon/pex-models'
+import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
+
+export type NewMessage<T extends MessageKind> = Omit<MessageModel<T>, 'signature'> & { signature?: string }
+export type NewResource<T extends ResourceKind> = Omit<ResourceModel<T>, 'signature'> & { signature?: string }
 
 export type ResourceModel<T extends ResourceKind> = {
   /** The metadata object contains fields about the resource and is present in every tbdex resources of all types. */
@@ -24,7 +27,7 @@ export type ResourceMetadata<T extends ResourceKind> = {
 }
 
 export type ResourceKind = keyof ResourceKinds
-export type ResourceKindModel<T extends keyof ResourceKinds> = ResourceKinds[T]
+export type ResourceKindModel<T extends ResourceKind> = ResourceKinds[T]
 export type ResourceKinds = {
   'offering': OfferingModel
 }
@@ -74,8 +77,6 @@ export type MessageModel<T extends MessageKind> = {
   data: MessageKindModel<T>
   /** signature that verifies that authenticity and integrity of a message */
   signature: string
-  /** An ephemeral JSON object used to transmit sensitive data (e.g. PII) */
-  private?: T extends 'rfq' ? Private : never
 }
 
 export type MessageMetadata<T extends MessageKind> = {
@@ -114,10 +115,7 @@ export type RfqModel = {
   /** Selected payment method that the PFI will use to send the listed base currency to Alice */
   payoutMethod: SelectedPaymentMethod
   /** Presentation Submission that fulfills the requirements included in the respective Offering */
-  vcs: {
-    presentation_submission: PresentationSubmission
-    claims: string[]
-  }
+  vcs: string
 }
 
 export type SelectedPaymentMethod = {

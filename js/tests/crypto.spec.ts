@@ -20,6 +20,23 @@ describe('Crypto', () => {
       await Crypto.verify({ signature: token })
     })
 
+    it('works with did:key', async () => {
+      const alice = await DevTools.createDid('key')
+      const [ verificationMethodKey ] = alice.keySet.verificationMethodKeys
+      const { privateKeyJwk } = verificationMethodKey
+
+      const parsedDid = didUtils.parseDid({ didUrl: alice.did })
+      const kid = `${alice.did}#${parsedDid.id}`
+
+      const token = await Crypto.sign({
+        privateKeyJwk,
+        kid,
+        payload: { timestamp: new Date().toISOString() }
+      })
+
+      await Crypto.verify({ signature: token })
+    })
+
     it('works with detached content', async () => {
       const alice = await DevTools.createDid('ion')
       const [ verificationMethodKey ] = alice.keySet.verificationMethodKeys
@@ -36,23 +53,6 @@ describe('Crypto', () => {
 
       const did = await Crypto.verify({ signature: token, detachedPayload: base64urlEncodedPayload })
       expect(alice.did).to.equal(did)
-    })
-
-    it('works with did:key', async () => {
-      const alice = await DevTools.createDid('key')
-      const [ verificationMethodKey ] = alice.keySet.verificationMethodKeys
-      const { privateKeyJwk } = verificationMethodKey
-
-      const parsedDid = didUtils.parseDid({ didUrl: alice.did })
-      const kid = `${alice.did}#${parsedDid.id}`
-
-      const token = await Crypto.sign({
-        privateKeyJwk,
-        kid,
-        payload: { timestamp: new Date().toISOString() }
-      })
-
-      await Crypto.verify({ signature: token })
     })
   })
 })

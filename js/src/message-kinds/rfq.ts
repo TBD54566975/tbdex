@@ -1,15 +1,29 @@
-import { RfqModel, MessageKind } from '../types.js'
+import type { MessageKind, MessageKindModel, MessageMetadata } from '../types.js'
+import { Message } from '../message.js'
 
-export class Rfq {
+/** options passed to {@link Quote.create} */
+export type CreateRfqOptions = {
+  data: MessageKindModel<'rfq'>
+  metadata: Omit<MessageMetadata<'rfq'>, 'id' |'kind' | 'createdAt' | 'exchangeId'>
+  private?: Record<string, any>
+}
+
+export class Rfq extends Message<'rfq'> {
   /** a set of valid Message kinds that can come after an rfq */
   readonly validNext = new Set<MessageKind>(['quote', 'close'])
-  readonly kind: MessageKind = 'rfq'
 
-  readonly data: RfqModel
+  static create(opts: CreateRfqOptions) {
+    const id = Message.generateId('rfq')
+    const metadata: MessageMetadata<'rfq'> = {
+      ...opts.metadata,
+      kind       : 'rfq',
+      id         : id,
+      exchangeId : id,
+      createdAt  : new Date().toISOString()
+    }
 
-  constructor(rfq: RfqModel) {
-    //! TODO: validate beforehand?
-    this.data = rfq
+    const message = { metadata, data: opts.data }
+    return new Rfq(message)
   }
 
   /** Offering which Alice would like to get a quote for */
@@ -35,9 +49,5 @@ export class Rfq {
   /** Selected payment method that the PFI will use to send the listed base currency to Alice */
   get payoutMethod() {
     return this.data.payoutMethod
-  }
-
-  toJSON() {
-    return this.data
   }
 }

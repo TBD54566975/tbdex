@@ -8,11 +8,12 @@ import { Convert } from '@web5/common'
 import { Rfq } from './message-kinds/index.js'
 import { Offering } from './resource-kinds/index.js'
 import { Crypto } from './crypto.js'
+import { OfferingModel, RfqModel } from './types.js'
 
 export type DidMethodOptions = 'key' | 'ion'
 
 /** options passed to {@link DevTools.createRfq} */
-export type CreateRfqOptions = {
+export type RfqOptions = {
   /**
    * {@link PortableDid} of the rfq sender. used to generate a random credential that fulfills the vcRequirements
    * of the offering returned by {@link DevTools.createOffering}
@@ -60,7 +61,7 @@ export class DevTools {
    * creates and returns an example offering. Useful for testing purposes
    */
   static createOffering() {
-    return new Offering({
+    const offeringData: OfferingModel = {
       description  : 'Selling BTC for USD',
       baseCurrency : {
         currencyCode : 'BTC',
@@ -132,6 +133,11 @@ export class DevTools {
           }
         }]
       }
+    }
+
+    return Offering.create({
+      metadata : { from: 'did:ex:pfi' },
+      data     : offeringData
     })
   }
 
@@ -142,9 +148,9 @@ export class DevTools {
    *
    * **NOTE**: generates a random credential that fulfills the vcRequirements of the offering
    */
-  static async createRfq(opts: CreateRfqOptions) {
+  static async createRfq(opts: RfqOptions) {
     const { sender } = opts
-    const { signedCredential } = await DevTools.createCredential({
+    const { signedCredential: _signedCredential } = await DevTools.createCredential({
       type    : 'YoloCredential',
       issuer  : sender,
       subject : sender.did,
@@ -153,7 +159,7 @@ export class DevTools {
       }
     })
 
-    return new Rfq({
+    const rfqData: RfqModel = {
       offeringId  : 'abcd123',
       payinMethod : {
         kind           : 'DEBIT_CARD',
@@ -171,18 +177,12 @@ export class DevTools {
         }
       },
       quoteAmountSubunits : '20000',
-      vcs                 : {
-        presentation_submission: {
-          id             : Date.now().toString(),
-          definition_id  : '7ce4004c-3c38-4853-968b-e411bafcd945',
-          descriptor_map : [{
-            format : 'jwt_vc',
-            id     : 'bbdb9b7c-5754-4f46-b63b-590bada959e0',
-            path   : '$.claims[0]'
-          }]
-        },
-        claims: [signedCredential]
-      }
+      vcs                 : ''
+    }
+
+    return Rfq.create({
+      metadata : { from: sender.did, to: 'did:ex:pfi' },
+      data     : rfqData
     })
   }
 

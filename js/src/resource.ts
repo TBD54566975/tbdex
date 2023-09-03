@@ -1,66 +1,56 @@
+import type { ResourceModel, ResourceMetadata, ResourceKind, ResourceKindModel, NewResource } from './types.js'
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
-import type { ResourceModel, ResourceMetadata, ResourceKind } from './types.js'
+import type { ResourceKindClass } from './resource-kinds/index.js'
 
 import { typeid } from 'typeid-js'
 import { Crypto } from './crypto.js'
 import { validate } from './validator.js'
-import { Offering } from './resource-kinds/index.js'
-
-/** Union type of all Resource Classes exported from [resource-kinds](./resource-kinds/index.ts) */
-export type ResourceKindClass = Offering
-
-/**
- * options passed to {@link Resource.create} method
-*/
-export type CreateResourceOptions<T extends ResourceKindClass> = {
-  metadata: Omit<ResourceMetadata<T['kind']>, 'id' |'kind' | 'createdAt' | 'updatedAt'>
-  data: T
-}
-
-/** argument passed to {@link Resource} constructor */
-export type NewResource<T extends ResourceKind> = Omit<ResourceModel<T>, 'signature'> & { signature?: string }
 
 /**
  * tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process.
  * They are not part of the message exchange, i.e Alice cannot reply to a Resource.
  */
-export class Resource<T extends ResourceKindClass> {
-  private _metadata: ResourceMetadata<T['kind']>
-  private _data: T['data']
+export class Resource<T extends ResourceKind> {
+  private _metadata: ResourceMetadata<T>
+  private _data: ResourceKindModel<T>
   private _signature: string
 
-  static create<T extends ResourceKindClass>(options: CreateResourceOptions<T>) {
-    const metadata = {
-      ...options.metadata,
-      id        : typeid(options.data.kind).toString(),
-      kind      : options.data.kind,
-      createdAt : new Date().toISOString()
-    } as ResourceMetadata<T['kind']>
+  /**
+   * used by {@link Resource.parse} to return an instance of resource kind's class. This abstraction is needed
+   * because importing the Resource Kind classes (e.g. Offering) creates a circular dependency
+   * due to each concrete Resource Kind class extending Resource. Library consumers dont have to worry about setting this
+  */
+  static factory: <T extends ResourceKind>(jsonResource: ResourceModel<T>) => ResourceKindClass
 
-    const resource = {
-      metadata,
-      data: options.data.toJSON()
-    } as NewResource<T['kind']>
-
-    return new Resource(resource)
+  /**
+   * Constructor is primarily for intended for internal use. For a better developer experience,
+   * consumers should use concrete classes to programmatically create resources (e.g. Offering class) and
+   * {@link Resource.parse} to parse stringified resources.
+   * @param jsonResource - the resource as a json object
+   * @param data - `resource.data` as a ResourceKind class instance. can be passed in as an optimization if class instance
+   * is present in calling scope
+   */
+  constructor(jsonResource: NewResource<T>) {
+    this._metadata = jsonResource.metadata
+    this._data = jsonResource.data
+    this._signature = jsonResource.signature
   }
 
   /**
    * parses the json resource into a Resource instance. performs format validation and an integrity check on the signature
    * @param payload - the resource to parse. can either be an object or a string
-   * @returns {Resource}
    */
-  static async parse<T extends ResourceKind>(payload: ResourceModel<T> | string) {
+  static async parse<T extends ResourceKind>(resource: ResourceModel<T> | string): Promise<ResourceKindClass> {
     let jsonResource: ResourceModel<T>
     try {
-      jsonResource = typeof payload === 'string' ? JSON.parse(payload) : payload
+      jsonResource = typeof resource === 'string' ? JSON.parse(resource): resource
     } catch(e) {
       throw new Error(`parse: Failed to parse resource. Error: ${e.message}`)
     }
 
     await Resource.verify(jsonResource)
 
-    return new Resource(jsonResource)
+    return Resource.factory(jsonResource)
   }
 
   /**
@@ -68,8 +58,8 @@ export class Resource<T extends ResourceKindClass> {
    * @throws if the message is invalid
    * @throws see {@link Crypto.verify}
    */
-  static async verify<T extends ResourceKindClass>(resource: Resource<T> | ResourceModel<T['kind']>) {
-    let jsonResource: ResourceModel<T['kind']> = resource instanceof Resource ? resource.toJSON() : resource
+  static async verify<T extends ResourceKind>(resource: ResourceModel<T> | Resource<T>): Promise<string> {
+    let jsonResource: ResourceModel<T> = resource instanceof Resource ? resource.toJSON() : resource
     Resource.validate(jsonResource)
 
     // create the payload to sign
@@ -81,6 +71,8 @@ export class Resource<T extends ResourceKindClass> {
     if (jsonResource.metadata.from !== signer) { // ensure that DID used to sign matches `from` property in metadata
       throw new Error('Signature verification failed: Expected DID in kid of JWS header must match metadata.from')
     }
+
+    return signer
   }
 
   /**
@@ -98,18 +90,8 @@ export class Resource<T extends ResourceKindClass> {
     validate(jsonResource['data'], jsonResource['metadata']['kind'])
   }
 
-  /**
-   * Constructor is primarily for intended for internal use. For a better developer experience,
-   * consumers should use {@link Resource.create} to programmatically create resources and
-   * {@link Resource.parse} to parse stringified resources.
-   * @param jsonResource - the resource as a json object
-   * @param data - `resource.data` as a ResourceKind class instance. can be passed in as an optimization if class instance
-   * is present in calling scope
-   */
-  constructor(jsonResource: NewResource<T['kind']>) {
-    this._metadata = jsonResource.metadata
-    this._signature = jsonResource.signature // may be undefined
-    this._data = jsonResource.data
+  static generateId(resourceKind: ResourceKind) {
+    return typeid(resourceKind).toString()
   }
 
   /**
@@ -133,10 +115,11 @@ export class Resource<T extends ResourceKindClass> {
   async verify() {
     return Resource.verify(this)
   }
+
   /**
    * returns the message as a json object. Automatically used by {@link JSON.stringify} method.
    */
-  toJSON(): ResourceModel<T['kind']> {
+  toJSON(): ResourceModel<T> {
     return {
       metadata  : this.metadata,
       data      : this.data,
@@ -176,5 +159,10 @@ export class Resource<T extends ResourceKindClass> {
 
   get updatedAt() {
     return this.metadata.updatedAt
+  }
+
+  /** offering type guard */
+  isOffering(): this is Resource<'offering'> {
+    return this.metadata.kind === 'offering'
   }
 }

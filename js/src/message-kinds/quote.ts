@@ -1,18 +1,31 @@
-import { QuoteModel, MessageKind } from '../types.js'
+import type { MessageKind, MessageKindModel, MessageMetadata } from '../types.js'
+import { Message } from '../message.js'
+
+/** options passed to {@link Quote.create} */
+export type CreateQuoteOptions = {
+  data: MessageKindModel<'quote'>
+  metadata: Omit<MessageMetadata<'quote'>, 'id' |'kind' | 'createdAt'>
+}
 
 /**
  * Sent by the PFI in response to an RFQ. Includes a locked-in price that the PFI is willing to honor until
  * the quote expires
  */
-export class Quote {
-  /** a set of valid Message kinds that can come after a quote */
+export class Quote extends Message<'quote'> {
   readonly validNext = new Set<MessageKind>(['order', 'close'])
-  readonly kind: MessageKind = 'quote'
 
-  readonly data: QuoteModel
+  static create(opts: CreateQuoteOptions) {
+    const id = Message.generateId('quote')
+    const metadata: MessageMetadata<'quote'> = {
+      ...opts.metadata,
+      kind       : 'quote',
+      id         : id,
+      exchangeId : id,
+      createdAt  : new Date().toISOString()
+    }
 
-  constructor(quoteData: QuoteModel) {
-    this.data = quoteData
+    const message = { metadata, data: opts.data }
+    return new Quote(message)
   }
 
   /** When this quote expires. Expressed as ISO8601 */
@@ -33,9 +46,5 @@ export class Quote {
   /** Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) */
   get paymentInstructions() {
     return this.data.paymentInstructions
-  }
-
-  toJSON() {
-    return this.data
   }
 }
