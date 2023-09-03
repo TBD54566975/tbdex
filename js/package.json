@@ -99,6 +99,7 @@
     "build": "npm run clean && npm run compile-validators && npm run build:esm && npm run build:cjs && npm run build:browser",
     "lint": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "eslint . --ext .ts --fix",
+    "docs": "npm run build:esm && typedoc --plugin typedoc-plugin-markdown --out docs src/main.ts",
     "try": "npm run compile-validators && npm run build:esm && node dist/esm/src/try.js"
   }
 }
