@@ -1,6 +1,9 @@
-import type { MessageKind, MessageKindModel, MessageMetadata } from '../types.js'
+import type { MessageKind, MessageKindModel, MessageMetadata, ResourceModel } from '../types.js'
+import { Offering } from '../resource-kinds/index.js'
 import { Message } from '../message.js'
-import { Crypto } from '../crypto.js'
+import { PEXv2 } from '@sphereon/pex'
+
+const pex = new PEXv2()
 
 /** options passed to {@link Quote.create} */
 export type CreateRfqOptions = {
@@ -29,6 +32,42 @@ export class Rfq extends Message<'rfq'> {
 
     const message = { metadata, data: opts.data }
     return new Rfq(message)
+  }
+
+  /**
+   * evaluates this rfq against the provided offering
+   * @param offering - the offering to evaluate this rfq against
+   * @throws if {@link offeringId} doesn't match the provided offering's id
+   */
+  verifyOfferingRequirements(offering: Offering | ResourceModel<'offering'>) {
+    if (offering.metadata.id !== this.offeringId)  {
+      throw new Error(`offering id mismatch. (rfq) ${this.offeringId} !== ${offering.metadata.id} (offering)`)
+    }
+
+    // TODO: validate rfq's quoteAmountSubunits against offering's quoteCurrency min/max
+
+    // TODO: validate rfq's payinMethod.kind against offering's payinMethods
+    // TODO: validate rfq's payinMethod.paymentDetails against offering's respective requiredPaymentDetails json schema
+
+    // TODO: validate rfq's payoutMethod.kind against offering's payoutMethods
+    // TODO: validate rfq's payoutMethod.paymentDetails against offering's respective requiredPaymentDetails json schema
+
+    this.verifyCredentialRequirements(offering)
+  }
+
+  /**
+   * checks the claims provided in this rfq against the provided offering's requirements
+   * @param offering - the offering to check against
+   * @throws
+   */
+  verifyCredentialRequirements(offering: Offering | ResourceModel<'offering'>) {
+    const { areRequiredCredentialsPresent } = pex.evaluatePresentation(offering.data.vcRequirements, this.vcs)
+
+    if (areRequiredCredentialsPresent === 'error') {
+      throw new Error(`claims do not fulfill the offering's requirements`)
+    }
+
+    // TODO: verify integrity
   }
 
   /** Offering which Alice would like to get a quote for */
