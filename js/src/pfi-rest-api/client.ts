@@ -147,11 +147,14 @@ export class PfiRestClient {
     const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(pfiDid)
     const apiRoute = `${pfiServiceEndpoint}/exchanges/${exchangeId}`
 
-    // TODO: generate Bearer token
-
+    const requestToken = await PfiRestClient.generateRequestToken(privateKeyJwk, privateKeyJwk.kid)
     let response: Response
     try {
-      response = await fetch(apiRoute)
+      response = await fetch(apiRoute, {
+        headers: {
+          authorization: `Bearer ${requestToken}`
+        }
+      })
     } catch(e) {
       throw new Error(`Failed to get offerings from ${pfiDid}. Error: ${e.message}`)
     }
