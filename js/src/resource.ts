@@ -10,7 +10,7 @@ import { validate } from './validator.js'
  * tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process.
  * They are not part of the message exchange, i.e Alice cannot reply to a Resource.
  */
-export class Resource<T extends ResourceKind> {
+export abstract class Resource<T extends ResourceKind> {
   private _metadata: ResourceMetadata<T>
   private _data: ResourceKindModel<T>
   private _signature: string
