@@ -122,7 +122,7 @@ export type SelectedPaymentMethod = {
   /** Type of payment method e.g. BTC_ADDRESS, DEBIT_CARD, MOMO_MPESA */
   kind: string
   /** An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema */
-  paymentDetails: Record<string, any>
+  paymentDetails: Record<string, any> | string
 }
 
 /**

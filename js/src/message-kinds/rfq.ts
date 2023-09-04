@@ -1,5 +1,6 @@
 import type { MessageKind, MessageKindModel, MessageMetadata } from '../types.js'
 import { Message } from '../message.js'
+import { Crypto } from '../crypto.js'
 
 /** options passed to {@link Quote.create} */
 export type CreateRfqOptions = {
@@ -11,6 +12,7 @@ export type CreateRfqOptions = {
 export class Rfq extends Message<'rfq'> {
   /** a set of valid Message kinds that can come after an rfq */
   readonly validNext = new Set<MessageKind>(['quote', 'close'])
+  _private: Record<string, any>
 
   static create(opts: CreateRfqOptions) {
     const id = Message.generateId('rfq')
@@ -21,6 +23,9 @@ export class Rfq extends Message<'rfq'> {
       exchangeId : id,
       createdAt  : new Date().toISOString()
     }
+
+    // TODO: hash `data.payinMethod.paymentDetails` and set `private`
+    // TODO: hash `data.payoutMethod.paymentDetails` and set `private`
 
     const message = { metadata, data: opts.data }
     return new Rfq(message)
@@ -49,5 +54,12 @@ export class Rfq extends Message<'rfq'> {
   /** Selected payment method that the PFI will use to send the listed base currency to Alice */
   get payoutMethod() {
     return this.data.payoutMethod
+  }
+
+  toJSON() {
+    const jsonMessage = super.toJSON()
+    jsonMessage['private'] = this._private
+
+    return jsonMessage
   }
 }
