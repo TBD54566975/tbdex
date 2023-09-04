@@ -1,26 +1,35 @@
-import { OrderStatusModel, MessageKind } from '../types.js'
+import type { MessageKind, MessageKindModel, MessageMetadata } from '../types.js'
+import { Message } from '../message.js'
+
+/** options passed to {@link OrderStatus.create} */
+export type CreateOrderStatusOptions = {
+  data: MessageKindModel<'orderstatus'>
+  metadata: Omit<MessageMetadata<'orderstatus'>, 'id' |'kind' | 'createdAt'>
+}
 
 /**
  * Sent by the PFI to Alice to convey the current status of an order. There can be many OrderStatus
  * messages in a given Exchange
  */
-export class OrderStatus {
-  /** a set of valid Message kinds that can come after an orderStatus */
+export class OrderStatus extends Message<'orderstatus'> {
   readonly validNext = new Set<MessageKind>([])
-  readonly kind: MessageKind = 'orderstatus'
 
-  readonly data: OrderStatusModel
+  static create(opts: CreateOrderStatusOptions) {
+    const id = Message.generateId('orderstatus')
+    const metadata: MessageMetadata<'orderstatus'> = {
+      ...opts.metadata,
+      kind       : 'orderstatus',
+      id         : id,
+      exchangeId : id,
+      createdAt  : new Date().toISOString()
+    }
 
-  constructor(orderStatusData: OrderStatusModel) {
-    this.data = orderStatusData
+    const message = { metadata, data: opts.data }
+    return new OrderStatus(message)
   }
 
   /** Current status of Order that's being executed (e.g. PROCESSING, COMPLETED, FAILED etc.) */
   get orderStatus() {
     return this.data.orderStatus
-  }
-
-  toJSON() {
-    return this.data
   }
 }

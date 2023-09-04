@@ -1,40 +1,43 @@
-import { expect } from 'chai'
-import { Convert } from '@web5/common'
-import { DevTools } from '../src/dev-tools.js'
-import { Message, OrderStatus } from '../src/main.js'
+import type { RfqModel } from '../src/main.js'
 
-describe('Message', () => {
+import { Rfq, DevTools } from '../src/main.js'
+import { Convert } from '@web5/common'
+import { expect } from 'chai'
+
+const rfqData: RfqModel = {
+  offeringId  : 'abcd123',
+  payinMethod : {
+    kind           : 'DEBIT_CARD',
+    paymentDetails : {
+      'cardNumber'     : '1234567890123456',
+      'expiryDate'     : '12/22',
+      'cardHolderName' : 'Ephraim Bartholomew Winthrop',
+      'cvv'            : '123'
+    }
+  },
+  payoutMethod: {
+    kind           : 'BTC_ADDRESS',
+    paymentDetails : {
+      btcAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+    }
+  },
+  quoteAmountSubunits : '20000',
+  vcs                 : ''
+}
+
+describe('Rfq', () => {
   describe('create', () => {
-    it('creates a message', async () => {
+    it('creates an rfq', async () => {
       const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const message = Message.create({
+      const message = Rfq.create({
         metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
+        data     : rfqData
       })
 
       expect(message.id).to.exist
       expect(message.exchangeId).to.exist
       expect(message.id).to.equal(message.exchangeId)
       expect(message.id).to.include('rfq_')
-    })
-
-    it('creates a message for an existing thread', async () => {
-      const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const rfqMessage = Message.create({
-        metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
-      })
-
-      const orderStatusMessage = Message.create({
-        metadata : { from: 'did:ex:pfi', to: alice.did, exchangeId: rfqMessage.exchangeId },
-        data     : new OrderStatus({orderStatus: 'test status'})
-      })
-
-      expect(orderStatusMessage.id).to.exist
-      expect(orderStatusMessage.id).to.include('orderstatus')
-      expect(orderStatusMessage.exchangeId).to.equal(rfqMessage.exchangeId)
     })
   })
 
@@ -43,7 +46,7 @@ describe('Message', () => {
       const testCases = ['hi', [], 30, ';;;)_', true, null, undefined]
       for (let testCase of testCases) {
         try {
-          Message.validate(testCase)
+          Rfq.validate(testCase)
           expect.fail()
         } catch(e) {
           expect(e.message).to.include('must be object')
@@ -53,7 +56,7 @@ describe('Message', () => {
 
     it('throws an error if required properties are missing', () => {
       try {
-        Message.validate({})
+        Rfq.validate({})
         expect.fail()
       } catch(e) {
         expect(e.message).to.include('required property')
@@ -64,33 +67,31 @@ describe('Message', () => {
   describe('sign', () => {
     it('sets signature property', async () => {
       const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const message = Message.create({
+      const rfq = Rfq.create({
         metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
+        data     : rfqData
       })
 
       const { privateKeyJwk } = alice.keySet.verificationMethodKeys[0]
       const kid = alice.document.verificationMethod[0].id
-      await message.sign(privateKeyJwk, kid)
+      await rfq.sign(privateKeyJwk, kid)
 
-      expect(message.signature).to.not.be.undefined
-      expect(typeof message.signature).to.equal('string')
+      expect(rfq.signature).to.not.be.undefined
+      expect(typeof rfq.signature).to.equal('string')
     })
 
     it('includes alg and kid in jws header', async () => {
       const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const message = Message.create({
+      const rfq = Rfq.create({
         metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
+        data     : rfqData
       })
 
       const { privateKeyJwk } = alice.keySet.verificationMethodKeys[0]
       const kid = alice.document.verificationMethod[0].id
-      await message.sign(privateKeyJwk, kid)
+      await rfq.sign(privateKeyJwk, kid)
 
-      const [base64UrlEncodedJwsHeader] = message.signature.split('.')
+      const [base64UrlEncodedJwsHeader] = rfq.signature.split('.')
       const jwsHeader = Convert.base64Url(base64UrlEncodedJwsHeader).toObject()
 
       expect(jwsHeader['kid']).to.equal(kid)
@@ -101,29 +102,27 @@ describe('Message', () => {
   describe('verify', () => {
     it('does not throw an exception if message integrity is intact', async () => {
       const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const message = Message.create({
+      const rfq = Rfq.create({
         metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
+        data     : rfqData
       })
 
       const { privateKeyJwk } = alice.keySet.verificationMethodKeys[0]
       const kid = alice.document.verificationMethod[0].id
-      await message.sign(privateKeyJwk, kid)
+      await rfq.sign(privateKeyJwk, kid)
 
-      await message.verify()
+      await rfq.verify()
     })
 
     it('throws an error if no signature is present on the message provided', async () => {
       const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const message = Message.create({
+      const rfq = Rfq.create({
         metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
+        data     : rfqData
       })
 
       try {
-        await message.verify()
+        await rfq.verify()
         expect.fail()
       } catch(e) {
         expect(e.message).to.include(`must have required property 'signature'`)
@@ -142,7 +141,7 @@ describe('Message', () => {
   describe('parse', () => {
     it('throws an error if payload is not valid JSON', async () => {
       try {
-        await Message.parse(';;;)_')
+        await Rfq.parse(';;;)_')
         expect.fail()
       } catch(e) {
         expect(e.message).to.include('Failed to parse message')
@@ -151,18 +150,17 @@ describe('Message', () => {
 
     it('returns an instance of Message if parsing is successful', async () => {
       const alice = await DevTools.createDid()
-      const rfq = DevTools.createRfq()
-      const message = Message.create({
+      const rfq = Rfq.create({
         metadata : { from: alice.did, to: 'did:ex:pfi' },
-        data     : rfq
+        data     : rfqData
       })
 
       const { privateKeyJwk } = alice.keySet.verificationMethodKeys[0]
       const kid = alice.document.verificationMethod[0].id
-      await message.sign(privateKeyJwk, kid)
+      await rfq.sign(privateKeyJwk, kid)
 
-      const jsonMessage = JSON.stringify(message)
-      const parsedMessage = await Message.parse(jsonMessage)
+      const jsonMessage = JSON.stringify(rfq)
+      const parsedMessage = await Rfq.parse(jsonMessage)
 
       expect(jsonMessage).to.equal(JSON.stringify(parsedMessage))
     })

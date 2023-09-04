@@ -1,5 +1,7 @@
-import type { MessageKindClass, Message } from '../message.js'
-import type { ResourceKindClass, Resource } from '../resource.js'
+import type { MessageKind, ResourceKind } from '../types.js'
+
+import type { Message } from '../message.js'
+import type { Resource } from '../resource.js'
 
 export type ErrorDetail = {
   /** A unique identifier for this particular occurrence of the problem. */
@@ -30,7 +32,7 @@ export type HttpResponse = {
   headers: Headers
 }
 
-export type DataResponse<T extends Message<MessageKindClass>[] | Resource<ResourceKindClass>[]> = HttpResponse & {
+export type DataResponse<T extends Message<MessageKind>[] | Resource<ResourceKind>[]> = HttpResponse & {
   data: T
   errors?: never
 }
