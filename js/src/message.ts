@@ -162,7 +162,7 @@ export class Message<T extends MessageKind> {
     return this.metadata.kind === 'quote'
   }
 
-  /** ORder type guard */
+  /** Order type guard */
   isOrder(): this is Message<'order'> {
     return this.metadata.kind === 'order'
   }
