@@ -29,7 +29,7 @@ export type ResourceMetadata<T extends ResourceKind> = {
 export type ResourceKind = keyof ResourceKinds
 export type ResourceKindModel<T extends ResourceKind> = ResourceKinds[T]
 export type ResourceKinds = {
-  'offering': OfferingModel
+  'offering': OfferingData
 }
 
 /**
@@ -37,7 +37,7 @@ export type ResourceKinds = {
  * including the requirements, conditions, and constraints in
  * order to fulfill that offer.
  */
-export type OfferingModel = {
+export type OfferingData = {
   /** Brief description of what is being offered. */
   description: string
   /** Number of quote currency units for one base currency unit (i.e 290000 USD for 1 BTC) */
@@ -50,8 +50,8 @@ export type OfferingModel = {
   payinMethods: PaymentMethod[]
   /** A list of accepted payment methods that Alice can use to receive baseCurrency from a PFI */
   payoutMethods: PaymentMethod[]
-  /** PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote. */
-  vcRequirements: PresentationDefinitionV2
+  /** Articulates the claim(s) required when submitting an RFQ for this offering. */
+  requiredClaims: PresentationDefinitionV2
 }
 
 export type CurrencyDetails = {
@@ -98,14 +98,14 @@ export type Private = Record<string, any>
 export type MessageKindModel<T extends keyof MessageKinds> = MessageKinds[T]
 export type MessageKind = 'rfq' | 'quote' | 'order' | 'orderstatus' | 'close'
 export type MessageKinds = {
-  'rfq': RfqModel
-  'quote': QuoteModel
-  'order': OrderModel
-  'orderstatus': OrderStatusModel
-  'close': CloseModel
+  'rfq': RfqData
+  'quote': QuoteData
+  'order': OrderData
+  'orderstatus': OrderStatusData
+  'close': CloseData
 }
 
-export type RfqModel = {
+export type RfqData = {
   /** Offering which Alice would like to get a quote for */
   offeringId: string
   /** Amount of quote currency you want to spend in order to receive base currency */
@@ -114,8 +114,8 @@ export type RfqModel = {
   payinMethod: SelectedPaymentMethod
   /** Selected payment method that the PFI will use to send the listed base currency to Alice */
   payoutMethod: SelectedPaymentMethod
-  /** Presentation Submission that fulfills the requirements included in the respective Offering */
-  vcs: string
+  /** claims that fulfill the requirements declared in an Offering */
+  claims: string[]
 }
 
 export type SelectedPaymentMethod = {
@@ -129,7 +129,7 @@ export type SelectedPaymentMethod = {
  * Message sent by the PFI in response to an RFQ. Includes a locked-in price that the PFI is willing to honor until
  * the quote expires
  */
-export type QuoteModel = {
+export type QuoteData = {
   /** When this quote expires. Expressed as ISO8601 */
   expiresAt: string
   /** the amount of base currency that Alice will receive */
@@ -166,7 +166,7 @@ export type PaymentInstruction = {
 /**
  * Message sent by Alice to the PFI to accept a Quote. Order is currently an empty object
  */
-export type OrderModel = {
+export type OrderData = {
   [key: string]: never
 }
 
@@ -174,7 +174,7 @@ export type OrderModel = {
  * Message sent by the PFI to Alice to convey the current status of an order. There can be many OrderStatus
  * messages in a given Exchange
  */
-export type OrderStatusModel = {
+export type OrderStatusData = {
   /** Current status of Order that's being executed (e.g. PROCESSING, COMPLETED, FAILED etc.) */
   orderStatus: string
 }
@@ -182,7 +182,7 @@ export type OrderStatusModel = {
 /**
  * a Close can be sent by Alice or the PFI as a reply to an RFQ or a Quote
  */
-export type CloseModel = {
+export type CloseData = {
   /** an explanation of why the exchange is being closed */
   reason?: string
 }

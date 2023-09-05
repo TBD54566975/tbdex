@@ -1,4 +1,4 @@
-import type { ResourceMetadata, MessageModel, OfferingModel, ResourceModel, MessageKind } from '../types.js'
+import type { ResourceMetadata, MessageModel, OfferingData, ResourceModel, MessageKind } from '../types.js'
 import type { DataResponse, ErrorDetail, ErrorResponse, HttpResponse } from './types.js'
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
 
@@ -27,9 +27,9 @@ export type GetOfferingsOptions = {
   pfiDid: string
   params?: {
     /** ISO 3166 currency code string */
-    baseCurrency: OfferingModel['baseCurrency']['currencyCode']
+    baseCurrency: OfferingData['baseCurrency']['currencyCode']
     /** ISO 3166 currency code string */
-    quoteCurrency: OfferingModel['baseCurrency']['currencyCode']
+    quoteCurrency: OfferingData['baseCurrency']['currencyCode']
     id: ResourceMetadata<any>['id']
   }
 }
@@ -77,8 +77,9 @@ export class PfiRestClient {
     let response: Response
     try {
       response = await fetch(apiRoute, {
-        method : 'POST',
-        body   : JSON.stringify(jsonMessage)
+        method  : 'POST',
+        headers : { 'content-type': 'application/json' },
+        body    : JSON.stringify(jsonMessage)
       })
     } catch(e) {
       throw new Error(`Failed to send message to ${pfiDid}. Error: ${e.message}`)
@@ -220,6 +221,10 @@ export class PfiRestClient {
    *              when dereferencing the signer's DID
    */
   static async generateRequestToken(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<string> {
+    // TODO: include exp property. expires 1 minute from generation time
+    // TODO: include aud property. should be DID of receipient
+    // TODO: include nbf property. not before current time
+    // TODO: include iss property. should be requester's did
     const tokenPayload = { timestamp: new Date().toISOString() }
     return Crypto.sign({ privateKeyJwk, kid, payload: tokenPayload })
   }

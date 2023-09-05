@@ -1,11 +1,11 @@
-import type { OfferingModel } from '../src/main.js'
+import type { OfferingData } from '../src/main.js'
 
 import { Offering } from '../src/main.js'
 import { DevTools } from '../src/dev-tools.js'
 import { Convert } from '@web5/common'
 import { expect } from 'chai'
 
-const offeringData: OfferingModel = {
+const offeringData: OfferingData = {
   description  : 'Selling BTC for USD',
   baseCurrency : {
     currencyCode : 'BTC',
@@ -62,7 +62,7 @@ const offeringData: OfferingModel = {
       additionalProperties : false
     }
   }],
-  vcRequirements: {
+  requiredClaims: {
     id                : '7ce4004c-3c38-4853-968b-e411bafcd945',
     input_descriptors : [{
       id          : 'bbdb9b7c-5754-4f46-b63b-590bada959e0',

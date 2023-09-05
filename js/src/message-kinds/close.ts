@@ -7,9 +7,7 @@ export type CreateCloseOptions = {
   metadata: Omit<MessageMetadata<'close'>, 'id' |'kind' | 'createdAt'>
 }
 
-/**
- * a Close can be sent by Alice or the PFI as a reply to an RFQ or a Quote
- */
+/** a Close can be sent by Alice or the PFI as a reply to an RFQ or a Quote */
 export class Close extends Message<'close'> {
   /** a set of valid Message kinds that can come after a close */
   readonly validNext = new Set<MessageKind>([])

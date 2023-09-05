@@ -55,8 +55,8 @@ export class Offering extends Resource<'offering'> {
     return this.data.payoutMethods
   }
 
-  /** PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote. */
-  get vcRequirements() {
-    return this.data.vcRequirements
+  /** Articulates the claim(s) required when submitting an RFQ for this offering. */
+  get requiredClaims() {
+    return this.data.requiredClaims
   }
 }

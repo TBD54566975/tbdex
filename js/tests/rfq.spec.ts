@@ -1,10 +1,10 @@
-import type { RfqModel } from '../src/main.js'
+import type { RfqData } from '../src/main.js'
 
 import { Rfq, DevTools } from '../src/main.js'
 import { Convert } from '@web5/common'
 import { expect } from 'chai'
 
-const rfqData: RfqModel = {
+const rfqData: RfqData = {
   offeringId  : 'abcd123',
   payinMethod : {
     kind           : 'DEBIT_CARD',
@@ -22,7 +22,7 @@ const rfqData: RfqModel = {
     }
   },
   quoteAmountSubunits : '20000',
-  vcs                 : ''
+  claims              : ['']
 }
 
 describe('Rfq', () => {
@@ -163,6 +163,90 @@ describe('Rfq', () => {
       const parsedMessage = await Rfq.parse(jsonMessage)
 
       expect(jsonMessage).to.equal(JSON.stringify(parsedMessage))
+    })
+  })
+
+  describe('verifyClaims', () => {
+    it(`does not throw an exception if an rfq's claims fulfill the provided offering's requirements`, async () => {
+      const alice = await DevTools.createDid()
+      const offering = DevTools.createOffering()
+      const { signedCredential } = await DevTools.createCredential({ // this credential fulfills the offering's required claims
+        type    : 'YoloCredential',
+        issuer  : alice,
+        subject : alice.did,
+        data    : {
+          'beep': 'boop'
+        }
+      })
+
+      const rfq = Rfq.create({
+        metadata : { from: alice.did, to: 'did:ex:pfi' },
+        data     : {
+          offeringId  : 'abcd123',
+          payinMethod : {
+            kind           : 'DEBIT_CARD',
+            paymentDetails : {
+              'cardNumber'     : '1234567890123456',
+              'expiryDate'     : '12/22',
+              'cardHolderName' : 'Ephraim Bartholomew Winthrop',
+              'cvv'            : '123'
+            }
+          },
+          payoutMethod: {
+            kind           : 'BTC_ADDRESS',
+            paymentDetails : {
+              btcAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+            }
+          },
+          quoteAmountSubunits : '20000',
+          claims              : [signedCredential]
+        }
+      })
+
+      rfq.verifyClaims(offering)
+    })
+
+    it(`throws an exception if an rfq's claims dont fulfill the provided offering's requirements`, async () => {
+      const alice = await DevTools.createDid()
+      const offering = DevTools.createOffering()
+      const { signedCredential } = await DevTools.createCredential({
+        type    : 'PuupuuCredential',
+        issuer  : alice,
+        subject : alice.did,
+        data    : {
+          'beep': 'boop'
+        }
+      })
+
+      const rfq = Rfq.create({
+        metadata : { from: alice.did, to: 'did:ex:pfi' },
+        data     : {
+          offeringId  : 'abcd123',
+          payinMethod : {
+            kind           : 'DEBIT_CARD',
+            paymentDetails : {
+              'cardNumber'     : '1234567890123456',
+              'expiryDate'     : '12/22',
+              'cardHolderName' : 'Ephraim Bartholomew Winthrop',
+              'cvv'            : '123'
+            }
+          },
+          payoutMethod: {
+            kind           : 'BTC_ADDRESS',
+            paymentDetails : {
+              btcAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+            }
+          },
+          quoteAmountSubunits : '20000',
+          claims              : [signedCredential]
+        }
+      })
+
+      try {
+        rfq.verifyClaims(offering)
+      } catch(e) {
+        expect(e.message).to.include(`claims do not fulfill the offering's requirements`)
+      }
     })
   })
 })

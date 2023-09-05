@@ -63,7 +63,7 @@
         "$ref": "#/definitions/PaymentMethod"
       }
     },
-    "vcRequirements": {
+    "requiredClaims": {
       "type": "object",
       "description": "PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote."
     }
@@ -75,6 +75,6 @@
     "quoteCurrency",
     "payinMethods",
     "payoutMethods",
-    "vcRequirements"
+    "requiredClaims"
   ]
 }

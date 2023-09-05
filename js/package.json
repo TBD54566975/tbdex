@@ -1,6 +1,6 @@
 {
   "name": "@tbd54566975/tbdex",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "description": "Library that includes type definitions for tbdex messages",
   "license": "Apache-2.0",
@@ -85,12 +85,12 @@
     "sinon": "15.0.2",
     "typedoc": "0.25.0",
     "typedoc-plugin-markdown": "3.16.0",
-    "typescript": "5.0.4"
+    "typescript": "5.2.2"
   },
   "scripts": {
     "clean": "rimraf generated dist tests/compiled",
     "compile-validators": "rimraf generated && node build/compile-validators.js",
-    "build:esm": "rimraf dist/esm dist/types && npx tsc -p tsconfig.json",
+    "build:esm": "rimraf dist/esm dist/types && tsc",
     "build:cjs": "rimraf dist/cjs && npx tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
     "build:browser": "rimraf dist/browser.mjs dist/browser.js && node build/bundles.js",
     "test:node": "rimraf tests/compiled && npm run compile-validators && tsc -p tests/tsconfig.json && mocha",

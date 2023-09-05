@@ -27,8 +27,11 @@
       "type": "string",
       "description": "Amount of quote currency you want to spend in order to receive base currency"
     },
-    "vcs": {
-      "type": "string",
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
       "description": "Presentation Submission that fulfills the requirements included in the respective Offering"
     },
     "payinMethod": {
@@ -38,5 +41,5 @@
       "$ref": "#/definitions/SelectedPaymentMethod"
     }
   },
-  "required": ["offeringId", "quoteAmountSubunits", "vcs", "payinMethod", "payoutMethod"]
+  "required": ["offeringId", "quoteAmountSubunits", "claims", "payinMethod", "payoutMethod"]
 }
