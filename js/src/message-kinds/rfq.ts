@@ -52,16 +52,16 @@ export class Rfq extends Message<'rfq'> {
     // TODO: validate rfq's payoutMethod.kind against offering's payoutMethods
     // TODO: validate rfq's payoutMethod.paymentDetails against offering's respective requiredPaymentDetails json schema
 
-    this.verifyCredentialRequirements(offering)
+    this.verifyClaims(offering)
   }
 
   /**
-   * checks the claims provided in this rfq against the provided offering's requirements
+   * checks the claims provided in this rfq against an offering's requirements
    * @param offering - the offering to check against
-   * @throws
+   * @throws if rfq's claims do not fulfill the offering's requirements
    */
-  verifyCredentialRequirements(offering: Offering | ResourceModel<'offering'>) {
-    const { areRequiredCredentialsPresent } = pex.evaluatePresentation(offering.data.vcRequirements, this.vcs)
+  verifyClaims(offering: Offering | ResourceModel<'offering'>) {
+    const { areRequiredCredentialsPresent } = pex.evaluateCredentials(offering.data.requiredClaims, this.claims)
 
     if (areRequiredCredentialsPresent === 'error') {
       throw new Error(`claims do not fulfill the offering's requirements`)
@@ -81,8 +81,8 @@ export class Rfq extends Message<'rfq'> {
   }
 
   /** Presentation Submission VP that fulfills the requirements included in the respective Offering */
-  get vcs() {
-    return this.data.vcs
+  get claims() {
+    return this.data.claims
   }
 
   /** Selected payment method that Alice will use to send the listed quote currency to the PFI. */

@@ -7,6 +7,7 @@ export type CreateOrderOptions = {
   private?: Record<string, any>
 }
 
+/** Message sent by Alice to the PFI to accept a Quote. */
 export class Order extends Message<'order'> {
   readonly validNext = new Set<MessageKind>(['orderstatus'])
 

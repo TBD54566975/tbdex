@@ -100,7 +100,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `quoteUnitsPerBaseUnit` | string                                                                                                   | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
 | `baseCurrency`          | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is selling.                                                                                  |
 | `quoteCurrency`         | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                  |
-| `vcRequirements`        | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | Y        | Articulates the credential(s) required when submitting an RFQ for this offering.                                                     |
+| `requiredClaims`        | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | Y        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |
 | `payinMethods`          | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`         | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
 | `createdAt`             | datetime                                                                                                 | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
@@ -385,13 +385,13 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (quote currency) I want to trade for BTC (base currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field                 | data type                                         | required | description                                                                                                         |
-| --------------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
-| `offeringId`          | string                                            | Y        | Offering which Alice would like to get a quote for                                                                  |
-| `quoteAmountSubunits` | string                                            | Y        | Amount of quote currency you want to spend in order to receive base currency                                        |
-| `vcs`                 | string                                            | Y        | VerifiablePresentation in JWT string format that meets the specification per PresentationDefinition in the Offering |
-| `payinMethod`         | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send quote currency.                                                                |
-| `payoutMethod`        | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive base currency.                                                              |
+| field                 | data type                                         | required | description                                                                           |
+| --------------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| `offeringId`          | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
+| `quoteAmountSubunits` | string                                            | Y        | Amount of quote currency you want in exchange for base currency                       |
+| `claims`              | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `payinMethod`         | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send quote currency.                                  |
+| `payoutMethod`        | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive base currency.                                |
 
 #### `SelectedPaymentMethod`
 | field            | data type | required | description                                                                                       |

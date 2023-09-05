@@ -8,7 +8,7 @@ import { Convert } from '@web5/common'
 import { Rfq } from './message-kinds/index.js'
 import { Offering } from './resource-kinds/index.js'
 import { Crypto } from './crypto.js'
-import { OfferingModel, RfqModel } from './types.js'
+import { OfferingData, RfqData } from './types.js'
 
 export type DidMethodOptions = 'key' | 'ion'
 
@@ -61,7 +61,7 @@ export class DevTools {
    * creates and returns an example offering. Useful for testing purposes
    */
   static createOffering() {
-    const offeringData: OfferingModel = {
+    const offeringData: OfferingData = {
       description  : 'Selling BTC for USD',
       baseCurrency : {
         currencyCode : 'BTC',
@@ -118,7 +118,7 @@ export class DevTools {
           additionalProperties : false
         }
       }],
-      vcRequirements: {
+      requiredClaims: {
         id                : '7ce4004c-3c38-4853-968b-e411bafcd945',
         input_descriptors : [{
           id          : 'bbdb9b7c-5754-4f46-b63b-590bada959e0',
@@ -146,11 +146,11 @@ export class DevTools {
    * creates and returns an example rfq for the offering returned by {@link DevTools.createOffering}.
    * Useful for testing purposes.
    *
-   * **NOTE**: generates a random credential that fulfills the vcRequirements of the offering
+   * **NOTE**: generates a random credential that fulfills the offering's required claims
    */
   static async createRfq(opts: RfqOptions) {
     const { sender } = opts
-    const { signedCredential: _signedCredential } = await DevTools.createCredential({
+    const { signedCredential } = await DevTools.createCredential({
       type    : 'YoloCredential',
       issuer  : sender,
       subject : sender.did,
@@ -159,7 +159,7 @@ export class DevTools {
       }
     })
 
-    const rfqData: RfqModel = {
+    const rfqData: RfqData = {
       offeringId  : 'abcd123',
       payinMethod : {
         kind           : 'DEBIT_CARD',
@@ -177,7 +177,7 @@ export class DevTools {
         }
       },
       quoteAmountSubunits : '20000',
-      vcs                 : ''
+      claims              : [signedCredential]
     }
 
     return Rfq.create({

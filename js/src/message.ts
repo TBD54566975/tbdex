@@ -88,8 +88,8 @@ export class Message<T extends MessageKind> {
   /**
    * signs the message as a jws with detached content and sets the signature property
    * @param privateKeyJwk - the key to sign with
-   * @param kid - the kid to include in the jws header. used by the verifier to select the appropriate verificationMethod
-   *              when dereferencing the signer's DID
+   * @param kid - the verification method id to include in the jws header. used by the verifier to
+   *               select the appropriate verificationMethod when dereferencing the signer's DID
    */
   async sign(privateKeyJwk: Web5PrivateKeyJwk, kid: string): Promise<void> {
     const toSign = { metadata: this.metadata, data: this.data }

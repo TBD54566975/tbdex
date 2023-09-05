@@ -5,19 +5,20 @@
       "DOM",
       "ES6"
     ],
+    "rootDir": "./",
     "allowJs": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "nodenext",
     "outDir": "dist/esm",
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "dist/types",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
   "include": [
-    "./src"
+    "src"
   ],
   "exclude": [
     "node_modules",
