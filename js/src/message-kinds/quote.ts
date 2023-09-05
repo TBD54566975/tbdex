@@ -15,13 +15,11 @@ export class Quote extends Message<'quote'> {
   readonly validNext = new Set<MessageKind>(['order', 'close'])
 
   static create(opts: CreateQuoteOptions) {
-    const id = Message.generateId('quote')
     const metadata: MessageMetadata<'quote'> = {
       ...opts.metadata,
-      kind       : 'quote',
-      id         : id,
-      exchangeId : id,
-      createdAt  : new Date().toISOString()
+      kind      : 'quote',
+      id        : Message.generateId('quote'),
+      createdAt : new Date().toISOString()
     }
 
     const message = { metadata, data: opts.data }

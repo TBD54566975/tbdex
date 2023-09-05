@@ -12,13 +12,11 @@ export class Order extends Message<'order'> {
   readonly validNext = new Set<MessageKind>(['orderstatus'])
 
   static create(opts: CreateOrderOptions) {
-    const id = Message.generateId('order')
     const metadata: MessageMetadata<'order'> = {
       ...opts.metadata,
-      kind       : 'order',
-      id         : id,
-      exchangeId : id,
-      createdAt  : new Date().toISOString()
+      kind      : 'order',
+      id        : Message.generateId('order'),
+      createdAt : new Date().toISOString()
     }
 
     const message = { metadata, data: {} }

@@ -13,13 +13,11 @@ export class Close extends Message<'close'> {
   readonly validNext = new Set<MessageKind>([])
 
   static create(opts: CreateCloseOptions) {
-    const id = Message.generateId('close')
     const metadata: MessageMetadata<'close'> = {
       ...opts.metadata,
-      kind       : 'close',
-      id         : id,
-      exchangeId : id,
-      createdAt  : new Date().toISOString()
+      kind      : 'close',
+      id        : Message.generateId('close'),
+      createdAt : new Date().toISOString()
     }
 
     const message = { metadata, data: opts.data }

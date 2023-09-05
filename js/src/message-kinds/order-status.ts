@@ -15,13 +15,11 @@ export class OrderStatus extends Message<'orderstatus'> {
   readonly validNext = new Set<MessageKind>([])
 
   static create(opts: CreateOrderStatusOptions) {
-    const id = Message.generateId('orderstatus')
     const metadata: MessageMetadata<'orderstatus'> = {
       ...opts.metadata,
-      kind       : 'orderstatus',
-      id         : id,
-      exchangeId : id,
-      createdAt  : new Date().toISOString()
+      kind      : 'orderstatus',
+      id        : Message.generateId('orderstatus'),
+      createdAt : new Date().toISOString()
     }
 
     const message = { metadata, data: opts.data }

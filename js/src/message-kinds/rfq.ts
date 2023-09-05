@@ -5,7 +5,7 @@ import { PEXv2 } from '@sphereon/pex'
 
 const pex = new PEXv2()
 
-/** options passed to {@link Quote.create} */
+/** options passed to {@link Rfq.create} */
 export type CreateRfqOptions = {
   data: MessageKindModel<'rfq'>
   metadata: Omit<MessageMetadata<'rfq'>, 'id' |'kind' | 'createdAt' | 'exchangeId'>
