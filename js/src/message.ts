@@ -1,4 +1,5 @@
 import type { MessageKind, MessageKindModel, MessageModel, MessageMetadata, NewMessage } from './types.js'
+import type { Rfq, Quote, Order, OrderStatus, Close } from './message-kinds/index.js'
 import type { PrivateKeyJwk as Web5PrivateKeyJwk } from '@web5/crypto'
 import type { MessageKindClass } from './message-kinds/index.js'
 
@@ -153,27 +154,27 @@ export class Message<T extends MessageKind> {
   }
 
   /** Rfq type guard */
-  isRfq(): this is Message<'rfq'> {
+  isRfq(): this is Rfq {
     return this.metadata.kind === 'rfq'
   }
 
   /** Quote type guard */
-  isQuote(): this is Message<'quote'> {
+  isQuote(): this is Quote {
     return this.metadata.kind === 'quote'
   }
 
   /** Order type guard */
-  isOrder(): this is Message<'order'> {
+  isOrder(): this is Order {
     return this.metadata.kind === 'order'
   }
 
   /** OrderStatus type guard */
-  isOrderStatus(): this is Message<'orderstatus'> {
+  isOrderStatus(): this is OrderStatus {
     return this.metadata.kind === 'orderstatus'
   }
 
   /** Close type guard */
-  isClose(): this is Message<'close'> {
+  isClose(): this is Close {
     return this.metadata.kind === 'close'
   }
 
