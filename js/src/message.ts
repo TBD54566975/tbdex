@@ -87,6 +87,14 @@ export class Message<T extends MessageKind> {
   }
 
   /**
+   * returns an instance of the appropriate MessageKind class based on the value of `jsonMessage.metadata.kind`
+   * @param jsonMessage
+   */
+  static fromJson<T extends MessageKind>(jsonMessage: MessageModel<T>) {
+    return Message.factory(jsonMessage)
+  }
+
+  /**
    * signs the message as a jws with detached content and sets the signature property
    * @param privateKeyJwk - the key to sign with
    * @param kid - the verification method id to include in the jws header. used by the verifier to
