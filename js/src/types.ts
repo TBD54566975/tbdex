@@ -1,6 +1,8 @@
 import type { Schema as JsonSchema } from 'ajv'
 import type { PresentationDefinitionV2 } from '@sphereon/pex-models'
 
+export { JsonSchema }
+
 export type NewMessage<T extends MessageKind> = Omit<MessageModel<T>, 'signature'> & { signature?: string }
 export type NewResource<T extends ResourceKind> = Omit<ResourceModel<T>, 'signature'> & { signature?: string }
 
@@ -137,7 +139,7 @@ export type QuoteData = {
   /** the amount of quote currency that the PFI will receive */
   quote: QuoteDetails
   /** Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) */
-  paymentInstructions: PaymentInstructions
+  paymentInstructions?: PaymentInstructions
 }
 
 export type QuoteDetails = {
@@ -146,7 +148,7 @@ export type QuoteDetails = {
   /** The amount of currency expressed in the smallest respective unit */
   amountSubunits: string
   /** the amount paid in fees */
-  feeSubunits: string
+  feeSubunits?: string
 }
 
 export type PaymentInstructions = {

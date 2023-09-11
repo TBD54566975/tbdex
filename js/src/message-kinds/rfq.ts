@@ -1,4 +1,4 @@
-import type { MessageKind, MessageKindModel, MessageMetadata, ResourceModel } from '../types.js'
+import type { MessageKind, MessageKindModel, MessageMetadata, MessageModel, ResourceModel } from '../types.js'
 import { Offering } from '../resource-kinds/index.js'
 import { Message } from '../message.js'
 import { PEXv2 } from '@sphereon/pex'
