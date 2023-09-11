@@ -5,7 +5,7 @@ import type {
   JwsHeaderParams
 } from '@web5/crypto'
 
-import * as cbor from 'cbor-x'
+import * as cbor from 'cborg'
 import { sha256 } from '@noble/hashes/sha256'
 import { Convert } from '@web5/common'
 import { EcdsaAlgorithm, EdDsaAlgorithm, Jose } from '@web5/crypto'

@@ -13,6 +13,7 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "dist/types",
+    "skipLibCheck": true,
     "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "resolveJsonModule": true

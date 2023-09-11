@@ -52,8 +52,8 @@ export type GetExchangeOptions = {
 export type GetExchangesOptions = {
   /** the DID of the PFI from whom you want to get offerings */
   pfiDid: string
-  // TODO: include privateKeyJwk needed to create authz token
-  // TODO: include supported query params
+  privateKeyJwk: Web5PrivateKeyJwk
+  exchangeIds: string[]
 }
 
 export class PfiRestClient {
@@ -187,7 +187,45 @@ export class PfiRestClient {
    * get a specific exchange from the pfi provided
    * @param _opts - options
    */
-  static getExchanges(_opts: GetExchangesOptions) {
+  static async getExchanges(opts: GetExchangesOptions) {
+    const { pfiDid, exchangeIds, privateKeyJwk } = opts
+    const pfiServiceEndpoint = await PfiRestClient.getPfiServiceEndpoint(pfiDid)
+
+    const apiRoute = `${pfiServiceEndpoint}/exchanges?`
+
+    const requestToken = await PfiRestClient.generateRequestToken(privateKeyJwk, privateKeyJwk.kid)
+    let response: Response
+    try {
+      response = await fetch(apiRoute, {
+        headers: {
+          authorization: `Bearer ${requestToken}`
+        }
+      })
+    } catch(e) {
+      throw new Error(`Failed to get exchanges from ${pfiDid}. Error: ${e.message}`)
+    }
+
+    const data: Message<MessageKind>[] = []
+
+    if (response.status === 200) {
+      const responseBody = await response.json() as { data: MessageModel<MessageKind>[] }
+      for (let jsonMessage of responseBody.data) {
+        const message = await Message.parse(jsonMessage)
+        data.push(message)
+      }
+
+      return {
+        status  : response.status,
+        headers : response.headers,
+        data    : data
+      }
+    } else {
+      return {
+        status  : response.status,
+        headers : response.headers,
+        errors  : await response.json() as ErrorDetail[]
+      } as ErrorResponse
+    }
     /**
      * TODO:
      * resolve PFI DID

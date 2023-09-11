@@ -1,6 +1,6 @@
 {
   "name": "@tbd54566975/tbdex",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "type": "module",
   "description": "Library that includes type definitions for tbdex messages",
   "license": "Apache-2.0",
@@ -56,7 +56,7 @@
     "@web5/crypto": "0.1.6-alpha-20230828-8204a49",
     "@web5/dids": "0.1.9-alpha-20230828-8204a49",
     "ajv": "8.12.0",
-    "cbor-x": "1.5.4",
+    "cborg": "3.0.0",
     "query-string": "8.1.0",
     "typeid-js": "0.3.0"
   },
