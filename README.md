@@ -197,7 +197,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
         }
       }
     ],
-    "vcRequirements": {
+    "requiredClaims": {
       "id": "7ce4004c-3c38-4853-968b-e411bafcd945",
       "input_descriptors": [
         {
