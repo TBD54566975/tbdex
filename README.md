@@ -584,7 +584,7 @@ Quick explanation of terms used.
 | KYC             | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
 | payin           | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
 | payout          | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
-| payout currency | currency that the PFI is SELLING. Alice will _receive_ the payout currency from the PFI.                                                                           |
+| payout currency | currency that the PFI is paying out to Alice. Alice will _receive_ the payout currency from the PFI.                                                                           |
 | payin currency  | currency the PFI will accept in exchange for the payin currency. The PFI will _receive_ the payin currency from Alice.                                             |
 
 # Additional Resources
