@@ -10,10 +10,6 @@ Version: Draft
 > 
 > This specification will continue to be in a **Draft** state until there are two separate PFIs deployed and providing liquidity to individuals or other institutions
 
-> [!WARNING]
->
-> This repo is currently under construction 🚧.
-
 
 # Table of Contents <!-- omit in toc -->
 - [Resources](#resources)
@@ -92,18 +88,18 @@ The `signature` property's value is a compact [JWS](https://datatracker.ietf.org
 ### `Offering`
 An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
 
-> PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the base currency, and what payment methods I can use to pay you the quote currency."
+> PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the payin currency, and what payment methods I can use to pay you the payout currency."
 
-| field                   | data type                                                                                                | required | description                                                                                                                          |
-| ----------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `description`           | string                                                                                                   | Y        | Brief description of what is being offered.                                                                                          |
-| `quoteUnitsPerBaseUnit` | string                                                                                                   | Y        | Number of quote units on offer for one base currency unit (i.e 290000 USD for 1 BTC                                                  |
-| `baseCurrency`          | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is selling.                                                                                  |
-| `quoteCurrency`         | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is accepting as payment for `baseCurrency`.                                                  |
-| `requiredClaims`        | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | Y        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |
-| `payinMethods`          | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
-| `payoutMethods`         | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
-| `createdAt`             | datetime                                                                                                 | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
+| field                     | data type                                                                                                | required | description                                                                                                                          |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                                                                          |
+| `payoutUnitsPerPayinUnit` | string                                                                                                   | Y        | Number of payout units alice would get for 1 payin unit                                                                              |
+| `payinCurrency`           | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is accepting as payment.                                                                     |
+| `payoutCurrency`          | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is selling.                                                                                  |
+| `payinMethods`            | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
+| `payoutMethods`           | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
+| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | Y        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |
+| `createdAt`               | datetime                                                                                                 | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
 
 #### `CurrencyDetails`
 | field          | data type | required | description                                            |
@@ -117,28 +113,28 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | ------------------------ | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
 | `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in order to use this payment method |
-| `feeSubunits`            | string                                  | N        | The fee expressed in the quote currency's sub units to make use of this payment method            |
+| `feeSubunits`            | string                                  | N        | The fee expressed in the currency's sub units to make use of this payment method                  |
 
 
 #### Example
 ```json
 {
   "metadata": {
-    "from": "did:key:z6MkvejBwUL7ovyLKHMjnJUgpby7zHo81f4GJvqbTk18E3Z6",
-    "id": "offering_01h8ykxvc2fz7s36rpdpzhat29",
+    "from": "did:ex:pfi",
     "kind": "offering",
-    "createdAt": "2023-08-28T17:44:08.834Z"
+    "id": "offering_01ha82y8d0fhstg95hhfjwmgxf",
+    "createdAt": "2023-09-13T20:15:22.528Z"
   },
   "data": {
     "description": "Selling BTC for USD",
-    "baseCurrency": {
+    "payinCurrency": {
+      "currencyCode": "USD"
+    },
+    "payoutCurrency": {
       "currencyCode": "BTC",
       "maxSubunits": "99952611"
     },
-    "quoteCurrency": {
-      "currencyCode": "USD"
-    },
-    "quoteUnitsPerBaseUnit": "26043.40",
+    "payoutUnitsPerPayinUnit": "0.00003826",
     "payinMethods": [
       {
         "kind": "DEBIT_CARD",
@@ -219,7 +215,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
       ]
     }
   },
-  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZlakJ3VUw3b3Z5TEtITWpuSlVncGJ5N3pIbzgxZjRHSnZxYlRrMThFM1o2I3o2TWt2ZWpCd1VMN292eUxLSE1qbkpVZ3BieTd6SG84MWY0R0p2cWJUazE4RTNaNiJ9..NFBgiiZucnRS5GPI2V1X_z52oNt3TbMuRv1MupF25PhstzifrB39yxZs8SK-9FQtYzDraycy-nKn6RoHxqodDw"
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2syc1QyZUtvQWdUUTdzWjY3YTdmRDMzR21jYzZ1UXdaYmlxeWF5Rk1hYkhHI3o2TWtrMnNUMmVLb0FnVFE3c1o2N2E3ZkQzM0dtY2M2dVF3WmJpcXlheUZNYWJIRyJ9..9EBTL3VcajsQzSNOm8GElhcwvYcFGaRp24FTwmC845RCF84Md-ZB-CxdCo7kEjzsAY8OaB55XFSH_8K9vedhAw"
 }
 ```
 
@@ -279,7 +275,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
 {
   "data": {
     "offeringId": <OFFERING_ID>,
-    "quoteAmountSubunits": "STR_VALUE",
+    "payoutSubunits": "STR_VALUE",
     "vcs": <PRESENTATION_SUBMISSION_HASH>, <---- hash
     "payinMethod": {
       "kind": "BTC_ADDRESS",
@@ -383,15 +379,15 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 
 ## Message Kinds
 ### `RFQ (Request For Quote)`
-> Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (quote currency) I want to trade for BTC (base currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
+> Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field                 | data type                                         | required | description                                                                           |
-| --------------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| `offeringId`          | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
-| `quoteAmountSubunits` | string                                            | Y        | Amount of quote currency you want in exchange for base currency                       |
-| `claims`              | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
-| `payinMethod`         | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send quote currency.                                  |
-| `payoutMethod`        | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive base currency.                                |
+| field           | data type                                         | required | description                                                                           |
+| --------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| `offeringId`    | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
+| `payinSubunits` | string                                            | Y        | Amount of payin currency you want in exchange for payout currency                     |
+| `claims`        | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `payinMethod`   | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                  |
+| `payoutMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                              |
 
 #### `SelectedPaymentMethod`
 | field            | data type | required | description                                                                                       |
@@ -402,37 +398,36 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 ```json
 {
   "metadata": {
-    "from": "did:ex:alice",
+    "from": "did:key:z6Mks4N5XdrE6VieJsgH8SMSRavmTox74RqoroW7bZzBLQBi",
     "to": "did:ex:pfi",
     "kind": "rfq",
-    "id": "abcd123",
-    "exchangeId": <RFQ_ID>,
-    "parentId": null,
-    "createdAt": "ISO_8601"
+    "id": "rfq_01ha835rhefwmagsknrrhvaa0k",
+    "exchangeId": "rfq_01ha835rhefwmagsknrrhvaa0k",
+    "createdAt": "2023-09-13T20:19:28.430Z"
   },
   "data": {
-    "offeringId": <OFFERING_ID>,
-    "quoteAmountSubunits": "STR_VALUE",
-    "vcs": <PRESENTATION_SUBMISSION_HASH>,
+    "offeringId": "abcd123",
     "payinMethod": {
+      "kind": "DEBIT_CARD",
+      "paymentDetails": {
+        "cardNumber": "1234567890123456",
+        "expiryDate": "12/22",
+        "cardHolderName": "Ephraim Bartholomew Winthrop",
+        "cvv": "123"
+      }
+    },
+    "payoutMethod": {
       "kind": "BTC_ADDRESS",
-      "paymentDetails": <OBJ_HASH>
+      "paymentDetails": {
+        "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+      }
     },
-    "payoutMethod": {
-      "kind": "MOMO_MPESA",
-      "paymentDetails": <OBJ_HASH>
-    }
+    "payinSubunits": "20000",
+    "claims": [
+      "eyJhbGciOiJFZERTQSJ9.eyJpc3MiOiJkaWQ6a2V5Ono2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSIsInN1YiI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwidmMiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiIxNjk0NjM2MzY4NDI5IiwidHlwZSI6IllvbG9DcmVkZW50aWFsIiwiaXNzdWVyIjoiZGlkOmtleTp6Nk1rczRONVhkckU2VmllSnNnSDhTTVNSYXZtVG94NzRScW9yb1c3Ylp6QkxRQmkiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTA5LTEzVDIwOjE5OjI4LjQyOVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwiYmVlcCI6ImJvb3AifX19.cejevPPHPGhajd1oP4nfLpxRMKm801BzPdqjm9pQikaMEnh1WZXrap2j_kALZN_PCUddNtW1R_YY18UoERRJBw"
+    ]
   },
-  "signature": "COMPACT_JWS",
-  "private": {
-    "vcs": <PRESENTATION_SUBMISSION>,
-    "payinMethod": {
-      "paymentDetails": <OBJ>
-    },
-    "payoutMethod": {
-      "paymentDetails": <OBJ>
-    }
-  }
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpI3o2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSJ9..LpR3qNP6PiiACVQKdP68OqhZZY8MqNX96WFS6CzVzX7EgmSroY1WC_tAnQzOAI1pGofzoasEuU1-a2tUOyB_Cg"
 }
 ```
 
@@ -456,8 +451,8 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 | field                 | data type                                     | required | description                                                                                               |
 | --------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
 | `expiresAt `          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
-| `base`                | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _base_ currency that Alice will receive                                                     |
-| `quote`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _quote_ currency that the PFI will receive                                                  |
+| `payin`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payin_ currency that the PFI will receive                                                  |
+| `payout`              | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payout_ currency that Alice will receive                                                   |
 | `paymentInstructions` | [`PaymentInstructions`](#paymentinstructions) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 
@@ -490,28 +485,24 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 {
   "metadata": {
     "from": "did:ex:pfi",
-    "to": "did:ex:alice",
+    "to": "did:key:z6MkoreC1URMQEVKm8wxzhVFntLzvPXYbtH8CEFNKUcSkLWT",
+    "exchangeId": "rfq_01ha83f661fs2avj6qgdhxpg28",
     "kind": "quote",
-    "id": "abcd123",
-    "exchangeId": <RFQ_ID>,
-    "parentId": <RFQ_ID>,
-    "createdAt": "ISO_8601"
+    "id": "quote_01ha83f663e3e88fshb06h6g78",
+    "createdAt": "2023-09-13T20:24:37.315Z"
   },
   "data": {
-    "expiresAt": "ISO_8601",
-    "paymentInstructions": null,
-    "base": {
-      "currencyCode": "BTC",
-      "amountSubunits": "3",
-      "feeSubunits": "0",
-    },
-    "quote": {
+    "expiresAt": "2023-09-13T23:11:17.315Z",
+    "payin": {
       "currencyCode": "USD",
-      "amountSubunits": "100_00",
-      "feeSubunits": "0",
+      "amountSubunits": "10000"
     },
+    "payout": {
+      "currencyCode": "BTC",
+      "amountSubunits": "380000.0000"
+    }
   },
-  "signature": "COMPACT_JWS",
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29yZUMxVVJNUUVWS204d3h6aFZGbnRMenZQWFlidEg4Q0VGTktVY1NrTFdUI3o2TWtvcmVDMVVSTVFFVkttOHd4emhWRm50THp2UFhZYnRIOENFRk5LVWNTa0xXVCJ9..R_BBKJoWifPFh10GJ1ij2gCCxND1CdzKbiOgPCIha__0GvRy0rHYCi18-TY7jNARaQ94RHXHYIsCRm2MuOPACw"
 }
 ```
 
@@ -523,16 +514,15 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 ```json
 {
   "metadata": {
-    "from": "did:ex:alice",
+    "from": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
     "to": "did:ex:pfi",
+    "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
     "kind": "order",
-    "id": "abcd123",
-    "exchangeId": <RFQ_ID>,
-    "parentId": <QUOTE_ID>,
-    "createdAt": "ISO_8601"
+    "id": "order_01ha83pkgsfk6t1kxg7q42s48j",
+    "createdAt": "2023-09-13T20:28:40.345Z"
   },
   "data": {},
-  "signature": "COMPACT_JWS",
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
 }
 ```
 
@@ -552,16 +542,16 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
 {
   "metadata": {
     "from": "did:ex:pfi",
-    "to": "did:ex:alice",
-    "kind": "orderStatus",
-    "id": "abcd123",
-    "exchangeId": <RFQ_ID>,
-    "createdAt": "ISO_8601"
+    "to": "did:key:z6Mkgz7DnRNKVHdF8XavhU6gCcGKBbAUz3FwRjci4bsZQ5U5",
+    "exchangeId": "rfq_01ha83s5cmeecsm2qg7cvrc9hc",
+    "kind": "orderstatus",
+    "id": "orderstatus_01ha83s5crff3bmvq3t000cz91",
+    "createdAt": "2023-09-13T20:30:04.184Z"
   },
   "data": {
-    "orderStatus": "PENDING"
+    "orderStatus": "COMPLETED"
   },
-  "signature": "COMPACT_JWS",
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2d6N0RuUk5LVkhkRjhYYXZoVTZnQ2NHS0JiQVV6M0Z3UmpjaTRic1pRNVU1I3o2TWtnejdEblJOS1ZIZEY4WGF2aFU2Z0NjR0tCYkFVejNGd1JqY2k0YnNaUTVVNSJ9..RvOeT5cSurl3I5EO-wg3wVXaNd3mxHhjDUQQj1sNiHz-9u2dI3Hc0ALM-YA6fYLVW9N6XDlSpAAdQd7yZl7rDg"
 }
 ```
 
@@ -588,14 +578,14 @@ sequenceDiagram
 # Jargon Decoder
 Quick explanation of terms used. 
 
-| Term           | Definition                                                                                                                                                         |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| PFI            | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
-| KYC            | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
-| payin          | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
-| payout         | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
-| base currency  | currency that the PFI is SELLING. Alice will _receive_ the base currency from the PFI.                                                                             |
-| quote currency | currency the PFI will accept in exchange for the base currency. The PFI will _receive_ the quote currency from Alice.                                              |
+| Term            | Definition                                                                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| PFI             | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
+| KYC             | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
+| payin           | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
+| payout          | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
+| payout currency | currency that the PFI is paying out to Alice. Alice will _receive_ the payout currency from the PFI.                                                                           |
+| payin currency  | currency the PFI will accept in exchange for the payin currency. The PFI will _receive_ the payin currency from Alice.                                             |
 
 # Additional Resources
 
