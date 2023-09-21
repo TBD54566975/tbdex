@@ -1,4 +1,4 @@
-# tbDEX PFI RESTful API <!-- omit in toc -->
+# tbDEX HTTP API <!-- omit in toc -->
 
 # Introduction <!-- omit in toc -->
 This specification defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX
