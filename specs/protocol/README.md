@@ -251,8 +251,7 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 | `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                |
 | `id`         | Y              | The message's ID                                                                                  |
 | `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange    |
-| `parentId`   | N              | the ID of the most recent message in a exchange. Not present for the first message in an exchange |
-| `timestamp`  | Y              | ISO 8601                                                                                          |
+| `createdAt`  | Y              | ISO 8601                                                                                          |
 
 
 ### `data`
@@ -436,16 +435,16 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 ### `Close`
 > Alice -> PFI: "Not interested anymore." or "oops sent by accident"
 
-> PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)"
+> PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)" or "Your exchange is completed"
 
-a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote
+a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It indicates a terminal state. No messages can be added to an exchange after a `Close`.
 
 | Field    | Data Type | Required | Description                                        |
 | -------- | --------- | -------- | -------------------------------------------------- |
-| `reason` | string    | N        | an explanation of why the exchange is being closed |
+| `reason` | string    | N        | an explanation of why the exchange is being closed/completed |
 
 > **Note**
-> Include a section that explains rules around when a Close can/can't be sent. Can Alice close after having sent an Order message, effectively accepting the quote?
+> Include a section that explains rules around when a Close can/can't be sent.
 
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
@@ -575,6 +574,7 @@ sequenceDiagram
   PFI1->>Alice: OrderStatus
   PFI1->>Alice: OrderStatus
   PFI1->>Alice: OrderStatus
+  PFI1->>Alice: Close
 ```
 
 # Jargon Decoder
