@@ -14,3 +14,4 @@ This repo contains specifications for tbDEX
 
 * [JavaScript/Typescript](https://github.com/TBD54566975/tbdex-js) (feature complete)
 * [Kotlin](https://github.com/TBD54566975/tbdex-kt) (work in progress)
+* [Example PFI implementation](https://github.com/TBD54566975/tbdex-mock-pfi/)
