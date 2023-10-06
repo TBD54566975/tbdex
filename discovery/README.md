@@ -33,9 +33,9 @@ If it possible to use a did URI as the serviceEndpoint itself, for example:
 In this case, resolving the serviceEndpoint DID should return a DID Document with a serviceEndpoint with an id of "PFI" as above. This could allow registration of one did method to allow discovery (via ION) via another did method (say web) hosted by the PFI.
 
    
-## Discovery with ION
+# Discovery with ION DID method
 
-One of the uses of the ION did method can be to allow discovery of types of DIDs, in particular PFIs.
+One of the uses of the ION DID method can be to allow discovery of types of DIDs, in particular: PFIs.
 Using a did:ion type of `1669` (this number because: 16=P, 6=F, 9=I) means that all PFIs can advertise themselves in a permissionless and decentralized and uncensorable way using the ION did method.
 
 This does not require that the PFI runs or uses an ION node, or a did:ion method exclusively, as described above the PFI can register a did:ion which has a serviceEndpoint of did:web and then use that to advertise its PFI serviceEndpoint via .well-known/did.json on their website (ie just register their precence with ION once).
@@ -51,19 +51,16 @@ This is example code in javascript which can run in any environment, but could b
 
 
 
-# Registering a PFI with the ION network
+## Registering a PFI with the ION network
 
-*NOTE*: this is currently broken as the current library was using a challenge method that was closed down. This will be fixed soon.
-
-To test out the example code included here, you will need to install the dependencies:
+To test out the example code below, you will need to install the dependencies:
 
 ```bash
 npm install @decentralized-identity/ion-tools
 ```
 
 
-
-## Registering a PFI
+### Registering a PFI
 
 ```node create-and-anchor.mjs```
 
@@ -71,7 +68,7 @@ A PFI will create a did (at least once) and may choose to anchor it. This is exa
 
 This will create a new DID and anchor it permanently to the bitcoin blockchain via sidetree and ION. The DID (including private key) will be saved in a json file in the same directory.
 
-## Registering a PFI that uses did:web
+### Registering a PFI that uses did:web
 
 You don't have to use ION with your PFI to register its availability, you can instead use this script and register your PFI with a did:web method which is hosted on your website.
 
