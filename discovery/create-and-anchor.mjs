@@ -18,14 +18,9 @@ let did = new DID({
     ],
     services: [
       {
-        id: 'domain-1',
-        type: 'LinkedDomains',
-        serviceEndpoint: 'https://foo.example.com'
-      },
-      {
         id:'pfi',
         'type': 'PFI',
-        'serviceEndpoint': 'https://pfi.mic4.com',
+        'serviceEndpoint': 'https://test-pfi.com',
       },
     ]
   }
@@ -44,7 +39,12 @@ createRequest.suffixData.type = '1669'; // PFI a 16 , 6 , 9
 // Prod Mainnet
 const endpoint = 'https://ion.tbd.engineering';
 
-let anchorResponse = await anchor(createRequest, { solutionEndpoint: endpoint + '/operations' });
+// Anchor the create request
+let anchorResponse = await anchor(createRequest, 
+  { // use a fake challengeEndpoint as the one MSFT hosted is now closed down (and was defaulted in the library)
+    challengeEndpoint: "https://gist.githubusercontent.com/michaelneale/ff647d64f1bd49c7e3beed350ea5c265/raw/ab8183f469fbda3f89b83ce55a7701809122b348/challenge.json", 
+    // the resolution endpoint is the one we want to use
+    solutionEndpoint: endpoint + '/operations' });
 
 console.log('Create Request');
 console.log(createRequest);
