@@ -41,15 +41,6 @@ Using a did:ion type of `1669` (this number because: 16=P, 6=F, 9=I) means that 
 This does not require that the PFI runs or uses an ION node, or a did:ion method exclusively, as described above the PFI can register a did:ion which has a serviceEndpoint of did:web and then use that to advertise its PFI serviceEndpoint via .well-known/did.json on their website (ie just register their precence with ION once).
 
 
-# Registering a PFI with the ION network
-
-To test out the example code included here, you will need to install the dependencies:
-
-```bash
-npm install @decentralized-identity/ion-tools
-```
-
-
 ## Discovering PFIs
 
 ```node discover.mjs```
@@ -57,6 +48,19 @@ npm install @decentralized-identity/ion-tools
 This will provide a list of PFIs. This uses a did:ion type of `1669` (this number because: 16=P, 6=F, 9=I) to find all PFIs (and check they have a PFI type serviceEndpoint)
 
 This is example code in javascript which can run in any environment, but could be implemented in any language. This would typically be used by an app looking for PFIs to transact with.
+
+
+
+# Registering a PFI with the ION network
+
+*NOTE*: this is currently broken as the current library was using a challenge method that was closed down. This will be fixed soon.
+
+To test out the example code included here, you will need to install the dependencies:
+
+```bash
+npm install @decentralized-identity/ion-tools
+```
+
 
 
 ## Registering a PFI
