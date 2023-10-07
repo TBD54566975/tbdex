@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tbdex.io/order-status.schema.json",
+  "$id": "https://tbdex.io/orderstatus.schema.json",
   "type": "object",
   "required": [
     "orderStatus"
