@@ -16,7 +16,7 @@ In general it is recommended for a PFI to be discoverable, it SHOULD publish a D
       }
 ```    
 
-This will expose a REST API at the serviceEndpoint which can be used to discover the PFI's capabilities and offers, make RFQs and tranact.
+This will expose a REST API at the serviceEndpoint which can be used to discover the PFI's capabilities and offers, make RFQs and transact.
 
 ### Service Endpoint options
 
