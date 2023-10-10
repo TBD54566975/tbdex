@@ -53,8 +53,6 @@ This is example code in javascript which can run in any environment, but could b
 
 ## Registering a PFI with the ION network
 
-*Note*: this is a WIP and not yet fully functional, this code is made available as an example.
-
 To test out the example code below, you will need to install the dependencies:
 
 ```bash
