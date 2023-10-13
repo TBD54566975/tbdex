@@ -10,11 +10,11 @@
           "description": "ISO 3166 currency code string"
         },
         "amountSubunits": {
-          "type": "string",
+          "type": "integer",
           "description": "The amount of currency expressed in the smallest respective unit"
         },
         "feeSubunits": {
-          "type": "string",
+          "type": "integer",
           "description": "The amount paid in fees"
         }
       },
@@ -34,7 +34,7 @@
       }
     },
     "PaymentInstructions": {
-      "type": "object",
+      "type": ["object", "null"],
       "properties": {
         "payin": {
           "$ref": "#/definitions/PaymentInstruction"
@@ -51,15 +51,15 @@
       "type": "string",
       "description": "When this quote expires. Expressed as ISO8601"
     },
-    "base": {
+    "payin": {
       "$ref": "#/definitions/QuoteDetails"
     },
-    "quote": {
+    "payout": {
       "$ref": "#/definitions/QuoteDetails"
     },
     "paymentInstructions": {
       "$ref": "#/definitions/PaymentInstructions"
     }
   },
-  "required": ["expiresAt", "base", "quote", "paymentInstructions"]
+  "required": ["expiresAt", "payin", "payout", "paymentInstructions"]
 }

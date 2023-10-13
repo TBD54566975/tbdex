@@ -10,11 +10,11 @@
           "description": "ISO 3166 currency code string"
         },
         "minSubunits": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Minimum amount of currency that can be requested"
         },
         "maxSubunits": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Maximum amount of currency that can be requested"
         }
       },
@@ -41,14 +41,14 @@
       "type": "string",
       "description": "Brief description of what is being offered."
     },
-    "quoteUnitsPerBaseUnit": {
-      "type": "string",
+    "payoutUnitsPerPayinUnit": {
+      "type": "integer",
       "description": "Number of quote currency units for one base currency unit (i.e 290000 USD for 1 BTC)"
     },
-    "baseCurrency": {
+    "payinCurrency": {
       "$ref": "#/definitions/CurrencyDetails"
     },
-    "quoteCurrency": {
+    "payoutCurrency": {
       "$ref": "#/definitions/CurrencyDetails"
     },
     "payinMethods": {
@@ -64,15 +64,15 @@
       }
     },
     "requiredClaims": {
-      "type": "object",
+      "type": "array",
       "description": "PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote."
     }
   },
   "required": [
     "description",
-    "quoteUnitsPerBaseUnit",
-    "baseCurrency",
-    "quoteCurrency",
+    "payoutUnitsPerPayinUnit",
+    "payinCurrency",
+    "payoutCurrency",
     "payinMethods",
     "payoutMethods",
     "requiredClaims"

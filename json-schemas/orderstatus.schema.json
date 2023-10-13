@@ -3,11 +3,11 @@
   "$id": "https://tbdex.dev/orderstatus.schema.json",
   "type": "object",
   "required": [
-    "orderStatus"
+    "status"
   ],
   "additionalProperties": false,
   "properties": {
-    "orderStatus": {
+    "status": {
       "enum": [
         "PENDING",
         "COMPLETED",
