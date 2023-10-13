@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tbd54566975.github.io/tbdex/rfq.schema.json",
+  "$id": "https://tbdex.dev/rfq.schema.json",
   "definitions": {
     "SelectedPaymentMethod": {
       "type": "object",

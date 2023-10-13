@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tbd54566975.github.io/tbdex/order.schema.json",
+  "$id": "https://tbdex.dev/order.schema.json",
   "type": "object",
   "required": [
     "paymentVerifiablePresentationJwt"
