@@ -1,13 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tbdex.io/resource.schema.json",
   "type": "object",
   "properties": {
     "metadata": {
       "type": "object",
       "properties": {
         "from": {
-          "$ref": "https://tbdex.io/definitions.json#/definitions/did",
+          "$ref": "definitions.json#/definitions/did",
           "description": "The PFI's DID"
         },
         "kind": {

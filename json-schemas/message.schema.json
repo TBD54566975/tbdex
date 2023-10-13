@@ -5,11 +5,11 @@
       "type": "object",
       "properties": {
         "from": {
-          "$ref": "https://tbdex.io/definitions.json#/definitions/did",
+          "$ref": "definitions.json#/definitions/did",
           "description": "The sender's DID"
         },
         "to": {
-          "$ref": "https://tbdex.io/definitions.json#/definitions/did",
+          "$ref": "definitions.json#/definitions/did",
           "description": "The recipient's DID"
         },
         "kind": {
