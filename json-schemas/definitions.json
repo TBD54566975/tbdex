@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tbdex.io/definitions.json",
+  "$id": "https://tbdex.dev/definitions.json",
   "type": "object",
   "definitions": {
     "did": {
