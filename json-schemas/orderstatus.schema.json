@@ -3,16 +3,12 @@
   "$id": "https://tbdex.dev/orderstatus.schema.json",
   "type": "object",
   "required": [
-    "status"
+    "orderStatus"
   ],
   "additionalProperties": false,
   "properties": {
-    "status": {
-      "enum": [
-        "PENDING",
-        "COMPLETED",
-        "FAILED"
-      ]
+    "orderStatus": {
+      "type":"string"
     }
   }
 }
