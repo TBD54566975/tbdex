@@ -51,15 +51,15 @@
       "type": "string",
       "description": "When this quote expires. Expressed as ISO8601"
     },
-    "base": {
+    "payin": {
       "$ref": "#/definitions/QuoteDetails"
     },
-    "quote": {
+    "payout": {
       "$ref": "#/definitions/QuoteDetails"
     },
     "paymentInstructions": {
       "$ref": "#/definitions/PaymentInstructions"
     }
   },
-  "required": ["expiresAt", "base", "quote", "paymentInstructions"]
+  "required": ["expiresAt", "payin", "payout"]
 }

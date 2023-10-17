@@ -41,14 +41,14 @@
       "type": "string",
       "description": "Brief description of what is being offered."
     },
-    "quoteUnitsPerBaseUnit": {
+    "payoutUnitsPerPayinUnit": {
       "type": "string",
-      "description": "Number of quote currency units for one base currency unit (i.e 290000 USD for 1 BTC)"
+      "description": "Number of payout currency units for one payin currency unit (i.e 290000 USD for 1 BTC)"
     },
-    "baseCurrency": {
+    "payinCurrency": {
       "$ref": "#/definitions/CurrencyDetails"
     },
-    "quoteCurrency": {
+    "payoutCurrency": {
       "$ref": "#/definitions/CurrencyDetails"
     },
     "payinMethods": {
@@ -70,9 +70,9 @@
   },
   "required": [
     "description",
-    "quoteUnitsPerBaseUnit",
-    "baseCurrency",
-    "quoteCurrency",
+    "payoutUnitsPerPayinUnit",
+    "payinCurrency",
+    "payoutCurrency",
     "payinMethods",
     "payoutMethods",
     "requiredClaims"

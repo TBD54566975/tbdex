@@ -10,12 +10,12 @@
           "description": "The sender's DID"
         },
         "to": {
-          "$ref": "definitions.json#/definitions/did",
+          "$ref": "https://tbdex.dev/definitions.json#/definitions/did",
           "description": "The recipient's DID"
         },
         "kind": {
           "type": "string",
-          "enum": ["rfq", "quote", "order", "orderStatus", "close"],
+          "enum": ["rfq", "quote", "order", "orderstatus", "close"],
           "description": "The message kind (e.g. rfq, quote)"
         },
         "id": {

@@ -23,7 +23,7 @@
       "type": "string",
       "description": "Offering which Alice would like to get a quote for"
     },
-    "quoteAmountSubunits": {
+    "payinSubunits": {
       "type": "string",
       "description": "Amount of quote currency you want to spend in order to receive base currency"
     },
@@ -41,5 +41,5 @@
       "$ref": "#/definitions/SelectedPaymentMethod"
     }
   },
-  "required": ["offeringId", "quoteAmountSubunits", "claims", "payinMethod", "payoutMethod"]
+  "required": ["offeringId", "payinSubunits", "claims", "payinMethod", "payoutMethod"]
 }

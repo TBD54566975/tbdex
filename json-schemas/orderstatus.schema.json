@@ -8,11 +8,7 @@
   "additionalProperties": false,
   "properties": {
     "orderStatus": {
-      "enum": [
-        "PENDING",
-        "COMPLETED",
-        "FAILED"
-      ]
+      "type":"string"
     }
   }
 }
