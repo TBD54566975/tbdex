@@ -32,7 +32,7 @@
           "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"
         }
       },
-      "required": ["kind", "requiredPaymentDetails"]
+      "required": ["kind"]
     }
   },
   "type": "object",
