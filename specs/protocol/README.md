@@ -32,15 +32,8 @@ Version: Draft
     - [`private`](#private)
       - [Example Usage in RFQ message](#example-usage-in-rfq-message)
     - [`signature`](#signature-1)
-      - [Header](#header)
-        - [Supported `alg`s](#supported-algs)
-      - [Payload](#payload)
   - [ID generation](#id-generation)
-  - [Hashing](#hashing)
-    - [Rationale](#rationale)
-      - [Why CBOR?](#why-cbor)
-      - [Why SHA256?](#why-sha256)
-      - [Why Base64?](#why-base64)
+  - [Digest](#digest)
   - [Message Kinds](#message-kinds)
     - [`RFQ (Request For Quote)`](#rfq-request-for-quote)
       - [`SelectedPaymentMethod`](#selectedpaymentmethod)
@@ -51,6 +44,14 @@ Version: Draft
       - [`PaymentInstruction`](#paymentinstruction)
     - [`Order`](#order)
     - [`OrderStatus`](#orderstatus)
+- [Common Traits](#common-traits)
+  - [ID Generation](#id-generation-1)
+  - [Digests](#digests)
+    - [Rationale](#rationale)
+      - [Why JSON Canonicalization Scheme (JCS)?](#why-json-canonicalization-scheme-jcs)
+      - [Why SHA256?](#why-sha256)
+      - [Why Base64url?](#why-base64url)
+  - [Signatures](#signatures)
 - [tbDEX conversation sequence](#tbdex-conversation-sequence)
 - [Jargon Decoder](#jargon-decoder)
 - [Additional Resources](#additional-resources)
@@ -84,7 +85,8 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 The actual resource content. This will _always_ be a JSON object. The [Resource Kinds section](#resource-kinds) specifies the content for each individual resource type
 
 ### `signature`
-The `signature` property's value is a compact [JWS](https://datatracker.ietf.org/doc/html/rfc7515).
+see [here](#signatures) for more details
+
 ## Resource Kinds
 
 ### `Offering`
@@ -244,14 +246,14 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field        | Required (Y/N) | Description                                                                                       |
-| ------------ | -------------- | ------------------------------------------------------------------------------------------------- |
-| `from`       | Y              | The sender's DID                                                                                  |
-| `to`         | Y              | the recipient's DID                                                                               |
-| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                |
-| `id`         | Y              | The message's ID                                                                                  |
-| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange    |
-| `createdAt`  | Y              | ISO 8601                                                                                          |
+| Field        | Required (Y/N) | Description                                                                                    |
+| ------------ | -------------- | ---------------------------------------------------------------------------------------------- |
+| `from`       | Y              | The sender's DID                                                                               |
+| `to`         | Y              | the recipient's DID                                                                            |
+| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                             |
+| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                |
+| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange |
+| `createdAt`  | Y              | ISO 8601                                                                                       |
 
 
 ### `data`
@@ -301,81 +303,14 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
 
 
 ### `signature`
-The `signature` property's value is a compact [JWS](https://datatracker.ietf.org/doc/html/rfc7515)
-
-#### Header
-The JWS header **MUST** contain the following properties:
-
-
-| Field | Description                                                                    |
-| ----- | ------------------------------------------------------------------------------ |
-| `alg` | [Reference](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1)       |
-| `kid` | the `id` of the DID Doc`verificationMethod` that can be used to verify the JWS |
-
-##### Supported `alg`s
-* `EdDSA` - Edwards-curve Digital Signature Algorithm. Ed25519
-* `ES256K` - AKA secp256k1. Well known for its use in Bitcoin 
-
-
-#### Payload
-The Payload is a JSON object and **MUST** contain the following:
-
-
-| Field      | Description                    |
-| ---------- | ------------------------------ |
-| `metadata` | [Hash](#Hashing) of `metadata` |
-| `data`     | [Hash](#Hashing) `data`        |
-
+see [here](#signatures) for more details
 
 ## ID generation
-Currently, tbdex message IDs are [TypeIDs](https://github.com/jetpack-io/typeid) generated by the sender. The prefix for a given id **MUST** be the same as `metadata.kind` of the message
-
-> **Note**
-> TODO: Discuss using `prefix_$(sha256(cbor(message)))` as the ID as an alternative
+See [here](#id-generation-1) for more details.
 
 
-## Hashing
-TL;DR:
-```
-base64Encode(
-  sha256(
-    cbor(json)
-  )
-)
-```
-
-1. **CBOR Encode the JSON Object**: take your JSON object and encode it using CBOR. This step produces a binary representation of your JSON object.
-2. **SHA256 the Bytes**: Hash the CBOR-encoded byte sequence using SHA256. This produces a fixed-size (256-bit) hash.
-3. **Base64 Encode the Hash**: Finally, to represent the hash in a text format (for easier sharing, storage, etc.), Base64 encode the SHA256 hash bytes.
-
-
-### Rationale
-
-#### Why CBOR?
-
-Benefits:
-* **Deterministic Serialization**: JSON serialization libraries can sometimes produce non-deterministic results, especially when it comes to the ordering of keys in objects. This could result in the same logical object having different serialized representations. CBOR, by contrast, offers deterministic serialization, ensuring that the same logical object will always produce the same binary representation.
-* **Uniform Data Representation**: Some data types, such as floating-point numbers, can have multiple valid representations in JSON (e.g., 1.0 vs. 1). CBOR can offer a more consistent representation of these types.
-
-Trade-offs:
-* **Complexity**: Additional complexity & dependencies to encode CBOR
-* **Performance**: While CBOR might be more space-efficient, the act of converting JSON to CBOR introduces an additional computational step. For small objects or infrequent operations, this might be negligible, but for high-frequency operations, the conversion overhead could become noticeable.
-
-#### Why SHA256?
-* **Widely Recognized and Adopted**: SHA256, which is part of the SHA-2 (Secure Hash Algorithm 2) family, is widely recognized and adopted in various cryptographic applications and protocols. SHA256 is standardized by the National Institute of Standards and Technology (NIST) in the U.S. Being a standard means it has undergone extensive review and evaluation by experts in the field.
-* **Security**: As of today, SHA256 has no known vulnerability to collision attacks, preimage attacks, or second preimage attacks. 
-  * A collision attack is when two different inputs produce the same hash. 
-  * A preimage attack is when, given a hash, an attacker finds an input that hashes to it. 
-  * A second preimage attack is when, given an input and its hash, an attacker finds a different input that produces the same hash. 
-* **Output Size**: SHA256 provides a fixed hash output of 256 bits (32 bytes). This size strikes a balance between efficiency and security
-
-#### Why Base64?
-When sending a SHA-256 hash (or any binary data) over the wire, it's common to use an encoding that translates the binary data into a set of characters that can be safely transmitted over systems that might not handle raw binary well. One of the most common encodings used for this purpose is Base64 encoding.
-
-Base64-encoded data is safe for transmission over most protocols and systems since it only uses printable ASCII characters. Base64 Encoding/Decoding is widely supported across several programming languages.
-
-> **Note** 
-> A raw SHA256 hash is 32 bytes. When base64 encoded it becomes a 44 byte string
+## Digest
+See [here](#digests) for more details
 
 
 ## Message Kinds
@@ -439,8 +374,8 @@ Base64-encoded data is safe for transmission over most protocols and systems sin
 
 a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It indicates a terminal state. No messages can be added to an exchange after a `Close`.
 
-| Field    | Data Type | Required | Description                                        |
-| -------- | --------- | -------- | -------------------------------------------------- |
+| Field    | Data Type | Required | Description                                                  |
+| -------- | --------- | -------- | ------------------------------------------------------------ |
 | `reason` | string    | N        | an explanation of why the exchange is being closed/completed |
 
 > **Note**
@@ -555,6 +490,78 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2d6N0RuUk5LVkhkRjhYYXZoVTZnQ2NHS0JiQVV6M0Z3UmpjaTRic1pRNVU1I3o2TWtnejdEblJOS1ZIZEY4WGF2aFU2Z0NjR0tCYkFVejNGd1JqY2k0YnNaUTVVNSJ9..RvOeT5cSurl3I5EO-wg3wVXaNd3mxHhjDUQQj1sNiHz-9u2dI3Hc0ALM-YA6fYLVW9N6XDlSpAAdQd7yZl7rDg"
 }
 ```
+
+
+# Common Traits
+Traits shared amongst both [Resources]() and [Messages]() are defined in this section
+
+## ID Generation
+
+IDs are [TypeIDs](https://github.com/jetpack-io/typeid) that are generated by the sender. The prefix for a given id **MUST** be the same as `metadata.kind` e.g.
+* Offering ID: `offering_7zzzzzzwzyf678004shr000zqf`
+* RFQ ID: `rfq_7zzzzzzzqke7nr003hxc001mey`
+
+> [!NOTE]
+> TODO: Discuss using [digest](#digests) as the ID as an alternative
+
+## Digests
+A digest is a representation of data in a condensed form. When used in cryptographic contexts, this condensed form provides a way to verify the integrity and authenticity of data without having to compare the data in its entirety.
+
+to construct the digest of any message or resource, perform the following steps:
+1. Initialize _payload_ to be a json object that contains the `metadata` and `data` properties whose values are the respective metadata and data values of the message or resource for which the digest is being computed
+2. JSON serialize _payload_ using the JSON Canonicalization Scheme (JCS) as defined in [RFC-8785](https://datatracker.ietf.org/doc/html/rfc8785)
+3. compute the sha256 hash of the serialized payload
+4. base64url encode the hash **without padding** as defined in [RFC-7515](https://datatracker.ietf.org/doc/html/rfc7515#appendix-C)
+
+### Rationale
+
+#### Why JSON Canonicalization Scheme (JCS)?
+
+* **Consistency**: JSON does not guarantee property order. Two semantically identical JSON objects can have their properties serialized in different orders. This can lead to two different serialized strings for the same data.
+When performing cryptographic operations, such as creating a digital signature or a hash, even the slightest difference in input data results in a drastically different output. Therefore, a consistent, canonical form of the data is essential.
+
+* **Interoperability**: Different implementations and libraries serialize JSON differently. JCS ensures that different systems and libraries produce the same serialized output for the same input, thus facilitating interoperability.
+
+* **Avoidance of Data Ambiguity**: JSON allows for multiple valid representations of the same data (e.g., the use of whitespace, number representations). This can cause ambiguity in interpreting or processing such data, especially in cryptographic contexts where precision is paramount.
+JCS defines a single, unambiguous representation for any given JSON document.
+
+* **Security**: In the world of security, particularly with cryptographic signatures, the principle of "what you see is what you sign" is critical. If there's any ambiguity in the serialized data form, it can lead to potential vulnerabilities or issues. By ensuring a canonical format, JCS mitigates potential attack vectors related to JSON's flexibility.
+
+* **Compatibility with Existing JSON Parsers**: JCS is designed to work seamlessly with existing JSON parsers. This makes it relatively straightforward to integrate into systems already using JSON without requiring significant changes to the existing infrastructure.
+
+#### Why SHA256?
+* **Widely Recognized and Adopted**: SHA256, which is part of the SHA-2 (Secure Hash Algorithm 2) family, is widely recognized and adopted in various cryptographic applications and protocols. SHA256 is standardized by the National Institute of Standards and Technology (NIST) in the U.S. Being a standard means it has undergone extensive review and evaluation by experts in the field.
+* **Security**: As of today, SHA256 has no known vulnerability to collision attacks, preimage attacks, or second preimage attacks. 
+  * A collision attack is when two different inputs produce the same hash. 
+  * A preimage attack is when, given a hash, an attacker finds an input that hashes to it. 
+  * A second preimage attack is when, given an input and its hash, an attacker finds a different input that produces the same hash. 
+* **Output Size**: SHA256 provides a fixed hash output of 256 bits (32 bytes). This size strikes a balance between efficiency and security
+
+#### Why Base64url?
+When sending a SHA-256 hash (or any binary data) over the wire, it's common to use an encoding that translates the binary data into a set of characters that can be safely transmitted over systems that might not handle raw binary well.
+
+Base64url-encoded data is safe for transmission over most protocols and systems since it only uses printable ASCII characters. It is widely supported across several programming languages.
+
+> **Note** 
+> A raw SHA256 hash is 32 bytes. When base64 encoded it becomes a 44 byte string
+
+## Signatures
+A message or resource signature is a detached compact JWS as defined in [RFC-7515](https://datatracker.ietf.org/doc/html/rfc7515) (Detached content defined in [appendix F](https://datatracker.ietf.org/doc/html/rfc7515#appendix-F)).
+
+> [!NOTE]
+> Why detatched JWS?
+> Detached signatures are employed to facilitate scenarios where the payload (i.e., the data being signed) is already available or transmitted separately. By using a detached signature, the original payload remains unaltered and can be transmitted or stored in its native format without being embedded in the signature itself. This approach avoides redundancy but also allows recipients to independently verify the integrity and authenticity of the payload using the detached signature and the signer's public key.
+
+Signatures are computed using a private key whose public key is present as a [verification method](https://www.w3.org/TR/did-core/#verification-methods) with an [assertion method](https://www.w3.org/TR/did-core/#assertion) [verification relationship](https://www.w3.org/TR/did-core/#verification-relationships) when resolving the DID of the sender.
+
+To construct the signature of a message or resource, perform the following steps:
+1. Construct the JWS Header as defined [here in RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#section-4). The header **MUST** include the following properties:
+   * [`alg`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1)
+   * [`kid`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.4) - the fully qualified [assertion method ID](https://www.w3.org/TR/did-core/#verification-methods) 
+2. Use the message or resource's [digest](#digests) as the JWS Payload 
+3. Compute the JWS as defined [here in RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#section-5.1)
+4. detach the payload as defined [here in RFC7515](https://datatracker.ietf.org/doc/html/rfc7515#appendix-F)
+5. set the value of the `signature` property of the respective message or resource to the resulting compact detached JWS
 
 
 # tbDEX conversation sequence
