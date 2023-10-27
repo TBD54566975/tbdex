@@ -301,7 +301,7 @@ Uses DID authn via Bearer token in header.
 ## List Exchanges
 
 ### Description
-Returns a map of Exchange ID to array of tbdex messages forming the exchange
+Returns an array of tbdex message arrays
 
 ### Authentication
 Uses DID authn via Bearer token in header.
@@ -312,7 +312,7 @@ Uses DID authn via Bearer token in header.
 ### Response
 | Status             | Body                                   |
 | ------------------ | -------------------------------------- |
-| `200: OK.     `    | `{ data: { string: tbdexMessage[] } }` |
+| `200: OK.     `    | `{ data: { TbdexMessage[][] } }` |
 | `400: Bad Request` | `{ errors: Error[] }`                  |
 | `404: Not Found`   | N/A                                    |
 | `403: Forbidden`   | N/A                                    |
