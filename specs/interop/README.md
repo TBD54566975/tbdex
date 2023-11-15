@@ -16,11 +16,11 @@ Interoperability profiles are a bundle of standards (sometimes even more specifi
 
 While there are variations in profiles’ breadth and depth, here are the different components we should consider specifying support for:
 
-- **Entity Identifiers** – how participants are identified, and how one can access their cryptographic key material (e.g. DIDs, specific DID methods, x509s, JWKs, etc.).]
+- **Entity Identifiers** – how participants are identified, and how one can access their cryptographic key material (e.g. DIDs, specific DID methods, x509s, JWKs, etc.).
 - **Cryptographic Operations** – which cryptographic keys and algorithms for encryption/decryption, signing/verification, and other operations are supported (e.g. Ed25519/EdDSA, X25519/ECDH, P-256/ECDSA, etc.).
 - **Credential Format** – what type of Verifiable Credential(s) to be used (e.g. W3C Verifiable Credentials v1.1, v2.0, Open ID Tokens, SD-JWT/SD-JWT-VC, mDoc/mDL, etc.).
 - **User Authentication** – how one *authenticates* with other entities (e.g. DIDAuth, OpenID Connect, SIOPv2, etc.).
-- ********************************************Credential Application******************************************** – how entities apply for and receive Verifiable Credentials (e.g. VC-API, OID4VCI, Credential Manifest, a DWN protocol, etc.).
+- **Credential Application** – how entities apply for and receive Verifiable Credentials (e.g. VC-API, OID4VCI, Credential Manifest, a DWN protocol, etc.).
     - **Note:** There is a distinction between Credential Application protocols like OID4VCI and Credential Application languages/data models like Credential Manifest.
 - **Credential** **Presentation** – how entities request and share presentations of credentials with one another (e.g. VC-API, OID4VP, Presentation Exchange, a DWN protocol, etc.).
     - **Note:** There is a distinction between Credential Presentation protocols like OID4VP and Credential Presentation languages/data models like Presentation Exchange.
