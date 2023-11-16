@@ -24,7 +24,7 @@ This repo contains specifications for tbDEX
 
 ![digram](tbdex_message_sequence.png)
 
-For information on the development process for this protocol, check out [sdk-development]()
+For information on the development process for this protocol, check out [sdk-development](https://github.com/TBD54566975/sdk-development/)
 
 ## Implementations 
 
