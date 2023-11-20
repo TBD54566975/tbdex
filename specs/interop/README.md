@@ -50,15 +50,15 @@ With tbDEX we identify three main parties. The parties may overlap (e.g. a tbDEX
 
 |     | Supported | Who? | Notes |
 | --- | --------- | ---- | ----- |
-| Entity Identifiers [Required] | `did:jwk`, `did:dht`, `did:web` | Nodes, Issuer, Wallets | `did:dht` is **recommended** as a default method. |
-| Entity Identifiers [Optional] | `did:key`, `did:ion` | Nodes, Issuer, Wallets | Optionally supported methods. |
-| Signature Schemes | Ed25519/EdDSA, secp256k1/ES256K, secp256r1 (P-256)/ECDSA, X25519/ECDH | Nodes, Issuer, Wallets | Sign/Verify: ed25519 with EdDSA, secp256r1 with ECDSA, secp256k1 with ES256K Encrypt/Decrypt (via Key Agreement): X25519 and secp keys with ECDH Note: worth specifying encryption algs? |
-| Entity AuthN/Z | tbDEX Signed Messages with VCs | Nodes, Issuer, Wallets | [As outlined here](https://github.com/TBD54566975/tbdex/tree/main/specs/protocol#signatures). |
-| VC Formats | W3C VCDM v1.1 as VC-JWT and VP-JWT | Nodes, Issuer, Wallets | Most widely adopted; should be used with VC-JSON-Schema instead of JSON-LD contexts. |
-| Credential Issuance | OID4VCI | Issuer, Wallets | Will need to pick an implementers draft to implement against. |
-| Credential Presentation (Option) | OID4VP using Presentation Exchange v2 | Nodes, Issuer, Wallets | Will need to pick an implementers draft to implement against. |
-| Status | Status List 2021 | Nodes, Issuer, Wallets |  Implemented against [this specification](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-status-list-2021-20230102/#example-example-statuslist2021credential). |
-| tbDEX Messages | v1, DIF PEv2 | Nodes, Wallets | Yet to be versioned. |
+| Entity Identifiers [Required] | `did:jwk`, `did:dht`, `did:web` | Nodes, Issuer, Agents | `did:dht` is **recommended** as a default method. |
+| Entity Identifiers [Optional] | `did:key`, `did:ion` | Nodes, Issuer, Agents | Optionally supported methods. |
+| Signature Schemes | Ed25519/EdDSA, secp256k1/ES256K, secp256r1 (P-256)/ECDSA, X25519/ECDH | Nodes, Issuer, Agents | Sign/Verify: ed25519 with EdDSA, secp256r1 with ECDSA, secp256k1 with ES256K Encrypt/Decrypt (via Key Agreement): X25519 and secp keys with ECDH Note: worth specifying encryption algs? |
+| Entity AuthN/Z | tbDEX Signed Messages with VCs | Nodes, Issuer, Agents | [As outlined here](https://github.com/TBD54566975/tbdex/tree/main/specs/protocol#signatures). |
+| VC Formats | W3C VCDM v1.1 as VC-JWT and VP-JWT | Nodes, Issuer, Agents | Most widely adopted; should be used with VC-JSON-Schema instead of JSON-LD contexts. |
+| Credential Issuance | OID4VCI | Issuer, Agents | Will need to pick an implementers draft to implement against. |
+| Credential Presentation (Option) | OID4VP using Presentation Exchange v2 | Nodes, Issuer, Agents | Will need to pick an implementers draft to implement against. |
+| Status | Status List 2021 | Nodes, Issuer, Agents |  Implemented against [this specification](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-status-list-2021-20230102/#example-example-statuslist2021credential). |
+| tbDEX Messages | v1, DIF PEv2 | Nodes, Agents | Yet to be versioned. |
 
 ### Profile Detail
 
