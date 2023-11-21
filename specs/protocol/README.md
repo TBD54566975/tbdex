@@ -120,7 +120,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `feeSubunits`            | string                                  | N        | The fee expressed in the currency's sub units to make use of this payment method                  |
 
 
-#### Example
+#### Example Offering
 ```json
 {
   "metadata": {
@@ -331,6 +331,7 @@ See [here](#digests) for more details
 | `kind`           | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
 | `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema |
 
+#### RFQ example
 ```json
 {
   "metadata": {
@@ -381,6 +382,24 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 > **Note**
 > Include a section that explains rules around when a Close can/can't be sent.
 
+#### Example Close
+```json
+{
+  "metadata": {
+    "from": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
+    "to": "did:ex:pfi",
+    "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
+    "kind": "close",
+    "id": "close_03ha83trerk6t9tkg7q42s48j",
+    "createdAt": "2023-09-13T20:28:40.345Z"
+  },
+  "data": {
+    "reason": "Rejecting Quote"
+  },
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
+}
+```
+
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
@@ -416,7 +435,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 | `link`        | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI                     |
 | `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI |
 
-
+#### Example Quote
 ```json
 {
   "metadata": {
@@ -430,12 +449,10 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
   "data": {
     "expiresAt": "2023-09-13T23:11:17.315Z",
     "payin": {
-      "currencyCode": "USD",
-      "amountSubunits": "10000"
+      "link": "http://cash.app/pfi?currency=usd&amount=50"
     },
     "payout": {
-      "currencyCode": "BTC",
-      "amountSubunits": "380000.0000"
+      "instruction": "BTC will be paid to the provided BTC address",
     }
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29yZUMxVVJNUUVWS204d3h6aFZGbnRMenZQWFlidEg4Q0VGTktVY1NrTFdUI3o2TWtvcmVDMVVSTVFFVkttOHd4emhWRm50THp2UFhZYnRIOENFRk5LVWNTa0xXVCJ9..R_BBKJoWifPFh10GJ1ij2gCCxND1CdzKbiOgPCIha__0GvRy0rHYCi18-TY7jNARaQ94RHXHYIsCRm2MuOPACw"
@@ -446,7 +463,7 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 ### `Order`
 > Alice -> PFI: I'm happy with the quote and I want to execute the transaction"
 
-
+#### Example Order
 ```json
 {
   "metadata": {
