@@ -1,6 +1,8 @@
 # tbDEX <!-- omit in toc -->
 
 - [Purpose](#purpose)
+- [Implementations](#implementations)
+- [Test Vectors](#test-vectors)
 - [Features](#features)
   - [tbDEX Message](#tbdex-message)
   - [tbDEX Resource](#tbdex-resource)
@@ -31,6 +33,9 @@ For information on the development process for this protocol, check out [sdk-dev
 * [JavaScript/Typescript](https://github.com/TBD54566975/tbdex-js) (feature complete)
 * [Kotlin](https://github.com/TBD54566975/tbdex-kt) (work in progress)
 * [Example PFI implementation](https://github.com/TBD54566975/tbdex-pfi-exemplar/)
+
+## Test Vectors
+Implementations are run against a common set of [test vectors](./hosted/test-vectors/). For more information about how test vectors are used, check out the [Test Vectors](https://github.com/TBD54566975/sdk-development#test-vectors) section of the `sdk-development` readme.
 
 ## Features
 
