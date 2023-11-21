@@ -120,7 +120,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `feeSubunits`            | string                                  | N        | The fee expressed in the currency's sub units to make use of this payment method                  |
 
 
-#### Example
+#### Example Offering
 ```json
 {
   "metadata": {
