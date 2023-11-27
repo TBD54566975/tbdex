@@ -62,14 +62,14 @@ tbDEX Resources are published by PFIs for anyone to consume and generally used a
 ## Fields
 All tbdex resources are JSON objects which can include the following top-level properties:
 
-| Field       | Required (Y/N) | Description                                                           |
-| ----------- | -------------- | --------------------------------------------------------------------- |
-| `metadata`  | Y              | An object containing fields _about_ the resource                      |
-| `data`      | Y              | The actual resource content (e.g. an offering)                        |
-| `signature` | Y              | signature that verifies the authenticity and integrity of the message |
+| Field       | Required (Y/N) | Description                                                            |
+| ----------- | -------------- | ---------------------------------------------------------------------- |
+| `metadata`  | Y              | An object containing fields _about_ the resource                       |
+| `data`      | Y              | The actual resource content (e.g. an offering)                         |
+| `signature` | Y              | signature that verifies the authenticity and integrity of the resource |
 
 ### `metadata`
-The `metadata` object contains fields _about_ the message and is present in _every_ tbdex resource. 
+The `metadata` object contains fields _about_ the resource and is present in _every_ tbdex resource. 
 
 
 | Field       | Required (Y/N) | Description                                 |
@@ -103,7 +103,6 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `payinMethods`            | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`           | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
 | `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | Y        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |
-| `createdAt`               | datetime                                                                                                 | Y        | The creation time of the resource. Expressed as ISO8601                                                                              |
 
 #### `CurrencyDetails`
 | field          | data type | required | description                                            |
