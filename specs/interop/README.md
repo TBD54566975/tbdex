@@ -128,6 +128,10 @@ The specification is built on top of OAuth 2.0 [RFC6749](https://www.rfc-editor.
 
 > This specification can also be combined with [SIOPv2](https://openid.github.io/SIOPv2/openid-connect-self-issued-v2-wg-draft.html), if implementers require OpenID Connect features, such as the issuance of Self-Issued ID Tokens [SIOPv2](https://openid.github.io/SIOPv2/openid-connect-self-issued-v2-wg-draft.html).
 
+#### Credential Status
+
+Credential Status is accomplished by utilizing the spec [Status List 2021](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-status-list-2021-20230102/#example-example-statuslist2021credential). **Note:** This spec is under development and is being upgraded under [Bitstring Status List](https://w3c.github.io/vc-bitstring-status-list/), which will be monitored for future adoption.
+
 #### tbDEX Messages
 
 [tbDEX messages](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#messages), a self-contained, authenticated data payload that facilitate all interactions on [tbDEX](https://github.com/TBD54566975/tbdex).
@@ -135,7 +139,6 @@ The specification is built on top of OAuth 2.0 [RFC6749](https://www.rfc-editor.
 ## Comparison to Other Profiles
 
 The table below compares compatability with other profiles. Since no other profiles yet support tbDEX messaging, it is excluded from the chart. Support is marked as :heavy_check_mark: if there is overlap (e.g. a profile supports did:web); complete overlap is not a requirement. Support is marked as :x: if there is no overlap. Support is marked as :question: if the profile does not specify a feature.
-
 
 |                         | DIF | HAIP | EBSI | MSFT | 
 | ----------------------- | --- | ---- | ---- | ---- |
