@@ -57,7 +57,7 @@ With tbDEX we identify three main parties. The parties may overlap (e.g. a tbDEX
 | VC Formats | W3C VCDM v1.1 as VC-JWT and VP-JWT | Nodes, Issuer, Agents | Most widely adopted; should be used with VC-JSON-Schema instead of JSON-LD contexts. |
 | Credential Issuance | OID4VCI | Issuer, Agents | Will need to pick an implementers draft to implement against. |
 | Credential Presentation (Option) | OID4VP using Presentation Exchange v2 | Nodes, Issuer, Agents | Will need to pick an implementers draft to implement against. |
-| Status | Status List 2021 | Nodes, Issuer, Agents |  Implemented against [this specification](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-status-list-2021-20230102/#example-example-statuslist2021credential). |
+| Credential Status | Status List 2021 | Nodes, Issuer, Agents |  Implemented against [this specification](https://www.w3.org/community/reports/credentials/CG-FINAL-vc-status-list-2021-20230102/#example-example-statuslist2021credential). |
 | tbDEX Messages | v1, DIF PEv2 | Nodes, Agents | Yet to be versioned. |
 
 ### Profile Detail
