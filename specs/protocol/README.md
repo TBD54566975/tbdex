@@ -278,7 +278,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
   "data": {
     "offeringId": <OFFERING_ID>,
     "payoutSubunits": "STR_VALUE",
-    "vcs": <PRESENTATION_SUBMISSION_HASH>, <---- hash
+    "claims": <PRESENTATION_SUBMISSION_HASH>, <---- hash
     "payinMethod": {
       "kind": "BTC_ADDRESS",
       "paymentDetails": <OBJ_HASH> <---- hash
@@ -289,7 +289,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
     }
   },
   "private": {
-    "vcs": <PRESENTATION_SUBMISSION>, <---- actual
+    "claims": <PRESENTATION_SUBMISSION>, <---- actual
     "payinMethod": {
       "paymentDetails": <OBJ> <---- actual
     },
@@ -345,6 +345,19 @@ See [here](#digests) for more details
     "offeringId": "abcd123",
     "payinMethod": {
       "kind": "DEBIT_CARD",
+      "paymentDetails": "<HASH_PRIVATE_PAYIN_METHOD_PAYMENT_DETAILS>"
+    },
+    "payoutMethod": {
+      "kind": "BTC_ADDRESS",
+      "paymentDetails": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
+    },
+    "payinSubunits": "20000",
+    "claims": [
+      "<HASH_PRIVATE_CLAIMS_0>"
+    ]
+  },
+  "private": {
+    "payinMethod": {
       "paymentDetails": {
         "cardNumber": "1234567890123456",
         "expiryDate": "12/22",
@@ -353,12 +366,10 @@ See [here](#digests) for more details
       }
     },
     "payoutMethod": {
-      "kind": "BTC_ADDRESS",
       "paymentDetails": {
         "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
       }
     },
-    "payinSubunits": "20000",
     "claims": [
       "eyJhbGciOiJFZERTQSJ9.eyJpc3MiOiJkaWQ6a2V5Ono2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSIsInN1YiI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwidmMiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiIxNjk0NjM2MzY4NDI5IiwidHlwZSI6IllvbG9DcmVkZW50aWFsIiwiaXNzdWVyIjoiZGlkOmtleTp6Nk1rczRONVhkckU2VmllSnNnSDhTTVNSYXZtVG94NzRScW9yb1c3Ylp6QkxRQmkiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTA5LTEzVDIwOjE5OjI4LjQyOVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwiYmVlcCI6ImJvb3AifX19.cejevPPHPGhajd1oP4nfLpxRMKm801BzPdqjm9pQikaMEnh1WZXrap2j_kALZN_PCUddNtW1R_YY18UoERRJBw"
     ]
