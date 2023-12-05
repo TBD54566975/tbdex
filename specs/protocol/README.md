@@ -278,7 +278,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
   "data": {
     "offeringId": <OFFERING_ID>,
     "payoutSubunits": "STR_VALUE",
-    "vcs": <PRESENTATION_SUBMISSION_HASH>, <---- hash
+    "claims": <PRESENTATION_SUBMISSION_HASH>, <---- hash
     "payinMethod": {
       "kind": "BTC_ADDRESS",
       "paymentDetails": <OBJ_HASH> <---- hash
@@ -289,7 +289,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
     }
   },
   "private": {
-    "vcs": <PRESENTATION_SUBMISSION>, <---- actual
+    "claims": <PRESENTATION_SUBMISSION>, <---- actual
     "payinMethod": {
       "paymentDetails": <OBJ> <---- actual
     },
