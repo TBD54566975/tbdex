@@ -424,17 +424,12 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 
 
 #### `QuoteDetails`
-| field            | data type | required | description                                                      |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------- |
-| `currencyCode`   | string    | Y        | ISO 3166 currency code string                                    |
-| `amount` |      [`DecimalString`](#decimalstring)     | Y        | The amount of currency expressed in the smallest respective unit |
-| `fee`    | [`DecimalString`](#decimalstring)    | N        | The amount paid in fees                                          |
+| field                | data type                                   | required | description                                                                                               |
+|----------------------|---------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------|
+| `currencyCode`       | string                                      | Y        | ISO 3166 currency code string                                                                             |
+| `amount`             | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid to the PFI or by the PFI excluding fees                                       |
+| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount paid in fees                                                                                   |
 | `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
-
-
-> [!NOTE]
-> 
-> Include a section that explains `fee`. Does `amount` _include_ `fee` or does `amount + fee = total`?
 
 #### `PaymentInstruction`
 | field         | data type | required | description                                                               |
