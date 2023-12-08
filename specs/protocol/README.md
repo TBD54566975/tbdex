@@ -316,19 +316,33 @@ See [here](#digests) for more details
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
+#### Public `data`
 | field           | data type                                         | required | description                                                                           |
 | --------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
 | `offeringId`    | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
 | `payinSubunits` | string                                            | Y        | Amount of payin currency you want in exchange for payout currency                     |
-| `claims`        | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `claims`        | string[]                                          | Y        | An array of hashes of claims that fulfill the requirements declared in an [Offering](#offering). The actual claims will be listed in `private.claims` |
 | `payinMethod`   | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                  |
 | `payoutMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                              |
 
-#### `SelectedPaymentMethod`
+##### `SelectedPaymentMethod`
 | field            | data type | required | description                                                                                       |
 | ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `kind`           | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
+| `paymentDetails` | string    | N        | A hash of the respective `private.payingMethod.paymentDetails` or `private.payinMethod.paymentDetails` object |
+
+#### `RfqPrivate`
+| field           | data type                                         | required | description                                                                           |
+| --------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| `claims`        | string[]                                          | Y        | An array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `payinMethod`   | [`PrivateSelectedPaymentMethod`](#privateselectedpaymentmethod) | N        | Specify which payment method to send payin currency.                                  |
+| `payoutMethod`  | [`PrivateSelectedPaymentMethod`](#privateselectedpaymentmethod) | N        | Specify which payment method to receive payout currency.                              |
+
+##### `PrivateSelectedPaymentMethod`
+| field            | data type | required | description                                                                                       |
+| ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema |
+
 
 #### RFQ example
 ```json
