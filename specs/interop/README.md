@@ -1,8 +1,6 @@
-# [PROPOSED] tbDEX Interop Profile
+# [PROPOSED] tbDEX Interop Profile v0.1
 
-```
-This is a proposed interop profile that is subject to change. Please open issues for questions and additional discussion.
-```
+> This is a proposed interop profile that is subject to change. Please open issues for questions and additional discussion.
 
 # Overview
 
@@ -30,6 +28,8 @@ While there are variations in profiles’ breadth and depth, here are the differ
     - **Note:** There is a distinction between Credential Presentation protocols like OID4VP and Credential Presentation languages/data models like Presentation Exchange.
 - **Credential Status** – how issuers, post-issuance, can represent the status of a Verifiable Credential (e.g. Status List 2021, etc.).
 - **tbDEX Messages** – how messages in tbDEX interactions look and are sent (e.g. data model, protocol, transport).
+
+> Trust and Discovery are out of scope for this version.
 
 ## Existing Profiles
 
