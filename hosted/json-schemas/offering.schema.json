@@ -11,10 +11,12 @@
         },
         "minAmount": {
           "type": "string",
+          "pattern": "^(\\d*\\.?\\d*)$",
           "description": "Minimum amount of currency that can be requested"
         },
         "maxAmount": {
           "type": "string",
+          "pattern": "^(\\d*\\.?\\d*)$",
           "description": "Maximum amount of currency that can be requested"
         }
       },

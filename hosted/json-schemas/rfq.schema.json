@@ -25,6 +25,7 @@
     },
     "payinAmount": {
       "type": "string",
+      "pattern": "^(\\d*\\.?\\d*)$",
       "description": "Amount of quote currency you want to spend in order to receive base currency"
     },
     "claims": {

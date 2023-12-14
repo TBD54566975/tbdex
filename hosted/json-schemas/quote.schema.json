@@ -11,10 +11,12 @@
         },
         "amount": {
           "type": "string",
+          "pattern": "^(\\d*\\.?\\d*)$",
           "description": "The amount of currency expressed in the smallest respective unit"
         },
         "fee": {
           "type": "string",
+          "pattern": "^(\\d*\\.?\\d*)$",
           "description": "The amount paid in fees"
         }
       },
