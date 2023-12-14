@@ -9,16 +9,16 @@
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
-        "amountSubunits": {
+        "amount": {
           "type": "string",
           "description": "The amount of currency expressed in the smallest respective unit"
         },
-        "feeSubunits": {
+        "fee": {
           "type": "string",
           "description": "The amount paid in fees"
         }
       },
-      "required": ["currencyCode", "amountSubunits"]
+      "required": ["currencyCode", "amount"]
     },
     "PaymentInstruction": {
       "type": "object",

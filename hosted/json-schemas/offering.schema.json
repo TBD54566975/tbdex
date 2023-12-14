@@ -9,11 +9,11 @@
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
-        "minSubunits": {
+        "minAmount": {
           "type": "string",
           "description": "Minimum amount of currency that can be requested"
         },
-        "maxSubunits": {
+        "maxAmount": {
           "type": "string",
           "description": "Maximum amount of currency that can be requested"
         }
