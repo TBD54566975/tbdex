@@ -91,7 +91,7 @@
                 "data": {},
                 "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..FLzrqCirBzDFix3AuIpv-1FtGSUNq7v6ckUQjzrGc5JLDSggS8P-MdVJ1gW5SVCusZCRhkjk6UX4qQXSFZ4X8w"
             },
-            "errors": "valid"
+            "errors": false
         },
         {
             "description": "Close parses from string",
@@ -110,7 +110,7 @@
                 },
                 "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..TDtaxXdl1Bljuft8bZlvxTXTK472fKOia12kG_mQA7UhGTVIfwO9cuDCS_86EZHPMhkAvYdOnIiUodouZVba_A"
             },
-            "errors": "valid"
+            "errors": false
         },
         {
             "description": "Order Status parses from string",
