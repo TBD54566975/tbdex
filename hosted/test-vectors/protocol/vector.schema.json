@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "input": {
+      "type": "string"
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "present": {
+          "type": "boolean"
+        }
+      },
+      "required": ["present"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["description", "input"],
+  "oneOf": [
+    {
+      "required": ["output"],
+      "not": {"required": ["error"]}
+    },
+    {
+      "required": ["error"],
+      "not": {"required": ["output"]}
+    }
+  ]
+}
