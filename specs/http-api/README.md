@@ -14,9 +14,11 @@ Version: Draft
 - [Discoverability](#discoverability)
   - [Example](#example)
 - [Error Responses](#error-responses)
+  - [Error object](#error-object)
+  - [Example](#example-1)
 - [Query Params](#query-params)
   - [Pagination](#pagination)
-    - [Example](#example-1)
+    - [Example](#example-2)
 - [Idempotency](#idempotency)
 - [Offerings](#offerings)
   - [List Offerings](#list-offerings)
@@ -28,37 +30,50 @@ Version: Draft
     - [Response](#response)
 - [Exchanges](#exchanges)
   - [Submit RFQ](#submit-rfq)
+    - [Description](#description-1)
     - [Endpoint](#endpoint-1)
     - [Authentication](#authentication-1)
     - [Authorization](#authorization-1)
     - [Request Body](#request-body)
     - [Response](#response-1)
     - [Errors](#errors)
-  - [Get Quote](#get-quote)
+  - [Get Quote/Order/OrderStatus](#get-quoteorderorderstatus)
+    - [Description](#description-2)
     - [Endpoint](#endpoint-2)
+    - [Authentication](#authentication-2)
+    - [Authorization](#authorization-2)
     - [Response](#response-2)
     - [Response Body](#response-body)
   - [Submit Order](#submit-order)
+    - [Description](#description-3)
     - [Endpoint](#endpoint-3)
+    - [Authentication](#authentication-3)
+    - [Authorization](#authorization-3)
     - [Order Request Body](#order-request-body)
     - [Response](#response-3)
     - [Errors](#errors-1)
   - [Submit Close](#submit-close)
-    - [Description](#description-1)
+    - [Description](#description-4)
     - [Endpoint](#endpoint-4)
+    - [Authentication](#authentication-4)
+    - [Authorization](#authorization-4)
     - [Request Body](#request-body-1)
     - [Response](#response-4)
     - [Errors](#errors-2)
   - [Get Exchange (DESCOPED)](#get-exchange-descoped)
-    - [Description](#description-2)
-    - [Authentication](#authentication-2)
+    - [Description](#description-5)
     - [Endpoint](#endpoint-5)
+    - [Authentication](#authentication-5)
+    - [Authorization](#authorization-5)
     - [Query Params](#query-params-2)
     - [Response](#response-5)
   - [List Exchanges](#list-exchanges)
-    - [Description](#description-3)
-    - [Authentication](#authentication-3)
+    - [Description](#description-6)
     - [Endpoint](#endpoint-6)
+    - [Authentication](#authentication-6)
+      - [JWS Header](#jws-header)
+      - [JWS Payload](#jws-payload)
+    - [Authorization](#authorization-6)
     - [Response](#response-6)
     - [Query Params](#query-params-3)
 - [References](#references)
@@ -198,6 +213,9 @@ An exchange is a series of linked tbDEX messages between Alice and a PFI for a s
 
 ## Submit RFQ
 
+### Description
+Submits an RFQ (Request For Quote). Alice is asking the PFI to provide a Quote so she can evaluate it.
+
 ### Endpoint
 `POST /exchanges/:exchange_id/rfq`
 
@@ -225,24 +243,44 @@ No Authorization required to submit an RFQ
 | 409    | RFQ already exists      |
 | 409    | Exchange already exists |
 
-## Get Quote
+## Get Quote/Order/OrderStatus
+
+### Description
+Retrieve the desired tbdex message type given an exchangeId.
+
 ### Endpoint
 `GET /exchanges/:exchange_id/?messageType=quote`
+
+### Authentication
+Refer to [Signature Verification Section]() of the tbDEX spec  
+### Authorization
+No Authorization required to Get Quote
+
 
 ### Response
 | Status             | Body                              |
 | ------------------ | --------------------------------- |
-| `200: OK`          | `{ data: TbdexMessage<Quote>[] }` |
+| `200: OK`          | `{ data: TbdexMessage<Quote/Order/OrderStatus>[] }` |
 | `400: Bad Request` | `{ errors: Error[] }`             |
 
 ### Response Body
 > [!IMPORTANT]
-> See Quote structure [here](../README.md#quote)
+> See Quote structure [here](../protocol/README.md#quote)
+> See Order structure [here](../protocol/README.md#order)
+> See OrderStatus structure [here](../protocol/README.md#orderstatus)
 
 ## Submit Order
 
+### Description
+Submits the Order. Alice wants to accept the Quote and execute the transaction.
+
 ### Endpoint
 `POST /exchanges/:exchange_id/order`
+
+### Authentication
+Refer to [Signature Verification Section]() of the tbDEX spec  
+### Authorization
+No Authorization required to submit an Order
 
 ### Order Request Body
 > [!IMPORTANT]
@@ -271,6 +309,11 @@ Closes the exchange. Indicates that Alice is no longer interested
 ### Endpoint
 `POST /exchanges/:exchange_id/close`
 
+### Authentication
+Refer to [Signature Verification Section]() of the tbDEX spec  
+### Authorization
+No Authorization required to submit a Close
+
 ### Request Body
 > [!IMPORTANT]
 > See Close structure [here](../README.md#close)
@@ -296,12 +339,13 @@ Closes the exchange. Indicates that Alice is no longer interested
 ### Description
 Retrieves the messages specified by ID and messageType
 
-### Authentication
-Uses DID authn via Bearer token in header.
-
 ### Endpoint
 `GET /exchanges/:id`
 
+### Authentication
+Uses DID authn via Bearer token in header.
+### Authorization
+No Authorization required to get exchange.
 
 ### Query Params
 | Param         | Description                   |
@@ -323,18 +367,39 @@ Uses DID authn via Bearer token in header.
 ## List Exchanges
 
 ### Description
-Returns an array of tbdex message arrays
-
-### Authentication
-Uses DID authn via Bearer token in header.
+Returns an array of tbdex message arrays (a list of exchanges)
 
 ### Endpoint
 `GET /exchanges`
 
+### Authentication
+A tbdex http client must send an Http Auth Header in the form of a JWT `Bearer` token.
+
+The JWT must consist of JWS header and JWT payload containing the below fields, and signed by the client's DID.
+
+#### JWS Header
+| Param  | Value | Description | 
+|--------|-------|-------------|
+| `typ`  | `JWT` | Token type  |
+| `alg`  | `HS256` | Algorithm |
+| `kid`  | `did:dht:alice...#dwn-sig` | Key ID of the sender's DID |
+
+#### JWS Payload
+| Param  | Value | Description | 
+|--------|-------|-------------|
+| `aud`  | `did:dht:pfi` | DID of the audience (i.e. PFI DID)  |
+| `iss`  | `did:dht:alice` | DID of the issuer (i.e. Alice DID) |
+| `exp`  | `1703222687` | Time when the JWT expires. 1 minute after issuance  |
+| `iat`  | `1703222795` | Time when the JWT was issued. |
+| `jti`  |  `0189f7e5-c883-7106-8272-ccb7fcba0575` | Unique identifier for the JWT. Used to prevent reply attacks. Must be uuidv7. |
+
+### Authorization
+No Authorization required to get exchanges
+
 ### Response
 | Status             | Body                                   |
 | ------------------ | -------------------------------------- |
-| `200: OK.     `    | `{ data: { TbdexMessage[][] } }` |
+| `200: OK.`         | `{ data: { TbdexMessage[][] } }`       |
 | `400: Bad Request` | `{ errors: Error[] }`                  |
 | `404: Not Found`   | N/A                                    |
 | `403: Forbidden`   | N/A                                    |
