@@ -173,7 +173,7 @@ The IDs of individual tbDEX messages are used as idempotency keys
 
 # Offerings
 
-The [`Offering`](../README.md#offering) resource is used to convey the currency pairs a PFI is _offering_. It includes information about payment methods and associated fees.
+The [`Offering`](../protocol/README.md#offering) resource is used to convey the currency pairs a PFI is _offering_. It includes information about payment methods and associated fees.
 
 ## List Offerings
 
@@ -226,7 +226,7 @@ No Authorization required to submit an RFQ
 
 ### Request Body
 > [!IMPORTANT]
-> See RFQ structure [here](../README.md#rfq-request-for-quote)
+> See RFQ structure [here](../protocol/README.md#rfq-request-for-quote)
 
 ### Response
 | Status             | Body                  |
@@ -284,7 +284,7 @@ No Authorization required to submit an Order
 
 ### Order Request Body
 > [!IMPORTANT]
-> See Order structure [here](../README.md#order)
+> See Order structure [here](../protocol/README.md#order)
 
 
 ### Response
@@ -316,7 +316,7 @@ No Authorization required to submit a Close
 
 ### Request Body
 > [!IMPORTANT]
-> See Close structure [here](../README.md#close)
+> See Close structure [here](../protocol/README.md#close)
 
 
 ### Response
