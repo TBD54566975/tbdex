@@ -384,7 +384,7 @@ The JWT must consist of JWS header and JWT payload containing the below fields, 
 | `alg`  | `HS256` | Algorithm |
 | `kid`  | `did:dht:alice...#dwn-sig` | Key ID of the sender's DID |
 
-#### JWS Payload
+#### JWT Claims Set
 | Param  | Value | Description | 
 |--------|-------|-------------|
 | `aud`  | `did:dht:pfi` | DID of the audience (i.e. PFI DID)  |
