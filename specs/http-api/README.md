@@ -373,7 +373,7 @@ Returns an array of tbdex message arrays (a list of exchanges)
 `GET /exchanges`
 
 ### Authentication
-A tbdex http client must send an Http Auth Header in the form of a JWT `Bearer` token.
+A tbdex http client MUST set the HTTP [Authorization Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) in order to be authenticated. The value of the header MUST use the [Bearer Authentication Scheme] as defined in [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750), and the access token MUST be a JWT.
 
 The JWT must consist of JWS header and JWT payload containing the below fields, and signed by the client's DID.
 
@@ -391,7 +391,7 @@ The JWT must consist of JWS header and JWT payload containing the below fields, 
 | `iss`  | `did:dht:alice` | DID of the issuer (i.e. Alice DID) |
 | `exp`  | `1703222687` | Time when the JWT expires. 1 minute after issuance  |
 | `iat`  | `1703222795` | Time when the JWT was issued. |
-| `jti`  |  `0189f7e5-c883-7106-8272-ccb7fcba0575` | Unique identifier for the JWT. Used to prevent reply attacks. Must be uuidv7. |
+| `jti`  |  `0189f7e5-c883-7106-8272-ccb7fcba0575` | Unique identifier for the JWT. Used to prevent replay attacks. Must be uuidv7. |
 
 ### Authorization
 No Authorization required to get exchanges
