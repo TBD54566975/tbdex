@@ -13,28 +13,8 @@
       "additionalProperties": true
     },
     "error": {
-      "type": "object",
-      "properties": {
-        "detail": {
-          "type": "string"
-        },
-        "present": {
-          "type": "boolean"
-        }
-      },
-      "required": ["present"],
-      "additionalProperties": false
+      "type": "boolean"
     }
   },
-  "required": ["description", "input"],
-  "oneOf": [
-    {
-      "required": ["output"],
-      "not": {"required": ["error"]}
-    },
-    {
-      "required": ["error"],
-      "not": {"required": ["output"]}
-    }
-  ]
+  "required": ["description", "input", "error"]
 }
