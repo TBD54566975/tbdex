@@ -1,0 +1,3 @@
+[submodule "tbdex-interop-suite"]
+	path = tbdex-interop-suite
+	url = git@github.com:TBD54566975/tbdex-interop-suite.git
