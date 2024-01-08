@@ -1,0 +1,39 @@
+{
+  "description": "Quote parses from string",
+  "input": "{\"metadata\":{\"kind\":\"quote\",\"to\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"from\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"id\":\"quote_7zzzzzzpyrfy2r004fgm0013c7\",\"exchangeId\":\"rfq_7zzzzzzzztfxx8001ff8000ex2\",\"createdAt\":\"2023-10-24T16:15:04.024Z\"},\"data\":{\"expiresAt\":\"2023-10-25T16:15:04.024Z\",\"payin\":{\"currencyCode\":\"AUD\",\"amountSubunits\":\"1000\",\"feeSubunits\":\"1\"},\"payout\":{\"currencyCode\":\"BTC\",\"amountSubunits\":\"12\",\"feeSubunits\":\"2\"},\"paymentInstructions\":{\"payin\":{\"link\":\"https://block.xyz\",\"instruction\":\"payin instruction\"},\"payout\":{\"link\":\"https://block.xyz\",\"instruction\":\"payout instruction\"}}},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..B2n8TL3Tk_Bq0uf8l-1IIj_p44fuLghihElbrF493N1b1TqexdHqkhUuevdh5DKsTi3DgiQyHd8Vijwnz6Ap_A\"}",
+  "output": {
+      "metadata": {
+          "kind": "quote",
+          "to": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
+          "from": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
+          "id": "quote_7zzzzzzpyrfy2r004fgm0013c7",
+          "exchangeId": "rfq_7zzzzzzzztfxx8001ff8000ex2",
+          "createdAt": "2023-10-24T16:15:04.024Z"
+      },
+      "data": {
+          "expiresAt": "2023-10-25T16:15:04.024Z",
+          "payin": {
+              "currencyCode": "AUD",
+              "amountSubunits": "1000",
+              "feeSubunits": "1"
+          },
+          "payout": {
+              "currencyCode": "BTC",
+              "amountSubunits": "12",
+              "feeSubunits": "2"
+          },
+          "paymentInstructions": {
+              "payin": {
+                  "link": "https://block.xyz",
+                  "instruction": "payin instruction"
+              },
+              "payout": {
+                  "link": "https://block.xyz",
+                  "instruction": "payout instruction"
+              }
+          }
+      },
+      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..B2n8TL3Tk_Bq0uf8l-1IIj_p44fuLghihElbrF493N1b1TqexdHqkhUuevdh5DKsTi3DgiQyHd8Vijwnz6Ap_A"
+  },
+  "error": false
+}

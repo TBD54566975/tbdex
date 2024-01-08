@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "validate-vectors": "node validate-vectors.js"
+  },
+  "dependencies": {
+    "ajv": "^8.0.1"
+  }
+}

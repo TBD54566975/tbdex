@@ -1,0 +1,17 @@
+{
+  "description": "Order parses from string",
+  "input": "{\"metadata\":{\"kind\":\"order\",\"to\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"from\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"id\":\"order_01hdh7fpzjeh980014a8000t9d\",\"exchangeId\":\"rfq_7zzzzzzqvhffw8002vz0000mwp\",\"createdAt\":\"2023-10-24T16:15:04.032Z\"},\"data\":{},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..FLzrqCirBzDFix3AuIpv-1FtGSUNq7v6ckUQjzrGc5JLDSggS8P-MdVJ1gW5SVCusZCRhkjk6UX4qQXSFZ4X8w\"}",
+  "output": {
+      "metadata": {
+          "kind": "order",
+          "to": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
+          "from": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
+          "id": "order_01hdh7fpzjeh980014a8000t9d",
+          "exchangeId": "rfq_7zzzzzzqvhffw8002vz0000mwp",
+          "createdAt": "2023-10-24T16:15:04.032Z"
+      },
+      "data": {},
+      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..FLzrqCirBzDFix3AuIpv-1FtGSUNq7v6ckUQjzrGc5JLDSggS8P-MdVJ1gW5SVCusZCRhkjk6UX4qQXSFZ4X8w"
+  },
+  "error": false
+}
