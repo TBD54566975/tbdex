@@ -1,0 +1,109 @@
+{
+  "description": "can parse and serialize an Offering",
+  "input": "{\"metadata\":{\"kind\":\"offering\",\"from\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"id\":\"offering_01hdh7fyftfkv8002wyr000nj5\",\"createdAt\":\"2023-10-24T16:15:03.662Z\",\"updatedAt\":\"2023-10-24T16:15:03.662Z\"},\"data\":{\"description\":\"A sample offering\",\"payoutUnitsPerPayinUnit\":\"1\",\"payoutCurrency\":{\"currencyCode\":\"USDC\"},\"payinCurrency\":{\"currencyCode\":\"AUD\",\"minSubunits\":\"1\",\"maxSubunits\":\"10000\"},\"payinMethods\":[{\"kind\":\"BTC_ADDRESS\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"phoneNumber\":{\"minLength\":12,\"pattern\":\"^+2547[0-9]{8}$\",\"description\":\"Mobile Money account number of the Recipient\",\"type\":\"string\",\"title\":\"Phone Number\",\"maxLength\":12},\"accountHolderName\":{\"pattern\":\"^[A-Za-zs'-]+$\",\"description\":\"Name of the account holder as it appears on the Mobile Money account\",\"type\":\"string\",\"title\":\"Account Holder Name\",\"maxLength\":32}},\"required\":[\"accountNumber\",\"accountHolderName\"]}}],\"payoutMethods\":[{\"kind\":\"MOMO\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"phoneNumber\":{\"minLength\":12,\"pattern\":\"^+2547[0-9]{8}$\",\"description\":\"Mobile Money account number of the Recipient\",\"type\":\"string\",\"title\":\"Phone Number\",\"maxLength\":12},\"accountHolderName\":{\"pattern\":\"^[A-Za-zs'-]+$\",\"description\":\"Name of the account holder as it appears on the Mobile Money account\",\"type\":\"string\",\"title\":\"Account Holder Name\",\"maxLength\":32}},\"required\":[\"accountNumber\",\"accountHolderName\"]}}],\"requiredClaims\":{\"id\":\"test-pd-id\",\"name\":\"simple PD\",\"purpose\":\"pd for testing\",\"input_descriptors\":[{\"id\":\"whatever\",\"purpose\":\"id for testing\",\"constraints\":{\"fields\":[{\"path\":[\"$.credentialSubject.btcAddress\"]}]}}]}},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..MyaMT4LZAlkLj4w9LZMqQLsaklhHlsrob60p1XmKMKg249kweyXPGABpEnvKD_65_1s1RjdyKlEotgQT15xAYw\"}",
+  "output": {
+      "metadata": {
+          "kind": "offering",
+          "from": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
+          "id": "offering_01hdh7fyftfkv8002wyr000nj5",
+          "createdAt": "2023-10-24T16:15:03.662Z",
+          "updatedAt": "2023-10-24T16:15:03.662Z"
+      },
+      "data": {
+          "description": "A sample offering",
+          "payoutUnitsPerPayinUnit": "1",
+          "payoutCurrency": {
+              "currencyCode": "USDC"
+          },
+          "payinCurrency": {
+              "currencyCode": "AUD",
+              "minSubunits": "1",
+              "maxSubunits": "10000"
+          },
+          "payinMethods": [
+              {
+                  "kind": "BTC_ADDRESS",
+                  "requiredPaymentDetails": {
+                      "$schema": "http://json-schema.org/draft-07/schema",
+                      "additionalProperties": false,
+                      "type": "object",
+                      "properties": {
+                          "phoneNumber": {
+                              "minLength": 12,
+                              "pattern": "^+2547[0-9]{8}$",
+                              "description": "Mobile Money account number of the Recipient",
+                              "type": "string",
+                              "title": "Phone Number",
+                              "maxLength": 12
+                          },
+                          "accountHolderName": {
+                              "pattern": "^[A-Za-zs'-]+$",
+                              "description": "Name of the account holder as it appears on the Mobile Money account",
+                              "type": "string",
+                              "title": "Account Holder Name",
+                              "maxLength": 32
+                          }
+                      },
+                      "required": [
+                          "accountNumber",
+                          "accountHolderName"
+                      ]
+                  }
+              }
+          ],
+          "payoutMethods": [
+              {
+                  "kind": "MOMO",
+                  "requiredPaymentDetails": {
+                      "$schema": "http://json-schema.org/draft-07/schema",
+                      "additionalProperties": false,
+                      "type": "object",
+                      "properties": {
+                          "phoneNumber": {
+                              "minLength": 12,
+                              "pattern": "^+2547[0-9]{8}$",
+                              "description": "Mobile Money account number of the Recipient",
+                              "type": "string",
+                              "title": "Phone Number",
+                              "maxLength": 12
+                          },
+                          "accountHolderName": {
+                              "pattern": "^[A-Za-zs'-]+$",
+                              "description": "Name of the account holder as it appears on the Mobile Money account",
+                              "type": "string",
+                              "title": "Account Holder Name",
+                              "maxLength": 32
+                          }
+                      },
+                      "required": [
+                          "accountNumber",
+                          "accountHolderName"
+                      ]
+                  }
+              }
+          ],
+          "requiredClaims": {
+              "id": "test-pd-id",
+              "name": "simple PD",
+              "purpose": "pd for testing",
+              "input_descriptors": [
+                  {
+                      "id": "whatever",
+                      "purpose": "id for testing",
+                      "constraints": {
+                          "fields": [
+                              {
+                                  "path": [
+                                      "$.credentialSubject.btcAddress"
+                                  ]
+                              }
+                          ]
+                      }
+                  }
+              ]
+          }
+      },
+      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..MyaMT4LZAlkLj4w9LZMqQLsaklhHlsrob60p1XmKMKg249kweyXPGABpEnvKD_65_1s1RjdyKlEotgQT15xAYw"
+  },
+  "error": false
+}

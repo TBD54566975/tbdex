@@ -1,0 +1,36 @@
+{
+  "description": "RFQ parses from string",
+  "input": "{\"metadata\":{\"kind\":\"rfq\",\"to\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"from\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"id\":\"rfq_7zzzzzzyzte028007g0g001xdc\",\"exchangeId\":\"rfq_7zzzzzzyzte028007g0g001xdc\",\"createdAt\":\"2023-10-24T16:15:04.010Z\"},\"data\":{\"offeringId\":\"offering_01hdh7fyzzek48003ms0001bv2\",\"payinSubunits\":\"1000\",\"payinMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"address\":\"123456\"}},\"payoutMethod\":{\"kind\":\"MOMO\",\"paymentDetails\":{\"phoneNumber\":\"+254712345678\",\"accountHolderName\":\"Alfred Holder\"}},\"claims\":[\"presentation submission\"]},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..Y9gKs87CGalvHxlChHsL2fx2wtlPbY2-tBDciz7rSKRJkWmeIdyu-7NxwUdVMlQfJ58PTLoYPknXUKL8Hc0v4w\"}",
+  "output": {
+      "metadata": {
+          "kind": "rfq",
+          "to": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
+          "from": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
+          "id": "rfq_7zzzzzzyzte028007g0g001xdc",
+          "exchangeId": "rfq_7zzzzzzyzte028007g0g001xdc",
+          "createdAt": "2023-10-24T16:15:04.010Z"
+      },
+      "data": {
+          "offeringId": "offering_01hdh7fyzzek48003ms0001bv2",
+          "payinSubunits": "1000",
+          "payinMethod": {
+              "kind": "BTC_ADDRESS",
+              "paymentDetails": {
+                  "address": "123456"
+              }
+          },
+          "payoutMethod": {
+              "kind": "MOMO",
+              "paymentDetails": {
+                  "phoneNumber": "+254712345678",
+                  "accountHolderName": "Alfred Holder"
+              }
+          },
+          "claims": [
+              "presentation submission"
+          ]
+      },
+      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..Y9gKs87CGalvHxlChHsL2fx2wtlPbY2-tBDciz7rSKRJkWmeIdyu-7NxwUdVMlQfJ58PTLoYPknXUKL8Hc0v4w"
+  },
+  "error": false
+}
