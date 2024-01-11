@@ -1,109 +1,104 @@
 {
-  "description": "can parse and serialize an Offering",
-  "input": "{\"metadata\":{\"kind\":\"offering\",\"from\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"id\":\"offering_01hdh7fyftfkv8002wyr000nj5\",\"createdAt\":\"2023-10-24T16:15:03.662Z\",\"updatedAt\":\"2023-10-24T16:15:03.662Z\"},\"data\":{\"description\":\"A sample offering\",\"payoutUnitsPerPayinUnit\":\"1\",\"payoutCurrency\":{\"currencyCode\":\"USDC\"},\"payinCurrency\":{\"currencyCode\":\"AUD\",\"minSubunits\":\"1\",\"maxSubunits\":\"10000\"},\"payinMethods\":[{\"kind\":\"BTC_ADDRESS\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"phoneNumber\":{\"minLength\":12,\"pattern\":\"^+2547[0-9]{8}$\",\"description\":\"Mobile Money account number of the Recipient\",\"type\":\"string\",\"title\":\"Phone Number\",\"maxLength\":12},\"accountHolderName\":{\"pattern\":\"^[A-Za-zs'-]+$\",\"description\":\"Name of the account holder as it appears on the Mobile Money account\",\"type\":\"string\",\"title\":\"Account Holder Name\",\"maxLength\":32}},\"required\":[\"accountNumber\",\"accountHolderName\"]}}],\"payoutMethods\":[{\"kind\":\"MOMO\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"phoneNumber\":{\"minLength\":12,\"pattern\":\"^+2547[0-9]{8}$\",\"description\":\"Mobile Money account number of the Recipient\",\"type\":\"string\",\"title\":\"Phone Number\",\"maxLength\":12},\"accountHolderName\":{\"pattern\":\"^[A-Za-zs'-]+$\",\"description\":\"Name of the account holder as it appears on the Mobile Money account\",\"type\":\"string\",\"title\":\"Account Holder Name\",\"maxLength\":32}},\"required\":[\"accountNumber\",\"accountHolderName\"]}}],\"requiredClaims\":{\"id\":\"test-pd-id\",\"name\":\"simple PD\",\"purpose\":\"pd for testing\",\"input_descriptors\":[{\"id\":\"whatever\",\"purpose\":\"id for testing\",\"constraints\":{\"fields\":[{\"path\":[\"$.credentialSubject.btcAddress\"]}]}}]}},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..MyaMT4LZAlkLj4w9LZMqQLsaklhHlsrob60p1XmKMKg249kweyXPGABpEnvKD_65_1s1RjdyKlEotgQT15xAYw\"}",
+  "description": "Offering parses from string",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6Mksn8gCx2TLG1iDUaCoBTMopS1LmHQzRkTyNJ5Fx9Xxe8i\",\"kind\":\"offering\",\"id\":\"offering_01hkx6adctftns5k7qd9fred3f\",\"createdAt\":\"2024-01-11T21:19:46.074Z\"},\"data\":{\"description\":\"Selling BTC for USD\",\"payinCurrency\":{\"currencyCode\":\"USD\"},\"payoutCurrency\":{\"currencyCode\":\"BTC\",\"maxAmount\":\"999526.11\"},\"payoutUnitsPerPayinUnit\":\"0.000038.26\",\"payinMethods\":[{\"kind\":\"DEBIT_CARD\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"type\":\"object\",\"properties\":{\"cardNumber\":{\"type\":\"string\",\"description\":\"The 16-digit debit card number\",\"minLength\":16,\"maxLength\":16},\"expiryDate\":{\"type\":\"string\",\"description\":\"The expiry date of the card in MM/YY format\",\"pattern\":\"^(0[1-9]|1[0-2])\\\\/([0-9]{2})$\"},\"cardHolderName\":{\"type\":\"string\",\"description\":\"Name of the cardholder as it appears on the card\"},\"cvv\":{\"type\":\"string\",\"description\":\"The 3-digit CVV code\",\"minLength\":3,\"maxLength\":3}},\"required\":[\"cardNumber\",\"expiryDate\",\"cardHolderName\",\"cvv\"],\"additionalProperties\":false}}],\"payoutMethods\":[{\"kind\":\"BTC_ADDRESS\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"type\":\"object\",\"properties\":{\"btcAddress\":{\"type\":\"string\",\"description\":\"your Bitcoin wallet address\"}},\"required\":[\"btcAddress\"],\"additionalProperties\":false}}],\"requiredClaims\":{\"id\":\"7ce4004c-3c38-4853-968b-e411bafcd945\",\"input_descriptors\":[{\"id\":\"bbdb9b7c-5754-4f46-b63b-590bada959e0\",\"constraints\":{\"fields\":[{\"path\":[\"$.type\"],\"filter\":{\"type\":\"string\",\"const\":\"YoloCredential\"}}]}}]}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3NuOGdDeDJUTEcxaURVYUNvQlRNb3BTMUxtSFF6UmtUeU5KNUZ4OVh4ZThpI3o2TWtzbjhnQ3gyVExHMWlEVWFDb0JUTW9wUzFMbUhRelJrVHlOSjVGeDlYeGU4aSJ9..VfS8PZ2_jvOhjGevLalz5iCWGfRLQFNKhiF8n0DaupqOhlMAqYhfYYlE0gIl1NoYRUCZUhKdWaLHivYYKg3UDg\"}",
   "output": {
-      "metadata": {
-          "kind": "offering",
-          "from": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
-          "id": "offering_01hdh7fyftfkv8002wyr000nj5",
-          "createdAt": "2023-10-24T16:15:03.662Z",
-          "updatedAt": "2023-10-24T16:15:03.662Z"
+    "metadata": {
+      "from": "did:key:z6Mksn8gCx2TLG1iDUaCoBTMopS1LmHQzRkTyNJ5Fx9Xxe8i",
+      "kind": "offering",
+      "id": "offering_01hkx6adctftns5k7qd9fred3f",
+      "createdAt": "2024-01-11T21:19:46.074Z"
+    },
+    "data": {
+      "description": "Selling BTC for USD",
+      "payinCurrency": {
+        "currencyCode": "USD"
       },
-      "data": {
-          "description": "A sample offering",
-          "payoutUnitsPerPayinUnit": "1",
-          "payoutCurrency": {
-              "currencyCode": "USDC"
-          },
-          "payinCurrency": {
-              "currencyCode": "AUD",
-              "minSubunits": "1",
-              "maxSubunits": "10000"
-          },
-          "payinMethods": [
-              {
-                  "kind": "BTC_ADDRESS",
-                  "requiredPaymentDetails": {
-                      "$schema": "http://json-schema.org/draft-07/schema",
-                      "additionalProperties": false,
-                      "type": "object",
-                      "properties": {
-                          "phoneNumber": {
-                              "minLength": 12,
-                              "pattern": "^+2547[0-9]{8}$",
-                              "description": "Mobile Money account number of the Recipient",
-                              "type": "string",
-                              "title": "Phone Number",
-                              "maxLength": 12
-                          },
-                          "accountHolderName": {
-                              "pattern": "^[A-Za-zs'-]+$",
-                              "description": "Name of the account holder as it appears on the Mobile Money account",
-                              "type": "string",
-                              "title": "Account Holder Name",
-                              "maxLength": 32
-                          }
-                      },
-                      "required": [
-                          "accountNumber",
-                          "accountHolderName"
-                      ]
-                  }
+      "payoutCurrency": {
+        "currencyCode": "BTC",
+        "maxAmount": "999526.11"
+      },
+      "payoutUnitsPerPayinUnit": "0.000038.26",
+      "payinMethods": [
+        {
+          "kind": "DEBIT_CARD",
+          "requiredPaymentDetails": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "type": "object",
+            "properties": {
+              "cardNumber": {
+                "type": "string",
+                "description": "The 16-digit debit card number",
+                "minLength": 16,
+                "maxLength": 16
+              },
+              "expiryDate": {
+                "type": "string",
+                "description": "The expiry date of the card in MM/YY format",
+                "pattern": "^(0[1-9]|1[0-2])\\/([0-9]{2})$"
+              },
+              "cardHolderName": {
+                "type": "string",
+                "description": "Name of the cardholder as it appears on the card"
+              },
+              "cvv": {
+                "type": "string",
+                "description": "The 3-digit CVV code",
+                "minLength": 3,
+                "maxLength": 3
               }
-          ],
-          "payoutMethods": [
-              {
-                  "kind": "MOMO",
-                  "requiredPaymentDetails": {
-                      "$schema": "http://json-schema.org/draft-07/schema",
-                      "additionalProperties": false,
-                      "type": "object",
-                      "properties": {
-                          "phoneNumber": {
-                              "minLength": 12,
-                              "pattern": "^+2547[0-9]{8}$",
-                              "description": "Mobile Money account number of the Recipient",
-                              "type": "string",
-                              "title": "Phone Number",
-                              "maxLength": 12
-                          },
-                          "accountHolderName": {
-                              "pattern": "^[A-Za-zs'-]+$",
-                              "description": "Name of the account holder as it appears on the Mobile Money account",
-                              "type": "string",
-                              "title": "Account Holder Name",
-                              "maxLength": 32
-                          }
-                      },
-                      "required": [
-                          "accountNumber",
-                          "accountHolderName"
-                      ]
-                  }
-              }
-          ],
-          "requiredClaims": {
-              "id": "test-pd-id",
-              "name": "simple PD",
-              "purpose": "pd for testing",
-              "input_descriptors": [
-                  {
-                      "id": "whatever",
-                      "purpose": "id for testing",
-                      "constraints": {
-                          "fields": [
-                              {
-                                  "path": [
-                                      "$.credentialSubject.btcAddress"
-                                  ]
-                              }
-                          ]
-                      }
-                  }
-              ]
+            },
+            "required": [
+              "cardNumber",
+              "expiryDate",
+              "cardHolderName",
+              "cvv"
+            ],
+            "additionalProperties": false
           }
-      },
-      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..MyaMT4LZAlkLj4w9LZMqQLsaklhHlsrob60p1XmKMKg249kweyXPGABpEnvKD_65_1s1RjdyKlEotgQT15xAYw"
+        }
+      ],
+      "payoutMethods": [
+        {
+          "kind": "BTC_ADDRESS",
+          "requiredPaymentDetails": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "type": "object",
+            "properties": {
+              "btcAddress": {
+                "type": "string",
+                "description": "your Bitcoin wallet address"
+              }
+            },
+            "required": [
+              "btcAddress"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ],
+      "requiredClaims": {
+        "id": "7ce4004c-3c38-4853-968b-e411bafcd945",
+        "input_descriptors": [
+          {
+            "id": "bbdb9b7c-5754-4f46-b63b-590bada959e0",
+            "constraints": {
+              "fields": [
+                {
+                  "path": [
+                    "$.type"
+                  ],
+                  "filter": {
+                    "type": "string",
+                    "const": "YoloCredential"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3NuOGdDeDJUTEcxaURVYUNvQlRNb3BTMUxtSFF6UmtUeU5KNUZ4OVh4ZThpI3o2TWtzbjhnQ3gyVExHMWlEVWFDb0JUTW9wUzFMbUhRelJrVHlOSjVGeDlYeGU4aSJ9..VfS8PZ2_jvOhjGevLalz5iCWGfRLQFNKhiF8n0DaupqOhlMAqYhfYYlE0gIl1NoYRUCZUhKdWaLHivYYKg3UDg"
   },
   "error": false
 }

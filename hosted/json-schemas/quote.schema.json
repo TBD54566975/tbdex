@@ -4,19 +4,18 @@
   "definitions": {
     "QuoteDetails": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "currencyCode": {
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
         "amount": {
-          "type": "string",
-          "pattern": "^(\\d*\\.?\\d*)$",
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount of currency expressed in the smallest respective unit"
         },
         "fee": {
-          "type": "string",
-          "pattern": "^(\\d*\\.?\\d*)$",
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount paid in fees"
         }
       },
@@ -24,6 +23,7 @@
     },
     "PaymentInstruction": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "link": {
           "type": "string",
@@ -37,6 +37,7 @@
     },
     "PaymentInstructions": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "payin": {
           "$ref": "#/definitions/PaymentInstruction"
@@ -49,6 +50,7 @@
   },
   "type": "object",
   "properties": {
+    "additionalProperties": false,
     "expiresAt": {
       "type": "string",
       "description": "When this quote expires. Expressed as ISO8601"

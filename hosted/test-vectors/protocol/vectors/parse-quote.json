@@ -1,39 +1,38 @@
 {
   "description": "Quote parses from string",
-  "input": "{\"metadata\":{\"kind\":\"quote\",\"to\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"from\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"id\":\"quote_7zzzzzzpyrfy2r004fgm0013c7\",\"exchangeId\":\"rfq_7zzzzzzzztfxx8001ff8000ex2\",\"createdAt\":\"2023-10-24T16:15:04.024Z\"},\"data\":{\"expiresAt\":\"2023-10-25T16:15:04.024Z\",\"payin\":{\"currencyCode\":\"AUD\",\"amountSubunits\":\"1000\",\"feeSubunits\":\"1\"},\"payout\":{\"currencyCode\":\"BTC\",\"amountSubunits\":\"12\",\"feeSubunits\":\"2\"},\"paymentInstructions\":{\"payin\":{\"link\":\"https://block.xyz\",\"instruction\":\"payin instruction\"},\"payout\":{\"link\":\"https://block.xyz\",\"instruction\":\"payout instruction\"}}},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..B2n8TL3Tk_Bq0uf8l-1IIj_p44fuLghihElbrF493N1b1TqexdHqkhUuevdh5DKsTi3DgiQyHd8Vijwnz6Ap_A\"}",
+  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hkx78yxffp2b8z72zagwk81f\",\"from\":\"did:key:z6MkpkqjLNUHHazoqP1LMBuVLRTn8qXcUpqcnE5wwcgguU5p\",\"to\":\"did:ex:pfi\",\"kind\":\"quote\",\"id\":\"quote_01hkx78yxffp2b8z72zdmjez7q\",\"createdAt\":\"2024-01-11T21:36:27.055Z\"},\"data\":{\"expiresAt\":\"2024-01-11T21:36:27.055Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\"},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\"},\"paymentInstructions\":{\"payin\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"},\"payout\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3BrcWpMTlVISGF6b3FQMUxNQnVWTFJUbjhxWGNVcHFjbkU1d3djZ2d1VTVwI3o2TWtwa3FqTE5VSEhhem9xUDFMTUJ1VkxSVG44cVhjVXBxY25FNXd3Y2dndVU1cCJ9..jb3LxwUAJFHcFXtXtJy8FatIQ1Sz09e5RyBkSCELHhY9Kj3eVjgI4f2USCEATWvQ7oyZJSTyTpeBbBQpSE0QDA\"}",
   "output": {
-      "metadata": {
-          "kind": "quote",
-          "to": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
-          "from": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
-          "id": "quote_7zzzzzzpyrfy2r004fgm0013c7",
-          "exchangeId": "rfq_7zzzzzzzztfxx8001ff8000ex2",
-          "createdAt": "2023-10-24T16:15:04.024Z"
+    "metadata": {
+      "exchangeId": "rfq_01hkx78yxffp2b8z72zagwk81f",
+      "from": "did:key:z6MkpkqjLNUHHazoqP1LMBuVLRTn8qXcUpqcnE5wwcgguU5p",
+      "to": "did:ex:pfi",
+      "kind": "quote",
+      "id": "quote_01hkx78yxffp2b8z72zdmjez7q",
+      "createdAt": "2024-01-11T21:36:27.055Z"
+    },
+    "data": {
+      "expiresAt": "2024-01-11T21:36:27.055Z",
+      "payin": {
+        "currencyCode": "BTC",
+        "amount": "0.01",
+        "fee": "0.0001"
       },
-      "data": {
-          "expiresAt": "2023-10-25T16:15:04.024Z",
-          "payin": {
-              "currencyCode": "AUD",
-              "amountSubunits": "1000",
-              "feeSubunits": "1"
-          },
-          "payout": {
-              "currencyCode": "BTC",
-              "amountSubunits": "12",
-              "feeSubunits": "2"
-          },
-          "paymentInstructions": {
-              "payin": {
-                  "link": "https://block.xyz",
-                  "instruction": "payin instruction"
-              },
-              "payout": {
-                  "link": "https://block.xyz",
-                  "instruction": "payout instruction"
-              }
-          }
+      "payout": {
+        "currencyCode": "USD",
+        "amount": "1000.00"
       },
-      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..B2n8TL3Tk_Bq0uf8l-1IIj_p44fuLghihElbrF493N1b1TqexdHqkhUuevdh5DKsTi3DgiQyHd8Vijwnz6Ap_A"
+      "paymentInstructions": {
+        "payin": {
+          "link": "tbdex.io/example",
+          "instruction": "Fake instruction"
+        },
+        "payout": {
+          "link": "tbdex.io/example",
+          "instruction": "Fake instruction"
+        }
+      }
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3BrcWpMTlVISGF6b3FQMUxNQnVWTFJUbjhxWGNVcHFjbkU1d3djZ2d1VTVwI3o2TWtwa3FqTE5VSEhhem9xUDFMTUJ1VkxSVG44cVhjVXBxY25FNXd3Y2dndVU1cCJ9..jb3LxwUAJFHcFXtXtJy8FatIQ1Sz09e5RyBkSCELHhY9Kj3eVjgI4f2USCEATWvQ7oyZJSTyTpeBbBQpSE0QDA"
   },
   "error": false
 }
