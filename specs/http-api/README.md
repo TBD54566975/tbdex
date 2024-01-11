@@ -20,60 +20,57 @@ Version: Draft
   - [Pagination](#pagination)
     - [Example](#example-2)
 - [Idempotency](#idempotency)
+- [Protected Endpoints](#protected-endpoints)
+  - [Authentication](#authentication)
+    - [Token Generation](#token-generation)
+      - [Header](#header)
+      - [Payload](#payload)
+  - [Token Verification](#token-verification)
 - [Offerings](#offerings)
   - [List Offerings](#list-offerings)
     - [Description](#description)
     - [Endpoint](#endpoint)
-    - [Authentication](#authentication)
-    - [Authorization](#authorization)
+    - [Protected](#protected)
     - [Query Params](#query-params-1)
     - [Response](#response)
 - [Exchanges](#exchanges)
   - [Submit RFQ](#submit-rfq)
     - [Description](#description-1)
     - [Endpoint](#endpoint-1)
-    - [Authentication](#authentication-1)
-    - [Authorization](#authorization-1)
+    - [Protected](#protected-1)
     - [Request Body](#request-body)
     - [Response](#response-1)
     - [Errors](#errors)
   - [Get Quote/Order/OrderStatus](#get-quoteorderorderstatus)
     - [Description](#description-2)
     - [Endpoint](#endpoint-2)
-    - [Authentication](#authentication-2)
-    - [Authorization](#authorization-2)
+    - [Protected](#protected-2)
     - [Response](#response-2)
     - [Response Body](#response-body)
   - [Submit Order](#submit-order)
     - [Description](#description-3)
     - [Endpoint](#endpoint-3)
-    - [Authentication](#authentication-3)
-    - [Authorization](#authorization-3)
+    - [Protected](#protected-3)
     - [Order Request Body](#order-request-body)
     - [Response](#response-3)
     - [Errors](#errors-1)
   - [Submit Close](#submit-close)
     - [Description](#description-4)
     - [Endpoint](#endpoint-4)
-    - [Authentication](#authentication-4)
-    - [Authorization](#authorization-4)
+    - [Protected](#protected-4)
     - [Request Body](#request-body-1)
     - [Response](#response-4)
     - [Errors](#errors-2)
   - [Get Exchange (DESCOPED)](#get-exchange-descoped)
     - [Description](#description-5)
     - [Endpoint](#endpoint-5)
-    - [Authentication](#authentication-5)
-    - [Authorization](#authorization-5)
+    - [Protected](#protected-5)
     - [Query Params](#query-params-2)
     - [Response](#response-5)
   - [List Exchanges](#list-exchanges)
     - [Description](#description-6)
     - [Endpoint](#endpoint-6)
-    - [Authentication](#authentication-6)
-      - [JWS Header](#jws-header)
-      - [JWS Payload](#jws-payload)
-    - [Authorization](#authorization-6)
+    - [Protected](#protected-6)
     - [Response](#response-6)
     - [Query Params](#query-params-3)
 - [References](#references)
@@ -109,24 +106,24 @@ If the serviceEndpoint is itself a DID, this did should resolve to a document an
 * If present, the body of an error response will conform to the following:
 
 
-| Field              | Required (Y/N) | Description               |
-| ------------------ | -------------- | ------------------------- |
-| `errors`           |      Y         | List of `Error` objects   |
+| Field    | Required (Y/N) | Description             |
+| -------- | -------------- | ----------------------- |
+| `errors` | Y              | List of `Error` objects |
 
 
 ## Error object
 | Field              | Required (Y/N) | Description                                                                                                                                                                                            |
 | ------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`               |      N         | A unique identifier for this particular occurrence of the problem.                                                                                                                                     |
-| `status`           |      N         | The HTTP status code applicable to this problem, expressed as a string value. This SHOULD be provided.                                                                                                 |
-| `code`             |      N         | An application-specific error code, expressed as a string value.                                                                                                                                       |
-| `title`            |      N         | A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.                                               |
-| `detail`           |      Y         | A human-readable explanation specific to this occurrence of the problem. Like `title`, this field’s value can be localized.                                                                            |
-| `source`           |      N         | An object containing references to the primary source of the error. It should include the `pointer`, `parameter`, or `header` members or be omitted.                                                   |
-| `source.pointer`   |      N         | A JSON Pointer to the value in the request document that caused the error. This MUST point to a value in the request document that exists; if it doesn’t, the client SHOULD simply ignore the pointer. |
-| `source.parameter` |      N         | A string indicating which URI query parameter caused the error.                                                                                                                                        |
-| `source.header`    |      N         | A string indicating the name of a single request header which caused the error.                                                                                                                        |
-| `meta`             |      N         | A meta object containing non-standard meta-information about the error.                                                                                                                                |
+| `id`               | N              | A unique identifier for this particular occurrence of the problem.                                                                                                                                     |
+| `status`           | N              | The HTTP status code applicable to this problem, expressed as a string value. This SHOULD be provided.                                                                                                 |
+| `code`             | N              | An application-specific error code, expressed as a string value.                                                                                                                                       |
+| `title`            | N              | A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.                                               |
+| `detail`           | Y              | A human-readable explanation specific to this occurrence of the problem. Like `title`, this field’s value can be localized.                                                                            |
+| `source`           | N              | An object containing references to the primary source of the error. It should include the `pointer`, `parameter`, or `header` members or be omitted.                                                   |
+| `source.pointer`   | N              | A JSON Pointer to the value in the request document that caused the error. This MUST point to a value in the request document that exists; if it doesn’t, the client SHOULD simply ignore the pointer. |
+| `source.parameter` | N              | A string indicating which URI query parameter caused the error.                                                                                                                                        |
+| `source.header`    | N              | A string indicating the name of a single request header which caused the error.                                                                                                                        |
+| `meta`             | N              | A meta object containing non-standard meta-information about the error.                                                                                                                                |
 
 ---
 
@@ -171,6 +168,57 @@ The IDs of individual tbDEX messages are used as idempotency keys
 
 ---
 
+# Protected Endpoints
+
+A  **_protected endpoint_** is defined as one that requires the requester to be _authenticated_.  These endpoints respond with resources specific to the authenticated DID e.g. 
+* Messages sent by or intended for the requester only
+* Balances 
+
+> [!NOTE] 
+> Each individual endpoint section in this specification will include `Protected: true/false` to indicate whether it is protected
+
+## Authentication
+
+Authentication is facilitated through bearer tokens, which are included in the `Authorization` header of any request sent to a protected endpoint. Specifically, the header is formatted as `Authorization: Bearer ${token}`
+
+### Token Generation
+
+The bearer token is a [JSON Web Token (JWT)](https://datatracker.ietf.org/doc/html/rfc7519) generated by the requester that contains the following:
+
+#### Header
+
+| Key                                                                  | Description                                                                                                                                                                                      |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`typ`](https://datatracker.ietf.org/doc/html/rfc7519#section-5.1)   | JWT. Setting `typ` to `JWT` as recommended by the JWT spec provides a means to disambiguate among different types of signatures and tokens.                                                      |
+| [`kid`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.4) | Fully qualified [VerificationMethod ID](https://www.w3.org/TR/did-core/#verification-methods). Used to locate the DID Document verification method utilized to verify the integrity of the JWT. |
+| [`alg`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1) | Cryptographic algorithm used to compute the JWT signature.                                                                                                                                       |
+
+
+#### Payload
+
+| Key                                                                  | Description                                                                                                                                                                 |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`aud`](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.3) | The intended PFI's DID. Incorporating the `aud` claim limits the risk to just one PFI in case a request token is compromised, thereby reducing the surface area for misuse. |
+| [`iss`](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) | The requester's DID. Included to be informative, though it is technically duplicative as the `kid` also includes the requester's DID.                                       |
+| [`exp`](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.4) | Expiration timestamp. Limits the amount of time a compromised request token can be used.                                                                                    |
+| [`iat`](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.6) | Indicates when the JWT was created. Included to be informative.                                                                                                             |
+| [`jti`](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.7) | Used as a nonce to prevent replay attacks. The specification text should include more detail on how to prevent these attacks.                                               |
+
+> [!NOTE]
+> This bearer token is sufficient for authentication as it proves that the requester controls the private key associated to the DID that the requester is identifying as. 
+
+
+## Token Verification
+
+The receiver of the token must evaluate it to ensure its validity. A bearer token is valid if these conditions are met:
+
+- `exp` timestamp is not in the past
+- `aud` is the DID of the receiving PFI's DID
+- `kid` is resolved to be a valid DID whose DID Document verification method is used to verify the integrity of the JWT
+- `jti` is not a nonce that was previously used by the same requester
+
+---
+
 # Offerings
 
 The [`Offering`](../protocol/README.md#offering) resource is used to convey the currency pairs a PFI is _offering_. It includes information about payment methods and associated fees.
@@ -184,11 +232,8 @@ Used to fetch offerings from a PFI
 ### Endpoint
 `GET /offerings`
 
-### Authentication
-No authentication required.
-
-### Authorization
-No authorization required. Offerings are publicly accessible
+### Protected
+False
 
 ### Query Params
 | Param              | Description                                                                                                                                                        |
@@ -219,10 +264,8 @@ Submits an RFQ (Request For Quote). Alice is asking the PFI to provide a Quote s
 ### Endpoint
 `POST /exchanges/:exchange_id/rfq`
 
-### Authentication
-Refer to [Signature Verification Section]() of the tbDEX spec  
-### Authorization
-No Authorization required to submit an RFQ
+### Protected
+False
 
 ### Request Body
 > [!IMPORTANT]
@@ -251,17 +294,14 @@ Retrieve the desired tbdex message type given an exchangeId.
 ### Endpoint
 `GET /exchanges/:exchange_id/?messageType=quote`
 
-### Authentication
-Refer to [Signature Verification Section]() of the tbDEX spec  
-### Authorization
-No Authorization required to Get Quote
-
+### Protected
+True
 
 ### Response
-| Status             | Body                              |
-| ------------------ | --------------------------------- |
+| Status             | Body                                                |
+| ------------------ | --------------------------------------------------- |
 | `200: OK`          | `{ data: TbdexMessage<Quote/Order/OrderStatus>[] }` |
-| `400: Bad Request` | `{ errors: Error[] }`             |
+| `400: Bad Request` | `{ errors: Error[] }`                               |
 
 ### Response Body
 > [!IMPORTANT]
@@ -277,10 +317,8 @@ Submits the Order. Alice wants to accept the Quote and execute the transaction.
 ### Endpoint
 `POST /exchanges/:exchange_id/order`
 
-### Authentication
-Refer to [Signature Verification Section]() of the tbDEX spec  
-### Authorization
-No Authorization required to submit an Order
+### Protected
+False
 
 ### Order Request Body
 > [!IMPORTANT]
@@ -309,10 +347,8 @@ Closes the exchange. Indicates that Alice is no longer interested
 ### Endpoint
 `POST /exchanges/:exchange_id/close`
 
-### Authentication
-Refer to [Signature Verification Section]() of the tbDEX spec  
-### Authorization
-No Authorization required to submit a Close
+### Protected
+False
 
 ### Request Body
 > [!IMPORTANT]
@@ -342,10 +378,8 @@ Retrieves the messages specified by ID and messageType
 ### Endpoint
 `GET /exchanges/:id`
 
-### Authentication
-Uses DID authn via Bearer token in header.
-### Authorization
-No Authorization required to get exchange.
+### Protected
+True
 
 ### Query Params
 | Param         | Description                   |
@@ -372,37 +406,16 @@ Returns an array of tbdex message arrays (a list of exchanges)
 ### Endpoint
 `GET /exchanges`
 
-### Authentication
-A tbdex http client must send an Http Auth Header in the form of a JWT `Bearer` token.
-
-The JWT must consist of JWS header and JWT payload containing the below fields, and signed by the client's DID.
-
-#### JWS Header
-| Param  | Value | Description | 
-|--------|-------|-------------|
-| `typ`  | `JWT` | Token type  |
-| `alg`  | `HS256` | Algorithm |
-| `kid`  | `did:dht:alice...#dwn-sig` | Key ID of the sender's DID |
-
-#### JWS Payload
-| Param  | Value | Description | 
-|--------|-------|-------------|
-| `aud`  | `did:dht:pfi` | DID of the audience (i.e. PFI DID)  |
-| `iss`  | `did:dht:alice` | DID of the issuer (i.e. Alice DID) |
-| `exp`  | `1703222687` | Time when the JWT expires. 1 minute after issuance  |
-| `iat`  | `1703222795` | Time when the JWT was issued. |
-| `jti`  |  `0189f7e5-c883-7106-8272-ccb7fcba0575` | Unique identifier for the JWT. Used to prevent reply attacks. Must be uuidv7. |
-
-### Authorization
-No Authorization required to get exchanges
+### Protected
+True
 
 ### Response
-| Status             | Body                                   |
-| ------------------ | -------------------------------------- |
-| `200: OK.`         | `{ data: { TbdexMessage[][] } }`       |
-| `400: Bad Request` | `{ errors: Error[] }`                  |
-| `404: Not Found`   | N/A                                    |
-| `403: Forbidden`   | N/A                                    |
+| Status             | Body                             |
+| ------------------ | -------------------------------- |
+| `200: OK.`         | `{ data: { TbdexMessage[][] } }` |
+| `400: Bad Request` | `{ errors: Error[] }`            |
+| `404: Not Found`   | N/A                              |
+| `403: Forbidden`   | N/A                              |
 
 ### Query Params
 
@@ -410,7 +423,7 @@ No Authorization required to get exchanges
 | ----- | ------------------------ |
 | id    | exchange id(s) to return |
 
-
+---
 
 # References
 * JSON:API spec: https://jsonapi.org/format/
