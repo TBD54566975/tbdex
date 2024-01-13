@@ -313,7 +313,7 @@ See [here](#id-generation-1) for more details.
 See [here](#digests) for more details
 
 ## `DecimalString`
-Currency amounts have type `DecimalString`, which is string containing a decimal amount of major currency units and following the regex `/^\d*\.?\d*$/`. The decimal separator is a period `.` even for currencies which may use comma `,` as a decimal separator. The currency symbol must be omitted.
+Currency amounts have type `DecimalString`, which is string containing a decimal amount of major currency units. The decimal separator is a period `.`. The currency symbol must be omitted.
 
 
 ## Message Kinds
