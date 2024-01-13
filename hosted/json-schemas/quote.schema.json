@@ -49,8 +49,8 @@
     }
   },
   "type": "object",
+  "additionalProperties": false,
   "properties": {
-    "additionalProperties": false,
     "expiresAt": {
       "type": "string",
       "description": "When this quote expires. Expressed as ISO8601"
