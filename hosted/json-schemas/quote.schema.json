@@ -17,6 +17,9 @@
         "fee": {
           "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount paid in fees"
+        },
+        "paymentInstruction": {
+          "$ref": "#/definitions/PaymentInstruction"
         }
       },
       "required": ["currencyCode", "amount"]
@@ -34,18 +37,6 @@
           "description": "Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI"
         }
       }
-    },
-    "PaymentInstructions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "payin": {
-          "$ref": "#/definitions/PaymentInstruction"
-        },
-        "payout": {
-          "$ref": "#/definitions/PaymentInstruction"
-        }
-      }
     }
   },
   "type": "object",
@@ -60,9 +51,6 @@
     },
     "payout": {
       "$ref": "#/definitions/QuoteDetails"
-    },
-    "paymentInstructions": {
-      "$ref": "#/definitions/PaymentInstructions"
     }
   },
   "required": ["expiresAt", "payin", "payout"]

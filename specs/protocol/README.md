@@ -40,7 +40,6 @@ Version: Draft
     - [`Close`](#close)
     - [`Quote`](#quote)
       - [`QuoteDetails`](#quotedetails)
-      - [`PaymentInstructions`](#paymentinstructions)
       - [`PaymentInstruction`](#paymentinstruction)
     - [`Order`](#order)
     - [`OrderStatus`](#orderstatus)
@@ -422,7 +421,6 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 | `expiresAt `          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
 | `payin`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payin_ currency that the PFI will receive                                                  |
 | `payout`              | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payout_ currency that Alice will receive                                                   |
-| `paymentInstructions` | [`PaymentInstructions`](#paymentinstructions) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 
 #### `QuoteDetails`
@@ -431,17 +429,12 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 | `currencyCode`   | string    | Y        | ISO 3166 currency code string                                    |
 | `amount` |      [`DecimalString`](#decimalstring)     | Y        | The amount of currency expressed in the smallest respective unit |
 | `fee`    | [`DecimalString`](#decimalstring)    | N        | The amount paid in fees                                          |
+| `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 
 > [!NOTE]
 > 
 > Include a section that explains `fee`. Does `amount` _include_ `fee` or does `amount + fee = total`?
-
-#### `PaymentInstructions`
-| field    | data type                                   | required | description                                               |
-| -------- | ------------------------------------------- | -------- | --------------------------------------------------------- |
-| `payin`  | [`PaymentInstruction`](#paymentinstruction) | N        | Link or Instruction describing how to pay the PFI.        |
-| `payout` | [`PaymentInstruction`](#paymentinstruction) | N        | Link or Instruction describing how to get paid by the PFI |
 
 #### `PaymentInstruction`
 | field         | data type | required | description                                                               |
