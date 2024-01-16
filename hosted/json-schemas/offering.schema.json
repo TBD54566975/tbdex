@@ -4,17 +4,18 @@
   "definitions": {
     "CurrencyDetails": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "currencyCode": {
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
-        "minSubunits": {
-          "type": "string",
+        "minAmount": {
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "Minimum amount of currency that can be requested"
         },
-        "maxSubunits": {
-          "type": "string",
+        "maxAmount": {
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "Maximum amount of currency that can be requested"
         }
       },
@@ -22,6 +23,7 @@
     },
     "PaymentMethod": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "kind": {
           "type": "string",
@@ -37,6 +39,7 @@
   },
   "type": "object",
   "properties": {
+    "additionalProperties": false,
     "description": {
       "type": "string",
       "description": "Brief description of what is being offered."

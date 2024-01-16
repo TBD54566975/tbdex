@@ -4,6 +4,7 @@
   "definitions": {
     "MessageMetadata": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "from": {
           "$ref": "definitions.json#/definitions/did",
