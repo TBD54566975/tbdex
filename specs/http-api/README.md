@@ -352,7 +352,8 @@ Uses DID authn via Bearer token in header.
 
 ---
 
-## Get Balances
+## List Balances
+This endpoint is *OPTIONAL*. It is only relevant for PFIs which expose a stored balance functionality either for institutional or retail customers.
 
 ### Description
 Returns an array of balance amounts for each currency held by the caller.  
