@@ -266,7 +266,6 @@ No Authorization required to create an exchange
 | ------ | -----------------------------|
 | 400    | Validation error(s)          |
 | 400    | Failed Signature Check       |
-| 404    | Exchange not found           |
 | 409    | Exchange already exists      |
 
 ## Get Quote
