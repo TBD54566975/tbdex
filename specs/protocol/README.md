@@ -54,6 +54,7 @@ Version: Draft
   - [Signatures](#signatures)
 - [tbDEX conversation sequence](#tbdex-conversation-sequence)
 - [Jargon Decoder](#jargon-decoder)
+- [Stored Balances](#stored-balances)
 - [Additional Resources](#additional-resources)
 
 # Resources
@@ -118,6 +119,13 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in order to use this payment method |
 | `feeSubunits`            | string                                  | N        | The fee expressed in the currency's sub units to make use of this payment method                  |
 
+##### Reserved `PaymentMethod`s
+
+Some payment methods should be consistent across PFIs and therefore have reserved `kind` values. PFIs may provide, as a feature, stored balances, which are effectively the PFI custodying assets or funds on behalf of their customer. Customers can top up this balance and their transactions can draw against this balance. 
+
+| kind           | description                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------- | 
+| `STORED_BALANCE`| Represents a customer's balance with the PFI. See [Stored Balances](#stored-balances) for information on usage   |                                  
 
 #### Example Offering
 ```json
@@ -622,6 +630,60 @@ Quick explanation of terms used.
 | payout          | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
 | payout currency | currency that the PFI is paying out to Alice. Alice will _receive_ the payout currency from the PFI.                                                               |
 | payin currency  | currency the PFI will accept in exchange for the payin currency. The PFI will _receive_ the payin currency from Alice.                                             |
+
+# Stored Balances
+Stored balances are assets or funds custodied by a PFI on behalf of a customer. They are relevant for PFIs which provide options for institutional top ups, or which are custodial. Supporting stored balances is entirely optional. The intent is to provide the ability for PFIs who choose to do so.
+
+## Top up stored balance
+A USD -> USDC institutional top-up offering could appear as:
+
+```json
+{
+  "payinCurrency": "USD",
+  "payoutCurrency": "USDC",
+  "payinMethods": [{
+    "kind": "WIRE_TRANSFER"
+  }],
+  "payoutMethods": [{
+    "kind": "STORED_BALANCE"
+  }],
+  "requiredClaims": ["KnownBusinessCredential"]
+}
+```
+
+A USD -> USDC retail customer offering could appear as:
+
+```json
+{
+  "payinCurrency": "USD",
+  "payoutCurrency": "USDC",
+  "payinMethods": [{
+    "kind": "WIRE_TRANSFER"
+  }],
+  "payoutMethods": [{
+    "kind": "STORED_BALANCE"
+  }],
+  "requiredClaims": ["KnownCustomerCredential"]
+}
+```
+
+## Off ramp using stored balance
+
+A USDC -> KES off ramp offering could appear as:
+
+```json
+{
+  "payinCurrency": "USDC",
+  "payoutCurrency": "KES",
+  "payinMethods": [{
+    "kind": "STORED_BALANCE"
+  }],
+  "payoutMethods": [{
+    "kind": "MOMO_MPESA"
+  }],
+  "requiredClaims": ["SanctionsCredential"]
+}
+```
 
 # Additional Resources
 
