@@ -61,6 +61,12 @@ Version: Draft
     - [Endpoint](#endpoint-6)
     - [Response](#response-6)
     - [Query Params](#query-params-3)
+  - [List Balances](#list-balances)
+    - [Description](#description-4)
+    - [Authentication](#authentication-4)
+    - [Endpoint](#endpoint-7)
+    - [Response](#response-7)
+    - [Example](#example-2)
 - [References](#references)
 
 # Discoverability
@@ -126,7 +132,6 @@ If the serviceEndpoint is itself a DID, this did should resolve to a document an
 
     }
   ]
-
 }
 
 ```
@@ -345,7 +350,42 @@ Uses DID authn via Bearer token in header.
 | ----- | ------------------------ |
 | id    | exchange id(s) to return |
 
+---
 
+## Get Balances
+
+### Description
+Returns an array of balance amounts for each currency held by the caller.  
+
+### Authentication
+Uses DID authn via Bearer token in header.
+
+### Endpoint
+`GET /balances`
+
+### Response
+| Status             | Body                                   |
+| ------------------ | -------------------------------------- |
+| `200: OK.     `    | `{ data: { Balance[] } }` |
+| `400: Bad Request` | `{ errors: Error[] }`                  |
+| `404: Not Found`   | N/A                                    |
+| `403: Forbidden`   | N/A                                    |
+
+#### Example
+
+```json
+{
+  "data": [
+    {
+      /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
+      "currency": "USD", 
+      /** same format used to represent currency values across messages */
+      "available": "400.00",
+    }
+  ]
+}
+
+```
 
 # References
 * JSON:API spec: https://jsonapi.org/format/
