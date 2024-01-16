@@ -156,6 +156,17 @@ The IDs of individual tbDEX messages are used as idempotency keys
 
 ---
 
+# Callbacks
+Callbacks are implemented via the `replyTo` property on the [request to create an exchange](#create-exchange). 
+
+`replyTo` is a fully qualified URI which could either be a DID or just a URL.
+
+If `replyTo` is present, a PFI will send any/all new messages for a given exchange to the supplied URI. This makes the URI scoped to each exchange, allowing the caller to specify a different URI per exchange if they so wish. 
+
+If `replyTo` is _not_ present, the caller will have to poll the PFI for the exchange in question to receive new messages.
+
+---
+
 # Offerings
 
 The [`Offering`](../README.md#offering) resource is used to convey the currency pairs a PFI is _offering_. It includes information about payment methods and associated fees.
@@ -196,19 +207,52 @@ No authorization required. Offerings are publicly accessible
 # Exchanges
 An exchange is a series of linked tbDEX messages between Alice and a PFI for a single exchange. An exchange can be created by submitting an RFQ.
 
-## Submit RFQ
+## Create Exchange
 
 ### Endpoint
-`POST /exchanges/:exchange_id/rfq`
+`POST /exchanges/:exchange_id`
 
 ### Authentication
 Refer to [Signature Verification Section]() of the tbDEX spec  
 ### Authorization
-No Authorization required to submit an RFQ
+No Authorization required to create an exchange
 
 ### Request Body
+
+#### `CreateExchangeRequest`
+| field            | data type | required | description                                                                                       |
+| ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `rfq`           | object    | Y        | The request for quote                       |
+| `replyTo` | object    | N        | A string containing a valid URI where new messages from the PFI will be sent |
+
 > [!IMPORTANT]
 > See RFQ structure [here](../README.md#rfq-request-for-quote)
+
+```json
+{
+  "rfq": {
+    {
+      "metadata": {
+        "from": "did:key:z6Mks4N5XdrE6VieJsgH8SMSRavmTox74RqoroW7bZzBLQBi",
+        "to": "did:ex:pfi",
+        "kind": "rfq",
+        "id": "rfq_01ha835rhefwmagsknrrhvaa0k",
+        "exchangeId": "rfq_01ha835rhefwmagsknrrhvaa0k",
+        "createdAt": "2023-09-13T20:19:28.430Z"
+      },
+      "data": {
+        "offeringId": "abcd123",
+        "payinMethod": {
+          "kind": "DEBIT_CARD",
+          "paymentDetails": "<HASH_PRIVATE_PAYIN_METHOD_PAYMENT_DETAILS>"
+        },
+        // ...
+      }
+    }
+  },
+  "replyTo": "https://alice.wallet.com/events"
+}
+```
 
 ### Response
 | Status             | Body                  |
@@ -217,13 +261,13 @@ No Authorization required to submit an RFQ
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description             |
-| ------ | ----------------------- |
-| 400    | Validation error(s)     |
-| 400    | Failed Signature Check  |
-| 404    | Exchange not found      |
-| 409    | RFQ already exists      |
-| 409    | Exchange already exists |
+| Status | Description                  |
+| ------ | -----------------------------|
+| 400    | Validation error(s)          |
+| 400    | Failed Signature Check       |
+| 404    | Exchange not found           |
+| 409    | Exchange already exists      |
+| 409    | Exchange already exists      |
 
 ## Get Quote
 ### Endpoint
