@@ -2,6 +2,29 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tbdex.dev/rfq.schema.json",
   "definitions": {
+    "Rfq": {
+      "offeringId": {
+        "type": "string",
+        "description": "Offering which Alice would like to get a quote for"
+      },
+      "payinAmount": {
+        "$ref": "definitions.json#/definitions/decimalString",
+        "description": "Amount of quote currency you want to spend in order to receive base currency"
+      },
+      "claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Presentation Submission that fulfills the requirements included in the respective Offering"
+      },
+      "payinMethod": {
+        "$ref": "#/definitions/SelectedPaymentMethod"
+      },
+      "payoutMethod": {
+        "$ref": "#/definitions/SelectedPaymentMethod"
+      }
+    },
     "SelectedPaymentMethod": {
       "type": "object",
       "additionalProperties": false,
@@ -20,28 +43,14 @@
   },
   "type": "object",
   "properties": {
-    "additionalProperties": false,
-    "offeringId": {
+    "rfq": {
+      "$ref": "#/definitions/Rfq"
+    },
+    "replyTo": {
       "type": "string",
-      "description": "Offering which Alice would like to get a quote for"
+      "description": "A string containing a valid URI where new messages from the PFI will be sent"
     },
-    "payinAmount": {
-      "$ref": "definitions.json#/definitions/decimalString",
-      "description": "Amount of quote currency you want to spend in order to receive base currency"
-    },
-    "claims": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Presentation Submission that fulfills the requirements included in the respective Offering"
-    },
-    "payinMethod": {
-      "$ref": "#/definitions/SelectedPaymentMethod"
-    },
-    "payoutMethod": {
-      "$ref": "#/definitions/SelectedPaymentMethod"
-    }
+    "additionalProperties": false
   },
-  "required": ["offeringId", "payinAmount", "claims", "payinMethod", "payoutMethod"]
+  "required": ["Rfq"]
 }
