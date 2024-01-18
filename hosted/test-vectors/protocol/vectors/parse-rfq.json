@@ -1,6 +1,6 @@
 {
   "description": "RFQ parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV\",\"to\":\"did:ex:pfi\",\"kind\":\"rfq\",\"id\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"exchangeId\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"createdAt\":\"2024-01-12T19:03:26.334Z\"},\"data\":{\"offeringId\":\"offering_01hkzgxgbyfpysvnehhcppe762\",\"payinMethod\":{\"kind\":\"DEBIT_CARD\",\"paymentDetails\":{\"cardNumber\":\"1234567890123456\",\"expiryDate\":\"12/22\",\"cardHolderName\":\"Ephraim Bartholomew Winthrop\",\"cvv\":\"123\"}},\"payoutMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"btcAddress\":\"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\"}},\"payinAmount\":\"200.00\",\"claims\":[\"\"]},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg\"}",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV\",\"to\":\"did:ex:pfi\",\"kind\":\"rfq\",\"id\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",      \"exchangeId\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"createdAt\":\"2024-01-12T19:03:26.334Z\"},\"data\": {\"rfq\": {\"offeringId\":\"offering_01hkzgxgbyfpysvnehhcppe762\",        \"payinMethod\": {\"kind\":\"DEBIT_CARD\",\"paymentDetails\": {\"cardNumber\":\"1234567890123456\",\"expiryDate\":\"12/22\",\"cardHolderName\":\"Ephraim Bartholomew Winthrop\",\"cvv\":\"123\"}},\"payoutMethod\": {\"kind\":\"BTC_ADDRESS\",\"paymentDetails\": {\"btcAddress\":\"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\"}},\"payinAmount\":\"200.00\",\"claims\": [\"\"]},\"replyTo\":\"https://tbdex.io/callbacks\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg\"}",
   "output": {
     "metadata": {
       "from": "did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV",
@@ -11,26 +11,29 @@
       "createdAt": "2024-01-12T19:03:26.334Z"
     },
     "data": {
-      "offeringId": "offering_01hkzgxgbyfpysvnehhcppe762",
-      "payinMethod": {
-        "kind": "DEBIT_CARD",
-        "paymentDetails": {
-          "cardNumber": "1234567890123456",
-          "expiryDate": "12/22",
-          "cardHolderName": "Ephraim Bartholomew Winthrop",
-          "cvv": "123"
-        }
+      "rfq": {
+        "offeringId": "offering_01hkzgxgbyfpysvnehhcppe762",
+        "payinMethod": {
+          "kind": "DEBIT_CARD",
+          "paymentDetails": {
+            "cardNumber": "1234567890123456",
+            "expiryDate": "12/22",
+            "cardHolderName": "Ephraim Bartholomew Winthrop",
+            "cvv": "123"
+          }
+        },
+        "payoutMethod": {
+          "kind": "BTC_ADDRESS",
+          "paymentDetails": {
+            "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+          }
+        },
+        "payinAmount": "200.00",
+        "claims": [
+          ""
+        ]
       },
-      "payoutMethod": {
-        "kind": "BTC_ADDRESS",
-        "paymentDetails": {
-          "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-        }
-      },
-      "payinAmount": "200.00",
-      "claims": [
-        ""
-      ]
+      "replyTo": "https://tbdex.io/callbacks"
     },
     "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg"
   },
