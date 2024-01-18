@@ -1,17 +1,17 @@
 {
   "description": "RFQ parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV\",\"to\":\"did:ex:pfi\",\"kind\":\"rfq\",\"id\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"exchangeId\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"createdAt\":\"2024-01-12T19:03:26.334Z\"},\"data\":{\"offeringId\":\"offering_01hkzgxgbyfpysvnehhcppe762\",\"payinMethod\":{\"kind\":\"DEBIT_CARD\",\"paymentDetails\":{\"cardNumber\":\"1234567890123456\",\"expiryDate\":\"12/22\",\"cardHolderName\":\"Ephraim Bartholomew Winthrop\",\"cvv\":\"123\"}},\"payoutMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"btcAddress\":\"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\"}},\"payinAmount\":\"200.00\",\"claims\":[\"\"]},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg\"}",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6MkuMLVPuWEFPANCnLWStXJ322tMXv1n25TDZns8NLDhRCR\",\"to\":\"did:ex:pfi\",\"kind\":\"rfq\",\"id\":\"rfq_01hmdqqr30egh86wn617zecynx\",\"exchangeId\":\"rfq_01hmdqqr30egh86wn617zecynx\",\"createdAt\":\"2024-01-18T07:31:59.712Z\"},\"data\":{\"offeringId\":\"abcd123\",\"payinMethod\":{\"kind\":\"DEBIT_CARD\",\"paymentDetails\":{\"cardNumber\":\"1234567890123456\",\"expiryDate\":\"12/22\",\"cardHolderName\":\"Ephraim Bartholomew Winthrop\",\"cvv\":\"123\"}},\"payoutMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"btcAddress\":\"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\"}},\"payinAmount\":\"20000.00\",\"claims\":[\"eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSI3o2TWt1TUxWUHVXRUZQQU5DbkxXU3RYSjMyMnRNWHYxbjI1VERabnM4TkxEaFJDUiJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUHV1cHV1Q3JlZGVudGlhbCJdLCJpZCI6InVybjp1dWlkOmYwYzU3NmI3LTZjYWQtNDI2YS05ZmRmLWRiMjg2MWMzYTlmYyIsImlzc3VlciI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSIiwiaXNzdWFuY2VEYXRlIjoiMjAyNC0wMS0xOFQwNzozMTo1OVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSIiwiYmVlcCI6ImJvb3AifX0sImlzcyI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSIiwic3ViIjoiZGlkOmtleTp6Nk1rdU1MVlB1V0VGUEFOQ25MV1N0WEozMjJ0TVh2MW4yNVREWm5zOE5MRGhSQ1IifQ.JjH6K8XUNghyI92VZguoakN9N0h3sv90ki-05FaUzSKWQcsPX75Y_axF9w4b6zzVVK5_K5ZC69GarwosZ8QMBw\"]},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSI3o2TWt1TUxWUHVXRUZQQU5DbkxXU3RYSjMyMnRNWHYxbjI1VERabnM4TkxEaFJDUiJ9..KMhM4DLem01NNZeQjjrqdeB6tNR6gzD5DdyrHxzisXNx8gtMY5xOPiRDYJxxRZu_m45LQ2PwK_egUgN-m8PPBQ\"}",
   "output": {
     "metadata": {
-      "from": "did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV",
+      "from": "did:key:z6MkuMLVPuWEFPANCnLWStXJ322tMXv1n25TDZns8NLDhRCR",
       "to": "did:ex:pfi",
       "kind": "rfq",
-      "id": "rfq_01hkzgxgbyfpysvnehhha7tmm8",
-      "exchangeId": "rfq_01hkzgxgbyfpysvnehhha7tmm8",
-      "createdAt": "2024-01-12T19:03:26.334Z"
+      "id": "rfq_01hmdqqr30egh86wn617zecynx",
+      "exchangeId": "rfq_01hmdqqr30egh86wn617zecynx",
+      "createdAt": "2024-01-18T07:31:59.712Z"
     },
     "data": {
-      "offeringId": "offering_01hkzgxgbyfpysvnehhcppe762",
+      "offeringId": "abcd123",
       "payinMethod": {
         "kind": "DEBIT_CARD",
         "paymentDetails": {
@@ -27,12 +27,12 @@
           "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
         }
       },
-      "payinAmount": "200.00",
+      "payinAmount": "20000.00",
       "claims": [
-        ""
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSI3o2TWt1TUxWUHVXRUZQQU5DbkxXU3RYSjMyMnRNWHYxbjI1VERabnM4TkxEaFJDUiJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUHV1cHV1Q3JlZGVudGlhbCJdLCJpZCI6InVybjp1dWlkOmYwYzU3NmI3LTZjYWQtNDI2YS05ZmRmLWRiMjg2MWMzYTlmYyIsImlzc3VlciI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSIiwiaXNzdWFuY2VEYXRlIjoiMjAyNC0wMS0xOFQwNzozMTo1OVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSIiwiYmVlcCI6ImJvb3AifX0sImlzcyI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSIiwic3ViIjoiZGlkOmtleTp6Nk1rdU1MVlB1V0VGUEFOQ25MV1N0WEozMjJ0TVh2MW4yNVREWm5zOE5MRGhSQ1IifQ.JjH6K8XUNghyI92VZguoakN9N0h3sv90ki-05FaUzSKWQcsPX75Y_axF9w4b6zzVVK5_K5ZC69GarwosZ8QMBw"
       ]
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3VNTFZQdVdFRlBBTkNuTFdTdFhKMzIydE1YdjFuMjVURFpuczhOTERoUkNSI3o2TWt1TUxWUHVXRUZQQU5DbkxXU3RYSjMyMnRNWHYxbjI1VERabnM4TkxEaFJDUiJ9..KMhM4DLem01NNZeQjjrqdeB6tNR6gzD5DdyrHxzisXNx8gtMY5xOPiRDYJxxRZu_m45LQ2PwK_egUgN-m8PPBQ"
   },
   "error": false
 }
