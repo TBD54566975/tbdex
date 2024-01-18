@@ -293,7 +293,7 @@ False
 | field            | data type | required | description                                                                                       |
 | ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `rfq`           | object    | Y        | The request for quote                       |
-| `replyTo` | object    | N        | A string containing a valid URI where new messages from the PFI will be sent |
+| `replyTo` | string    | N        | A string containing a valid URI where new messages from the PFI will be sent |
 
 > [!IMPORTANT]
 > See RFQ structure [here](../protocol/README.md#rfq-request-for-quote)
