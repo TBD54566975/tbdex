@@ -1,38 +1,36 @@
 {
   "description": "Quote parses from string",
-  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hkx78yxffp2b8z72zagwk81f\",\"from\":\"did:key:z6MkpkqjLNUHHazoqP1LMBuVLRTn8qXcUpqcnE5wwcgguU5p\",\"to\":\"did:ex:pfi\",\"kind\":\"quote\",\"id\":\"quote_01hkx78yxffp2b8z72zdmjez7q\",\"createdAt\":\"2024-01-11T21:36:27.055Z\"},\"data\":{\"expiresAt\":\"2024-01-11T21:36:27.055Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\"},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\"},\"paymentInstructions\":{\"payin\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"},\"payout\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3BrcWpMTlVISGF6b3FQMUxNQnVWTFJUbjhxWGNVcHFjbkU1d3djZ2d1VTVwI3o2TWtwa3FqTE5VSEhhem9xUDFMTUJ1VkxSVG44cVhjVXBxY25FNXd3Y2dndVU1cCJ9..jb3LxwUAJFHcFXtXtJy8FatIQ1Sz09e5RyBkSCELHhY9Kj3eVjgI4f2USCEATWvQ7oyZJSTyTpeBbBQpSE0QDA\"}",
+  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hm02j3bdf25rx1ahkx3h653v\",\"from\":\"did:key:z6MkfZVwW9oZug6SVdMVWNEndLf4rFcrxRVzhteAGRVF8ynJ\",\"to\":\"did:ex:pfi\",\"kind\":\"quote\",\"id\":\"quote_01hm02j3bdf25rx1ahm11dkp4v\",\"createdAt\":\"2024-01-13T00:11:46.925Z\"},\"data\":{\"expiresAt\":\"2024-01-13T00:11:46.925Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2ZaVndXOW9adWc2U1ZkTVZXTkVuZExmNHJGY3J4UlZ6aHRlQUdSVkY4eW5KI3o2TWtmWlZ3VzlvWnVnNlNWZE1WV05FbmRMZjRyRmNyeFJWemh0ZUFHUlZGOHluSiJ9..e7R_CF3ocY8wVLDX9NkcG60Hw6C-G-9Xu4NmSuME4Qh7gvIdNzXrNbJ82hV_Y1MFJoy51rSnDvljGi3b5Tf8CA\"}",
   "output": {
     "metadata": {
-      "exchangeId": "rfq_01hkx78yxffp2b8z72zagwk81f",
-      "from": "did:key:z6MkpkqjLNUHHazoqP1LMBuVLRTn8qXcUpqcnE5wwcgguU5p",
+      "exchangeId": "rfq_01hm02j3bdf25rx1ahkx3h653v",
+      "from": "did:key:z6MkfZVwW9oZug6SVdMVWNEndLf4rFcrxRVzhteAGRVF8ynJ",
       "to": "did:ex:pfi",
       "kind": "quote",
-      "id": "quote_01hkx78yxffp2b8z72zdmjez7q",
-      "createdAt": "2024-01-11T21:36:27.055Z"
+      "id": "quote_01hm02j3bdf25rx1ahm11dkp4v",
+      "createdAt": "2024-01-13T00:11:46.925Z"
     },
     "data": {
-      "expiresAt": "2024-01-11T21:36:27.055Z",
+      "expiresAt": "2024-01-13T00:11:46.925Z",
       "payin": {
         "currencyCode": "BTC",
         "amount": "0.01",
-        "fee": "0.0001"
+        "fee": "0.0001",
+        "paymentInstruction": {
+          "link": "tbdex.io/example",
+          "instruction": "Fake instruction"
+        }
       },
       "payout": {
         "currencyCode": "USD",
-        "amount": "1000.00"
-      },
-      "paymentInstructions": {
-        "payin": {
-          "link": "tbdex.io/example",
-          "instruction": "Fake instruction"
-        },
-        "payout": {
+        "amount": "1000.00",
+        "paymentInstruction": {
           "link": "tbdex.io/example",
           "instruction": "Fake instruction"
         }
       }
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3BrcWpMTlVISGF6b3FQMUxNQnVWTFJUbjhxWGNVcHFjbkU1d3djZ2d1VTVwI3o2TWtwa3FqTE5VSEhhem9xUDFMTUJ1VkxSVG44cVhjVXBxY25FNXd3Y2dndVU1cCJ9..jb3LxwUAJFHcFXtXtJy8FatIQ1Sz09e5RyBkSCELHhY9Kj3eVjgI4f2USCEATWvQ7oyZJSTyTpeBbBQpSE0QDA"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2ZaVndXOW9adWc2U1ZkTVZXTkVuZExmNHJGY3J4UlZ6aHRlQUdSVkY4eW5KI3o2TWtmWlZ3VzlvWnVnNlNWZE1WV05FbmRMZjRyRmNyeFJWemh0ZUFHUlZGOHluSiJ9..e7R_CF3ocY8wVLDX9NkcG60Hw6C-G-9Xu4NmSuME4Qh7gvIdNzXrNbJ82hV_Y1MFJoy51rSnDvljGi3b5Tf8CA"
   },
   "error": false
 }
