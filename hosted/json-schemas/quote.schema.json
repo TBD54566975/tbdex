@@ -4,24 +4,26 @@
   "definitions": {
     "QuoteDetails": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "currencyCode": {
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
-        "amountSubunits": {
-          "type": "string",
+        "amount": {
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount of currency expressed in the smallest respective unit"
         },
-        "feeSubunits": {
-          "type": "string",
+        "fee": {
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount paid in fees"
         }
       },
-      "required": ["currencyCode", "amountSubunits"]
+      "required": ["currencyCode", "amount"]
     },
     "PaymentInstruction": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "link": {
           "type": "string",
@@ -35,6 +37,7 @@
     },
     "PaymentInstructions": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "payin": {
           "$ref": "#/definitions/PaymentInstruction"
@@ -46,6 +49,7 @@
     }
   },
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "expiresAt": {
       "type": "string",

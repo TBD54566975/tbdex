@@ -1,36 +1,38 @@
 {
   "description": "RFQ parses from string",
-  "input": "{\"metadata\":{\"kind\":\"rfq\",\"to\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"from\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"id\":\"rfq_7zzzzzzyzte028007g0g001xdc\",\"exchangeId\":\"rfq_7zzzzzzyzte028007g0g001xdc\",\"createdAt\":\"2023-10-24T16:15:04.010Z\"},\"data\":{\"offeringId\":\"offering_01hdh7fyzzek48003ms0001bv2\",\"payinSubunits\":\"1000\",\"payinMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"address\":\"123456\"}},\"payoutMethod\":{\"kind\":\"MOMO\",\"paymentDetails\":{\"phoneNumber\":\"+254712345678\",\"accountHolderName\":\"Alfred Holder\"}},\"claims\":[\"presentation submission\"]},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..Y9gKs87CGalvHxlChHsL2fx2wtlPbY2-tBDciz7rSKRJkWmeIdyu-7NxwUdVMlQfJ58PTLoYPknXUKL8Hc0v4w\"}",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV\",\"to\":\"did:ex:pfi\",\"kind\":\"rfq\",\"id\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"exchangeId\":\"rfq_01hkzgxgbyfpysvnehhha7tmm8\",\"createdAt\":\"2024-01-12T19:03:26.334Z\"},\"data\":{\"offeringId\":\"offering_01hkzgxgbyfpysvnehhcppe762\",\"payinMethod\":{\"kind\":\"DEBIT_CARD\",\"paymentDetails\":{\"cardNumber\":\"1234567890123456\",\"expiryDate\":\"12/22\",\"cardHolderName\":\"Ephraim Bartholomew Winthrop\",\"cvv\":\"123\"}},\"payoutMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"btcAddress\":\"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\"}},\"payinAmount\":\"200.00\",\"claims\":[\"\"]},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg\"}",
   "output": {
-      "metadata": {
-          "kind": "rfq",
-          "to": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
-          "from": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
-          "id": "rfq_7zzzzzzyzte028007g0g001xdc",
-          "exchangeId": "rfq_7zzzzzzyzte028007g0g001xdc",
-          "createdAt": "2023-10-24T16:15:04.010Z"
+    "metadata": {
+      "from": "did:key:z6MkwL16fCK7ziBtHheoNqSM6jEaWGQbu9fRxYFSzQiUSrHV",
+      "to": "did:ex:pfi",
+      "kind": "rfq",
+      "id": "rfq_01hkzgxgbyfpysvnehhha7tmm8",
+      "exchangeId": "rfq_01hkzgxgbyfpysvnehhha7tmm8",
+      "createdAt": "2024-01-12T19:03:26.334Z"
+    },
+    "data": {
+      "offeringId": "offering_01hkzgxgbyfpysvnehhcppe762",
+      "payinMethod": {
+        "kind": "DEBIT_CARD",
+        "paymentDetails": {
+          "cardNumber": "1234567890123456",
+          "expiryDate": "12/22",
+          "cardHolderName": "Ephraim Bartholomew Winthrop",
+          "cvv": "123"
+        }
       },
-      "data": {
-          "offeringId": "offering_01hdh7fyzzek48003ms0001bv2",
-          "payinSubunits": "1000",
-          "payinMethod": {
-              "kind": "BTC_ADDRESS",
-              "paymentDetails": {
-                  "address": "123456"
-              }
-          },
-          "payoutMethod": {
-              "kind": "MOMO",
-              "paymentDetails": {
-                  "phoneNumber": "+254712345678",
-                  "accountHolderName": "Alfred Holder"
-              }
-          },
-          "claims": [
-              "presentation submission"
-          ]
+      "payoutMethod": {
+        "kind": "BTC_ADDRESS",
+        "paymentDetails": {
+          "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+        }
       },
-      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..Y9gKs87CGalvHxlChHsL2fx2wtlPbY2-tBDciz7rSKRJkWmeIdyu-7NxwUdVMlQfJ58PTLoYPknXUKL8Hc0v4w"
+      "payinAmount": "200.00",
+      "claims": [
+        ""
+      ]
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3dMMTZmQ0s3emlCdEhoZW9OcVNNNmpFYVdHUWJ1OWZSeFlGU3pRaVVTckhWI3o2TWt3TDE2ZkNLN3ppQnRIaGVvTnFTTTZqRWFXR1FidTlmUnhZRlN6UWlVU3JIViJ9..Htj1qJ-xGh1ujE4fY1i3SRjvaHM4A38pRnPCTP44aMGDCD-Xy1cWBISr8KlGiUZ25Hrn4wVebYFdzLbp4eDQBg"
   },
   "error": false
 }
