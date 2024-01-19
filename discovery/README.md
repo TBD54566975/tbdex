@@ -18,6 +18,8 @@ In general it is recommended for a PFI to be discoverable, it SHOULD publish a D
 
 This will expose a REST API at the serviceEndpoint which can be used to discover the PFI's capabilities and offers, make RFQs and transact.
 
+The id of the service endpoint is up to the PFI.
+
 ### Service Endpoint options
 
 If it possible to use a did URI as the serviceEndpoint itself, for example:
