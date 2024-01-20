@@ -77,7 +77,6 @@
     "payinCurrency",
     "payoutCurrency",
     "payinMethods",
-    "payoutMethods",
-    "requiredClaims"
+    "payoutMethods"
   ]
 }
