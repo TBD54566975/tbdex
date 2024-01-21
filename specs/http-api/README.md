@@ -83,7 +83,7 @@ PFIs can become publicly discoverable by advertising their API endpoint as a [Se
 | `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services)                               |
 | `type`            | `PFI`                                                                                       |
 | `serviceEndpoint` | PFI's publicly addressable API endpoint or DID which has PFIs publicly addressable endpoint |
-If the serviceEndpoint is itself a DID, this did should resolve to a document and then its serviceEndpoints can be examined for the `PFI` type entry. The ID can be chosen at the descretion of the PFI, but the service entry should be of type `PFI`.
+If the serviceEndpoint is itself a DID, this DID should resolve to a document and then its serviceEndpoints can be examined for the `PFI` type entry. The ID can be chosen at the discretion of the PFI, but the service entry should be of type `PFI`.
 
 ## Example
 ```json
