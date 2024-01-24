@@ -1,17 +1,17 @@
 {
-  "description": "RFQ parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:key:z6MkieB8ZimxqWjDoDYWBqWmhNxkbAVNa1WauYb9jeGebvCF\",\"to\":\"did:ex:pfi\",\"exchangeId\":\"abcd123\",\"kind\":\"order\",\"id\":\"order_01hmvz7e3rfe4tqaww1g3xfwjp\",\"createdAt\":\"2024-01-23T20:12:15.864Z\"},\"data\":{},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2llQjhaaW14cVdqRG9EWVdCcVdtaE54a2JBVk5hMVdhdVliOWplR2VidkNGI3o2TWtpZUI4WmlteHFXakRvRFlXQnFXbWhOeGtiQVZOYTFXYXVZYjlqZUdlYnZDRiJ9..oX_cusqpOx8TkL9v53evnYFHXzmzX0WohooRNlbuKWa0_XmOyERynHCrG9YwYhge8N3CAJ3U7CSAXJs9u-sKBg\"}",
+  "description": "Order parses from string",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6Mknwb8BdXAbrPmxJLz95czMLNAawiXhkps2aYTfj1r6GTg\",\"to\":\"did:ex:pfi\",\"exchangeId\":\"abcd123\",\"kind\":\"order\",\"id\":\"order_01hmyq0z5rekprxbb72d9vepkw\",\"createdAt\":\"2024-01-24T21:46:38.648Z\"},\"data\":{},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa253YjhCZFhBYnJQbXhKTHo5NWN6TUxOQWF3aVhoa3BzMmFZVGZqMXI2R1RnI3o2TWtud2I4QmRYQWJyUG14Skx6OTVjek1MTkFhd2lYaGtwczJhWVRmajFyNkdUZyJ9..5eM8tSJP9uDzFCRSPG5-UmVAxIpcLZ84HIlpuoow_dv7TNeIQrqdmLDAohbxTBXLnqWmIXZs76kdA_vRhom4DA\"}",
   "output": {
     "metadata": {
-      "from": "did:key:z6MkieB8ZimxqWjDoDYWBqWmhNxkbAVNa1WauYb9jeGebvCF",
+      "from": "did:key:z6Mknwb8BdXAbrPmxJLz95czMLNAawiXhkps2aYTfj1r6GTg",
       "to": "did:ex:pfi",
       "exchangeId": "abcd123",
       "kind": "order",
-      "id": "order_01hmvz7e3rfe4tqaww1g3xfwjp",
-      "createdAt": "2024-01-23T20:12:15.864Z"
+      "id": "order_01hmyq0z5rekprxbb72d9vepkw",
+      "createdAt": "2024-01-24T21:46:38.648Z"
     },
     "data": {},
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2llQjhaaW14cVdqRG9EWVdCcVdtaE54a2JBVk5hMVdhdVliOWplR2VidkNGI3o2TWtpZUI4WmlteHFXakRvRFlXQnFXbWhOeGtiQVZOYTFXYXVZYjlqZUdlYnZDRiJ9..oX_cusqpOx8TkL9v53evnYFHXzmzX0WohooRNlbuKWa0_XmOyERynHCrG9YwYhge8N3CAJ3U7CSAXJs9u-sKBg"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa253YjhCZFhBYnJQbXhKTHo5NWN6TUxOQWF3aVhoa3BzMmFZVGZqMXI2R1RnI3o2TWtud2I4QmRYQWJyUG14Skx6OTVjek1MTkFhd2lYaGtwczJhWVRmajFyNkdUZyJ9..5eM8tSJP9uDzFCRSPG5-UmVAxIpcLZ84HIlpuoow_dv7TNeIQrqdmLDAohbxTBXLnqWmIXZs76kdA_vRhom4DA"
   },
   "error": false
 }

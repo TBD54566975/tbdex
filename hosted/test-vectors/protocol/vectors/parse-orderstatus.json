@@ -1,19 +1,19 @@
 {
-  "description": "RFQ parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:key:z6MkoyMEsJNHvSDodryPH6ib7TBMGEDzAQABwTNZF3NJPdXT\",\"to\":\"did:ex:pfi\",\"exchangeId\":\"abcd123\",\"kind\":\"orderstatus\",\"id\":\"orderstatus_01hmvz7e3tf0v9d9n494gpjx0c\",\"createdAt\":\"2024-01-23T20:12:15.866Z\"},\"data\":{\"orderStatus\":\"wee\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa295TUVzSk5IdlNEb2RyeVBINmliN1RCTUdFRHpBUUFCd1ROWkYzTkpQZFhUI3o2TWtveU1Fc0pOSHZTRG9kcnlQSDZpYjdUQk1HRUR6QVFBQndUTlpGM05KUGRYVCJ9..89ueaQCksuYPXY9-J0OhfH1Do1XVnKmR2FxvRRx7nzPjIIzr77wq7KongXjsmYCht52C7hSV8BGt8at1pwbhCA\"}",
+  "description": "Order Status parses from string",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6MkhycBhaHjfAJVtH7xNxNKNiduSYdQgCHgQwbrz32GEaDQ\",\"to\":\"did:ex:pfi\",\"exchangeId\":\"abcd123\",\"kind\":\"orderstatus\",\"id\":\"orderstatus_01hmyq0z5tf5nv3s1yr7qbhnv4\",\"createdAt\":\"2024-01-24T21:46:38.650Z\"},\"data\":{\"orderStatus\":\"wee\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2h5Y0JoYUhqZkFKVnRIN3hOeE5LTmlkdVNZZFFnQ0hnUXdicnozMkdFYURRI3o2TWtoeWNCaGFIamZBSlZ0SDd4TnhOS05pZHVTWWRRZ0NIZ1F3YnJ6MzJHRWFEUSJ9..V1iGKO9_8xiB6j_bQQpXAsc66l_Tw7YlU3-dXFuCjtieKO65bN19Gm53poS7Bph6Ih2h-BIkc8T6y68B463lAg\"}",
   "output": {
     "metadata": {
-      "from": "did:key:z6MkoyMEsJNHvSDodryPH6ib7TBMGEDzAQABwTNZF3NJPdXT",
+      "from": "did:key:z6MkhycBhaHjfAJVtH7xNxNKNiduSYdQgCHgQwbrz32GEaDQ",
       "to": "did:ex:pfi",
       "exchangeId": "abcd123",
       "kind": "orderstatus",
-      "id": "orderstatus_01hmvz7e3tf0v9d9n494gpjx0c",
-      "createdAt": "2024-01-23T20:12:15.866Z"
+      "id": "orderstatus_01hmyq0z5tf5nv3s1yr7qbhnv4",
+      "createdAt": "2024-01-24T21:46:38.650Z"
     },
     "data": {
       "orderStatus": "wee"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa295TUVzSk5IdlNEb2RyeVBINmliN1RCTUdFRHpBUUFCd1ROWkYzTkpQZFhUI3o2TWtveU1Fc0pOSHZTRG9kcnlQSDZpYjdUQk1HRUR6QVFBQndUTlpGM05KUGRYVCJ9..89ueaQCksuYPXY9-J0OhfH1Do1XVnKmR2FxvRRx7nzPjIIzr77wq7KongXjsmYCht52C7hSV8BGt8at1pwbhCA"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2h5Y0JoYUhqZkFKVnRIN3hOeE5LTmlkdVNZZFFnQ0hnUXdicnozMkdFYURRI3o2TWtoeWNCaGFIamZBSlZ0SDd4TnhOS05pZHVTWWRRZ0NIZ1F3YnJ6MzJHRWFEUSJ9..V1iGKO9_8xiB6j_bQQpXAsc66l_Tw7YlU3-dXFuCjtieKO65bN19Gm53poS7Bph6Ih2h-BIkc8T6y68B463lAg"
   },
   "error": false
 }
