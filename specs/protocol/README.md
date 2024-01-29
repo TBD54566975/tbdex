@@ -281,7 +281,7 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 | `offeringId`   | string                                            | Y        | Offering for which Alice would like to get a quote                                                                          |
 | `payinAmount`  | [`DecimalString`](#decimalstring)                 | Y        | Amount of payin currency you want in exchange for payout currency                                                           |
 | `claims`       | string[]                                          | N        | An array of claims that fulfill the requirements declared in an [Offering](#offering). Excluded from the signature payload. |
-| `claimsHash`   | string                                            | Y        | A hash [digest](#digest) of `claims`                                                                                        |
+| `claimsHash`   | string                                            | N        | A hash [digest](#digest) of `claims`                                                                                        |
 | `payinMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                                                        |
 | `payoutMethod` | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                                                                    |
 
@@ -297,7 +297,7 @@ For further information on supported hashing algorithms, please refer to [digest
 |----------------------|-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | `kind`               | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                             |
 | `paymentDetails`     | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema. Excluded from the signature payload. |
-| `paymentDetailsHash` | string    | Y        | A hash [digest](#digest)  of `paymentDetails`                                                                                           |
+| `paymentDetailsHash` | string    | N        | A hash [digest](#digest)  of `paymentDetails`                                                                                           |
 
 
 #### RFQ example
