@@ -24,7 +24,19 @@ This repo contains specifications for tbDEX
 | [Protocol](./specs/protocol/) | Defines the message and resource formats that make up the tbDEX messaging protocol                   | [Draft](./specs/protocol/#status-) |
 | [HTTP API](./specs/http-api/) | Defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX | [Draft](./specs/http-api/#status-) |
 
-![digram](tbdex_message_sequence.png)
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant PFI
+
+    PFI->>Alice: Offering (pull)
+
+    Alice->>+PFI: RFQ (push)
+    PFI->>Alice: Quote (push)
+    Alice->>PFI: Order (push)
+    PFI-->>Alice: OrderStatus (push)
+    deactivate PFI
+```
 
 For information on the development process for this protocol, check out [sdk-development](https://github.com/TBD54566975/sdk-development/)
 
