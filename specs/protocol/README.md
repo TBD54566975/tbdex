@@ -258,49 +258,6 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 ### `data`
 The actual message content. This will _always_ be a JSON object. The [Message Kinds section](#message-kinds) specifies the content for each individual message type
 
-
-### `private`
-Often times, an RFQ will contain PII or PCI data either within the `credentials` being presented or within `paymentDetails` of `payinMethod` or `payoutMethod` (e.g. card details, phone numbers, full names etc). 
-
-In order to prevent storing this sensitive data with the message itself, the value of a property containing sensitive data can be a [hash](#Hashing) of the sensitive data. The actual sensitive data itself is included in the `private` field. 
-
-The `private` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient
-
-The value of `private` **MUST** be a JSON object that matches the structure of `data`. The properties present within `private` **MUST** only be the properties of `data` that include the hash counterpart.
-
-> **Note**
-> Rationale behind the `private` JSON object matching the structure of `data` is to simplify programmatic hash evaluation using JSONPath to pluck the respective hash from `data`. **NOTE**: we should try this to make sure it's actually "easy"
-
-#### Example Usage in RFQ message
-
-```json
-{
-  "data": {
-    "offeringId": <OFFERING_ID>,
-    "payoutAmount": "STR_VALUE",
-    "claims": <PRESENTATION_SUBMISSION_HASH>, <---- hash
-    "payinMethod": {
-      "kind": "BTC_ADDRESS",
-      "paymentDetails": <OBJ_HASH> <---- hash
-    },
-    "payoutMethod": {
-      "kind": "MOMO_MPESA",
-      "paymentDetails": <OBJ_HASH> <---- hash
-    }
-  },
-  "private": {
-    "claims": <PRESENTATION_SUBMISSION>, <---- actual
-    "payinMethod": {
-      "paymentDetails": <OBJ> <---- actual
-    },
-    "payoutMethod": {
-      "paymentDetails": <OBJ> <---- actual
-    }
-  }
-}
-```
-
-
 ### `signature`
 see [here](#signatures) for more details
 
@@ -319,19 +276,29 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field          | data type                                         | required | description                                                                           |
-|----------------|---------------------------------------------------|----------|---------------------------------------------------------------------------------------|
-| `offeringId`   | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
-| `payinAmount`  | [`DecimalString`](#decimalstring)                 | Y        | Amount of payin currency you want in exchange for payout currency                     |
-| `claims`       | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
-| `payinMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                  |
-| `payoutMethod` | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                              |
+| field          | data type                                         | required | description                                                                                                                 |
+|----------------|---------------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------|
+| `offeringId`   | string                                            | Y        | Offering for which Alice would like to get a quote                                                                          |
+| `payinAmount`  | [`DecimalString`](#decimalstring)                 | Y        | Amount of payin currency you want in exchange for payout currency                                                           |
+| `claims`       | string[]                                          | N        | An array of claims that fulfill the requirements declared in an [Offering](#offering). Excluded from the signature payload. |
+| `claimsHash`   | string                                            | Y        | A hash [digest](#digest) of `claims`                                                                                        |
+| `payinMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                                                        |
+| `payoutMethod` | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                                                                    |
+
+#### Unsigned Fields
+In many instances, an RFQ may include Personally Identifiable Information (PII) or Payment Card Industry (PCI) data, either embedded within the `claims` being presented or within the `paymentDetails` of `payinMethod` or `payoutMethod` (such as card details, phone numbers, full names, etc.).
+
+To safeguard privacy, the signature deliberately excludes these fields during the signing process. Specifically, the fields `claims`, `payinMethod.paymentDetails`, and `payoutMethod.paymentDetails` are removed from the RFQ before signing. To ensure the integrity of the signature, each excluded field undergoes a hashing process. The resulting hash is then placed in the corresponding field, namely `claimsHash`, `payinMethod.paymentDetailsHash`, and `payoutMethod.paymentDetailsHash`. This allows PFIs to selectively omit the unsigned fields when storing or transmitting the message.
+
+For further information on supported hashing algorithms, please refer to [digest](#digest) section.
 
 #### `SelectedPaymentMethod`
-| field            | data type | required | description                                                                                       |
-| ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `kind`           | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
-| `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema |
+| field                | data type | required | description                                                                                                                             |
+|----------------------|-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `kind`               | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                             |
+| `paymentDetails`     | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema. Excluded from the signature payload. |
+| `paymentDetailsHash` | string    | Y        | A hash [digest](#digest)  of `paymentDetails`                                                                                           |
+
 
 #### RFQ example
 ```json
@@ -348,36 +315,28 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
     "offeringId": "abcd123",
     "payinMethod": {
       "kind": "DEBIT_CARD",
-      "paymentDetails": "<HASH_PRIVATE_PAYIN_METHOD_PAYMENT_DETAILS>"
-    },
-    "payoutMethod": {
-      "kind": "BTC_ADDRESS",
-      "paymentDetails": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
-    },
-    "payinAmount": "200.00",
-    "claims": [
-      "<HASH_PRIVATE_CLAIMS_0>"
-    ]
-  },
-  "private": {
-    "payinMethod": {
+      "paymentDetailsHash": "<HASH_PAYIN_METHOD_PAYMENT_DETAILS>",
       "paymentDetails": {
         "cardNumber": "1234567890123456",
         "expiryDate": "12/22",
         "cardHolderName": "Ephraim Bartholomew Winthrop",
         "cvv": "123"
-      }
+      },
     },
     "payoutMethod": {
+      "kind": "BTC_ADDRESS",
+      "paymentDetailsHash": "<HASH_PAYOUT_METHOD_PAYMENT_DETAILS>",
       "paymentDetails": {
         "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
       }
     },
+    "payinAmount": "200.00",
     "claims": [
       "eyJhbGciOiJFZERTQSJ9.eyJpc3MiOiJkaWQ6a2V5Ono2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSIsInN1YiI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwidmMiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiIxNjk0NjM2MzY4NDI5IiwidHlwZSI6IllvbG9DcmVkZW50aWFsIiwiaXNzdWVyIjoiZGlkOmtleTp6Nk1rczRONVhkckU2VmllSnNnSDhTTVNSYXZtVG94NzRScW9yb1c3Ylp6QkxRQmkiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTA5LTEzVDIwOjE5OjI4LjQyOVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwiYmVlcCI6ImJvb3AifX19.cejevPPHPGhajd1oP4nfLpxRMKm801BzPdqjm9pQikaMEnh1WZXrap2j_kALZN_PCUddNtW1R_YY18UoERRJBw"
-    ]
+    ],
+    "claimsHash": "<HASH_PRIVATE_CLAIMS_0>"
   },
-  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpI3o2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSJ9..LpR3qNP6PiiACVQKdP68OqhZZY8MqNX96WFS6CzVzX7EgmSroY1WC_tAnQzOAI1pGofzoasEuU1-a2tUOyB_Cg"
+  "signature": "<SIGNATURE>"
 }
 ```
 
