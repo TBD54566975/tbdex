@@ -8,7 +8,8 @@
       "exchangeId": "abcd123",
       "kind": "order",
       "id": "order_01hmyq0z5rekprxbb72d9vepkw",
-      "createdAt": "2024-01-24T21:46:38.648Z"
+      "createdAt": "2024-01-24T21:46:38.648Z",
+      "externalId": "P_123456"
     },
     "data": {},
     "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa253YjhCZFhBYnJQbXhKTHo5NWN6TUxOQWF3aVhoa3BzMmFZVGZqMXI2R1RnI3o2TWtud2I4QmRYQWJyUG14Skx6OTVjek1MTkFhd2lYaGtwczJhWVRmajFyNkdUZyJ9..5eM8tSJP9uDzFCRSPG5-UmVAxIpcLZ84HIlpuoow_dv7TNeIQrqdmLDAohbxTBXLnqWmIXZs76kdA_vRhom4DA"

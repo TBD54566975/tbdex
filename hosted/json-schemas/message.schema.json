@@ -27,6 +27,10 @@
           "type": "string",
           "description": "ID for a 'thread' of messages between Alice <-> PFI. Set by the first message in a thread"
         },
+        "externalId": {
+          "type": "string",
+          "description": "Arbitrary ID for the caller to associate with the message."
+        },
         "createdAt": {
           "type": "string",
           "description": "ISO8601 formatted string representing the timestamp"
