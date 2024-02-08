@@ -245,14 +245,15 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field        | Required (Y/N) | Description                                                                                    |
-| ------------ | -------------- | ---------------------------------------------------------------------------------------------- |
-| `from`       | Y              | The sender's DID                                                                               |
-| `to`         | Y              | the recipient's DID                                                                            |
-| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                             |
-| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                |
-| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange |
-| `createdAt`  | Y              | ISO 8601                                                                                       |
+| Field        | Required (Y/N) | Description                                                                                                               |
+| ------------ | -------------- | ----------------------------------------------------------------------------------------------                            |
+| `from`       | Y              | The sender's DID                                                                                                          |
+| `to`         | Y              | the recipient's DID                                                                                                       |
+| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                                         |
+| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                                           |
+| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange                             |
+| `externalId` | N              | Arbitrary ID for the caller to associate with the message. Different messages in the same exchange can have different IDs |
+| `createdAt`  | Y              | ISO 8601                                                                                                                  |
 
 
 ### `data`
