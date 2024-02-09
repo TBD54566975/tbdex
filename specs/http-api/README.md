@@ -358,8 +358,8 @@ This endpoint is *OPTIONAL*. It is only relevant for PFIs which expose a stored 
 ### Description
 Returns an array of balance amounts for each currency held by the caller.  
 
-### Authentication
-Uses DID authn via Bearer token in header.
+### Protected
+True
 
 ### Endpoint
 `GET /balances`
