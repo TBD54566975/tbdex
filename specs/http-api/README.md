@@ -74,6 +74,12 @@ Version: Draft
     - [Protected](#protected-6)
     - [Response](#response-6)
     - [Query Params](#query-params-3)
+  - [List Balances](#list-balances)
+    - [Description](#description-4)
+    - [Authentication](#protected-7)
+    - [Endpoint](#endpoint-7)
+    - [Response](#response-7)
+    - [Example](#example-2)
 - [References](#references)
 
 # Discoverability
@@ -139,7 +145,6 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 
     }
   ]
-
 }
 
 ```
@@ -475,6 +480,42 @@ True
 | id    | exchange id(s) to return |
 
 ---
+
+## List Balances
+This endpoint is *OPTIONAL*. It is only relevant for PFIs which expose a stored balance functionality either for institutional or retail customers.
+
+### Description
+Returns an array of balance resources for each currency held by the caller.  
+
+### Protected
+True
+
+### Endpoint
+`GET /balances`
+
+### Response
+| Status             | Body                                   |
+| ------------------ | -------------------------------------- |
+| `200: OK.     `    | `{ data: { Balance[] } }` |
+| `400: Bad Request` | `{ errors: Error[] }`                  |
+| `404: Not Found`   | N/A                                    |
+| `403: Forbidden`   | N/A                                    |
+
+#### Example
+
+```json
+{
+  "data": [
+    {
+      /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
+      "currencyCode": "USD", 
+      /** same format used to represent currency values across messages */
+      "available": "400.00",
+    }
+  ]
+}
+
+```
 
 # References
 * JSON:API spec: https://jsonapi.org/format/

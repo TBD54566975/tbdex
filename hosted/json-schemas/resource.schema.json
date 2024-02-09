@@ -13,7 +13,7 @@
         },
         "kind": {
           "type": "string",
-          "enum": ["offering"],
+          "enum": ["offering", "balance"],
           "description": "The resource kind (e.g. Offering)"
         },
         "id": {
