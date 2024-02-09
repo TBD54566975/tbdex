@@ -4,6 +4,7 @@
   "definitions": {
     "MessageMetadata": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "from": {
           "$ref": "definitions.json#/definitions/did",
@@ -25,6 +26,10 @@
         "exchangeId": {
           "type": "string",
           "description": "ID for a 'thread' of messages between Alice <-> PFI. Set by the first message in a thread"
+        },
+        "externalId": {
+          "type": "string",
+          "description": "Arbitrary ID for the caller to associate with the message."
         },
         "createdAt": {
           "type": "string",

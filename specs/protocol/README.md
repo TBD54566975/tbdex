@@ -40,7 +40,6 @@ Version: Draft
     - [`Close`](#close)
     - [`Quote`](#quote)
       - [`QuoteDetails`](#quotedetails)
-      - [`PaymentInstructions`](#paymentinstructions)
       - [`PaymentInstruction`](#paymentinstruction)
     - [`Order`](#order)
     - [`OrderStatus`](#orderstatus)
@@ -98,26 +97,27 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | field                     | data type                                                                                                | required | description                                                                                                                          |
 | ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                                                                          |
-| `payoutUnitsPerPayinUnit` | string                                                                                                   | Y        | Number of payout units alice would get for 1 payin unit                                                                              |
+| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit                                                                              |
 | `payinCurrency`           | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is accepting as payment.                                                                     |
 | `payoutCurrency`          | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is selling.                                                                                  |
 | `payinMethods`            | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
 | `payoutMethods`           | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
-| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |
+| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |                                                                                                                        |
+
 
 #### `CurrencyDetails`
-| field          | data type | required | description                                            |
-| -------------- | --------- | -------- | ------------------------------------------------------ |
-| `currencyCode` | string    | Y        | ISO 3166 currency code string                          |
-| `minSubunits`  | string    | N        | Minimum amount of currency that the offer is valid for |
-| `maxSubunits`  | string    | N        | Maximum amount of currency that the offer is valid for |
+| field          | data type                         | required | description                                            |
+|----------------|-----------------------------------|----------|--------------------------------------------------------|
+| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
+| `minAmount  `  | [`DecimalString`](#decimalstring) | N        | Minimum amount of currency that the offer is valid for |
+| `maxAmount`    | [`DecimalString`](#decimalstring) | N        | Maximum amount of currency that the offer is valid for |
 
 #### `PaymentMethod`
 | field                    | data type                               | required | description                                                                                       |
-| ------------------------ | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
+|--------------------------|-----------------------------------------|----------|---------------------------------------------------------------------------------------------------|
 | `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
 | `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in order to use this payment method |
-| `feeSubunits`            | string                                  | N        | The fee expressed in the currency's sub units to make use of this payment method                  |
+| `fee`                    | [`DecimalString`](#decimalstring)       | N        | The fee to use of this payment method                  |
 
 ##### Reserved `PaymentMethod`s
 
@@ -143,7 +143,7 @@ Some payment methods should be consistent across PFIs and therefore have reserve
     },
     "payoutCurrency": {
       "currencyCode": "BTC",
-      "maxSubunits": "99952611"
+      "maxAmount": "999526.11"
     },
     "payoutUnitsPerPayinUnit": "0.00003826",
     "payinMethods": [
@@ -253,14 +253,15 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field        | Required (Y/N) | Description                                                                                    |
-| ------------ | -------------- | ---------------------------------------------------------------------------------------------- |
-| `from`       | Y              | The sender's DID                                                                               |
-| `to`         | Y              | the recipient's DID                                                                            |
-| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                             |
-| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                |
-| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange |
-| `createdAt`  | Y              | ISO 8601                                                                                       |
+| Field        | Required (Y/N) | Description                                                                                                               |
+| ------------ | -------------- | ----------------------------------------------------------------------------------------------                            |
+| `from`       | Y              | The sender's DID                                                                                                          |
+| `to`         | Y              | the recipient's DID                                                                                                       |
+| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                                         |
+| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                                           |
+| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange                             |
+| `externalId` | N              | Arbitrary ID for the caller to associate with the message. Different messages in the same exchange can have different IDs |
+| `createdAt`  | Y              | ISO 8601                                                                                                                  |
 
 
 ### `data`
@@ -285,7 +286,7 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
 {
   "data": {
     "offeringId": <OFFERING_ID>,
-    "payoutSubunits": "STR_VALUE",
+    "payoutAmount": "STR_VALUE",
     "claims": <PRESENTATION_SUBMISSION_HASH>, <---- hash
     "payinMethod": {
       "kind": "BTC_ADDRESS",
@@ -319,18 +320,21 @@ See [here](#id-generation-1) for more details.
 ## Digest
 See [here](#digests) for more details
 
+## `DecimalString`
+Currency amounts have type `DecimalString`, which is string containing a decimal amount of major currency units. The decimal separator is a period `.`. The currency symbol must be omitted.
+
 
 ## Message Kinds
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field           | data type                                         | required | description                                                                           |
-| --------------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| `offeringId`    | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
-| `payinSubunits` | string                                            | Y        | Amount of payin currency you want in exchange for payout currency                     |
-| `claims`        | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
-| `payinMethod`   | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                  |
-| `payoutMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                              |
+| field          | data type                                         | required | description                                                                           |
+|----------------|---------------------------------------------------|----------|---------------------------------------------------------------------------------------|
+| `offeringId`   | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
+| `payinAmount`  | [`DecimalString`](#decimalstring)                 | Y        | Amount of payin currency you want in exchange for payout currency                     |
+| `claims`       | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `payinMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                  |
+| `payoutMethod` | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                              |
 
 #### `SelectedPaymentMethod`
 | field            | data type | required | description                                                                                       |
@@ -359,7 +363,7 @@ See [here](#digests) for more details
       "kind": "BTC_ADDRESS",
       "paymentDetails": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
     },
-    "payinSubunits": "20000",
+    "payinAmount": "200.00",
     "claims": [
       "<HASH_PRIVATE_CLAIMS_0>"
     ]
@@ -426,26 +430,15 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 | `expiresAt `          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
 | `payin`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payin_ currency that the PFI will receive                                                  |
 | `payout`              | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payout_ currency that Alice will receive                                                   |
-| `paymentInstructions` | [`PaymentInstructions`](#paymentinstructions) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 
 #### `QuoteDetails`
-| field            | data type | required | description                                                      |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------- |
-| `currencyCode`   | string    | Y        | ISO 3166 currency code string                                    |
-| `amountSubunits` |           | Y        | The amount of currency expressed in the smallest respective unit |
-| `feeSubunits`    | string    | N        | The amount paid in fees                                          |
-
-
-> [!NOTE]
-> 
-> Include a section that explains `feeSubunits`. Does `amountSubUnits` _include_ `feeSubunits` or does `amountSubunits + feeSubunits = totalSubunits`?
-
-#### `PaymentInstructions`
-| field    | data type                                   | required | description                                               |
-| -------- | ------------------------------------------- | -------- | --------------------------------------------------------- |
-| `payin`  | [`PaymentInstruction`](#paymentinstruction) | N        | Link or Instruction describing how to pay the PFI.        |
-| `payout` | [`PaymentInstruction`](#paymentinstruction) | N        | Link or Instruction describing how to get paid by the PFI |
+| field                | data type                                   | required | description                                                                                               |
+|----------------------|---------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------|
+| `currencyCode`       | string                                      | Y        | ISO 3166 currency code string                                                                             |
+| `amount`             | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid to the PFI or by the PFI excluding fees                                       |
+| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount paid in fees                                                                                   |
+| `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 #### `PaymentInstruction`
 | field         | data type | required | description                                                               |

@@ -1,19 +1,19 @@
 {
   "description": "Close parses from string",
-  "input": "{\"metadata\":{\"kind\":\"close\",\"to\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"from\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"id\":\"close_7zzzzzzpvqf2480048h0001jm6\",\"exchangeId\":\"rfq_01hdh7fqvpevq8003pxr001a45\",\"createdAt\":\"2023-10-24T16:15:04.037Z\"},\"data\":{\"reason\":\"test reason\"},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..TDtaxXdl1Bljuft8bZlvxTXTK472fKOia12kG_mQA7UhGTVIfwO9cuDCS_86EZHPMhkAvYdOnIiUodouZVba_A\"}",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6MkiRqD73BvHHZAsMWeRBzVYbKjLNzuRLB3hLQgRyGkMe6a\",\"to\":\"did:ex:pfi\",\"exchangeId\":\"close_01hp55f2jte9hasxd7f559z8n5\",\"kind\":\"close\",\"id\":\"close_01hp55f2jte9hasxd7fa7bbyb6\",\"createdAt\":\"2024-02-08T20:10:09.370Z\"},\"data\":{\"reason\":\"The reason for closing the exchange\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2lScUQ3M0J2SEhaQXNNV2VSQnpWWWJLakxOenVSTEIzaExRZ1J5R2tNZTZhI3o2TWtpUnFENzNCdkhIWkFzTVdlUkJ6VlliS2pMTnp1UkxCM2hMUWdSeUdrTWU2YSJ9..sSLIwctNOlzn9GBhajE8IIdIKjPw0X_g4EcfyV5y0JGiywjvfsC4VgQFwo7vEM8TfL4EFVca9qFseHm4T5EMCg\"}",
   "output": {
-      "metadata": {
-          "kind": "close",
-          "to": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
-          "from": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
-          "id": "close_7zzzzzzpvqf2480048h0001jm6",
-          "exchangeId": "rfq_01hdh7fqvpevq8003pxr001a45",
-          "createdAt": "2023-10-24T16:15:04.037Z"
-      },
-      "data": {
-          "reason": "test reason"
-      },
-      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaHdaMThhZWJMdll6Q0Rka2tVSDc4ejZSWGVjODQzQlFjOWh5YnNNUlNveGcjelEzc2hod1oxOGFlYkx2WXpDRGRra1VINzh6NlJYZWM4NDNCUWM5aHlic01SU294ZyIsImFsZyI6IkVTMjU2SyJ9..TDtaxXdl1Bljuft8bZlvxTXTK472fKOia12kG_mQA7UhGTVIfwO9cuDCS_86EZHPMhkAvYdOnIiUodouZVba_A"
+    "metadata": {
+      "from": "did:key:z6MkiRqD73BvHHZAsMWeRBzVYbKjLNzuRLB3hLQgRyGkMe6a",
+      "to": "did:ex:pfi",
+      "exchangeId": "close_01hp55f2jte9hasxd7f559z8n5",
+      "kind": "close",
+      "id": "close_01hp55f2jte9hasxd7fa7bbyb6",
+      "createdAt": "2024-02-08T20:10:09.370Z"
+    },
+    "data": {
+      "reason": "The reason for closing the exchange"
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2lScUQ3M0J2SEhaQXNNV2VSQnpWWWJLakxOenVSTEIzaExRZ1J5R2tNZTZhI3o2TWtpUnFENzNCdkhIWkFzTVdlUkJ6VlliS2pMTnp1UkxCM2hMUWdSeUdrTWU2YSJ9..sSLIwctNOlzn9GBhajE8IIdIKjPw0X_g4EcfyV5y0JGiywjvfsC4VgQFwo7vEM8TfL4EFVca9qFseHm4T5EMCg"
   },
   "error": false
 }

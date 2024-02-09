@@ -4,6 +4,7 @@
   "definitions": {
     "SelectedPaymentMethod": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "kind": {
           "type": "string",
@@ -19,12 +20,13 @@
   },
   "type": "object",
   "properties": {
+    "additionalProperties": false,
     "offeringId": {
       "type": "string",
       "description": "Offering which Alice would like to get a quote for"
     },
-    "payinSubunits": {
-      "type": "string",
+    "payinAmount": {
+      "$ref": "definitions.json#/definitions/decimalString",
       "description": "Amount of quote currency you want to spend in order to receive base currency"
     },
     "claims": {
@@ -41,5 +43,5 @@
       "$ref": "#/definitions/SelectedPaymentMethod"
     }
   },
-  "required": ["offeringId", "payinSubunits", "claims", "payinMethod", "payoutMethod"]
+  "required": ["offeringId", "payinAmount", "claims", "payinMethod", "payoutMethod"]
 }

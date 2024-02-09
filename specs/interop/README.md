@@ -1,4 +1,4 @@
-# [PROPOSED] tbDEX Interop Profile v0.1
+# tbDEX Interop Profile v1
 
 > This is a proposed interop profile that is subject to change. Please open issues for questions and additional discussion.
 
@@ -56,7 +56,7 @@ With tbDEX we identify three main parties. The parties may overlap (e.g. a tbDEX
 | --- | --------- | ---- | ----- |
 | Entity Identifiers | `did:jwk`, `did:dht`, `did:web` | Nodes, Issuer, Agents | `did:dht` is **recommended** as a default method. |
 | Cryptographic Schemes | Ed25519/EdDSA, secp256k1/ES256K, secp256r1 (P-256)/ECDSA, X25519/ECDH | Nodes, Issuer, Agents | Sign/Verify: ed25519 with EdDSA, secp256r1 with ECDSA, secp256k1 with ES256K Encrypt/Decrypt (via Key Agreement): X25519 and secp keys with ECDH |
-| Entity AuthN/Z | tbDEX Signed Messages with VCs | Nodes, Issuer, Agents | [As outlined here](https://github.com/TBD54566975/tbdex/tree/main/specs/protocol#signatures). |
+| Entity AuthN/Z | tbDEX Signed Messages with VCs, SIOPv2 | Nodes, Issuer, Agents | [As outlined here](https://github.com/TBD54566975/tbdex/tree/main/specs/protocol#signatures). |
 | VC Formats | W3C VCDM v1.1 as VC-JWT and VP-JWT | Nodes, Issuer, Agents | Most widely adopted; should be used with VC-JSON-Schema instead of JSON-LD contexts. |
 | Credential Issuance | OID4VCI | Issuer, Agents | Will need to pick an implementers draft to implement against. |
 | Credential Presentation (Option) | OID4VP using Presentation Exchange v2 | Nodes, Issuer, Agents | Will need to pick an implementers draft to implement against. |
@@ -77,7 +77,7 @@ For organizations, we support the usage of [`did:web`](https://w3c-ccg.github.io
 
 Authorization and Authentication are handled by [tbDEX messages](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#messages), a self-contained, authenticated data payload. When additional auth is needed messages can include [Verifiable Credentials](#vc-formats) using [Verifiable Presentations](#vc-formats).
 
-In the case of [Credential Issuance](#credential-issuance) and [Credential Presentation using OID4VP](#presentation-using-oid4vp) additional authorization with [OAuth 2.0](https://www.rfc-editor.org/rfc/rfc6749.txt) is necessary. With [Credential Presentation using OID4VP](#presentation-using-oid4vp), authentication can be accomplished with [SIOPv2](https://openid.github.io/SIOPv2/openid-connect-self-issued-v2-wg-draft.html).
+In the case of [Credential Issuance](#credential-issuance) and [Credential Presentation using OID4VP](#presentation-using-oid4vp) additional authorization with [OAuth 2.0](https://www.rfc-editor.org/rfc/rfc6749.txt) is necessary. With [Credential Presentation using OID4VP](#presentation-using-oid4vp), authentication is accomplished with [SIOPv2](https://openid.github.io/SIOPv2/openid-connect-self-issued-v2-wg-draft.html).
 
 #### Cryptograhpic Schemes
 

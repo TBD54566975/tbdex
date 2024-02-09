@@ -4,24 +4,29 @@
   "definitions": {
     "QuoteDetails": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "currencyCode": {
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
-        "amountSubunits": {
-          "type": "string",
+        "amount": {
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount of currency expressed in the smallest respective unit"
         },
-        "feeSubunits": {
-          "type": "string",
+        "fee": {
+          "$ref": "definitions.json#/definitions/decimalString",
           "description": "The amount paid in fees"
+        },
+        "paymentInstruction": {
+          "$ref": "#/definitions/PaymentInstruction"
         }
       },
-      "required": ["currencyCode", "amountSubunits"]
+      "required": ["currencyCode", "amount"]
     },
     "PaymentInstruction": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "link": {
           "type": "string",
@@ -32,20 +37,10 @@
           "description": "Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI"
         }
       }
-    },
-    "PaymentInstructions": {
-      "type": "object",
-      "properties": {
-        "payin": {
-          "$ref": "#/definitions/PaymentInstruction"
-        },
-        "payout": {
-          "$ref": "#/definitions/PaymentInstruction"
-        }
-      }
     }
   },
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "expiresAt": {
       "type": "string",
@@ -56,9 +51,6 @@
     },
     "payout": {
       "$ref": "#/definitions/QuoteDetails"
-    },
-    "paymentInstructions": {
-      "$ref": "#/definitions/PaymentInstructions"
     }
   },
   "required": ["expiresAt", "payin", "payout"]

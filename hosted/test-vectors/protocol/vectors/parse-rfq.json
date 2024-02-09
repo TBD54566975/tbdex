@@ -1,36 +1,38 @@
 {
   "description": "RFQ parses from string",
-  "input": "{\"metadata\":{\"kind\":\"rfq\",\"to\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"from\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"id\":\"rfq_7zzzzzzyzte028007g0g001xdc\",\"exchangeId\":\"rfq_7zzzzzzyzte028007g0g001xdc\",\"createdAt\":\"2023-10-24T16:15:04.010Z\"},\"data\":{\"offeringId\":\"offering_01hdh7fyzzek48003ms0001bv2\",\"payinSubunits\":\"1000\",\"payinMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"address\":\"123456\"}},\"payoutMethod\":{\"kind\":\"MOMO\",\"paymentDetails\":{\"phoneNumber\":\"+254712345678\",\"accountHolderName\":\"Alfred Holder\"}},\"claims\":[\"presentation submission\"]},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..Y9gKs87CGalvHxlChHsL2fx2wtlPbY2-tBDciz7rSKRJkWmeIdyu-7NxwUdVMlQfJ58PTLoYPknXUKL8Hc0v4w\"}",
+  "input": "{\"metadata\":{\"from\":\"did:key:z6MkgpovCMWcwrCJgrcUf6JrQKA3tyyC4vQqgPY649AwFRnk\",\"to\":\"did:ex:pfi\",\"kind\":\"rfq\",\"id\":\"rfq_01hp55f2jyej8a9r0gawqzmh5e\",\"exchangeId\":\"rfq_01hp55f2jyej8a9r0gawqzmh5e\",\"createdAt\":\"2024-02-08T20:10:09.374Z\"},\"data\":{\"offeringId\":\"offering_01hp55f2jyej8a9r0gasxack31\",\"payinMethod\":{\"kind\":\"DEBIT_CARD\",\"paymentDetails\":{\"cardNumber\":\"1234567890123456\",\"expiryDate\":\"12/22\",\"cardHolderName\":\"Ephraim Bartholomew Winthrop\",\"cvv\":\"123\"}},\"payoutMethod\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetails\":{\"btcAddress\":\"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\"}},\"payinAmount\":\"20000.00\",\"claims\":[\"eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rI3o2TWtncG92Q01XY3dyQ0pncmNVZjZKclFLQTN0eXlDNHZRcWdQWTY0OUF3RlJuayJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUHV1cHV1Q3JlZGVudGlhbCJdLCJpZCI6InVybjp1dWlkOmFhNDg1MDViLTBkYmYtNDczZC05MGUyLTczNzRmNTY0ODI5NCIsImlzc3VlciI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rIiwiaXNzdWFuY2VEYXRlIjoiMjAyNC0wMi0wOFQyMDoxMDowOVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rIiwiYmVlcCI6ImJvb3AifX0sImlzcyI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rIiwic3ViIjoiZGlkOmtleTp6Nk1rZ3BvdkNNV2N3ckNKZ3JjVWY2SnJRS0EzdHl5QzR2UXFnUFk2NDlBd0ZSbmsifQ.clHwrKZWxkDKSABDyxq73Ic9U8S5aUoLoITXRi2LIDQX0of-FvW3WYw5e4L6CIM-cB0oiIn1VIZE-sP0vr2xBA\"]},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rI3o2TWtncG92Q01XY3dyQ0pncmNVZjZKclFLQTN0eXlDNHZRcWdQWTY0OUF3RlJuayJ9..mYaAG2tSKF0dOY0GwTU44108EpTLFfLi4h2Rd3M4RzMW6FCLnoVf86fi3AKzeIJiOiwAZ2YLUgOD_kP6Wh0QCw\"}",
   "output": {
-      "metadata": {
-          "kind": "rfq",
-          "to": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
-          "from": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
-          "id": "rfq_7zzzzzzyzte028007g0g001xdc",
-          "exchangeId": "rfq_7zzzzzzyzte028007g0g001xdc",
-          "createdAt": "2023-10-24T16:15:04.010Z"
+    "metadata": {
+      "from": "did:key:z6MkgpovCMWcwrCJgrcUf6JrQKA3tyyC4vQqgPY649AwFRnk",
+      "to": "did:ex:pfi",
+      "kind": "rfq",
+      "id": "rfq_01hp55f2jyej8a9r0gawqzmh5e",
+      "exchangeId": "rfq_01hp55f2jyej8a9r0gawqzmh5e",
+      "createdAt": "2024-02-08T20:10:09.374Z"
+    },
+    "data": {
+      "offeringId": "offering_01hp55f2jyej8a9r0gasxack31",
+      "payinMethod": {
+        "kind": "DEBIT_CARD",
+        "paymentDetails": {
+          "cardNumber": "1234567890123456",
+          "expiryDate": "12/22",
+          "cardHolderName": "Ephraim Bartholomew Winthrop",
+          "cvv": "123"
+        }
       },
-      "data": {
-          "offeringId": "offering_01hdh7fyzzek48003ms0001bv2",
-          "payinSubunits": "1000",
-          "payinMethod": {
-              "kind": "BTC_ADDRESS",
-              "paymentDetails": {
-                  "address": "123456"
-              }
-          },
-          "payoutMethod": {
-              "kind": "MOMO",
-              "paymentDetails": {
-                  "phoneNumber": "+254712345678",
-                  "accountHolderName": "Alfred Holder"
-              }
-          },
-          "claims": [
-              "presentation submission"
-          ]
+      "payoutMethod": {
+        "kind": "BTC_ADDRESS",
+        "paymentDetails": {
+          "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+        }
       },
-      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..Y9gKs87CGalvHxlChHsL2fx2wtlPbY2-tBDciz7rSKRJkWmeIdyu-7NxwUdVMlQfJ58PTLoYPknXUKL8Hc0v4w"
+      "payinAmount": "20000.00",
+      "claims": [
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rI3o2TWtncG92Q01XY3dyQ0pncmNVZjZKclFLQTN0eXlDNHZRcWdQWTY0OUF3RlJuayJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUHV1cHV1Q3JlZGVudGlhbCJdLCJpZCI6InVybjp1dWlkOmFhNDg1MDViLTBkYmYtNDczZC05MGUyLTczNzRmNTY0ODI5NCIsImlzc3VlciI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rIiwiaXNzdWFuY2VEYXRlIjoiMjAyNC0wMi0wOFQyMDoxMDowOVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rIiwiYmVlcCI6ImJvb3AifX0sImlzcyI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rIiwic3ViIjoiZGlkOmtleTp6Nk1rZ3BvdkNNV2N3ckNKZ3JjVWY2SnJRS0EzdHl5QzR2UXFnUFk2NDlBd0ZSbmsifQ.clHwrKZWxkDKSABDyxq73Ic9U8S5aUoLoITXRi2LIDQX0of-FvW3WYw5e4L6CIM-cB0oiIn1VIZE-sP0vr2xBA"
+      ]
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2dwb3ZDTVdjd3JDSmdyY1VmNkpyUUtBM3R5eUM0dlFxZ1BZNjQ5QXdGUm5rI3o2TWtncG92Q01XY3dyQ0pncmNVZjZKclFLQTN0eXlDNHZRcWdQWTY0OUF3RlJuayJ9..mYaAG2tSKF0dOY0GwTU44108EpTLFfLi4h2Rd3M4RzMW6FCLnoVf86fi3AKzeIJiOiwAZ2YLUgOD_kP6Wh0QCw"
   },
   "error": false
 }

@@ -1,17 +1,18 @@
 {
   "description": "Order parses from string",
-  "input": "{\"metadata\":{\"kind\":\"order\",\"to\":\"did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg\",\"from\":\"did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC\",\"id\":\"order_01hdh7fpzjeh980014a8000t9d\",\"exchangeId\":\"rfq_7zzzzzzqvhffw8002vz0000mwp\",\"createdAt\":\"2023-10-24T16:15:04.032Z\"},\"data\":{},\"signature\":\"eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..FLzrqCirBzDFix3AuIpv-1FtGSUNq7v6ckUQjzrGc5JLDSggS8P-MdVJ1gW5SVCusZCRhkjk6UX4qQXSFZ4X8w\"}",
+  "input": "{\"metadata\":{\"from\":\"did:dht:exa4mz6dseqjj7eutxqbwjo8s89hpzmgb15g3so38jf3fnytr8xo\",\"to\":\"did:key:z6Mknwb8BdXAbrPmxJLz95czMLNAawiXhkps2aYTfj1r6GTg\",\"exchangeId\":\"rfq_01hp4cfx3ze6psxws8wnx684dg\",\"kind\":\"order\",\"id\":\"order_01hp4cfynqe1v9trk27kytb1qp\",\"createdAt\":\"2024-02-08T12:53:43.765Z\",\"externalId\":\"P_123456\"},\"data\":{},\"signature\":\"eyJraWQiOiJkaWQ6ZGh0OmV4YTRtejZkc2Vxamo3ZXV0eHFid2pvOHM4OWhwem1nYjE1ZzNzbzM4amYzZm55dHI4eG8jMCIsImFsZyI6IkVkRFNBIn0..npnHsZB3fOTJF-91EYkZEFKRvsvYX5jKY2-ytfQmRiwbkRrLYWkHgtJyru4uAW524EZ_CN3ucHtcitOD8CQFAQ\"}",
   "output": {
-      "metadata": {
-          "kind": "order",
-          "to": "did:key:zQ3shhwZ18aebLvYzCDdkkUH78z6RXec843BQc9hybsMRSoxg",
-          "from": "did:key:zQ3shizfQYEiB8dqac96P6SHYtUCCsY7gSci4Qeaebgsfz1VC",
-          "id": "order_01hdh7fpzjeh980014a8000t9d",
-          "exchangeId": "rfq_7zzzzzzqvhffw8002vz0000mwp",
-          "createdAt": "2023-10-24T16:15:04.032Z"
-      },
-      "data": {},
-      "signature": "eyJraWQiOiJkaWQ6a2V5OnpRM3NoaXpmUVlFaUI4ZHFhYzk2UDZTSFl0VUNDc1k3Z1NjaTRRZWFlYmdzZnoxVkMjelEzc2hpemZRWUVpQjhkcWFjOTZQNlNIWXRVQ0NzWTdnU2NpNFFlYWViZ3NmejFWQyIsImFsZyI6IkVTMjU2SyJ9..FLzrqCirBzDFix3AuIpv-1FtGSUNq7v6ckUQjzrGc5JLDSggS8P-MdVJ1gW5SVCusZCRhkjk6UX4qQXSFZ4X8w"
+    "metadata": {
+      "kind": "order",
+      "to": "did:key:z6Mknwb8BdXAbrPmxJLz95czMLNAawiXhkps2aYTfj1r6GTg",
+      "from": "did:dht:exa4mz6dseqjj7eutxqbwjo8s89hpzmgb15g3so38jf3fnytr8xo",
+      "id": "order_01hp4cfynqe1v9trk27kytb1qp",
+      "exchangeId": "rfq_01hp4cfx3ze6psxws8wnx684dg",
+      "createdAt": "2024-02-08T12:53:43.765Z",
+      "externalId": "P_123456"
+    },
+    "data": {},
+    "signature": "eyJraWQiOiJkaWQ6ZGh0OmV4YTRtejZkc2Vxamo3ZXV0eHFid2pvOHM4OWhwem1nYjE1ZzNzbzM4amYzZm55dHI4eG8jMCIsImFsZyI6IkVkRFNBIn0..npnHsZB3fOTJF-91EYkZEFKRvsvYX5jKY2-ytfQmRiwbkRrLYWkHgtJyru4uAW524EZ_CN3ucHtcitOD8CQFAQ"
   },
   "error": false
 }
