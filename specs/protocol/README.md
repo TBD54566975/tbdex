@@ -237,7 +237,7 @@ A `Balance` is a protected resource used to communicate the amounts of each curr
 
 | field          | data type                         | required | description                                            |
 |----------------|-----------------------------------|----------|--------------------------------------------------------|
-| `currency` | string                            | Y        | ISO 3166 currency code string                          |
+| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
 | `available  `  | [`DecimalString`](#decimalstring) | Y        | The amount available to be transacted with |
 
 #### Example Balance
@@ -254,12 +254,12 @@ A `Balance` is a protected resource used to communicate the amounts of each curr
     "balances": [
       {
         /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
-        "currency": "USD", 
+        "currencyCode": "USD", 
         /** same format used to represent currency values across messages */
         "available": "400.00",
       },
       {
-        "currency": "MXN", 
+        "currencyCode": "MXN", 
         "available": "100.00",
       }
     ]

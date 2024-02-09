@@ -76,7 +76,7 @@ Version: Draft
     - [Query Params](#query-params-3)
   - [List Balances](#list-balances)
     - [Description](#description-4)
-    - [Authentication](#authentication-4)
+    - [Authentication](#protected-7)
     - [Endpoint](#endpoint-7)
     - [Response](#response-7)
     - [Example](#example-2)
@@ -508,7 +508,7 @@ True
   "data": [
     {
       /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
-      "currency": "USD", 
+      "currencyCode": "USD", 
       /** same format used to represent currency values across messages */
       "available": "400.00",
     }
