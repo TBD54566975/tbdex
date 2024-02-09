@@ -57,7 +57,9 @@ Version: Draft
 - [Additional Resources](#additional-resources)
 
 # Resources
-tbDEX Resources are published by PFIs for anyone to consume and generally used as a part of the discovery process. They are not part of the message exchange, i.e Alice cannot reply to a Resource.
+tbDEX Resources are published by PFIs and generally used as a part of the discovery process. They are not part of the message exchange, i.e Alice cannot reply to a Resource.
+
+There exist both publicly available and protected resources. Publicly available ones can be listed by any caller without authorization. Protected resources may only be accessible to specific DIDs. 
 
 ## Fields
 All tbdex resources are JSON objects which can include the following top-level properties:
@@ -225,6 +227,42 @@ Some payment methods should be consistent across PFIs and therefore have reserve
         }
       ]
     }
+  },
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2syc1QyZUtvQWdUUTdzWjY3YTdmRDMzR21jYzZ1UXdaYmlxeWF5Rk1hYkhHI3o2TWtrMnNUMmVLb0FnVFE3c1o2N2E3ZkQzM0dtY2M2dVF3WmJpcXlheUZNYWJIRyJ9..9EBTL3VcajsQzSNOm8GElhcwvYcFGaRp24FTwmC845RCF84Md-ZB-CxdCo7kEjzsAY8OaB55XFSH_8K9vedhAw"
+}
+```
+
+### `Balance`
+A `Balance` is a protected resource used to communicate the amounts of each currency held by the PFI on behalf of its customer.
+
+| field          | data type                         | required | description                                            |
+|----------------|-----------------------------------|----------|--------------------------------------------------------|
+| `currency` | string                            | Y        | ISO 3166 currency code string                          |
+| `available  `  | [`DecimalString`](#decimalstring) | Y        | The amount available to be transacted with |
+
+#### Example Balance
+```json
+{
+  "metadata": {
+    "from": "did:ex:pfi",
+    "kind": "balance",
+    "id": "balance_01ha82y8d0fhstg95hhfjwmgxf",
+    "createdAt": "2023-09-13T20:15:22.528Z",
+    "updatedAt": "2023-09-13T20:15:22.528Z"
+  },
+  "data": {
+    "balances": [
+      {
+        /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
+        "currency": "USD", 
+        /** same format used to represent currency values across messages */
+        "available": "400.00",
+      },
+      {
+        "currency": "MXN", 
+        "available": "100.00",
+      }
+    ]
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2syc1QyZUtvQWdUUTdzWjY3YTdmRDMzR21jYzZ1UXdaYmlxeWF5Rk1hYkhHI3o2TWtrMnNUMmVLb0FnVFE3c1o2N2E3ZkQzM0dtY2M2dVF3WmJpcXlheUZNYWJIRyJ9..9EBTL3VcajsQzSNOm8GElhcwvYcFGaRp24FTwmC845RCF84Md-ZB-CxdCo7kEjzsAY8OaB55XFSH_8K9vedhAw"
 }
@@ -626,6 +664,8 @@ Quick explanation of terms used.
 
 # Stored Balances
 Stored balances are assets or funds custodied by a PFI on behalf of a customer. They are relevant for PFIs which provide options for institutional top ups, or which are custodial. Supporting stored balances is entirely optional. The intent is to provide the ability for PFIs who choose to do so.
+
+If a PFI offers `STORED_BALANCE` as a payout kind, they MUST necessarily have a respective offering with`STORED_BALANCE` as a payin kind. 
 
 ## Top up stored balance
 A USD -> USDC institutional top-up offering could appear as:
