@@ -15,7 +15,7 @@
           "description": "An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
         }
       },
-      "required": ["kind", "paymentDetails"]
+      "required": ["kind"]
     }
   },
   "type": "object",
