@@ -118,7 +118,7 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | field                    | data type                               | required | description                                                                                       |
 |--------------------------|-----------------------------------------|----------|---------------------------------------------------------------------------------------------------|
 | `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
-| `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in order to use this payment method |
+| `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method. If `requiredPaymentDetails` is omitted, then the corresponding `paymentDetails` in the RFQ must also be omitted. |
 | `fee`                    | [`DecimalString`](#decimalstring)       | N        | The fee to use of this payment method                  |
 
 ##### Reserved `PaymentMethod`s
