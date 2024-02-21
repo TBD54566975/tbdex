@@ -281,7 +281,7 @@ An exchange is a series of linked tbDEX messages between Alice and a PFI for a s
 Submits an RFQ (Request For Quote). Alice is asking the PFI to provide a Quote so she can evaluate it.
 
 ### Endpoint
-`POST /exchanges/:exchange_id`
+`POST /exchanges`
 
 ### Authentication
 Refer to [Signature Verification Section]() of the tbDEX spec  
@@ -371,7 +371,7 @@ True
 Submits the Order. Alice wants to accept the Quote and execute the transaction.
 
 ### Endpoint
-`POST /exchanges/:exchange_id/order`
+`POST /exchanges/order`
 
 ### Protected
 False
@@ -401,7 +401,7 @@ False
 Closes the exchange. Indicates that Alice is no longer interested
 
 ### Endpoint
-`POST /exchanges/:exchange_id/close`
+`POST /exchanges/close`
 
 ### Protected
 False
