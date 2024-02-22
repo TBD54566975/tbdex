@@ -21,7 +21,7 @@ Each vector file must follow the schema in `vectors.json.schema`.
 5. Once you are confident that your test vector works as desired, open a PR against `tbdex`.
 
 ### Updating Existing Test Vectors
-You should update an existing test vector if and only if there is a backwards incompatible spec change. This should be rare. If this is not the case, you should generate a new test vector that captures the desired scenario. If you must update an existing test vector, follow similar steps to generating a new test vector.
+You should update an existing test vector if and only if there is a backwards incompatible spec change that must be reflected in the test vector. This should be rare. If this is not the case, you should generate a new test vector that captures the desired scenario. If you must update an existing test vector, follow similar steps to generating a new test vector.
 1. Use an implementation of TBDex that supports the desured scenario to create the `input`, `output`, and `error`.
 2. Validate the test vector structure.
   a. Set up with `cd hosted/test-vectors/protocol & npm install`.
