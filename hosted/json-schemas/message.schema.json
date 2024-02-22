@@ -34,9 +34,13 @@
         "createdAt": {
           "type": "string",
           "description": "ISO8601 formatted string representing the timestamp"
+        },
+        "protocolVersion": {
+          "type": "string",
+          "description": "Version of the protocol in use (x.x format)"
         }
       },
-      "required": ["from", "to", "kind", "id", "exchangeId", "createdAt"]
+      "required": ["from", "to", "kind", "id", "exchangeId", "createdAt", "protocolVersion"]
     },
     "Private": {
       "type": "object",

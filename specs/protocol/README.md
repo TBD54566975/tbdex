@@ -81,6 +81,7 @@ The `metadata` object contains fields _about_ the resource and is present in _ev
 | `id`        | Y              | The resource's ID                           |
 | `createdAt` | Y              | ISO 8601 timestamp                          |
 | `updatedAt` | N              | ISO 8601 timestamp                          |
+| `protocolVersion` | Y        | Version of the protocol in use (x.x format) |
 
 
 ### `data`
@@ -136,7 +137,8 @@ Some payment methods should be consistent across PFIs and therefore have reserve
     "from": "did:ex:pfi",
     "kind": "offering",
     "id": "offering_01ha82y8d0fhstg95hhfjwmgxf",
-    "createdAt": "2023-09-13T20:15:22.528Z"
+    "createdAt": "2023-09-13T20:15:22.528Z",
+    "protocolVersion": "1.0"
   },
   "data": {
     "description": "Selling BTC for USD",
@@ -248,7 +250,8 @@ A `Balance` is a protected resource used to communicate the amounts of each curr
     "kind": "balance",
     "id": "balance_01ha82y8d0fhstg95hhfjwmgxf",
     "createdAt": "2023-09-13T20:15:22.528Z",
-    "updatedAt": "2023-09-13T20:15:22.528Z"
+    "updatedAt": "2023-09-13T20:15:22.528Z",
+    "protocolVersion": "1.0"
   },
   "data": {
     "balances": [
@@ -299,7 +302,8 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 | `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                                           |
 | `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange                             |
 | `externalId` | N              | Arbitrary ID for the caller to associate with the message. Different messages in the same exchange can have different IDs |
-| `createdAt`  | Y              | ISO 8601                                                                                                                  |
+| `createdAt`  | Y              | ISO 8601                                                                                                   |
+| `protocolVersion` | Y        | Version of the protocol in use (x.x format)                                                                                          |
 
 
 ### `data`
@@ -389,7 +393,8 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
     "kind": "rfq",
     "id": "rfq_01ha835rhefwmagsknrrhvaa0k",
     "exchangeId": "rfq_01ha835rhefwmagsknrrhvaa0k",
-    "createdAt": "2023-09-13T20:19:28.430Z"
+    "createdAt": "2023-09-13T20:19:28.430Z",
+    "protocolVersion": "1.0"
   },
   "data": {
     "offeringId": "abcd123",
@@ -451,7 +456,8 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
     "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
     "kind": "close",
     "id": "close_03ha83trerk6t9tkg7q42s48j",
-    "createdAt": "2023-09-13T20:28:40.345Z"
+    "createdAt": "2023-09-13T20:28:40.345Z",
+    "protocolVersion": "1.0"
   },
   "data": {
     "reason": "Rejecting Quote"
@@ -493,7 +499,8 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
     "exchangeId": "rfq_01ha83f661fs2avj6qgdhxpg28",
     "kind": "quote",
     "id": "quote_01ha83f663e3e88fshb06h6g78",
-    "createdAt": "2023-09-13T20:24:37.315Z"
+    "createdAt": "2023-09-13T20:24:37.315Z",
+    "protocolVersion": "1.0"
   },
   "data": {
     "expiresAt": "2023-09-13T23:11:17.315Z",
@@ -521,7 +528,8 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
     "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
     "kind": "order",
     "id": "order_01ha83pkgsfk6t1kxg7q42s48j",
-    "createdAt": "2023-09-13T20:28:40.345Z"
+    "createdAt": "2023-09-13T20:28:40.345Z",
+    "protocolVersion": "1.0"
   },
   "data": {},
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
@@ -548,7 +556,8 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
     "exchangeId": "rfq_01ha83s5cmeecsm2qg7cvrc9hc",
     "kind": "orderstatus",
     "id": "orderstatus_01ha83s5crff3bmvq3t000cz91",
-    "createdAt": "2023-09-13T20:30:04.184Z"
+    "createdAt": "2023-09-13T20:30:04.184Z",
+    "protocolVersion": "1.0"
   },
   "data": {
     "orderStatus": "COMPLETED"
