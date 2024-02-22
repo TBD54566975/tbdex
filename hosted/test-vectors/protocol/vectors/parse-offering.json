@@ -1,12 +1,12 @@
 {
   "description": "Offering parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:abu39bcp7peyxkff8yz85kds4k4gpoizigkdcyqx3ozbyyiua6po\",\"kind\":\"offering\",\"id\":\"offering_01hpsc6akqfr1rhjjpt0efb3zq\",\"createdAt\":\"2024-02-16T16:32:31.351Z\"},\"data\":{\"description\":\"Selling BTC for USD\",\"payinCurrency\":{\"currencyCode\":\"USD\",\"minAmount\":\"0.0\",\"maxAmount\":\"999999.99\"},\"payoutCurrency\":{\"currencyCode\":\"BTC\",\"maxAmount\":\"999526.11\"},\"payoutUnitsPerPayinUnit\":\"0.00003826\",\"payinMethods\":[{\"kind\":\"DEBIT_CARD\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"type\":\"object\",\"properties\":{\"cardNumber\":{\"type\":\"string\",\"description\":\"The 16-digit debit card number\",\"minLength\":16,\"maxLength\":16},\"expiryDate\":{\"type\":\"string\",\"description\":\"The expiry date of the card in MM/YY format\",\"pattern\":\"^(0[1-9]|1[0-2])\\\\/([0-9]{2})$\"},\"cardHolderName\":{\"type\":\"string\",\"description\":\"Name of the cardholder as it appears on the card\"},\"cvv\":{\"type\":\"string\",\"description\":\"The 3-digit CVV code\",\"minLength\":3,\"maxLength\":3}},\"required\":[\"cardNumber\",\"expiryDate\",\"cardHolderName\",\"cvv\"],\"additionalProperties\":false}}],\"payoutMethods\":[{\"kind\":\"BTC_ADDRESS\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"type\":\"object\",\"properties\":{\"btcAddress\":{\"type\":\"string\",\"description\":\"your Bitcoin wallet address\"}},\"required\":[\"btcAddress\"],\"additionalProperties\":false}}],\"requiredClaims\":{\"id\":\"7ce4004c-3c38-4853-968b-e411bafcd945\",\"input_descriptors\":[{\"id\":\"bbdb9b7c-5754-4f46-b63b-590bada959e0\",\"constraints\":{\"fields\":[{\"path\":[\"$.type\"],\"filter\":{\"type\":\"string\",\"const\":\"YoloCredential\"}}]}}]}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6YWJ1MzliY3A3cGV5eGtmZjh5ejg1a2RzNGs0Z3BvaXppZ2tkY3lxeDNvemJ5eWl1YTZwbyMwIn0..yxDkTv6E7_O9AtXtmnPYZ5vVUm_vMmt82t8EBHVNY6q7xu2rDF10gXwzNK_Cje9v74xkKXlNpqXsKzuA1eqbCg\"}",
+  "input": "{\"metadata\":{\"from\":\"did:dht:it6qg6jy18fowfbw7pa4rbh8pc8xkoitf79ydh4361bmoi33rdio\",\"kind\":\"offering\",\"id\":\"offering_01hq9j192wfpdrmj802mgnzyqy\",\"createdAt\":\"2024-02-22T23:22:28.316Z\"},\"data\":{\"description\":\"Selling BTC for USD\",\"payinCurrency\":{\"currencyCode\":\"USD\",\"minAmount\":\"0.0\",\"maxAmount\":\"999999.99\"},\"payoutCurrency\":{\"currencyCode\":\"BTC\",\"maxAmount\":\"999526.11\"},\"payoutUnitsPerPayinUnit\":\"0.00003826\",\"payinMethods\":[{\"kind\":\"DEBIT_CARD\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"type\":\"object\",\"properties\":{\"cardNumber\":{\"type\":\"string\",\"description\":\"The 16-digit debit card number\",\"minLength\":16,\"maxLength\":16},\"expiryDate\":{\"type\":\"string\",\"description\":\"The expiry date of the card in MM/YY format\",\"pattern\":\"^(0[1-9]|1[0-2])\\\\/([0-9]{2})$\"},\"cardHolderName\":{\"type\":\"string\",\"description\":\"Name of the cardholder as it appears on the card\"},\"cvv\":{\"type\":\"string\",\"description\":\"The 3-digit CVV code\",\"minLength\":3,\"maxLength\":3}},\"required\":[\"cardNumber\",\"expiryDate\",\"cardHolderName\",\"cvv\"],\"additionalProperties\":false}}],\"payoutMethods\":[{\"kind\":\"BTC_ADDRESS\",\"requiredPaymentDetails\":{\"$schema\":\"http://json-schema.org/draft-07/schema\",\"type\":\"object\",\"properties\":{\"btcAddress\":{\"type\":\"string\",\"description\":\"your Bitcoin wallet address\"}},\"required\":[\"btcAddress\"],\"additionalProperties\":false}}],\"requiredClaims\":{\"id\":\"7ce4004c-3c38-4853-968b-e411bafcd945\",\"input_descriptors\":[{\"id\":\"bbdb9b7c-5754-4f46-b63b-590bada959e0\",\"constraints\":{\"fields\":[{\"path\":[\"$.type\"],\"filter\":{\"type\":\"string\",\"const\":\"YoloCredential\"}}]}}]}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6aXQ2cWc2ankxOGZvd2ZidzdwYTRyYmg4cGM4eGtvaXRmNzl5ZGg0MzYxYm1vaTMzcmRpbyMwIn0..NzRL_9YFxdMb-k1SpkL4uOccQCFLXIpoI626u6A_SPVFcCoWTlyi9H9PwlflVia63TcK0GB45f3zQetzwJiTAA\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:abu39bcp7peyxkff8yz85kds4k4gpoizigkdcyqx3ozbyyiua6po",
+      "from": "did:dht:it6qg6jy18fowfbw7pa4rbh8pc8xkoitf79ydh4361bmoi33rdio",
       "kind": "offering",
-      "id": "offering_01hpsc6akqfr1rhjjpt0efb3zq",
-      "createdAt": "2024-02-16T16:32:31.351Z"
+      "id": "offering_01hq9j192wfpdrmj802mgnzyqy",
+      "createdAt": "2024-02-22T23:22:28.316Z"
     },
     "data": {
       "description": "Selling BTC for USD",
@@ -100,7 +100,7 @@
         ]
       }
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6YWJ1MzliY3A3cGV5eGtmZjh5ejg1a2RzNGs0Z3BvaXppZ2tkY3lxeDNvemJ5eWl1YTZwbyMwIn0..yxDkTv6E7_O9AtXtmnPYZ5vVUm_vMmt82t8EBHVNY6q7xu2rDF10gXwzNK_Cje9v74xkKXlNpqXsKzuA1eqbCg"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6aXQ2cWc2ankxOGZvd2ZidzdwYTRyYmg4cGM4eGtvaXRmNzl5ZGg0MzYxYm1vaTMzcmRpbyMwIn0..NzRL_9YFxdMb-k1SpkL4uOccQCFLXIpoI626u6A_SPVFcCoWTlyi9H9PwlflVia63TcK0GB45f3zQetzwJiTAA"
   },
   "error": false
 }
