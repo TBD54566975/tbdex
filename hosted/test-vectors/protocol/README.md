@@ -17,5 +17,5 @@ Each vector file must follow the schema in `vectors.json.schema`.
 3. Validate the test vector structure.
   a. Set up with `cd hosted/test-vectors/protocol & npm install`.
   b. Run with `npm run validate-vectors`.
-4. Test the updated vectors against an implmentation of TBDex.
+4. Test the updated vectors against at least two implementations of TBDex.
 5. Once you are confident that your test vector works as desired, open a PR against `tbdex`.
