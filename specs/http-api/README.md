@@ -16,6 +16,7 @@ Version: Draft
 - [Error Responses](#error-responses)
   - [Error object](#error-object)
   - [Example](#example-1)
+- [Exceptions](#exceptions)
 - [Query Params](#query-params)
   - [Pagination](#pagination)
     - [Example](#example-2)
@@ -148,6 +149,24 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 }
 
 ```
+
+# Exceptions
+Custom exceptions are thrown in many scenarios as a way to provide more narrow and detailed information when the client encounters an error. 
+
+| Exception        | Description                                                | Typescript | Kotlin | Rust | Swift | 
+| ---------------- | ---------------------------------------------------------- | ---------- | ------ | ---- | ----- |
+| `RequestError`   | General error thrown when making HTTP requests.            | ✅         | ❌     | ❌    | ❌    |
+| `ResponseError`  | General error thrown when getting HTTP responses.          | ✅         | ❌     | ❌    | ❌    | 
+| `RequestTokenError`  | General error thrown for request token related issues. | ✅         | ❌     | ❌    | ❌    | 
+| `RequestTokenSigningError`  | Type of `RequestTokenError`. Thrown when a request token cannot be signed. | ✅         | ❌     | ❌    | ❌    |
+| `RequestTokenVerificationError`  | Type of `RequestTokenError`. Thrown when a request token cannot be verified. | ✅         | ❌     | ❌    | ❌    |
+| `RequestTokenMissingClaimsError` | Type of `RequestTokenError`. Thrown when a request token is missing required claims. | ✅         | ❌     | ❌    | ❌    |
+| `RequestTokenAudienceMismatchError`  | Type of `RequestTokenError`. Thrown when a request token aud does not match the PFI did for which its intended. | ✅         | ❌     | ❌    | ❌    |
+| `ValidationError`  | General error thrown when validating data.               | ✅         | ❌     | ❌    | ❌    |
+| `InvalidDidError`  | Type of `ValidationError`. Thrown when a DID is invalid. | ✅         | ❌     | ❌    | ❌    |
+| `MissingServiceEndpointError`  | Type of `ValidationError`. Thrown when a PFI's service endpoint can't be found. | ✅         | ❌     | ❌    | ❌    |
+
+
 # Query Params
 Query parameters, also known as query strings, are a way to send additional information to the server as part of a URL. They allow clients to provide specific input or customize the server's response. Query parameters typically follow the main URL and start with a `?` character. They consist of key-value pairs, and multiple pairs can be separated by `&` characters
 
