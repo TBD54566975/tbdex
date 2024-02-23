@@ -1,17 +1,17 @@
 {
   "description": "Quote parses from string",
-  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hq9j19rcf7pbkhjv1kgftwqe\",\"from\":\"did:dht:q1yw1kecr6n4ar7s6yyn31knyz8h96ouixrx4qamsjo4bfh4hp9o\",\"to\":\"did:ex:pfi\",\"kind\":\"quote\",\"id\":\"quote_01hq9j19rdej0ax9v64ck5bdw5\",\"createdAt\":\"2024-02-22T23:22:29.005Z\"},\"data\":{\"expiresAt\":\"2024-02-22T23:22:29.004Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6cTF5dzFrZWNyNm40YXI3czZ5eW4zMWtueXo4aDk2b3VpeHJ4NHFhbXNqbzRiZmg0aHA5byMwIn0..gz8f4doQ2hmoH0Rxr9IyZP6nRURK4N6bXcGoG3fVhjxiICPvT5yIwJcKwDbW_mweV-FUJjfQgV8WqFijvV9vDQ\"}",
+  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hq9qrb0xevgacr4f0sf28t8w\",\"from\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IlFjYmRfX1dCVVhBcFVvQlc5VU0yR1BGVzE1TTV6RUlGRWRSeU1Bb2dCWVEiLCJraWQiOiJnelhPWlZPWUFIUEloMVU1azM5ZUlYQkctRlhORXd4TDFyWGstX1ZxbVZvIiwiYWxnIjoiRWREU0EifQ\",\"to\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6Il93SUpQN2RRNjc0eXVCb1RMRUdhMlRsRUNQRzRYODZxX1IzaXpZY2piN2siLCJraWQiOiJQekpVZ3NheGVuZjkzTWgxdDFZYmxyX1phcGVuNm9LT04xVTVpM1h4dHhNIiwiYWxnIjoiRWREU0EifQ\",\"kind\":\"quote\",\"id\":\"quote_01hq9qrb0yes49xdcthkd4sw6b\",\"createdAt\":\"2024-02-23T01:02:26.846Z\"},\"data\":{\"expiresAt\":\"2024-02-23T01:02:26.845Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJbEZqWW1SZlgxZENWVmhCY0ZWdlFsYzVWVTB5UjFCR1Z6RTFUVFY2UlVsR1JXUlNlVTFCYjJkQ1dWRWlMQ0pyYVdRaU9pSm5lbGhQV2xaUFdVRklVRWxvTVZVMWF6TTVaVWxZUWtjdFJsaE9SWGQ0VERGeVdHc3RYMVp4YlZadklpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..RTkmSQGAjLExW2Li8Q0_i1OWLXRfFmm-3w9vKPfyzUlOfr5kmECe_aHaxXJTIu0T0yTI3EYosOblk9m6-75CBA\"}",
   "output": {
     "metadata": {
-      "exchangeId": "rfq_01hq9j19rcf7pbkhjv1kgftwqe",
-      "from": "did:dht:q1yw1kecr6n4ar7s6yyn31knyz8h96ouixrx4qamsjo4bfh4hp9o",
-      "to": "did:ex:pfi",
+      "exchangeId": "rfq_01hq9qrb0xevgacr4f0sf28t8w",
+      "from": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IlFjYmRfX1dCVVhBcFVvQlc5VU0yR1BGVzE1TTV6RUlGRWRSeU1Bb2dCWVEiLCJraWQiOiJnelhPWlZPWUFIUEloMVU1azM5ZUlYQkctRlhORXd4TDFyWGstX1ZxbVZvIiwiYWxnIjoiRWREU0EifQ",
+      "to": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6Il93SUpQN2RRNjc0eXVCb1RMRUdhMlRsRUNQRzRYODZxX1IzaXpZY2piN2siLCJraWQiOiJQekpVZ3NheGVuZjkzTWgxdDFZYmxyX1phcGVuNm9LT04xVTVpM1h4dHhNIiwiYWxnIjoiRWREU0EifQ",
       "kind": "quote",
-      "id": "quote_01hq9j19rdej0ax9v64ck5bdw5",
-      "createdAt": "2024-02-22T23:22:29.005Z"
+      "id": "quote_01hq9qrb0yes49xdcthkd4sw6b",
+      "createdAt": "2024-02-23T01:02:26.846Z"
     },
     "data": {
-      "expiresAt": "2024-02-22T23:22:29.004Z",
+      "expiresAt": "2024-02-23T01:02:26.845Z",
       "payin": {
         "currencyCode": "BTC",
         "amount": "0.01",
@@ -30,7 +30,7 @@
         }
       }
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6cTF5dzFrZWNyNm40YXI3czZ5eW4zMWtueXo4aDk2b3VpeHJ4NHFhbXNqbzRiZmg0aHA5byMwIn0..gz8f4doQ2hmoH0Rxr9IyZP6nRURK4N6bXcGoG3fVhjxiICPvT5yIwJcKwDbW_mweV-FUJjfQgV8WqFijvV9vDQ"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJbEZqWW1SZlgxZENWVmhCY0ZWdlFsYzVWVTB5UjFCR1Z6RTFUVFY2UlVsR1JXUlNlVTFCYjJkQ1dWRWlMQ0pyYVdRaU9pSm5lbGhQV2xaUFdVRklVRWxvTVZVMWF6TTVaVWxZUWtjdFJsaE9SWGQ0VERGeVdHc3RYMVp4YlZadklpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..RTkmSQGAjLExW2Li8Q0_i1OWLXRfFmm-3w9vKPfyzUlOfr5kmECe_aHaxXJTIu0T0yTI3EYosOblk9m6-75CBA"
   },
   "error": false
 }
