@@ -1,19 +1,19 @@
 {
   "description": "Close parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:jpawbsfppfttgowm5ue769zbcdqxs4fnhb41p1fm88mka3rmakzo\",\"to\":\"did:dht:8pxsusjqcbyiq41b9nh5tyj7iywue99t4ak3jjp1fcsnwk1m9p3o\",\"exchangeId\":\"rfq_01hq9qa0v0eb0tmxpsgkqfd3ky\",\"kind\":\"close\",\"id\":\"close_01hq9qa0v0eb0tmxpsgn8mj6vq\",\"createdAt\":\"2024-02-23T00:54:37.664Z\"},\"data\":{\"reason\":\"The reason for closing the exchange\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6anBhd2JzZnBwZnR0Z293bTV1ZTc2OXpiY2RxeHM0Zm5oYjQxcDFmbTg4bWthM3JtYWt6byMwIn0..QuxURbhTtkUjSESVfnao53xUw4xZuxj4gcEFQFqXWKTd1AuDDREvceOUMi_ayI8TibDkue7ZNYVhUqdq5kiKDw\"}",
+  "input": "{\"metadata\":{\"from\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IkJsbThUWHVXdHM3Q2doLU02T1RscV85cFhyUnVQWXNnUW5IOVNCdVY0R3MiLCJraWQiOiJIdWc3VlJpcnpoVWFFa3FMbGhhRExQak9rbENLbFd3ai1TNHV1aFF0cXdnIiwiYWxnIjoiRWREU0EifQ\",\"to\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IkRSZElOUEV0WGh1R1g2U0hEcHNBeHUtdUxvNmFYVmU1SUdlb1pnQmdwUG8iLCJraWQiOiJud0hCQ0t4aUZIZDZZZE5PQ2JSYVBEazhCMm1hQ2lQdWFxREQ0TDh5QVRJIiwiYWxnIjoiRWREU0EifQ\",\"exchangeId\":\"rfq_01hq9qrb10fr7sjrkc7enfmh48\",\"kind\":\"close\",\"id\":\"close_01hq9qrb10fr7sjrkc7g64p14b\",\"createdAt\":\"2024-02-23T01:02:26.848Z\"},\"data\":{\"reason\":\"The reason for closing the exchange\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJa0pzYlRoVVdIVlhkSE0zUTJkb0xVMDJUMVJzY1Y4NWNGaHlVblZRV1hOblVXNUlPVk5DZFZZMFIzTWlMQ0pyYVdRaU9pSklkV2MzVmxKcGNucG9WV0ZGYTNGTWJHaGhSRXhRYWs5cmJFTkxiRmQzYWkxVE5IVjFhRkYwY1hkbklpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..VIifj0FVBiQGk9fujYfcodaF6bsYwpU_1ohGWDqi1JoHtsJ3jqgdiWSZU2u6caDCHX4H48BBF9yHuNTmkPp_DQ\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:jpawbsfppfttgowm5ue769zbcdqxs4fnhb41p1fm88mka3rmakzo",
-      "to": "did:dht:8pxsusjqcbyiq41b9nh5tyj7iywue99t4ak3jjp1fcsnwk1m9p3o",
-      "exchangeId": "rfq_01hq9qa0v0eb0tmxpsgkqfd3ky",
+      "from": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IkJsbThUWHVXdHM3Q2doLU02T1RscV85cFhyUnVQWXNnUW5IOVNCdVY0R3MiLCJraWQiOiJIdWc3VlJpcnpoVWFFa3FMbGhhRExQak9rbENLbFd3ai1TNHV1aFF0cXdnIiwiYWxnIjoiRWREU0EifQ",
+      "to": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IkRSZElOUEV0WGh1R1g2U0hEcHNBeHUtdUxvNmFYVmU1SUdlb1pnQmdwUG8iLCJraWQiOiJud0hCQ0t4aUZIZDZZZE5PQ2JSYVBEazhCMm1hQ2lQdWFxREQ0TDh5QVRJIiwiYWxnIjoiRWREU0EifQ",
+      "exchangeId": "rfq_01hq9qrb10fr7sjrkc7enfmh48",
       "kind": "close",
-      "id": "close_01hq9qa0v0eb0tmxpsgn8mj6vq",
-      "createdAt": "2024-02-23T00:54:37.664Z"
+      "id": "close_01hq9qrb10fr7sjrkc7g64p14b",
+      "createdAt": "2024-02-23T01:02:26.848Z"
     },
     "data": {
       "reason": "The reason for closing the exchange"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6anBhd2JzZnBwZnR0Z293bTV1ZTc2OXpiY2RxeHM0Zm5oYjQxcDFmbTg4bWthM3JtYWt6byMwIn0..QuxURbhTtkUjSESVfnao53xUw4xZuxj4gcEFQFqXWKTd1AuDDREvceOUMi_ayI8TibDkue7ZNYVhUqdq5kiKDw"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJa0pzYlRoVVdIVlhkSE0zUTJkb0xVMDJUMVJzY1Y4NWNGaHlVblZRV1hOblVXNUlPVk5DZFZZMFIzTWlMQ0pyYVdRaU9pSklkV2MzVmxKcGNucG9WV0ZGYTNGTWJHaGhSRXhRYWs5cmJFTkxiRmQzYWkxVE5IVjFhRkYwY1hkbklpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..VIifj0FVBiQGk9fujYfcodaF6bsYwpU_1ohGWDqi1JoHtsJ3jqgdiWSZU2u6caDCHX4H48BBF9yHuNTmkPp_DQ"
   },
   "error": false
 }
