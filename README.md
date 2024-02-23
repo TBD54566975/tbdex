@@ -46,6 +46,9 @@ For information on the development process for this protocol, check out [sdk-dev
 * [Kotlin](https://github.com/TBD54566975/tbdex-kt) (work in progress)
 * [Example PFI implementation](https://github.com/TBD54566975/tbdex-pfi-exemplar/)
 
+### Tooling
+All projects (including the test vectors in this repo!) use hermit to manage tooling like node, gradle, etc. Hermit version pins and automatically downloads and installs tooling for a repo, including compiler toolchains, utilities, etc.See [this page](https://cashapp.github.io/hermit/usage/get-started/) to set up Hermit on your machine - make sure to download the open source build.
+
 ## Test Vectors
 Implementations are run against a common set of [test vectors](./hosted/test-vectors/). For more information about how test vectors are used, check out the [Test Vectors](https://github.com/TBD54566975/sdk-development#test-vectors) section of the `sdk-development` readme.
 
