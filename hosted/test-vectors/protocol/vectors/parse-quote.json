@@ -1,17 +1,17 @@
 {
   "description": "Quote parses from string",
-  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hq9qrb0xevgacr4f0sf28t8w\",\"from\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IlFjYmRfX1dCVVhBcFVvQlc5VU0yR1BGVzE1TTV6RUlGRWRSeU1Bb2dCWVEiLCJraWQiOiJnelhPWlZPWUFIUEloMVU1azM5ZUlYQkctRlhORXd4TDFyWGstX1ZxbVZvIiwiYWxnIjoiRWREU0EifQ\",\"to\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6Il93SUpQN2RRNjc0eXVCb1RMRUdhMlRsRUNQRzRYODZxX1IzaXpZY2piN2siLCJraWQiOiJQekpVZ3NheGVuZjkzTWgxdDFZYmxyX1phcGVuNm9LT04xVTVpM1h4dHhNIiwiYWxnIjoiRWREU0EifQ\",\"kind\":\"quote\",\"id\":\"quote_01hq9qrb0yes49xdcthkd4sw6b\",\"createdAt\":\"2024-02-23T01:02:26.846Z\"},\"data\":{\"expiresAt\":\"2024-02-23T01:02:26.845Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJbEZqWW1SZlgxZENWVmhCY0ZWdlFsYzVWVTB5UjFCR1Z6RTFUVFY2UlVsR1JXUlNlVTFCYjJkQ1dWRWlMQ0pyYVdRaU9pSm5lbGhQV2xaUFdVRklVRWxvTVZVMWF6TTVaVWxZUWtjdFJsaE9SWGQ0VERGeVdHc3RYMVp4YlZadklpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..RTkmSQGAjLExW2Li8Q0_i1OWLXRfFmm-3w9vKPfyzUlOfr5kmECe_aHaxXJTIu0T0yTI3EYosOblk9m6-75CBA\"}",
+  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hqf9etfffp5rv177n4bnkkkz\",\"from\":\"did:dht:1uh6jhzqsreubaunfcrmaqux5nq66hxm3fmj9wpt4w1zmpn6mzuy\",\"to\":\"did:dht:qo833wcry68i4hbpp6c5uegauamq1a4mrc8bp6z6dot5reou8x1o\",\"kind\":\"quote\",\"id\":\"quote_01hqf9etfffp5rv177n9byadmn\",\"createdAt\":\"2024-02-25T04:48:01.519Z\"},\"data\":{\"expiresAt\":\"2024-02-25T04:48:01.519Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6MXVoNmpoenFzcmV1YmF1bmZjcm1hcXV4NW5xNjZoeG0zZm1qOXdwdDR3MXptcG42bXp1eSMwIn0..ORNp3ooqguzpbi7t2kAhQxAu5Ss0J_DuFZ4TL4K5iMkR4wyASiF2Y5kSInkOED8hH3cpZ_2ZWQ47Pd4jUHd6Dw\"}",
   "output": {
     "metadata": {
-      "exchangeId": "rfq_01hq9qrb0xevgacr4f0sf28t8w",
-      "from": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IlFjYmRfX1dCVVhBcFVvQlc5VU0yR1BGVzE1TTV6RUlGRWRSeU1Bb2dCWVEiLCJraWQiOiJnelhPWlZPWUFIUEloMVU1azM5ZUlYQkctRlhORXd4TDFyWGstX1ZxbVZvIiwiYWxnIjoiRWREU0EifQ",
-      "to": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6Il93SUpQN2RRNjc0eXVCb1RMRUdhMlRsRUNQRzRYODZxX1IzaXpZY2piN2siLCJraWQiOiJQekpVZ3NheGVuZjkzTWgxdDFZYmxyX1phcGVuNm9LT04xVTVpM1h4dHhNIiwiYWxnIjoiRWREU0EifQ",
+      "exchangeId": "rfq_01hqf9etfffp5rv177n4bnkkkz",
+      "from": "did:dht:1uh6jhzqsreubaunfcrmaqux5nq66hxm3fmj9wpt4w1zmpn6mzuy",
+      "to": "did:dht:qo833wcry68i4hbpp6c5uegauamq1a4mrc8bp6z6dot5reou8x1o",
       "kind": "quote",
-      "id": "quote_01hq9qrb0yes49xdcthkd4sw6b",
-      "createdAt": "2024-02-23T01:02:26.846Z"
+      "id": "quote_01hqf9etfffp5rv177n9byadmn",
+      "createdAt": "2024-02-25T04:48:01.519Z"
     },
     "data": {
-      "expiresAt": "2024-02-23T01:02:26.845Z",
+      "expiresAt": "2024-02-25T04:48:01.519Z",
       "payin": {
         "currencyCode": "BTC",
         "amount": "0.01",
@@ -30,7 +30,7 @@
         }
       }
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJbEZqWW1SZlgxZENWVmhCY0ZWdlFsYzVWVTB5UjFCR1Z6RTFUVFY2UlVsR1JXUlNlVTFCYjJkQ1dWRWlMQ0pyYVdRaU9pSm5lbGhQV2xaUFdVRklVRWxvTVZVMWF6TTVaVWxZUWtjdFJsaE9SWGQ0VERGeVdHc3RYMVp4YlZadklpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..RTkmSQGAjLExW2Li8Q0_i1OWLXRfFmm-3w9vKPfyzUlOfr5kmECe_aHaxXJTIu0T0yTI3EYosOblk9m6-75CBA"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6MXVoNmpoenFzcmV1YmF1bmZjcm1hcXV4NW5xNjZoeG0zZm1qOXdwdDR3MXptcG42bXp1eSMwIn0..ORNp3ooqguzpbi7t2kAhQxAu5Ss0J_DuFZ4TL4K5iMkR4wyASiF2Y5kSInkOED8hH3cpZ_2ZWQ47Pd4jUHd6Dw"
   },
   "error": false
 }
