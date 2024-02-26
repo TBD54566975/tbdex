@@ -11,7 +11,7 @@
           "description": "The sender's DID"
         },
         "to": {
-          "$ref": "https://tbdex.dev/definitions.json#/definitions/did",
+          "$ref": "definitions.json#/definitions/did",
           "description": "The recipient's DID"
         },
         "kind": {
