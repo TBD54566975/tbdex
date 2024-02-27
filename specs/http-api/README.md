@@ -333,7 +333,7 @@ False
         "id": "rfq_01ha835rhefwmagsknrrhvaa0k",
         "exchangeId": "rfq_01ha835rhefwmagsknrrhvaa0k",
         "createdAt": "2023-09-13T20:19:28.430Z",
-        "protocolVersion": "1.0"
+        "protocol": "1.0"
       },
       "data": {
         "offeringId": "abcd123",
