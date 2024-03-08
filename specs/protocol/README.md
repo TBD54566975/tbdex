@@ -81,7 +81,7 @@ The `metadata` object contains fields _about_ the resource and is present in _ev
 | `id`        | Y              | The resource's ID                           |
 | `createdAt` | Y              | ISO 8601 timestamp                          |
 | `updatedAt` | N              | ISO 8601 timestamp                          |
-| `protocol` | Y        | Version of the protocol in use (x.x format). The protocol version must remain consistent across messages in a given exchange. Messages sharing the same `exchangeId` MUST also have the same `protocol` version. Protocol versions are tracked under [releases](https://github.com/TBD54566975/tbdex/releases) |
+| `protocol` | Y        | Version of the protocol in use (x.x format). The protocol version must remain consistent across messages in a given exchange. Messages sharing the same `exchangeId` MUST also have the same `protocol` version. Protocol versions are tracked in this repo |
 
 
 ### `data`
