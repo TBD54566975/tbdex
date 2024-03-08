@@ -1,20 +1,19 @@
 {
   "description": "Order Status parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:jum6g8u95w1wtwwkesf4zy6ytqkxqw6g1kddxao6zrzuykwh3ray\",\"to\":\"did:dht:zfwqxgwy7d87wa64c3zmn53673bzmjchrajjbysggu594889ct9o\",\"exchangeId\":\"rfq_01hr8ar99tf4xs9ttdmbc5qhty\",\"kind\":\"orderstatus\",\"id\":\"orderstatus_01hr8ar99vfskv27jg7nt5jpnt\",\"createdAt\":\"2024-03-05T22:11:40.987Z\",\"protocol\":\"0.8\"},\"data\":{\"orderStatus\":\"wee\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6anVtNmc4dTk1dzF3dHd3a2VzZjR6eTZ5dHFreHF3Nmcxa2RkeGFvNnpyenV5a3doM3JheSMwIn0..04xOLWzOuDaUVA9FJ2DXKA8HZy_ZagG2WstJ3j4cd3vVIsblqVeU2kXlG3LPGvohaNPHBqJKrGXBK7basXCfBg\"}",
+  "input": "{\"metadata\":{\"from\":\"did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IjN5cHJyeVNRQnVrY2dKanlGNHFnc2NrNUM1OTN1cmxsYTczc3Q5OUhPTFEiLCJraWQiOiJMVF94Uy1qUVdiQ3pBM2ZhT2FRZVFialAtM3pYVjJQY3A1cWtqQ2QxazcwIiwiYWxnIjoiRWREU0EifQ\",\"to\":\"did:ex:alice\",\"exchangeId\":\"abcd123\",\"kind\":\"orderstatus\",\"id\":\"orderstatus_01hpsc6ar0fadrfwcfz38qng31\",\"createdAt\":\"2024-02-16T16:32:31.488Z\"},\"data\":{\"orderStatus\":\"wee\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJak41Y0hKeWVWTlJRblZyWTJkS2FubEdOSEZuYzJOck5VTTFPVE4xY214c1lUY3pjM1E1T1VoUFRGRWlMQ0pyYVdRaU9pSk1WRjk0VXkxcVVWZGlRM3BCTTJaaFQyRlJaVkZpYWxBdE0zcFlWakpRWTNBMWNXdHFRMlF4YXpjd0lpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..rFR_aRgL5ySe-BOtBWnn9-MUiNru6hZrkus569AztjQbG26y4j9yYvOfzRIAVoqobiCi3T5qly5vMevaInVHDA\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:jum6g8u95w1wtwwkesf4zy6ytqkxqw6g1kddxao6zrzuykwh3ray",
-      "to": "did:dht:zfwqxgwy7d87wa64c3zmn53673bzmjchrajjbysggu594889ct9o",
-      "exchangeId": "rfq_01hr8ar99tf4xs9ttdmbc5qhty",
+      "from": "did:jwk:eyJjcnYiOiJFZDI1NTE5Iiwia3R5IjoiT0tQIiwieCI6IjN5cHJyeVNRQnVrY2dKanlGNHFnc2NrNUM1OTN1cmxsYTczc3Q5OUhPTFEiLCJraWQiOiJMVF94Uy1qUVdiQ3pBM2ZhT2FRZVFialAtM3pYVjJQY3A1cWtqQ2QxazcwIiwiYWxnIjoiRWREU0EifQ",
+      "to": "did:ex:alice",
+      "exchangeId": "abcd123",
       "kind": "orderstatus",
-      "id": "orderstatus_01hr8ar99vfskv27jg7nt5jpnt",
-      "createdAt": "2024-03-05T22:11:40.987Z",
-      "protocol": "0.8"
+      "id": "orderstatus_01hpsc6ar0fadrfwcfz38qng31",
+      "createdAt": "2024-02-16T16:32:31.488Z"
     },
     "data": {
       "orderStatus": "wee"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6anVtNmc4dTk1dzF3dHd3a2VzZjR6eTZ5dHFreHF3Nmcxa2RkeGFvNnpyenV5a3doM3JheSMwIn0..04xOLWzOuDaUVA9FJ2DXKA8HZy_ZagG2WstJ3j4cd3vVIsblqVeU2kXlG3LPGvohaNPHBqJKrGXBK7basXCfBg"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpGWkRJMU5URTVJaXdpYTNSNUlqb2lUMHRRSWl3aWVDSTZJak41Y0hKeWVWTlJRblZyWTJkS2FubEdOSEZuYzJOck5VTTFPVE4xY214c1lUY3pjM1E1T1VoUFRGRWlMQ0pyYVdRaU9pSk1WRjk0VXkxcVVWZGlRM3BCTTJaaFQyRlJaVkZpYWxBdE0zcFlWakpRWTNBMWNXdHFRMlF4YXpjd0lpd2lZV3huSWpvaVJXUkVVMEVpZlEjMCJ9..rFR_aRgL5ySe-BOtBWnn9-MUiNru6hZrkus569AztjQbG26y4j9yYvOfzRIAVoqobiCi3T5qly5vMevaInVHDA"
   },
   "error": false
 }

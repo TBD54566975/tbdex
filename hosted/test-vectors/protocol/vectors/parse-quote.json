@@ -1,18 +1,17 @@
 {
   "description": "Quote parses from string",
-  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hr8ar95kfrg93zn01azw6a4a\",\"from\":\"did:dht:dc3sogya1o9he7p1dk1zu1yx3i16kh1wh4ncx4g965d3rsdbutqy\",\"to\":\"did:dht:zfwqxgwy7d87wa64c3zmn53673bzmjchrajjbysggu594889ct9o\",\"kind\":\"quote\",\"id\":\"quote_01hr8ar95kfrg93zn01c7p4xbz\",\"createdAt\":\"2024-03-05T22:11:40.851Z\",\"protocol\":\"0.8\"},\"data\":{\"expiresAt\":\"2024-03-05T22:11:40.851Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6ZGMzc29neWExbzloZTdwMWRrMXp1MXl4M2kxNmtoMXdoNG5jeDRnOTY1ZDNyc2RidXRxeSMwIn0..6HZEE5FKkhRtTWQLduLNENbB9CU4xIa_lJvfODU7fWIIkWqoYwSqtZT1LYmR858LQ50aVTHTplK--b8CFNhgBw\"}",
+  "input": "{\"metadata\":{\"exchangeId\":\"rfq_01hpsc6aprerpaextx00tf9bjz\",\"from\":\"did:dht:9iezttmsuwb3djir3emu6s3kgbye4431dchnpq94h8f1dzkoyjso\",\"to\":\"did:ex:pfi\",\"kind\":\"quote\",\"id\":\"quote_01hpsc6aprerpaextx06a44hvy\",\"createdAt\":\"2024-02-16T16:32:31.448Z\"},\"data\":{\"expiresAt\":\"2024-02-16T16:32:31.448Z\",\"payin\":{\"currencyCode\":\"BTC\",\"amount\":\"0.01\",\"fee\":\"0.0001\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}},\"payout\":{\"currencyCode\":\"USD\",\"amount\":\"1000.00\",\"paymentInstruction\":{\"link\":\"tbdex.io/example\",\"instruction\":\"Fake instruction\"}}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6OWllenR0bXN1d2IzZGppcjNlbXU2czNrZ2J5ZTQ0MzFkY2hucHE5NGg4ZjFkemtveWpzbyMwIn0..T6ir72LeZ9RZDd1Ht8Y8Y1nXmaRWuM8veGco9-bcajQc9BX2lmNW2FiIy4afdRHRx6QwT27ub-Vuo2XMiKY1AQ\"}",
   "output": {
     "metadata": {
-      "exchangeId": "rfq_01hr8ar95kfrg93zn01azw6a4a",
-      "from": "did:dht:dc3sogya1o9he7p1dk1zu1yx3i16kh1wh4ncx4g965d3rsdbutqy",
-      "to": "did:dht:zfwqxgwy7d87wa64c3zmn53673bzmjchrajjbysggu594889ct9o",
+      "exchangeId": "rfq_01hpsc6aprerpaextx00tf9bjz",
+      "from": "did:dht:9iezttmsuwb3djir3emu6s3kgbye4431dchnpq94h8f1dzkoyjso",
+      "to": "did:ex:pfi",
       "kind": "quote",
-      "id": "quote_01hr8ar95kfrg93zn01c7p4xbz",
-      "createdAt": "2024-03-05T22:11:40.851Z",
-      "protocol": "0.8"
+      "id": "quote_01hpsc6aprerpaextx06a44hvy",
+      "createdAt": "2024-02-16T16:32:31.448Z"
     },
     "data": {
-      "expiresAt": "2024-03-05T22:11:40.851Z",
+      "expiresAt": "2024-02-16T16:32:31.448Z",
       "payin": {
         "currencyCode": "BTC",
         "amount": "0.01",
@@ -31,7 +30,7 @@
         }
       }
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6ZGMzc29neWExbzloZTdwMWRrMXp1MXl4M2kxNmtoMXdoNG5jeDRnOTY1ZDNyc2RidXRxeSMwIn0..6HZEE5FKkhRtTWQLduLNENbB9CU4xIa_lJvfODU7fWIIkWqoYwSqtZT1LYmR858LQ50aVTHTplK--b8CFNhgBw"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6OWllenR0bXN1d2IzZGppcjNlbXU2czNrZ2J5ZTQ0MzFkY2hucHE5NGg4ZjFkemtveWpzbyMwIn0..T6ir72LeZ9RZDd1Ht8Y8Y1nXmaRWuM8veGco9-bcajQc9BX2lmNW2FiIy4afdRHRx6QwT27ub-Vuo2XMiKY1AQ"
   },
   "error": false
 }
