@@ -35,6 +35,18 @@
           "type": "string",
           "description": "The type of payment method. e.g. BITCOIN_ADDRESS, DEBIT_CARD, etc."
         },
+        "name": {
+          "type": "string",
+          "description": "Payment Method name. Expected to be rendered on screen."
+        },
+        "description": {
+          "type": "string",
+          "description": "Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. \"segwit addresses only\""
+        },
+        "group": {
+          "type": "string",
+          "description": "value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit"
+        },
         "requiredPaymentDetails": {
           "type": "object",
           "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"

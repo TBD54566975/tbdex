@@ -23,7 +23,7 @@ Version: Draft
     - [`Offering`](#offering)
       - [`PaymentDetails`](#paymentdetails)
       - [`PaymentMethod`](#paymentmethod)
-        - [Reserved `PaymentMethod`s](#reserved-paymentmethods)
+        - [Reserved `PaymentMethod` Kinds](#reserved-paymentmethod-kinds)
       - [Example Offering](#example-offering)
     - [`Balance`](#balance)
       - [Example Balance](#example-balance)
@@ -125,13 +125,23 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `methods`      | [`PaymentMethod[]`](#paymentmethod) | Y        | A list of payment methods to select from               |
 
 #### `PaymentMethod`
-| field                    | data type                               | required | description                                                                                                                                                                                                                                               |
-| ------------------------ | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                                                                                                                                               |
-| `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method. If `requiredPaymentDetails` is omitted, then the corresponding `paymentDetails` in the RFQ must also be omitted. |
-| `fee`                    | [`DecimalString`](#decimalstring)       | N        | The fee to use of this payment method                                                                                                                                                                                                                     |
+| field                    | data type                               | required | description                                                                                                                                         |
+| ------------------------ | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                                         |
+| `name`                   | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
+| `description`            | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
+| `group`                  | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
+| `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
+| `fee`                    | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
 
-##### Reserved `PaymentMethod`s
+
+> [!IMPORTANT]
+> `kind` should be considered as a unique identifier that is used to _identify_ / _specify_ an individual payment method
+
+> [!IMPORTANT]
+> If `requiredPaymentDetails` is omitted, then any RFQs submitted for the respective offering must also omit `paymentDetails`. 
+
+##### Reserved `PaymentMethod` Kinds
 
 Some payment methods should be consistent across PFIs and therefore have reserved `kind` values. PFIs may provide, as a feature, stored balances, which are effectively the PFI custodying assets or funds on behalf of their customer. Customers can top up this balance and their transactions can draw against this balance. 
 
