@@ -21,9 +21,12 @@ Version: Draft
     - [`signature`](#signature)
   - [Resource Kinds](#resource-kinds)
     - [`Offering`](#offering)
-      - [`CurrencyDetails`](#currencydetails)
+      - [`PaymentDetails`](#paymentdetails)
       - [`PaymentMethod`](#paymentmethod)
-      - [Example](#example)
+        - [Reserved `PaymentMethod`s](#reserved-paymentmethods)
+      - [Example Offering](#example-offering)
+    - [`Balance`](#balance)
+      - [Example Balance](#example-balance)
     - [`Reputation`](#reputation)
 - [Messages](#messages)
   - [Fields](#fields-1)
@@ -34,14 +37,20 @@ Version: Draft
     - [`signature`](#signature-1)
   - [ID generation](#id-generation)
   - [Digest](#digest)
+  - [`DecimalString`](#decimalstring)
   - [Message Kinds](#message-kinds)
     - [`RFQ (Request For Quote)`](#rfq-request-for-quote)
-      - [`SelectedPaymentMethod`](#selectedpaymentmethod)
+      - [`SelectedPayinMethod`](#selectedpayinmethod)
+      - [`SelectedPayoutMethod`](#selectedpayoutmethod)
+      - [RFQ example](#rfq-example)
     - [`Close`](#close)
+      - [Example Close](#example-close)
     - [`Quote`](#quote)
       - [`QuoteDetails`](#quotedetails)
       - [`PaymentInstruction`](#paymentinstruction)
+      - [Example Quote](#example-quote)
     - [`Order`](#order)
+      - [Example Order](#example-order)
     - [`OrderStatus`](#orderstatus)
 - [Common Traits](#common-traits)
   - [ID Generation](#id-generation-1)
@@ -54,6 +63,8 @@ Version: Draft
 - [tbDEX conversation sequence](#tbdex-conversation-sequence)
 - [Jargon Decoder](#jargon-decoder)
 - [Stored Balances](#stored-balances)
+  - [Top up stored balance](#top-up-stored-balance)
+  - [Off ramp using stored balance](#off-ramp-using-stored-balance)
 - [Additional Resources](#additional-resources)
 
 # Resources
@@ -74,14 +85,14 @@ All tbdex resources are JSON objects which can include the following top-level p
 The `metadata` object contains fields _about_ the resource and is present in _every_ tbdex resource. 
 
 
-| Field       | Required (Y/N) | Description                                 |
-| ----------- | -------------- | ------------------------------------------- |
-| `from`      | Y              | The authors's DID                           |
-| `kind`      | Y              | the `data` property's type. e.g. `offering` |
-| `id`        | Y              | The resource's ID                           |
-| `createdAt` | Y              | ISO 8601 timestamp                          |
-| `updatedAt` | N              | ISO 8601 timestamp                          |
-| `protocol` | Y        | Version of the protocol in use (x.x format). The protocol version must remain consistent across messages in a given exchange. Messages sharing the same `exchangeId` MUST also have the same `protocol` version. Protocol versions are tracked in this repo |
+| Field       | Required (Y/N) | Description                                                                                                                                                                                                                                                 |
+| ----------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from`      | Y              | The authors's DID                                                                                                                                                                                                                                           |
+| `kind`      | Y              | the `data` property's type. e.g. `offering`                                                                                                                                                                                                                 |
+| `id`        | Y              | The resource's ID                                                                                                                                                                                                                                           |
+| `createdAt` | Y              | ISO 8601 timestamp                                                                                                                                                                                                                                          |
+| `updatedAt` | N              | ISO 8601 timestamp                                                                                                                                                                                                                                          |
+| `protocol`  | Y              | Version of the protocol in use (x.x format). The protocol version must remain consistent across messages in a given exchange. Messages sharing the same `exchangeId` MUST also have the same `protocol` version. Protocol versions are tracked in this repo |
 
 
 ### `data`
@@ -93,42 +104,40 @@ see [here](#signatures) for more details
 ## Resource Kinds
 
 ### `Offering`
-An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints in order to fulfill that offer.
+An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints needed fulfill that offer.
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the payin currency, and what payment methods I can use to pay you the payout currency."
 
-| field                     | data type                                                                                                | required | description                                                                                                                          |
-| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                                                                          |
-| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit                                                                              |
-| `payinCurrency`           | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is accepting as payment.                                                                     |
-| `payoutCurrency`          | [`CurrencyDetails`](#currencydetails)                                                                    | Y        | Details about the currency that the PFI is selling.                                                                                  |
-| `payinMethods`            | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to send payment to the PFI from in order to qualify for this offering. |
-| `payoutMethods`           | [`PaymentMethod[]`](#paymentmethod)                                                                      | Y        | A list of payment methods the counterparty (Alice) can choose to receive payment from the PFI in order to qualify for this offering. |
-| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Articulates the claim(s) required when submitting an RFQ for this offering.                                                          |                                                                                                                        |
+| field                     | data type                                                                                                | required | description                                                                 |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------- |
+| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                 |
+| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit                     |
+| `payin`                   | [`PaymentDetails`](#paymentdetails)                                                                      | Y        | Details and options associated to the _payin_ currency                      |
+| `payout`                  | [`PaymentDetails`](#paymentdetails)                                                                      | Y        | Details and options associated to the _payout_ currency                     |
+| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Articulates the claim(s) required when submitting an RFQ for this offering. |
 
-
-#### `CurrencyDetails`
-| field          | data type                         | required | description                                            |
-|----------------|-----------------------------------|----------|--------------------------------------------------------|
-| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
-| `minAmount  `  | [`DecimalString`](#decimalstring) | N        | Minimum amount of currency that the offer is valid for |
-| `maxAmount`    | [`DecimalString`](#decimalstring) | N        | Maximum amount of currency that the offer is valid for |
+#### `PaymentDetails`
+| field          | data type                           | required | description                                            |
+| -------------- | ----------------------------------- | -------- | ------------------------------------------------------ |
+| `currencyCode` | string                              | Y        | ISO 3166 currency code string                          |
+| `min`          | [`DecimalString`](#decimalstring)   | N        | Minimum amount of currency that the offer is valid for |
+| `max`          | [`DecimalString`](#decimalstring)   | N        | Maximum amount of currency that the offer is valid for |
+| `methods`      | [`PaymentMethod[]`](#paymentmethod) | Y        | A list of payment methods to select from               |
 
 #### `PaymentMethod`
-| field                    | data type                               | required | description                                                                                       |
-|--------------------------|-----------------------------------------|----------|---------------------------------------------------------------------------------------------------|
-| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
+| field                    | data type                               | required | description                                                                                                                                                                                                                                               |
+| ------------------------ | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                                                                                                                                               |
 | `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method. If `requiredPaymentDetails` is omitted, then the corresponding `paymentDetails` in the RFQ must also be omitted. |
-| `fee`                    | [`DecimalString`](#decimalstring)       | N        | The fee to use of this payment method                  |
+| `fee`                    | [`DecimalString`](#decimalstring)       | N        | The fee to use of this payment method                                                                                                                                                                                                                     |
 
 ##### Reserved `PaymentMethod`s
 
 Some payment methods should be consistent across PFIs and therefore have reserved `kind` values. PFIs may provide, as a feature, stored balances, which are effectively the PFI custodying assets or funds on behalf of their customer. Customers can top up this balance and their transactions can draw against this balance. 
 
-| kind           | description                                                                       |
-| ------------------------ | --------------------------------------------------------------------------------- | 
-| `STORED_BALANCE`| Represents a customer's balance with the PFI. See [Stored Balances](#stored-balances) for information on usage   |                                  
+| kind             | description                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- |
+| `STORED_BALANCE` | Represents a customer's balance with the PFI. See [Stored Balances](#stored-balances) for information on usage |
 
 #### Example Offering
 ```json
@@ -142,72 +151,72 @@ Some payment methods should be consistent across PFIs and therefore have reserve
   },
   "data": {
     "description": "Selling BTC for USD",
-    "payinCurrency": {
-      "currencyCode": "USD"
-    },
-    "payoutCurrency": {
-      "currencyCode": "BTC",
-      "maxAmount": "999526.11"
-    },
     "payoutUnitsPerPayinUnit": "0.00003826",
-    "payinMethods": [
-      {
-        "kind": "DEBIT_CARD",
-        "requiredPaymentDetails": {
-          "$schema": "http://json-schema.org/draft-07/schema",
-          "type": "object",
-          "properties": {
-            "cardNumber": {
-              "type": "string",
-              "description": "The 16-digit debit card number",
-              "minLength": 16,
-              "maxLength": 16
+    "payin": {
+      "currencyCode": "USD",
+      "methods": [
+        {
+          "kind": "DEBIT_CARD",
+          "requiredPaymentDetails": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "type": "object",
+            "properties": {
+              "cardNumber": {
+                "type": "string",
+                "description": "The 16-digit debit card number",
+                "minLength": 16,
+                "maxLength": 16
+              },
+              "expiryDate": {
+                "type": "string",
+                "description": "The expiry date of the card in MM/YY format",
+                "pattern": "^(0[1-9]|1[0-2])\\/([0-9]{2})$"
+              },
+              "cardHolderName": {
+                "type": "string",
+                "description": "Name of the cardholder as it appears on the card"
+              },
+              "cvv": {
+                "type": "string",
+                "description": "The 3-digit CVV code",
+                "minLength": 3,
+                "maxLength": 3
+              }
             },
-            "expiryDate": {
-              "type": "string",
-              "description": "The expiry date of the card in MM/YY format",
-              "pattern": "^(0[1-9]|1[0-2])\\/([0-9]{2})$"
-            },
-            "cardHolderName": {
-              "type": "string",
-              "description": "Name of the cardholder as it appears on the card"
-            },
-            "cvv": {
-              "type": "string",
-              "description": "The 3-digit CVV code",
-              "minLength": 3,
-              "maxLength": 3
-            }
-          },
-          "required": [
-            "cardNumber",
-            "expiryDate",
-            "cardHolderName",
-            "cvv"
-          ],
-          "additionalProperties": false
+            "required": [
+              "cardNumber",
+              "expiryDate",
+              "cardHolderName",
+              "cvv"
+            ],
+            "additionalProperties": false
+          }
         }
-      }
-    ],
-    "payoutMethods": [
-      {
-        "kind": "BTC_ADDRESS",
-        "requiredPaymentDetails": {
-          "$schema": "http://json-schema.org/draft-07/schema",
-          "type": "object",
-          "properties": {
-            "btcAddress": {
-              "type": "string",
-              "description": "your Bitcoin wallet address"
-            }
-          },
-          "required": [
-            "btcAddress"
-          ],
-          "additionalProperties": false
+      ]
+    },
+    "payout": {
+      "currencyCode": "BTC",
+      "max": "999526.11",
+      "methods": [
+        {
+          "kind": "BTC_ADDRESS",
+          "requiredPaymentDetails": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "type": "object",
+            "properties": {
+              "btcAddress": {
+                "type": "string",
+                "description": "your Bitcoin wallet address"
+              }
+            },
+            "required": [
+              "btcAddress"
+            ],
+            "additionalProperties": false
+          }
         }
-      }
-    ],
+      ]
+    },
     "requiredClaims": {
       "id": "7ce4004c-3c38-4853-968b-e411bafcd945",
       "input_descriptors": [
@@ -237,9 +246,9 @@ Some payment methods should be consistent across PFIs and therefore have reserve
 ### `Balance`
 A `Balance` is a protected resource used to communicate the amounts of each currency held by the PFI on behalf of its customer.
 
-| field          | data type                         | required | description                                            |
-|----------------|-----------------------------------|----------|--------------------------------------------------------|
-| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
+| field          | data type                         | required | description                                |
+| -------------- | --------------------------------- | -------- | ------------------------------------------ |
+| `currencyCode` | string                            | Y        | ISO 3166 currency code string              |
 | `available  `  | [`DecimalString`](#decimalstring) | Y        | The amount available to be transacted with |
 
 #### Example Balance
@@ -294,16 +303,16 @@ All tbdex messages are JSON objects which can include the following top-level pr
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
 
 
-| Field        | Required (Y/N) | Description                                                                                                               |
-| ------------ | -------------- | ----------------------------------------------------------------------------------------------                            |
-| `from`       | Y              | The sender's DID                                                                                                          |
-| `to`         | Y              | the recipient's DID                                                                                                       |
-| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                                         |
-| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                                           |
-| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange                             |
-| `externalId` | N              | Arbitrary ID for the caller to associate with the message. Different messages in the same exchange can have different IDs |
-| `createdAt`  | Y              | ISO 8601                                                                                                   |
-| `protocol` | Y        | Version of the protocol in use (x.x format). The protocol version must remain consistent across messages in a given exchange. Messages sharing the same `exchangeId` MUST also have the same `protocol` version. Protocol versions are tracked under [releases](https://github.com/TBD54566975/tbdex/releases)                                                                                    |
+| Field        | Required (Y/N) | Description                                                                                                                                                                                                                                                                                                    |
+| ------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from`       | Y              | The sender's DID                                                                                                                                                                                                                                                                                               |
+| `to`         | Y              | the recipient's DID                                                                                                                                                                                                                                                                                            |
+| `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                                                                                                                                                                                                                             |
+| `id`         | Y              | The message's ID. See [here](#id-generation-1) for more details                                                                                                                                                                                                                                                |
+| `exchangeId` | Y              | ID for a "exchange" of messages between Alice <-> PFI. Set by the first message in an exchange                                                                                                                                                                                                                 |
+| `externalId` | N              | Arbitrary ID for the caller to associate with the message. Different messages in the same exchange can have different IDs                                                                                                                                                                                      |
+| `createdAt`  | Y              | ISO 8601                                                                                                                                                                                                                                                                                                       |
+| `protocol`   | Y              | Version of the protocol in use (x.x format). The protocol version must remain consistent across messages in a given exchange. Messages sharing the same `exchangeId` MUST also have the same `protocol` version. Protocol versions are tracked under [releases](https://github.com/TBD54566975/tbdex/releases) |
 
 
 ### `data`
@@ -370,15 +379,21 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field          | data type                                         | required | description                                                                           |
-|----------------|---------------------------------------------------|----------|---------------------------------------------------------------------------------------|
-| `offeringId`   | string                                            | Y        | Offering which Alice would like to get a quote for                                    |
-| `payinAmount`  | [`DecimalString`](#decimalstring)                 | Y        | Amount of payin currency you want in exchange for payout currency                     |
-| `claims`       | string[]                                          | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
-| `payinMethod`  | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to send payin currency.                                  |
-| `payoutMethod` | [`SelectedPaymentMethod`](#selectedpaymentmethod) | Y        | Specify which payment method to receive payout currency.                              |
+| field        | data type                                        | required | description                                                                           |
+| ------------ | ------------------------------------------------ | -------- | ------------------------------------------------------------------------------------- |
+| `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for                                    |
+| `claims`     | string[]                                         | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                            |
+| `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                                   |
 
-#### `SelectedPaymentMethod`
+#### `SelectedPayinMethod`
+| field            | data type                         | required | description                                                                                       |
+| ---------------- | --------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `amount`         | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency                                 |
+| `kind`           | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
+| `paymentDetails` | object                            | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema |
+
+#### `SelectedPayoutMethod`
 | field            | data type | required | description                                                                                       |
 | ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `kind`           | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
@@ -398,21 +413,21 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
   },
   "data": {
     "offeringId": "abcd123",
-    "payinMethod": {
+    "payin": {
+      "amount": "200.00",
       "kind": "DEBIT_CARD",
       "paymentDetails": "<HASH_PRIVATE_PAYIN_METHOD_PAYMENT_DETAILS>"
     },
-    "payoutMethod": {
+    "payout": {
       "kind": "BTC_ADDRESS",
       "paymentDetails": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
     },
-    "payinAmount": "200.00",
     "claims": [
       "<HASH_PRIVATE_CLAIMS_0>"
     ]
   },
   "private": {
-    "payinMethod": {
+    "payin": {
       "paymentDetails": {
         "cardNumber": "1234567890123456",
         "expiryDate": "12/22",
@@ -420,7 +435,7 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
         "cvv": "123"
       }
     },
-    "payoutMethod": {
+    "payout": {
       "paymentDetails": {
         "btcAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
       }
@@ -469,16 +484,16 @@ a `Close` can be sent by Alice _or_ the PFI as a reply to an RFQ or a Quote. It 
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
-| field                 | data type                                     | required | description                                                                                               |
-| --------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| `expiresAt `          | datetime                                      | Y        | When this quote expires. Expressed as ISO8601                                                             |
-| `payin`               | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payin_ currency that the PFI will receive                                                  |
-| `payout`              | [`QuoteDetails`](#quotedetails)               | Y        | the amount of _payout_ currency that Alice will receive                                                   |
+| field        | data type                       | required | description                                              |
+| ------------ | ------------------------------- | -------- | -------------------------------------------------------- |
+| `expiresAt ` | datetime                        | Y        | When this quote expires. Expressed as ISO8601            |
+| `payin`      | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive |
+| `payout`     | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive  |
 
 
 #### `QuoteDetails`
 | field                | data type                                   | required | description                                                                                               |
-|----------------------|---------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------|
+| -------------------- | ------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
 | `currencyCode`       | string                                      | Y        | ISO 3166 currency code string                                                                             |
 | `amount`             | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid to the PFI or by the PFI excluding fees                                       |
 | `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount paid in fees                                                                                   |
