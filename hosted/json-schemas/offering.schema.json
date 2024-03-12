@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tbdex.dev/offering.schema.json",
   "definitions": {
-    "CurrencyDetails": {
+    "PaymentDetails": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -10,13 +10,19 @@
           "type": "string",
           "description": "ISO 3166 currency code string"
         },
-        "minAmount": {
+        "min": {
           "$ref": "definitions.json#/definitions/decimalString",
           "description": "Minimum amount of currency that can be requested"
         },
-        "maxAmount": {
+        "max": {
           "$ref": "definitions.json#/definitions/decimalString",
           "description": "Maximum amount of currency that can be requested"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PaymentMethod"
+          }
         }
       },
       "required": ["currencyCode"]
@@ -44,27 +50,15 @@
       "type": "string",
       "description": "Brief description of what is being offered."
     },
+    "payin": {
+      "$ref": "#/definitions/PaymentDetails"
+    },
+    "payout": {
+      "$ref": "#/definitions/PaymentDetails"
+    },
     "payoutUnitsPerPayinUnit": {
       "type": "string",
       "description": "Number of payout currency units for one payin currency unit (i.e 290000 USD for 1 BTC)"
-    },
-    "payinCurrency": {
-      "$ref": "#/definitions/CurrencyDetails"
-    },
-    "payoutCurrency": {
-      "$ref": "#/definitions/CurrencyDetails"
-    },
-    "payinMethods": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/PaymentMethod"
-      }
-    },
-    "payoutMethods": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/PaymentMethod"
-      }
     },
     "requiredClaims": {
       "type": "object",
@@ -73,10 +67,8 @@
   },
   "required": [
     "description",
-    "payoutUnitsPerPayinUnit",
-    "payinCurrency",
-    "payoutCurrency",
-    "payinMethods",
-    "payoutMethods"
+    "payin",
+    "payout",
+    "payoutUnitsPerPayinUnit"
   ]
 }
