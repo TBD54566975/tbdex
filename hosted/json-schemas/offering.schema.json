@@ -50,6 +50,18 @@
         "requiredPaymentDetails": {
           "type": "object",
           "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"
+        },
+        "min": {
+          "$ref": "definitions.json#/definitions/decimalString",
+          "description": "minimum amount required to use this payment method."
+        },
+        "max": {
+          "$ref": "definitions.json#/definitions/decimalString",
+          "description": "maximum amount allowed when using this payment method."
+        },
+        "fee": {
+          "$ref": "definitions.json#/definitions/decimalString",
+          "description": "Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method"
         }
       },
       "required": ["kind"]

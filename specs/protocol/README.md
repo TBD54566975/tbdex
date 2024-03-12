@@ -133,6 +133,12 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `group`                  | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
 | `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
 | `fee`                    | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
+| `min`                    | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
+| `max`                    | [`DecimalString`](#decimalstring)       | N        | maximum amount allowed when using this payment method.                                                                                              |
+
+
+> [!IMPORTANT]
+> the presence of `min` or `max` in a payment method takes precedence over `min` or `max` defined at the `PaymentDetails` level.
 
 
 > [!IMPORTANT]
