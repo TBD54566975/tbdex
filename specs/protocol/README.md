@@ -147,7 +147,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `max`                    | [`DecimalString`](#decimalstring)       | N        | maximum amount allowed when using this payment method.                                                                                              |
 
 > [!IMPORTANT]
-> `kind` should be considered as a unique identifier that is used to _identify_ / _specify_ an individual payment method
+> `kind` should be a unique identifier of an individual payment method
 
 > [!IMPORTANT]
 > the presence of `min` or `max` in a payment method takes precedence over `min` or `max` defined at the `PaymentDetails` level.
