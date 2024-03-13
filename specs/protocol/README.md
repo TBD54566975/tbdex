@@ -137,7 +137,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 #### `PayinMethod`
 | field                    | data type                               | required | description                                                                                                                                         |
 | ------------------------ | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`). considered to be a unique identifier                                   |
+| `kind`                   | string                                  | Y        | Unique string identifying a single kind of payment method i.e. (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                   |
 | `name`                   | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`            | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
 | `group`                  | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
