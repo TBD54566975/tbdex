@@ -106,7 +106,7 @@ see [here](#signatures) for more details
 ## Resource Kinds
 
 ### `Offering`
-An `Offering` is used by the PFI to describe a currency pair they have to _offer_ including the requirements, conditions, and constraints needed fulfill that offer.
+An `Offering` is a resource created by a PFI to define requirements for a given currency pair offered for exchange.
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the payin currency, and what payment methods I can use to pay you the payout currency."
 
