@@ -52,15 +52,15 @@
               },
               "min": {
                 "$ref": "definitions.json#/definitions/decimalString",
-                "description": "minimum amount required to use this payment method."
+                "description": "Minimum amount required to use this payment method."
               },
               "max": {
                 "$ref": "definitions.json#/definitions/decimalString",
-                "description": "maximum amount allowed when using this payment method."
+                "description": "Maximum amount allowed when using this payment method."
               },
               "fee": {
                 "$ref": "definitions.json#/definitions/decimalString",
-                "description": "Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method"
+                "description": "Fee charged to use this payment method. Absence of this field implies that there is no _additional_ fee associated to the respective payment method."
               }
             },
             "required": ["kind"]
@@ -105,7 +105,7 @@
               },
               "group": {
                 "type": "string",
-                "description": "value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit"
+                "description": "Value that can be used to group specific payment methods together (e.g. Mobile Money vs. Direct Bank Deposit)."
               },
               "requiredPaymentDetails": {
                 "type": "object",
@@ -113,11 +113,11 @@
               },
               "min": {
                 "$ref": "definitions.json#/definitions/decimalString",
-                "description": "minimum amount required to use this payment method."
+                "description": "Minimum amount required to use this payment method."
               },
               "max": {
                 "$ref": "definitions.json#/definitions/decimalString",
-                "description": "maximum amount allowed when using this payment method."
+                "description": "Maximum amount allowed when using this payment method."
               },
               "fee": {
                 "$ref": "definitions.json#/definitions/decimalString",
