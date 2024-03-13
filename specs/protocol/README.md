@@ -21,8 +21,10 @@ Version: Draft
     - [`signature`](#signature)
   - [Resource Kinds](#resource-kinds)
     - [`Offering`](#offering)
-      - [`PaymentDetails`](#paymentdetails)
-      - [`PaymentMethod`](#paymentmethod)
+      - [`PayinDetails`](#payindetails)
+      - [`PayoutDetails`](#payoutdetails)
+      - [`PayinMethod`](#payinmethod)
+      - [`PayoutMethod`](#payoutmethod)
         - [Reserved `PaymentMethod` Kinds](#reserved-paymentmethod-kinds)
       - [Example Offering](#example-offering)
     - [`Balance`](#balance)
@@ -112,22 +114,30 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------- |
 | `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                 |
 | `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit                     |
-| `payin`                   | [`PaymentDetails`](#paymentdetails)                                                                      | Y        | Details and options associated to the _payin_ currency                      |
-| `payout`                  | [`PaymentDetails`](#paymentdetails)                                                                      | Y        | Details and options associated to the _payout_ currency                     |
+| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency                      |
+| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency                     |
 | `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Articulates the claim(s) required when submitting an RFQ for this offering. |
 
-#### `PaymentDetails`
-| field          | data type                           | required | description                                            |
-| -------------- | ----------------------------------- | -------- | ------------------------------------------------------ |
-| `currencyCode` | string                              | Y        | ISO 3166 currency code string                          |
-| `min`          | [`DecimalString`](#decimalstring)   | N        | Minimum amount of currency that the offer is valid for |
-| `max`          | [`DecimalString`](#decimalstring)   | N        | Maximum amount of currency that the offer is valid for |
-| `methods`      | [`PaymentMethod[]`](#paymentmethod) | Y        | A list of payment methods to select from               |
+#### `PayinDetails`
+| field          | data type                         | required | description                                            |
+| -------------- | --------------------------------- | -------- | ------------------------------------------------------ |
+| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
+| `min`          | [`DecimalString`](#decimalstring) | N        | Minimum amount of currency that the offer is valid for |
+| `max`          | [`DecimalString`](#decimalstring) | N        | Maximum amount of currency that the offer is valid for |
+| `methods`      | [`PayinMethod[]`](#payinmethod)   | Y        | A list of payment methods to select from               |
 
-#### `PaymentMethod`
+#### `PayoutDetails`
+| field          | data type                         | required | description                                            |
+| -------------- | --------------------------------- | -------- | ------------------------------------------------------ |
+| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
+| `min`          | [`DecimalString`](#decimalstring) | N        | Minimum amount of currency that the offer is valid for |
+| `max`          | [`DecimalString`](#decimalstring) | N        | Maximum amount of currency that the offer is valid for |
+| `methods`      | [`PayoutMethod[]`](#payoutmethod) | Y        | A list of payment methods to select from               |
+
+#### `PayinMethod`
 | field                    | data type                               | required | description                                                                                                                                         |
 | ------------------------ | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                                                         |
+| `kind`                   | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`). considered to be a unique identifier                                   |
 | `name`                   | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`            | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
 | `group`                  | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
@@ -136,16 +146,32 @@ An `Offering` is used by the PFI to describe a currency pair they have to _offer
 | `min`                    | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
 | `max`                    | [`DecimalString`](#decimalstring)       | N        | maximum amount allowed when using this payment method.                                                                                              |
 
-
-> [!IMPORTANT]
-> the presence of `min` or `max` in a payment method takes precedence over `min` or `max` defined at the `PaymentDetails` level.
-
-
 > [!IMPORTANT]
 > `kind` should be considered as a unique identifier that is used to _identify_ / _specify_ an individual payment method
 
 > [!IMPORTANT]
+> the presence of `min` or `max` in a payment method takes precedence over `min` or `max` defined at the `PaymentDetails` level.
+
+> [!IMPORTANT]
 > If `requiredPaymentDetails` is omitted, then any RFQs submitted for the respective offering must also omit `paymentDetails`. 
+
+#### `PayoutMethod`
+| field                     | data type                               | required | description                                                                                                                                         |
+| ------------------------- | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`                    | string                                  | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`). considered to be a unique identifier                                   |
+| `estimatedSettlementTime` | uint                                    | Y        | estimated time taken to settle an order. expressed in seconds                                                                                       |
+| `name`                    | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
+| `description`             | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
+| `group`                   | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
+| `requiredPaymentDetails`  | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
+| `fee`                     | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
+| `min`                     | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
+| `max`                     | [`DecimalString`](#decimalstring)       | N        | maximum amount allowed when using this payment method.                                                                                              |
+
+
+> [!IMPORTANT]
+> `estimatedSettlementTime` is used to provide a rough estimate for the expected latency between receiving a _payin_ and settling the respective _payout_.
+> In simpler terms: "how much time would you estimate between receiving my payin and the payout landing where I specified?"
 
 ##### Reserved `PaymentMethod` Kinds
 
@@ -216,6 +242,7 @@ Some payment methods should be consistent across PFIs and therefore have reserve
       "methods": [
         {
           "kind": "BTC_ADDRESS",
+          "estimatedSettlementTime": 3600
           "requiredPaymentDetails": {
             "$schema": "http://json-schema.org/draft-07/schema",
             "type": "object",

@@ -1,8 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tbdex.dev/offering.schema.json",
-  "definitions": {
-    "PaymentDetails": {
+  "type": "object",
+  "properties": {
+    "additionalProperties": false,
+    "description": {
+      "type": "string",
+      "description": "Brief description of what is being offered."
+    },
+    "payin": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -21,64 +27,112 @@
         "methods": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PaymentMethod"
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "description": "The type of payment method. e.g. BITCOIN_ADDRESS, DEBIT_CARD, etc."
+              },
+              "name": {
+                "type": "string",
+                "description": "Payment Method name. Expected to be rendered on screen."
+              },
+              "description": {
+                "type": "string",
+                "description": "Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. \"segwit addresses only\""
+              },
+              "group": {
+                "type": "string",
+                "description": "value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit"
+              },
+              "requiredPaymentDetails": {
+                "type": "object",
+                "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"
+              },
+              "min": {
+                "$ref": "definitions.json#/definitions/decimalString",
+                "description": "minimum amount required to use this payment method."
+              },
+              "max": {
+                "$ref": "definitions.json#/definitions/decimalString",
+                "description": "maximum amount allowed when using this payment method."
+              },
+              "fee": {
+                "$ref": "definitions.json#/definitions/decimalString",
+                "description": "Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method"
+              }
+            },
+            "required": ["kind"]
           }
         }
       },
-      "required": ["currencyCode"]
+      "required": ["currencyCode", "methods"]
     },
-    "PaymentMethod": {
+    "payout": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "kind": {
+        "currencyCode": {
           "type": "string",
-          "description": "The type of payment method. e.g. BITCOIN_ADDRESS, DEBIT_CARD, etc."
-        },
-        "name": {
-          "type": "string",
-          "description": "Payment Method name. Expected to be rendered on screen."
-        },
-        "description": {
-          "type": "string",
-          "description": "Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. \"segwit addresses only\""
-        },
-        "group": {
-          "type": "string",
-          "description": "value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit"
-        },
-        "requiredPaymentDetails": {
-          "type": "object",
-          "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"
+          "description": "ISO 3166 currency code string"
         },
         "min": {
           "$ref": "definitions.json#/definitions/decimalString",
-          "description": "minimum amount required to use this payment method."
+          "description": "Minimum amount of currency that can be requested"
         },
         "max": {
           "$ref": "definitions.json#/definitions/decimalString",
-          "description": "maximum amount allowed when using this payment method."
+          "description": "Maximum amount of currency that can be requested"
         },
-        "fee": {
-          "$ref": "definitions.json#/definitions/decimalString",
-          "description": "Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method"
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "description": "The type of payment method. e.g. BITCOIN_ADDRESS, DEBIT_CARD, etc."
+              },
+              "name": {
+                "type": "string",
+                "description": "Payment Method name. Expected to be rendered on screen."
+              },
+              "description": {
+                "type": "string",
+                "description": "Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. \"segwit addresses only\""
+              },
+              "group": {
+                "type": "string",
+                "description": "value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit"
+              },
+              "requiredPaymentDetails": {
+                "type": "object",
+                "description": "A JSON Schema containing the fields that need to be collected in order to use this payment method"
+              },
+              "min": {
+                "$ref": "definitions.json#/definitions/decimalString",
+                "description": "minimum amount required to use this payment method."
+              },
+              "max": {
+                "$ref": "definitions.json#/definitions/decimalString",
+                "description": "maximum amount allowed when using this payment method."
+              },
+              "fee": {
+                "$ref": "definitions.json#/definitions/decimalString",
+                "description": "Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method"
+              },
+              "estimatedSettlementTime": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": ["kind", "estimatedSettlementTime"]
+          }
         }
       },
-      "required": ["kind"]
-    }
-  },
-  "type": "object",
-  "properties": {
-    "additionalProperties": false,
-    "description": {
-      "type": "string",
-      "description": "Brief description of what is being offered."
-    },
-    "payin": {
-      "$ref": "#/definitions/PaymentDetails"
-    },
-    "payout": {
-      "$ref": "#/definitions/PaymentDetails"
+      "required": ["currencyCode", "methods"]
     },
     "payoutUnitsPerPayinUnit": {
       "type": "string",
