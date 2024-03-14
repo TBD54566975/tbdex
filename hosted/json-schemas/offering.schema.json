@@ -44,7 +44,7 @@
               },
               "group": {
                 "type": "string",
-                "description": "value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit"
+                "description": "Value that can be used to group specific payment methods together (e.g. Mobile Money vs. Direct Bank Deposit)."
               },
               "requiredPaymentDetails": {
                 "type": "object",
