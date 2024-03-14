@@ -125,6 +125,7 @@
               },
               "estimatedSettlementTime": {
                 "type": "number",
+                "description": "Estimated time in seconds for the payout to be settled. e.g. 3600 for 1 hour. 0 for instant settlement.",
                 "minimum": 0
               }
             },
