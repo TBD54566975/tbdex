@@ -110,12 +110,12 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the payin currency, and what payment methods I can use to pay you the payout currency."
 
-| field                     | data type                                                                                                | required | description                                                                 |
-| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------- |
-| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                 |
-| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit                     |
-| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency                      |
-| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency                     |
+| field                     | data type                                                                                                | required | description                                                 |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------- |
+| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                 |
+| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit     |
+| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency      |
+| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency     |
 | `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering. |
 
 #### `PayinDetails`
@@ -137,7 +137,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 #### `PayinMethod`
 | field                    | data type                               | required | description                                                                                                                                         |
 | ------------------------ | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                   | string                                  | Y        | Unique string identifying a single kind of payment method i.e. (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                   |
+| `kind`                   | string                                  | Y        | Unique string identifying a single kind of payment method i.e. (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                 |
 | `name`                   | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`            | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
 | `group`                  | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
@@ -158,7 +158,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 #### `PayoutMethod`
 | field                     | data type                               | required | description                                                                                                                                         |
 | ------------------------- | --------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                    | string                                  | Y        | Unique string identifying a single kind of payment method i.e. (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                   |
+| `kind`                    | string                                  | Y        | Unique string identifying a single kind of payment method i.e. (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                 |
 | `estimatedSettlementTime` | uint                                    | Y        | estimated time taken to settle an order. expressed in seconds                                                                                       |
 | `name`                    | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`             | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
@@ -242,7 +242,7 @@ Some payment methods should be consistent across PFIs and therefore have reserve
       "methods": [
         {
           "kind": "BTC_ADDRESS",
-          "estimatedSettlementTime": 3600
+          "estimatedSettlementTime": 3600,
           "requiredPaymentDetails": {
             "$schema": "http://json-schema.org/draft-07/schema",
             "type": "object",
