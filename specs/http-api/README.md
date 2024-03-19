@@ -300,7 +300,7 @@ An exchange is a series of linked tbDEX messages between Alice and a PFI for a s
 Submits an RFQ (Request For Quote). Alice is asking the PFI to provide a Quote so she can evaluate it.
 
 ### Endpoint
-`POST /exchanges/:exchange_id`
+`POST /exchanges`
 
 ### Authentication
 Refer to [Signature Verification Section]() of the tbDEX spec  
@@ -385,43 +385,13 @@ True
 > See Order structure [here](../protocol/README.md#order)
 > See OrderStatus structure [here](../protocol/README.md#orderstatus)
 
-## Submit Order
-
-### Description
-Submits the Order. Alice wants to accept the Quote and execute the transaction.
-
-### Endpoint
-`POST /exchanges/:exchange_id/order`
-
-### Protected
-False
-
-### Order Request Body
-> [!IMPORTANT]
-> See Order structure [here](../protocol/README.md#order)
-
-
-### Response
-| Status             | Body                  |
-| ------------------ | --------------------- |
-| `202: Accepted`    | N/A                   |
-| `400: Bad Request` | `{ errors: Error[] }` |
-
-### Errors
-| Status | Description                                                               |
-| ------ | ------------------------------------------------------------------------- |
-| 400    | Failed Signature Check                                                    |
-| 404    | Exchange not found                                                        |
-| 409    | Order already exists                                                      |
-| 409    | Order not allowed (e.g. bc exchange was closed or bc no quote exists yet) |
-
-## Submit Close
+## Submit Order/Close
 
 ### Description
 Closes the exchange. Indicates that Alice is no longer interested
 
 ### Endpoint
-`POST /exchanges/:exchange_id/close`
+`PUT /exchanges/:exchange_id`
 
 ### Protected
 False
@@ -446,7 +416,7 @@ False
 
 ---
 
-## Get Exchange (DESCOPED)
+## Get Exchange
 
 ### Description
 Retrieves the messages specified by ID and messageType
