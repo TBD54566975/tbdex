@@ -1,0 +1,27 @@
+{
+  "description": "Balance parses from string",
+  "input": "{\"metadata\":{\"from\":\"did:dht:za3xy1bmyydr479qsippr1983qyow57wm36o87z8gu6fpxk554gy\",\"kind\":\"balance\",\"id\":\"balance_01hsh0y903e2svp0tr11jrmzjp\",\"createdAt\":\"2024-03-21T17:29:03.235Z\",\"protocol\":\"1.0\"},\"data\":{\"balances\":[{\"currencyCode\":\"USD\",\"available\":\"400.00\"},{\"currencyCode\":\"MXN\",\"available\":\"100.00\"}]},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6emEzeHkxYm15eWRyNDc5cXNpcHByMTk4M3F5b3c1N3dtMzZvODd6OGd1NmZweGs1NTRneSMwIn0..aNeU9IALOYPoHaKHoFVI55XJgnceDZuOXel2KlzwFcLND1HaWmyLJpFdzBMX8AgR2aloLo3w7qg0XH0mz0JQDw\"}",
+  "output": {
+    "metadata": {
+      "from": "did:dht:za3xy1bmyydr479qsippr1983qyow57wm36o87z8gu6fpxk554gy",
+      "kind": "balance",
+      "id": "balance_01hsh0y903e2svp0tr11jrmzjp",
+      "createdAt": "2024-03-21T17:29:03.235Z",
+      "protocol": "1.0"
+    },
+    "data": {
+      "balances": [
+        {
+          "currencyCode": "USD",
+          "available": "400.00"
+        },
+        {
+          "currencyCode": "MXN",
+          "available": "100.00"
+        }
+      ]
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6emEzeHkxYm15eWRyNDc5cXNpcHByMTk4M3F5b3c1N3dtMzZvODd6OGd1NmZweGs1NTRneSMwIn0..aNeU9IALOYPoHaKHoFVI55XJgnceDZuOXel2KlzwFcLND1HaWmyLJpFdzBMX8AgR2aloLo3w7qg0XH0mz0JQDw"
+  },
+  "error": false
+}
