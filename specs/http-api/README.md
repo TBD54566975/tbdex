@@ -284,10 +284,10 @@ False
 
 
 ### Response
-| Status             | Body                  |
-| ------------------ | --------------------- |
-| `200: OK`          | `Offering[]`          |
-| `400: Bad Request` | `{ errors: Error[] }` |
+| Status             | Body                   |
+| ------------------ | ---------------------- |
+| `200: OK`          | `{ data: Offering[] }` |
+| `400: Bad Request` | `{ errors: Error[] }`  |
 
 ---
 
