@@ -498,12 +498,12 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 
 A `Close` indicates a terminal state; no messages are valid after a `Close`. 
 
+A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, but a `Close` sent by Alice *after* an `Order` but does not guarantee the cancellation of an actively executing order. 
+
 | Field     | Data Type | Required | Description                                                  |
 | --------- | --------- | -------- | ------------------------------------------------------------ |
 | `reason`  | string    | N        | an explanation of why the exchange is being closed/completed |
 | `success` | boolean   | N        | indicates whether or not the exchange successfully completed |
-
-A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, but a `Close` sent by Alice *after* an `Order` but does not guarantee the cancellation of an actively executing order. 
 
 #### Example Close
 ```json
