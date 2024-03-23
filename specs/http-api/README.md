@@ -39,48 +39,44 @@ Version: Draft
   - [Create Exchange](#create-exchange)
     - [Description](#description-1)
     - [Endpoint](#endpoint-1)
+    - [Authentication](#authentication-1)
+    - [Authorization](#authorization)
     - [Protected](#protected-1)
     - [Request Body](#request-body)
+      - [`CreateExchangeRequest`](#createexchangerequest)
     - [Response](#response-1)
     - [Errors](#errors)
-  - [Get Quote/Order/OrderStatus](#get-quoteorderorderstatus)
+  - [Submit Order](#submit-order)
     - [Description](#description-2)
     - [Endpoint](#endpoint-2)
     - [Protected](#protected-2)
+    - [Order Request Body](#order-request-body)
     - [Response](#response-2)
-    - [Response Body](#response-body)
-  - [Submit Order](#submit-order)
+    - [Errors](#errors-1)
+  - [Submit Close](#submit-close)
     - [Description](#description-3)
     - [Endpoint](#endpoint-3)
     - [Protected](#protected-3)
-    - [Order Request Body](#order-request-body)
+    - [Request Body](#request-body-1)
     - [Response](#response-3)
-    - [Errors](#errors-1)
-  - [Submit Close](#submit-close)
+    - [Errors](#errors-2)
+  - [Get Exchange](#get-exchange)
     - [Description](#description-4)
     - [Endpoint](#endpoint-4)
     - [Protected](#protected-4)
-    - [Request Body](#request-body-1)
     - [Response](#response-4)
-    - [Errors](#errors-2)
-  - [Get Exchange (DESCOPED)](#get-exchange-descoped)
+  - [List Exchanges](#list-exchanges)
     - [Description](#description-5)
     - [Endpoint](#endpoint-5)
     - [Protected](#protected-5)
-    - [Query Params](#query-params-2)
     - [Response](#response-5)
-  - [List Exchanges](#list-exchanges)
-    - [Description](#description-6)
-    - [Endpoint](#endpoint-6)
-    - [Protected](#protected-6)
-    - [Response](#response-6)
-    - [Query Params](#query-params-3)
+    - [Query Params](#query-params-2)
   - [List Balances](#list-balances)
-    - [Description](#description-4)
-    - [Authentication](#protected-7)
-    - [Endpoint](#endpoint-7)
-    - [Response](#response-7)
-    - [Example](#example-2)
+    - [Description](#description-6)
+    - [Protected](#protected-6)
+    - [Endpoint](#endpoint-6)
+    - [Response](#response-6)
+      - [Example](#example-3)
 - [References](#references)
 
 # Discoverability
@@ -153,18 +149,18 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 # Exceptions
 Custom exceptions are thrown in many scenarios as a way to provide more narrow and detailed information when the client encounters an error. 
 
-| Exception        | Description                                                | Typescript | Kotlin | Rust | Swift | 
-| ---------------- | ---------------------------------------------------------- | ---------- | ------ | ---- | ----- |
-| `RequestError`   | General error thrown when making HTTP requests.            | ✅         | ❌     | ❌    | ❌    |
-| `ResponseError`  | General error thrown when getting HTTP responses.          | ✅         | ❌     | ❌    | ❌    | 
-| `RequestTokenError`  | General error thrown for request token related issues. | ✅         | ❌     | ❌    | ❌    | 
-| `RequestTokenSigningError`  | Type of `RequestTokenError`. Thrown when a request token cannot be signed. | ✅         | ❌     | ❌    | ❌    |
-| `RequestTokenVerificationError`  | Type of `RequestTokenError`. Thrown when a request token cannot be verified. | ✅         | ❌     | ❌    | ❌    |
-| `RequestTokenMissingClaimsError` | Type of `RequestTokenError`. Thrown when a request token is missing required claims. | ✅         | ❌     | ❌    | ❌    |
-| `RequestTokenAudienceMismatchError`  | Type of `RequestTokenError`. Thrown when a request token aud does not match the PFI did for which its intended. | ✅         | ❌     | ❌    | ❌    |
-| `ValidationError`  | General error thrown when validating data.               | ✅         | ❌     | ❌    | ❌    |
-| `InvalidDidError`  | Type of `ValidationError`. Thrown when a DID is invalid. | ✅         | ❌     | ❌    | ❌    |
-| `MissingServiceEndpointError`  | Type of `ValidationError`. Thrown when a PFI's service endpoint can't be found. | ✅         | ❌     | ❌    | ❌    |
+| Exception                           | Description                                                                                                     | Typescript | Kotlin | Rust | Swift |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------- | ------ | ---- | ----- |
+| `RequestError`                      | General error thrown when making HTTP requests.                                                                 | ✅          | ❌      | ❌    | ❌     |
+| `ResponseError`                     | General error thrown when getting HTTP responses.                                                               | ✅          | ❌      | ❌    | ❌     |
+| `RequestTokenError`                 | General error thrown for request token related issues.                                                          | ✅          | ❌      | ❌    | ❌     |
+| `RequestTokenSigningError`          | Type of `RequestTokenError`. Thrown when a request token cannot be signed.                                      | ✅          | ❌      | ❌    | ❌     |
+| `RequestTokenVerificationError`     | Type of `RequestTokenError`. Thrown when a request token cannot be verified.                                    | ✅          | ❌      | ❌    | ❌     |
+| `RequestTokenMissingClaimsError`    | Type of `RequestTokenError`. Thrown when a request token is missing required claims.                            | ✅          | ❌      | ❌    | ❌     |
+| `RequestTokenAudienceMismatchError` | Type of `RequestTokenError`. Thrown when a request token aud does not match the PFI did for which its intended. | ✅          | ❌      | ❌    | ❌     |
+| `ValidationError`                   | General error thrown when validating data.                                                                      | ✅          | ❌      | ❌    | ❌     |
+| `InvalidDidError`                   | Type of `ValidationError`. Thrown when a DID is invalid.                                                        | ✅          | ❌      | ❌    | ❌     |
+| `MissingServiceEndpointError`       | Type of `ValidationError`. Thrown when a PFI's service endpoint can't be found.                                 | ✅          | ❌      | ❌    | ❌     |
 
 
 # Query Params
@@ -225,11 +221,11 @@ The bearer token is a [JSON Web Token (JWT)](https://datatracker.ietf.org/doc/ht
 
 #### Header
 
-| Key                                                                  | Description                                                                                                                                                                                      |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`typ`](https://datatracker.ietf.org/doc/html/rfc7519#section-5.1)   | JWT. Setting `typ` to `JWT` as recommended by the JWT spec provides a means to disambiguate among different types of signatures and tokens.                                                      |
+| Key                                                                  | Description                                                                                                                                                                                     |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`typ`](https://datatracker.ietf.org/doc/html/rfc7519#section-5.1)   | JWT. Setting `typ` to `JWT` as recommended by the JWT spec provides a means to disambiguate among different types of signatures and tokens.                                                     |
 | [`kid`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.4) | Fully qualified [VerificationMethod ID](https://www.w3.org/TR/did-core/#verification-methods). Used to locate the DID Document verification method utilized to verify the integrity of the JWT. |
-| [`alg`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1) | Cryptographic algorithm used to compute the JWT signature.                                                                                                                                       |
+| [`alg`](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1) | Cryptographic algorithm used to compute the JWT signature.                                                                                                                                      |
 
 
 #### Claims Set
@@ -314,9 +310,9 @@ False
 ### Request Body
 
 #### `CreateExchangeRequest`
-| field            | data type | required | description                                                                                       |
-| ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `rfq`           | object    | Y        | The request for quote                       |
+| field     | data type | required | description                                                                  |
+| --------- | --------- | -------- | ---------------------------------------------------------------------------- |
+| `rfq`     | object    | Y        | The request for quote                                                        |
 | `replyTo` | string    | N        | A string containing a valid URI where new messages from the PFI will be sent |
 
 > [!IMPORTANT]
@@ -356,34 +352,11 @@ False
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description                  |
-| ------ | -----------------------------|
-| 400    | Validation error(s)          |
-| 400    | Failed Signature Check       |
-| 409    | Exchange already exists      |
-
-## Get Quote/Order/OrderStatus
-
-### Description
-Retrieve the desired tbdex message type given an exchangeId.
-
-### Endpoint
-`GET /exchanges/:exchange_id/?messageType=quote`
-
-### Protected
-True
-
-### Response
-| Status             | Body                                                |
-| ------------------ | --------------------------------------------------- |
-| `200: OK`          | `{ data: TbdexMessage<Quote/Order/OrderStatus>[] }` |
-| `400: Bad Request` | `{ errors: Error[] }`                               |
-
-### Response Body
-> [!IMPORTANT]
-> See Quote structure [here](../protocol/README.md#quote)
-> See Order structure [here](../protocol/README.md#order)
-> See OrderStatus structure [here](../protocol/README.md#orderstatus)
+| Status | Description             |
+| ------ | ----------------------- |
+| 400    | Validation error(s)     |
+| 400    | Failed Signature Check  |
+| 409    | Exchange already exists |
 
 ## Submit Order/Close
 
@@ -419,18 +392,13 @@ False
 ## Get Exchange
 
 ### Description
-Retrieves the messages specified by ID and messageType
+Retrieves all messages associated to a specific exchange
 
 ### Endpoint
 `GET /exchanges/:id`
 
 ### Protected
 True
-
-### Query Params
-| Param         | Description                   |
-| ------------- | ----------------------------- |
-| `messageType` | filters the messages returned |
 
 
 ### Response
@@ -447,7 +415,7 @@ True
 ## List Exchanges
 
 ### Description
-Returns an array of tbdex message arrays (a list of exchanges)
+Returns a list of exchange ids 
 
 ### Endpoint
 `GET /exchanges`
@@ -456,12 +424,12 @@ Returns an array of tbdex message arrays (a list of exchanges)
 True
 
 ### Response
-| Status             | Body                             |
-| ------------------ | -------------------------------- |
-| `200: OK.`         | `{ data: { TbdexMessage[][] } }` |
-| `400: Bad Request` | `{ errors: Error[] }`            |
-| `404: Not Found`   | N/A                              |
-| `403: Forbidden`   | N/A                              |
+| Status             | Body                     |
+| ------------------ | ------------------------ |
+| `200: OK.`         | `{ data: [id, id, id] }` |
+| `400: Bad Request` | `{ errors: Error[] }`    |
+| `404: Not Found`   | N/A                      |
+| `403: Forbidden`   | N/A                      |
 
 ### Query Params
 
@@ -484,12 +452,12 @@ True
 `GET /balances`
 
 ### Response
-| Status             | Body                                   |
-| ------------------ | -------------------------------------- |
+| Status             | Body                      |
+| ------------------ | ------------------------- |
 | `200: OK.     `    | `{ data: { Balance[] } }` |
-| `400: Bad Request` | `{ errors: Error[] }`                  |
-| `404: Not Found`   | N/A                                    |
-| `403: Forbidden`   | N/A                                    |
+| `400: Bad Request` | `{ errors: Error[] }`     |
+| `404: Not Found`   | N/A                       |
+| `403: Forbidden`   | N/A                       |
 
 #### Example
 
