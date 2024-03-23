@@ -486,26 +486,10 @@ True
 ### Response
 | Status             | Body                                   |
 | ------------------ | -------------------------------------- |
-| `200: OK.     `    | `{ data: { Balance[] } }` |
+| `200: OK.     `    | `{ data: { Balance[] } }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource|
 | `400: Bad Request` | `{ errors: Error[] }`                  |
 | `404: Not Found`   | N/A                                    |
 | `403: Forbidden`   | N/A                                    |
-
-#### Example
-
-```json
-{
-  "data": [
-    {
-      /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
-      "currencyCode": "USD", 
-      /** same format used to represent currency values across messages */
-      "available": "400.00",
-    }
-  ]
-}
-
-```
 
 # References
 * JSON:API spec: https://jsonapi.org/format/

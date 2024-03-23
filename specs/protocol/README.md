@@ -306,18 +306,10 @@ A `Balance` is a protected resource used to communicate the amounts of each curr
     "protocol": "1.0"
   },
   "data": {
-    "balances": [
-      {
-        /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
-        "currencyCode": "USD", 
-        /** same format used to represent currency values across messages */
-        "available": "400.00",
-      },
-      {
-        "currencyCode": "MXN", 
-        "available": "100.00",
-      }
-    ]
+    /** ISO 4217 currency code or widely adopted cryptocurrency code as string */
+    "currencyCode": "USD", 
+    /** same format used to represent currency values across messages */
+    "available": "400.00",
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2syc1QyZUtvQWdUUTdzWjY3YTdmRDMzR21jYzZ1UXdaYmlxeWF5Rk1hYkhHI3o2TWtrMnNUMmVLb0FnVFE3c1o2N2E3ZkQzM0dtY2M2dVF3WmJpcXlheUZNYWJIRyJ9..9EBTL3VcajsQzSNOm8GElhcwvYcFGaRp24FTwmC845RCF84Md-ZB-CxdCo7kEjzsAY8OaB55XFSH_8K9vedhAw"
 }
