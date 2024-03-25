@@ -486,7 +486,7 @@ True
 ### Response
 | Status             | Body                                   |
 | ------------------ | -------------------------------------- |
-| `200: OK.     `    | `{ data: { Balance[] } }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource|
+| `200: OK.     `    | `{ data: Balance[] }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource|
 | `400: Bad Request` | `{ errors: Error[] }`                  |
 | `404: Not Found`   | N/A                                    |
 | `403: Forbidden`   | N/A                                    |
