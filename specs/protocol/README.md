@@ -496,14 +496,12 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 
 > PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)" or "Your exchange is completed"
 
-A `Close` indicates a terminal state; no messages are valid after a `Close`. 
+A `Close` indicates a terminal state; no messages are valid after a `Close`. A `Close` can be created by Alice *prior-to* an `Order` but *not after*. A `Close` can be created by the PFI at any point during the exchange, wherein the `success` property is applicable *after* an `Order` where a `success` of `true` indicates a successful execution of the `Order` and a `success` of `false` indicates a failed execution of the `Order`.
 
-A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, but a `Close` sent by Alice *after* an `Order` but does not guarantee the cancellation of an actively executing order. 
-
-| Field     | Data Type | Required | Description                                                  |
-| --------- | --------- | -------- | ------------------------------------------------------------ |
-| `reason`  | string    | N        | an explanation of why the exchange is being closed/completed |
-| `success` | boolean   | N        | indicates whether or not the exchange successfully completed |
+| Field     | Data Type | Required | Description                                                                                      |
+| --------- | --------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `reason`  | string    | N        | an explanation of why the exchange is being closed/completed                                     |
+| `success` | boolean   | N        | indicates whether or not the exchange successfully completed, only valid when created by the PFI |
 
 #### Example Close
 ```json
