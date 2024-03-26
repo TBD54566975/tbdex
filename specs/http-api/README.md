@@ -272,7 +272,7 @@ False
 ### Query Params
 | Param              | Description                                                                                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `payinCurrency`     | The primary currency listed in a currency pair, representing the unit being traded. **This is the currency that Alice will be _receiving_**                        |
+| `payinCurrency`     | The payin unit of a given currency pair offered for exchange. **This is the currency that the PFI will be _receiving_**                        |
 | `payoutCurrency`    | The secondary currency listed in a currency pair, indicating its value in relation to the base currency. **This is the currency that the PFI will be _receiving_** |
 | `id`               | Query for a specific offering                                                                                                                                      |
 
