@@ -354,17 +354,14 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 The actual message content. This will _always_ be a JSON object. The [Message Kinds section](#message-kinds) specifies the content for each individual message type
 
 
-### `private`
-Often times, an RFQ will contain PII or PCI data either within the `credentials` being presented or within `paymentDetails` of `payinMethod` or `payoutMethod` (e.g. card details, phone numbers, full names etc). 
+### `privateData`
+Often times, an RFQ will contain PII or PCI data either within the `claims` being presented or within `paymentDetails` of `payin` or `payout` (e.g. card details, phone numbers, full names etc).
 
-In order to prevent storing this sensitive data with the message itself, the value of a property containing sensitive data can be a [hash](#Hashing) of the sensitive data. The actual sensitive data itself is included in the `private` field. 
+In order to prevent storing this sensitive data with the message itself, an RFQ may have property `privateData` which holds the raw values for certain fields, while the RFQ's `data` property holds salted hashes of the fields in `privateData`. `privateData` is NOT signed over, so the signature integrity of an RFQ can be verified even if `privateData` is not present. The hashed value is produced by creating a [digest](#digests) of a JSON array containing a salt and the cleartext value that appears in `privateData`. For example, to produce `Rfq.data.payin.paymentDetailsHash`, create a digest of `[salt, Rfq.privateData.payin.paymentDetails]`. The RECOMMENDED minimum length of the randomly-generated portion of the salt is 128 bits.
 
-The `private` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient
+Message kinds other than RFQ may NOT have property `privateData`. The [RFQ `privateData` section](#rfq-request-for-quote) specifies the content of RFQ `data` and `privateData`.
 
-The value of `private` **MUST** be a JSON object that matches the structure of `data`. The properties present within `private` **MUST** only be the properties of `data` that include the hash counterpart.
-
-> **Note**
-> Rationale behind the `private` JSON object matching the structure of `data` is to simplify programmatic hash evaluation using JSONPath to pluck the respective hash from `data`. **NOTE**: we should try this to make sure it's actually "easy"
+The `privateData` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient
 
 #### Example Usage in RFQ message
 
@@ -372,19 +369,19 @@ The value of `private` **MUST** be a JSON object that matches the structure of `
 {
   "data": {
     "offeringId": <OFFERING_ID>,
-    "payoutAmount": "STR_VALUE",
-    "claims": <PRESENTATION_SUBMISSION_HASH>, <---- hash
-    "payinMethod": {
+    "claimsHashes": [<PRESENTATION_SUBMISSION_HASH>], <---- hash
+    "payin": {
       "kind": "BTC_ADDRESS",
-      "paymentDetails": <OBJ_HASH> <---- hash
+      "amount": "STR_VALUE",
+      "paymentDetailsHash": <OBJ_HASH> <---- hash
     },
-    "payoutMethod": {
+    "payout": {
       "kind": "MOMO_MPESA",
-      "paymentDetails": <OBJ_HASH> <---- hash
+      "paymentDetailsHash": <OBJ_HASH> <---- hash
     }
   },
-  "private": {
-    "claims": <PRESENTATION_SUBMISSION>, <---- actual
+  "privateData": {
+    "claims": [<PRESENTATION_SUBMISSION>], <---- actual
     "payinMethod": {
       "paymentDetails": <OBJ> <---- actual
     },
@@ -414,25 +411,38 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field        | data type                                        | required | description                                                                           |
-| ------------ | ------------------------------------------------ | -------- | ------------------------------------------------------------------------------------- |
-| `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for                                    |
-| `claims`     | string[]                                         | Y        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
-| `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                            |
-| `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                                   |
+| field          | data type                                        | required | description                                                                |
+|----------------|--------------------------------------------------|----------|----------------------------------------------------------------------------|
+| `offeringId`   | string                                           | Y        | Offering which Alice would like to get a quote for                         |
+| `claimsHashes` | string[]                                         | Y        | an array of salted digests of the claims appearing in `privateDate.claims` |
+| `payin`        | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                 |
+| `payout`       | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                        |
 
 #### `SelectedPayinMethod`
-| field            | data type                         | required | description                                                                                       |
-| ---------------- | --------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `amount`         | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency                                 |
-| `kind`           | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
-| `paymentDetails` | object                            | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema |
+| field                | data type                         | required | description                                                                 |
+|----------------------|-----------------------------------|----------|-----------------------------------------------------------------------------|
+| `amount`             | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency           |
+| `kind`               | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`) |
+| `paymentDetailsHash` | string                            | N        | A salted digest of `privateData.payin.paymentDetails`                       |
 
 #### `SelectedPayoutMethod`
+| field                | data type | required | description                                                                 |
+|----------------------|-----------|----------|-----------------------------------------------------------------------------|
+| `kind`               | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`) |
+| `paymentDetailsHash` | object    | N        | A salted digest of `privateData.payout.paymentDetails`                       |
+
+#### `privateData`
+| field    | data type                                         | required | description                                                                           |
+|----------|---------------------------------------------------|----------|---------------------------------------------------------------------------------------|
+| `salt`   | string                                            | N        |                                                                                       |
+| `claims` | string[]                                          | N        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
+| `payin`  | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payin.paymentDetails`                                   |
+| `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                  |
+
+#### `PrivatePaymentDetails`
 | field            | data type | required | description                                                                                       |
 | ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `kind`           | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                       |
-| `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema |
+| `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema. If `data.payin/payout.paymentDetailsHash` is omitted, then `privateData.payin/payout.paymentDetails` respectively must also be omitted. |
 
 #### RFQ example
 ```json
@@ -451,17 +461,17 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
     "payin": {
       "amount": "200.00",
       "kind": "DEBIT_CARD",
-      "paymentDetails": "<HASH_PRIVATE_PAYIN_METHOD_PAYMENT_DETAILS>"
+      "paymentDetailsHash": "<HASH_PRIVATE_PAYIN_METHOD_PAYMENT_DETAILS>"
     },
     "payout": {
       "kind": "BTC_ADDRESS",
-      "paymentDetails": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
+      "paymentDetailsHash": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
     },
-    "claims": [
+    "claimsHashes": [
       "<HASH_PRIVATE_CLAIMS_0>"
     ]
   },
-  "private": {
+  "privateData": {
     "payin": {
       "paymentDetails": {
         "cardNumber": "1234567890123456",
@@ -479,7 +489,7 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
       "eyJhbGciOiJFZERTQSJ9.eyJpc3MiOiJkaWQ6a2V5Ono2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSIsInN1YiI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwidmMiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiIxNjk0NjM2MzY4NDI5IiwidHlwZSI6IllvbG9DcmVkZW50aWFsIiwiaXNzdWVyIjoiZGlkOmtleTp6Nk1rczRONVhkckU2VmllSnNnSDhTTVNSYXZtVG94NzRScW9yb1c3Ylp6QkxRQmkiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTA5LTEzVDIwOjE5OjI4LjQyOVoiLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpIiwiYmVlcCI6ImJvb3AifX19.cejevPPHPGhajd1oP4nfLpxRMKm801BzPdqjm9pQikaMEnh1WZXrap2j_kALZN_PCUddNtW1R_YY18UoERRJBw"
     ]
   },
-  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3M0TjVYZHJFNlZpZUpzZ0g4U01TUmF2bVRveDc0UnFvcm9XN2JaekJMUUJpI3o2TWtzNE41WGRyRTZWaWVKc2dIOFNNU1Jhdm1Ub3g3NFJxb3JvVzdiWnpCTFFCaSJ9..LpR3qNP6PiiACVQKdP68OqhZZY8MqNX96WFS6CzVzX7EgmSroY1WC_tAnQzOAI1pGofzoasEuU1-a2tUOyB_Cg"
+  "signature": "<SIGNATURE_OVER_METADATA_AND_DATA>"
 }
 ```
 

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tbdex.dev/rfq-private.schema.json",
+  "type": "object",
+  "properties": {
+    "additionalProperties": false,
+    "salt": {
+      "type": "string",
+      "description": "Randomly generated cryptographic salt used to hash privateData fields"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Presentation Submission that fulfills the requirements included in the respective Offering"
+    },
+    "payin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "paymentDetails": {
+          "type": "object",
+          "description": "An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
+        }
+      }
+    },
+    "payout": {
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "paymentDetails": {
+          "type": "object",
+          "description": "An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
+        }
+      }
+    }
+  }
+}
