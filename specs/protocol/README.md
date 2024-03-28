@@ -34,7 +34,7 @@ Version: Draft
   - [Fields](#fields-1)
     - [`metadata`](#metadata-1)
     - [`data`](#data-1)
-    - [`private`](#private)
+    - [`privateData`](#privatedata)
       - [Example Usage in RFQ message](#example-usage-in-rfq-message)
     - [`signature`](#signature-1)
   - [ID generation](#id-generation)
@@ -44,6 +44,8 @@ Version: Draft
     - [`RFQ (Request For Quote)`](#rfq-request-for-quote)
       - [`SelectedPayinMethod`](#selectedpayinmethod)
       - [`SelectedPayoutMethod`](#selectedpayoutmethod)
+      - [`privateData`](#privatedata-1)
+      - [`PrivatePaymentDetails`](#privatepaymentdetails)
       - [RFQ example](#rfq-example)
     - [`Close`](#close)
       - [Example Close](#example-close)
@@ -339,7 +341,7 @@ The `metadata` object contains fields _about_ the message and is present in _eve
 
 
 | Field        | Required (Y/N) | Description                                                                                                                                                                                                                                                                                                    |
-| ------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|--------------|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `from`       | Y              | The sender's DID                                                                                                                                                                                                                                                                                               |
 | `to`         | Y              | the recipient's DID                                                                                                                                                                                                                                                                                            |
 | `kind`       | Y              | e.g. `rfq`, `quote` etc. This defines the `data` property's _type_                                                                                                                                                                                                                                             |
@@ -355,13 +357,7 @@ The actual message content. This will _always_ be a JSON object. The [Message Ki
 
 
 ### `privateData`
-Often times, an RFQ will contain PII or PCI data either within the `claims` being presented or within `paymentDetails` of `payin` or `payout` (e.g. card details, phone numbers, full names etc).
-
-In order to prevent storing this sensitive data with the message itself, an RFQ may have property `privateData` which holds the raw values for certain fields, while the RFQ's `data` property holds salted hashes of the fields in `privateData`. `privateData` is NOT signed over, so the signature integrity of an RFQ can be verified even if `privateData` is not present. The hashed value is produced by creating a [digest](#digests) of a JSON array containing a salt and the cleartext value that appears in `privateData`. For example, to produce `Rfq.data.payin.paymentDetailsHash`, create a digest of `[salt, Rfq.privateData.payin.paymentDetails]`. The RECOMMENDED minimum length of the randomly-generated portion of the salt is 128 bits.
-
 Message kinds other than RFQ may NOT have property `privateData`. The [RFQ `privateData` section](#rfq-request-for-quote) specifies the content of RFQ `data` and `privateData`.
-
-The `privateData` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient
 
 #### Example Usage in RFQ message
 
@@ -411,27 +407,44 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field          | data type                                        | required | description                                                                |
-|----------------|--------------------------------------------------|----------|----------------------------------------------------------------------------|
-| `offeringId`   | string                                           | Y        | Offering which Alice would like to get a quote for                         |
-| `claimsHashes` | string[]                                         | Y        | an array of salted digests of the claims appearing in `privateDate.claims` |
-| `payin`        | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                 |
-| `payout`       | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                        |
+| field          | data type                                        | required | description                                                               |
+|----------------|--------------------------------------------------|----------|---------------------------------------------------------------------------|
+| `offeringId`   | string                                           | Y        | Offering which Alice would like to get a quote for                        |
+| `claimsHashes` | string[]                                         | Y        | an array of salted hashes of the claims appearing in `privateDate.claims` |
+| `payin`        | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                |
+| `payout`       | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                       |
 
 #### `SelectedPayinMethod`
 | field                | data type                         | required | description                                                                 |
 |----------------------|-----------------------------------|----------|-----------------------------------------------------------------------------|
 | `amount`             | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency           |
 | `kind`               | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`) |
-| `paymentDetailsHash` | string                            | N        | A salted digest of `privateData.payin.paymentDetails`                       |
+| `paymentDetailsHash` | string                            | N        | A salted hash of `privateData.payin.paymentDetails`                         |
 
 #### `SelectedPayoutMethod`
 | field                | data type | required | description                                                                 |
 |----------------------|-----------|----------|-----------------------------------------------------------------------------|
 | `kind`               | string    | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`) |
-| `paymentDetailsHash` | object    | N        | A salted digest of `privateData.payout.paymentDetails`                       |
+| `paymentDetailsHash` | object    | N        | A salted hash of `privateData.payout.paymentDetails`                        |
 
 #### `privateData`
+Often times, an RFQ will contain PII or PCI data either within the `claims` being presented or within `paymentDetails` of `payin` or `payout` (e.g. card details, phone numbers, full names etc).
+
+In order to prevent storing this sensitive data with the message itself, an RFQ may have property `privateData` which holds the raw values for certain fields, while the RFQ's `data` property holds salted hashes of the fields in `privateData`. `privateData` is NOT signed over, so the signature integrity of an RFQ can be verified even if `privateData` is not present.
+
+Each property in `privateData` has a corresponding property in `data` with the suffix `Hash` or `Hashes` if the value is an array. The salted hash of the property in `privateData` MUST match the value of the corresponding property in `data`. The following table enumerates all properties in `privateData` which have a corresponding property in `data`.
+
+| `privateData` property  | `data` property             | description                                                                                         |
+|-------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------|--|
+| `payin.paymentDetails`  | `payin.paymentDetailsHash`  | The salted hash of `payin.paymentDetails` must match `payin.paymentDetailsHash`.                    |
+| `payout.paymentDetails` | `payout.paymentDetailsHash` | The salted hash of `payout.paymentDetails` must match `payout.paymentDetailsHash`.                  |
+| `claims`                | `claimsHashes`              | The salted hash of each element in `claims` MUST match the corresponding element in `claimsHashes`. |
+
+The salted hash is produced by creating a [digest](#digests) of a JSON array containing a salt and the cleartext value that appears in `privateData`. For example, to produce `Rfq.data.payin.paymentDetailsHash`, create a digest of `[salt, Rfq.privateData.payin.paymentDetails]`. The RECOMMENDED minimum length of the randomly-generated portion of the salt is 128 bits. The salt is placed in `privateData.salt`. The salt MUST be present when `privateData` is present.
+
+The `privateData` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient.
+
+This table enumerates the structure of 
 | field    | data type                                         | required | description                                                                           |
 |----------|---------------------------------------------------|----------|---------------------------------------------------------------------------------------|
 | `salt`   | string                                            | N        |                                                                                       |
@@ -440,8 +453,8 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 | `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                  |
 
 #### `PrivatePaymentDetails`
-| field            | data type | required | description                                                                                       |
-| ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------- |
+| field            | data type | required | description                                                                                                                                                                                                                                |
+| ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema. If `data.payin/payout.paymentDetailsHash` is omitted, then `privateData.payin/payout.paymentDetails` respectively must also be omitted. |
 
 #### RFQ example
