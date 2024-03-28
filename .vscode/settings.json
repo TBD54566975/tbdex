@@ -1,0 +1,9 @@
+{
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "strings": "on",
+      "other": "on"
+    },
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  }
+}
