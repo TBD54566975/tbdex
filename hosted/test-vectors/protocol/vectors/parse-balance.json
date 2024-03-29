@@ -1,0 +1,19 @@
+{
+  "description": "Balance parses from string",
+  "input": "{\"metadata\":{\"from\":\"did:dht:t6gdbr4qs95b4j6pbdxe4rzp41am735pm9c65135gajusam9xx8o\",\"kind\":\"balance\",\"id\":\"balance_01ht38w02ae2kbhwbcakmnp8qb\",\"createdAt\":\"2024-03-28T19:33:56.938Z\",\"protocol\":\"1.0\"},\"data\":{\"currencyCode\":\"USD\",\"available\":\"400.00\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6dDZnZGJyNHFzOTViNGo2cGJkeGU0cnpwNDFhbTczNXBtOWM2NTEzNWdhanVzYW05eHg4byMwIn0..t-cVr4Djf9APYgEESNd4BO7DX6HMGd8KRzm_7sFP_oba4Ngh16BMagx_IBDcZJyeEKlUD51CdUy-ffJ4WWH_AQ\"}",
+  "output": {
+    "metadata": {
+      "from": "did:dht:t6gdbr4qs95b4j6pbdxe4rzp41am735pm9c65135gajusam9xx8o",
+      "kind": "balance",
+      "id": "balance_01ht38w02ae2kbhwbcakmnp8qb",
+      "createdAt": "2024-03-28T19:33:56.938Z",
+      "protocol": "1.0"
+    },
+    "data": {
+      "currencyCode": "USD",
+      "available": "400.00"
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6dDZnZGJyNHFzOTViNGo2cGJkeGU0cnpwNDFhbTczNXBtOWM2NTEzNWdhanVzYW05eHg4byMwIn0..t-cVr4Djf9APYgEESNd4BO7DX6HMGd8KRzm_7sFP_oba4Ngh16BMagx_IBDcZJyeEKlUD51CdUy-ffJ4WWH_AQ"
+  },
+  "error": false
+}

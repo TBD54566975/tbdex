@@ -269,14 +269,6 @@ Used to fetch offerings from a PFI
 ### Protected
 False
 
-### Query Params
-| Param              | Description                                                                                                                                                        |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `payinCurrency`     | The payin unit of a given currency pair offered for exchange. **This is the currency that the PFI will be _receiving_**                        |
-| `payoutCurrency`    | The payout unit of a given currency pair offered for exchange. **This is the currency that Alice will be _receiving_** |
-| `id`               | Query for a specific offering                                                                                                                                      |
-
-
 ### Response
 | Status             | Body                   |
 | ------------------ | ---------------------- |
