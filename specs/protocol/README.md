@@ -365,7 +365,7 @@ Message kinds other than RFQ may NOT have property `privateData`. The [RFQ `priv
 {
   "data": {
     "offeringId": <OFFERING_ID>,
-    "claimsHashes": [<PRESENTATION_SUBMISSION_HASH>], <---- hash
+    "claimsHashes": [<VERIFIABLE_CREDENTIAL_HASH>], <---- hash
     "payin": {
       "kind": "BTC_ADDRESS",
       "amount": "STR_VALUE",
@@ -377,7 +377,7 @@ Message kinds other than RFQ may NOT have property `privateData`. The [RFQ `priv
     }
   },
   "privateData": {
-    "claims": [<PRESENTATION_SUBMISSION>], <---- actual
+    "claims": [<VERIFIABLE_CREDENTIAL>], <---- actual
     "payinMethod": {
       "paymentDetails": <OBJ> <---- actual
     },
