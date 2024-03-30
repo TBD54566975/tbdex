@@ -8,12 +8,9 @@
       "type": "string",
       "description": "Offering which Alice would like to get a quote for"
     },
-    "claims": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Presentation Submission that fulfills the requirements included in the respective Offering"
+    "claimsHash": {
+      "type": "string",
+      "description": "Digests of Presentation Submissions that fulfills the requirements included in the respective Offering"
     },
     "payin": {
       "type": "object",
@@ -25,9 +22,9 @@
           "type": "string",
           "description": "Type of payment method e.g. BTC_ADDRESS, DEBIT_CARD, MOMO_MPESA"
         },
-        "paymentDetails": {
-          "type": "object",
-          "description": "An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
+        "paymentDetailsHash": {
+          "type": "string",
+          "description": "Digest of an object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
         }
       },
       "required": ["amount", "kind"]
@@ -39,13 +36,13 @@
           "type": "string",
           "description": "Selected payout method from the respective offering"
         },
-        "paymentDetails": {
-          "type": "object",
-          "description": "An object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
+        "paymentDetailsHash": {
+          "type": "string",
+          "description": "Digest of an object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
         }
       },
       "required": ["kind"]
     }
   },
-  "required": ["offeringId", "claims", "payin", "payout"]
+  "required": ["offeringId", "payin", "payout"]
 }
