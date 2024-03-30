@@ -8,11 +8,8 @@
       "type": "string",
       "description": "Offering which Alice would like to get a quote for"
     },
-    "claimsHashes": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
+    "claimsHash": {
+      "type": "string",
       "description": "Digests of Presentation Submissions that fulfills the requirements included in the respective Offering"
     },
     "payin": {
@@ -47,5 +44,5 @@
       "required": ["kind"]
     }
   },
-  "required": ["offeringId", "claimsHashes", "payin", "payout"]
+  "required": ["offeringId", "payin", "payout"]
 }
