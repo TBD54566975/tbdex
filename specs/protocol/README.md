@@ -365,7 +365,7 @@ Message kinds other than RFQ may NOT have property `privateData`. The [RFQ `priv
 {
   "data": {
     "offeringId": <OFFERING_ID>,
-    "claimsHashes": [<VERIFIABLE_CREDENTIAL_HASH>], <---- hash
+    "claimsHash": <VERIFIABLE_CREDENTIAL_HASH>, <---- hash
     "payin": {
       "kind": "BTC_ADDRESS",
       "amount": "STR_VALUE",
@@ -407,12 +407,12 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field          | data type                                        | required | description                                                               |
-|----------------|--------------------------------------------------|----------|---------------------------------------------------------------------------|
-| `offeringId`   | string                                           | Y        | Offering which Alice would like to get a quote for                        |
-| `claimsHashes` | string[]                                         | Y        | an array of salted hashes of the claims appearing in `privateDate.claims` |
-| `payin`        | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                |
-| `payout`       | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                       |
+| field        | data type                                        | required | description                                                 |
+|--------------|--------------------------------------------------|----------|-------------------------------------------------------------|
+| `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for          |
+| `claimsHash` | string[]                                         | Y        | Salted hash of the claims appearing in `privateDate.claims` |
+| `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                  |
+| `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                         |
 
 #### `SelectedPayinMethod`
 | field                | data type                         | required | description                                                                 |
@@ -432,13 +432,13 @@ Often times, an RFQ will contain PII or PCI data either within the `claims` bein
 
 In order to prevent storing this sensitive data with the message itself, an RFQ may have property `privateData` which holds the raw values for certain fields, while the RFQ's `data` property holds salted hashes of the fields in `privateData`. `privateData` is NOT signed over, so the signature integrity of an RFQ can be verified even if `privateData` is not present.
 
-Each property in `privateData` has a corresponding property in `data` with the suffix `Hash` or `Hashes` if the value is an array. The salted hash of the property in `privateData` MUST match the value of the corresponding property in `data`. The following table enumerates all properties in `privateData` which have a corresponding property in `data`.
+Each property in `privateData` has a corresponding property in `data` with the suffix `Hash`. The salted hash of the property in `privateData` MUST match the value of the corresponding property in `data`. The following table enumerates all properties in `privateData` which have a corresponding property in `data`.
 
 | `privateData` property  | `data` property             | description                                                                                         |
 |-------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------|--|
 | `payin.paymentDetails`  | `payin.paymentDetailsHash`  | The salted hash of `payin.paymentDetails` must match `payin.paymentDetailsHash`.                    |
 | `payout.paymentDetails` | `payout.paymentDetailsHash` | The salted hash of `payout.paymentDetails` must match `payout.paymentDetailsHash`.                  |
-| `claims`                | `claimsHashes`              | The salted hash of each element in `claims` MUST match the corresponding element in `claimsHashes`. |
+| `claims`                | `claimsHash`                | The salted hash of `claims` MUST match `claimsHash`.                                                |
 
 The salted hash is produced by creating a [digest](#digests) of a JSON array containing a salt and the cleartext value that appears in `privateData`. For example, to produce `Rfq.data.payin.paymentDetailsHash`, create a digest of `[salt, Rfq.privateData.payin.paymentDetails]`. The RECOMMENDED minimum length of the randomly-generated portion of the salt is 128 bits. The salt is placed in `privateData.salt`. The salt MUST be present when `privateData` is present.
 
@@ -480,9 +480,7 @@ This table enumerates the structure of
       "kind": "BTC_ADDRESS",
       "paymentDetailsHash": "<HASH_PRIVATE_PAYOUT_METHOD_PAYMENT_DETAILS>"
     },
-    "claimsHashes": [
-      "<HASH_PRIVATE_CLAIMS_0>"
-    ]
+    "claimsHash": "<HASH_PRIVATE_CLAIMS_0>"
   },
   "privateData": {
     "payin": {
