@@ -444,10 +444,10 @@ The salted hash is produced by creating a [digest](#digests) of a JSON array con
 
 The `privateData` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient.
 
-This table enumerates the structure of 
+This table enumerates the structure of `PrivateData` 
 | field    | data type                                         | required | description                                                                           |
 | -------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| `salt`   | string                                            | N        |                                                                                       |
+| `salt`   | string                                            | Y        | Randomly generated salt used for hashing PrivateData fields                           |
 | `claims` | string[]                                          | N        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
 | `payin`  | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payin.paymentDetails`                                   |
 | `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                  |
