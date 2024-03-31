@@ -377,6 +377,7 @@ Message kinds other than RFQ may NOT have property `privateData`. The [RFQ `priv
     }
   },
   "privateData": {
+    "salt": "1234567890",
     "claims": [<VERIFIABLE_CREDENTIAL>], <---- actual
     "payinMethod": {
       "paymentDetails": <OBJ> <---- actual
@@ -483,6 +484,7 @@ This table enumerates the structure of `PrivateData`
     "claimsHash": "<HASH_PRIVATE_CLAIMS_0>"
   },
   "privateData": {
+    "salt": "1234567890",
     "payin": {
       "paymentDetails": {
         "cardNumber": "1234567890123456",
