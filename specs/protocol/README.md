@@ -411,7 +411,7 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 | field        | data type                                        | required | description                                                 |
 | ------------ | ------------------------------------------------ | -------- | ----------------------------------------------------------- |
 | `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for          |
-| `claimsHash` | string[]                                         | Y        | Salted hash of the claims appearing in `privateDate.claims` |
+| `claimsHash` | string[]                                         | Y        | Salted hash of the claims appearing in `privateData.claims` |
 | `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                  |
 | `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                         |
 
