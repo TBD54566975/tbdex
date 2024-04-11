@@ -408,19 +408,19 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 ### `RFQ (Request For Quote)`
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
-| field        | data type                                        | required | description                                                 |
-| ------------ | ------------------------------------------------ | -------- | ----------------------------------------------------------- |
-| `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for          |
-| `claimsHash` | string[]                                         | Y        | Salted hash of the claims appearing in `privateData.claims` |
-| `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                  |
-| `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                         |
+| field        | data type                                        | required | description                                                                                                                                                              |
+|--------------|--------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for                                                                                                                       |
+| `claimsHash` | string                                           | N        | Salted hash of the list the claims appearing in `privateData.claims`. Omit `claimsHash` to denote that the RFQ contains no claims, i.e. `privateData.claims` is omitted. |
+| `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                                                                                                               |
+| `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                                                                                                                      |
 
 #### `SelectedPayinMethod`
 | field                | data type                         | required | description                                                                 |
 | -------------------- | --------------------------------- | -------- | --------------------------------------------------------------------------- |
 | `amount`             | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency           |
 | `kind`               | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`) |
-| `paymentDetailsHash` | string                            | N        | A salted hash of `privateData.payin.paymentDetails`                         |
+| `paymentDetailsHash` | string                            | N        | A salted hash of `privateData.payin.paymentDetails`. Omit `paymentDetailsHash` when there are no payment details.                         |
 
 #### `SelectedPayoutMethod`
 | field                | data type | required | description                                                                 |
@@ -435,23 +435,23 @@ In order to prevent storing this sensitive data with the message itself, an RFQ 
 
 Each property in `privateData` has a corresponding property in `data` with the suffix `Hash`. The salted hash of the property in `privateData` MUST match the value of the corresponding property in `data`. The following table enumerates all properties in `privateData` which have a corresponding property in `data`.
 
-| `privateData` property  | `data` property             | description                                                                        |
-| ----------------------- | --------------------------- | ---------------------------------------------------------------------------------- |
-| `payin.paymentDetails`  | `payin.paymentDetailsHash`  | The salted hash of `payin.paymentDetails` must match `payin.paymentDetailsHash`.   |
-| `payout.paymentDetails` | `payout.paymentDetailsHash` | The salted hash of `payout.paymentDetails` must match `payout.paymentDetailsHash`. |
-| `claims`                | `claimsHash`                | The salted hash of `claims` MUST match `claimsHash`.                               |
+| `privateData` property  | `data` property             | description                                                                                                                                                                                                                     |
+|-------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `payin.paymentDetails`  | `payin.paymentDetailsHash`  | The salted hash of `payin.paymentDetails` must match `payin.paymentDetailsHash`, unless `payint.paymentDetailsHash` is omitted. If `payin.paymentDetailsHash` is omitted, then `payin.paymentDetails` must also be omitted.     |
+| `payout.paymentDetails` | `payout.paymentDetailsHash` | The salted hash of `payout.paymentDetails` must match `payout.paymentDetailsHash`, unless `payout.paymentDetailsHash` is omitted. If `payout.paymentDetailsHash` is omitted, then `payout.paymentDetails` must also be omitted. |
+| `claims`                | `claimsHash`                | The salted hash of `claims` MUST match `claimsHash`, unless `claimsHash` is omitted. If `claimsHash` is omitted, then `claims` must also be omitted.                                                                            |
 
 The salted hash is produced by creating a [digest](#digests) of a JSON array containing a salt and the cleartext value that appears in `privateData`. For example, to produce `Rfq.data.payin.paymentDetailsHash`, create a digest of `[salt, Rfq.privateData.payin.paymentDetails]`. The RECOMMENDED minimum length of the randomly-generated portion of the salt is 128 bits. The salt is placed in `privateData.salt`. The salt MUST be present when `privateData` is present.
 
 The `privateData` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient.
 
 This table enumerates the structure of `PrivateData` 
-| field    | data type                                         | required | description                                                                           |
-| -------- | ------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| `salt`   | string                                            | Y        | Randomly generated salt used for hashing PrivateData fields                           |
-| `claims` | string[]                                          | N        | an array of claims that fulfill the requirements declared in an [Offering](#offering) |
-| `payin`  | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payin.paymentDetails`                                   |
-| `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                  |
+| field    | data type                                         | required | description                                                                                                                                                                                                                                                                                            |
+|----------|---------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `salt`   | string                                            | Y        | Randomly generated salt used for hashing PrivateData fields                                                                                                                                                                                                                                            |
+| `claims` | string[]                                          | N        | an array of claims that fulfill the requirements declared in an [Offering](#offering). If the creator of the RFQ wants to include no claims, then `claims` MUST be omitted rather than being an empty list. |
+| `payin`  | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payin.paymentDetails`                                                                                                                                                                                                                                                    |
+| `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                                                                                                                                                                                                                                   |
 
 #### `PrivatePaymentDetails`
 | field            | data type | required | description                                                                                                                                                                                                                                |
