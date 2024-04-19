@@ -123,7 +123,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 #### `PayinDetails`
 | field          | data type                         | required | description                                            |
 | -------------- | --------------------------------- | -------- | ------------------------------------------------------ |
-| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
+| `currencyCode` | string                            | Y        | ISO 4217 currency code string                          |
 | `min`          | [`DecimalString`](#decimalstring) | N        | Minimum amount of currency that the offer is valid for |
 | `max`          | [`DecimalString`](#decimalstring) | N        | Maximum amount of currency that the offer is valid for |
 | `methods`      | [`PayinMethod[]`](#payinmethod)   | Y        | A list of payment methods to select from               |
@@ -131,7 +131,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 #### `PayoutDetails`
 | field          | data type                         | required | description                                            |
 | -------------- | --------------------------------- | -------- | ------------------------------------------------------ |
-| `currencyCode` | string                            | Y        | ISO 3166 currency code string                          |
+| `currencyCode` | string                            | Y        | ISO 4217 currency code string                          |
 | `min`          | [`DecimalString`](#decimalstring) | N        | Minimum amount of currency that the offer is valid for |
 | `max`          | [`DecimalString`](#decimalstring) | N        | Maximum amount of currency that the offer is valid for |
 | `methods`      | [`PayoutMethod[]`](#payoutmethod) | Y        | A list of payment methods to select from               |
@@ -293,7 +293,7 @@ A `Balance` is a protected resource used to communicate the amounts of each curr
 
 | field          | data type                         | required | description                                |
 | -------------- | --------------------------------- | -------- | ------------------------------------------ |
-| `currencyCode` | string                            | Y        | ISO 3166 currency code string              |
+| `currencyCode` | string                            | Y        | ISO 4217 currency code string              |
 | `available  `  | [`DecimalString`](#decimalstring) | Y        | The amount available to be transacted with |
 
 #### Example Balance
@@ -552,7 +552,7 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
 #### `QuoteDetails`
 | field                | data type                                   | required | description                                                                                               |
 | -------------------- | ------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| `currencyCode`       | string                                      | Y        | ISO 3166 currency code string                                                                             |
+| `currencyCode`       | string                                      | Y        | ISO 4217 currency code string                                                                             |
 | `amount`             | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid to the PFI or by the PFI excluding fees                                       |
 | `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount paid in fees                                                                                   |
 | `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
