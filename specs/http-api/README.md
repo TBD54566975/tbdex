@@ -405,7 +405,7 @@ True
 ## List Exchanges
 
 ### Description
-Returns a list of exchange ids 
+Returns a list of exchange IDs 
 
 ### Endpoint
 `GET /exchanges`
@@ -420,12 +420,6 @@ True
 | `400: Bad Request` | `{ errors: Error[] }`    |
 | `404: Not Found`   | N/A                      |
 | `403: Forbidden`   | N/A                      |
-
-### Query Params
-
-| Param | Description              |
-| ----- | ------------------------ |
-| id    | exchange id(s) to return |
 
 ---
 
