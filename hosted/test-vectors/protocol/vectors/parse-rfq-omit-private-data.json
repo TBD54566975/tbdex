@@ -1,30 +1,30 @@
 {
   "description": "RFQ with privateData omitted parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:9kkuh34q7nkd4tphbcg7py9h1g16iftbtskesi9courdwj96q3sy\",\"to\":\"did:dht:8rqqxczxhdugndj5mykiahy7y4zg4zkk3jajr6qyo5owdrgqqx3y\",\"protocol\":\"1.0\",\"kind\":\"rfq\",\"id\":\"rfq_01ht6fh3fwe8etr9v0fkp0ffye\",\"exchangeId\":\"rfq_01ht6fh3fwe8etr9v0fkp0ffye\",\"createdAt\":\"2024-03-30T01:28:03.324Z\"},\"data\":{\"offeringId\":\"offering_01ht6fh3fwe8etr9v0fdrm75w7\",\"payin\":{\"kind\":\"DEBIT_CARD\",\"amount\":\"20000.00\",\"paymentDetailsHash\":\"L7tSdDuyGRNzsLta-9u2rxhz9-hY7iWVGomgnMcZWjQ\"},\"payout\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetailsHash\":\"IR8FJQ8N68UPY5lrmylik4vbNFLodXn6R2w2eEdoxNc\"},\"claimsHash\":\"ccCbBV6ONcYloiS_NKo2aFnJlibuG5cK-zy74YmBQW0\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6OWtrdWgzNHE3bmtkNHRwaGJjZzdweTloMWcxNmlmdGJ0c2tlc2k5Y291cmR3ajk2cTNzeSMwIn0..HApQWjaJ_jpqfkCixd3FzZOqFjSVtuFbRkipp-jZ-ZnMW5TED-o2WFnu2dkWCVt-Zv7xQWmSkFqeIy6O0PZsBA\"}",
+  "input": "{\"metadata\":{\"from\":\"did:dht:qyac4pru9ykcxbrutpaaxkmususxh4wtc4ctt19813zrie8uyy5y\",\"to\":\"did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy\",\"protocol\":\"1.0\",\"kind\":\"rfq\",\"id\":\"rfq_01hw25hn37fdcs0m21z3z1fr09\",\"exchangeId\":\"rfq_01hw25hn37fdcs0m21z3z1fr09\",\"createdAt\":\"2024-04-22T05:48:01.511Z\"},\"data\":{\"offeringId\":\"offering_01hw25hn36f0kstngeye3bytfh\",\"payin\":{\"kind\":\"DEBIT_CARD\",\"amount\":\"20000.00\",\"paymentDetailsHash\":\"E6z4pXvZKD3H7h66sMRNq3CDeEqqrsZDqK6E-PpIsrM\"},\"payout\":{\"kind\":\"BTC_ADDRESS\",\"paymentDetailsHash\":\"oynR-RqIJct-GlVyVc7Qqw3A9RQjT4wX44-tZmfrud4\"},\"claimsHash\":\"yqSdLDlRiRJkhTYJF7yqfliaX064uxb4am5r3MD1cWw\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6cXlhYzRwcnU5eWtjeGJydXRwYWF4a211c3VzeGg0d3RjNGN0dDE5ODEzenJpZTh1eXk1eSMwIn0..ePt0IG_SHKM8Dp-WIIUwVDSs-dIi7yoCboatmMRIW1orPCThK5YN-eQEC5oZFoByoYSiXskyUIHnkCkU_nh1BQ\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:9kkuh34q7nkd4tphbcg7py9h1g16iftbtskesi9courdwj96q3sy",
-      "to": "did:dht:8rqqxczxhdugndj5mykiahy7y4zg4zkk3jajr6qyo5owdrgqqx3y",
+      "from": "did:dht:qyac4pru9ykcxbrutpaaxkmususxh4wtc4ctt19813zrie8uyy5y",
+      "to": "did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy",
       "protocol": "1.0",
       "kind": "rfq",
-      "id": "rfq_01ht6fh3fwe8etr9v0fkp0ffye",
-      "exchangeId": "rfq_01ht6fh3fwe8etr9v0fkp0ffye",
-      "createdAt": "2024-03-30T01:28:03.324Z"
+      "id": "rfq_01hw25hn37fdcs0m21z3z1fr09",
+      "exchangeId": "rfq_01hw25hn37fdcs0m21z3z1fr09",
+      "createdAt": "2024-04-22T05:48:01.511Z"
     },
     "data": {
-      "offeringId": "offering_01ht6fh3fwe8etr9v0fdrm75w7",
+      "offeringId": "offering_01hw25hn36f0kstngeye3bytfh",
       "payin": {
         "kind": "DEBIT_CARD",
         "amount": "20000.00",
-        "paymentDetailsHash": "L7tSdDuyGRNzsLta-9u2rxhz9-hY7iWVGomgnMcZWjQ"
+        "paymentDetailsHash": "E6z4pXvZKD3H7h66sMRNq3CDeEqqrsZDqK6E-PpIsrM"
       },
       "payout": {
         "kind": "BTC_ADDRESS",
-        "paymentDetailsHash": "IR8FJQ8N68UPY5lrmylik4vbNFLodXn6R2w2eEdoxNc"
+        "paymentDetailsHash": "oynR-RqIJct-GlVyVc7Qqw3A9RQjT4wX44-tZmfrud4"
       },
-      "claimsHash": "ccCbBV6ONcYloiS_NKo2aFnJlibuG5cK-zy74YmBQW0"
+      "claimsHash": "yqSdLDlRiRJkhTYJF7yqfliaX064uxb4am5r3MD1cWw"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6OWtrdWgzNHE3bmtkNHRwaGJjZzdweTloMWcxNmlmdGJ0c2tlc2k5Y291cmR3ajk2cTNzeSMwIn0..HApQWjaJ_jpqfkCixd3FzZOqFjSVtuFbRkipp-jZ-ZnMW5TED-o2WFnu2dkWCVt-Zv7xQWmSkFqeIy6O0PZsBA"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6cXlhYzRwcnU5eWtjeGJydXRwYWF4a211c3VzeGg0d3RjNGN0dDE5ODEzenJpZTh1eXk1eSMwIn0..ePt0IG_SHKM8Dp-WIIUwVDSs-dIi7yoCboatmMRIW1orPCThK5YN-eQEC5oZFoByoYSiXskyUIHnkCkU_nh1BQ"
   },
   "error": false
 }

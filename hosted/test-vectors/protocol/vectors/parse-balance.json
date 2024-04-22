@@ -1,19 +1,19 @@
 {
   "description": "Balance parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:t6gdbr4qs95b4j6pbdxe4rzp41am735pm9c65135gajusam9xx8o\",\"kind\":\"balance\",\"id\":\"balance_01ht38w02ae2kbhwbcakmnp8qb\",\"createdAt\":\"2024-03-28T19:33:56.938Z\",\"protocol\":\"1.0\"},\"data\":{\"currencyCode\":\"USD\",\"available\":\"400.00\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6dDZnZGJyNHFzOTViNGo2cGJkeGU0cnpwNDFhbTczNXBtOWM2NTEzNWdhanVzYW05eHg4byMwIn0..t-cVr4Djf9APYgEESNd4BO7DX6HMGd8KRzm_7sFP_oba4Ngh16BMagx_IBDcZJyeEKlUD51CdUy-ffJ4WWH_AQ\"}",
+  "input": "{\"metadata\":{\"from\":\"did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy\",\"kind\":\"balance\",\"id\":\"balance_01hw25hn2pej6rdnd5qnh96wxj\",\"createdAt\":\"2024-04-22T05:48:01.494Z\",\"protocol\":\"1.0\"},\"data\":{\"currencyCode\":\"USD\",\"available\":\"400.00\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..v6cJEJuEOjCes3-7UJvkyMgPRUk9dD3h_COfjSEQJiNMpQ7DOMTnFAVd-g_gsO4Y5FBqnKT8B9N86pFPoebNCQ\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:t6gdbr4qs95b4j6pbdxe4rzp41am735pm9c65135gajusam9xx8o",
+      "from": "did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy",
       "kind": "balance",
-      "id": "balance_01ht38w02ae2kbhwbcakmnp8qb",
-      "createdAt": "2024-03-28T19:33:56.938Z",
+      "id": "balance_01hw25hn2pej6rdnd5qnh96wxj",
+      "createdAt": "2024-04-22T05:48:01.494Z",
       "protocol": "1.0"
     },
     "data": {
       "currencyCode": "USD",
       "available": "400.00"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6dDZnZGJyNHFzOTViNGo2cGJkeGU0cnpwNDFhbTczNXBtOWM2NTEzNWdhanVzYW05eHg4byMwIn0..t-cVr4Djf9APYgEESNd4BO7DX6HMGd8KRzm_7sFP_oba4Ngh16BMagx_IBDcZJyeEKlUD51CdUy-ffJ4WWH_AQ"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..v6cJEJuEOjCes3-7UJvkyMgPRUk9dD3h_COfjSEQJiNMpQ7DOMTnFAVd-g_gsO4Y5FBqnKT8B9N86pFPoebNCQ"
   },
   "error": false
 }
