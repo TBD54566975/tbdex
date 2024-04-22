@@ -1,21 +1,21 @@
 {
   "description": "Close parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:citdge9qqh1ow1zzhyegejp84jxfj57hho89wmukrcg6a5f8epeo\",\"to\":\"did:dht:ii8yzk4cuk6k1a3f8a1ry9ohk3xodfye9cnfcmehhoeyazhfqhco\",\"exchangeId\":\"rfq_01ht3y903wfq9a5ms0h3x4yp6q\",\"protocol\":\"1.0\",\"kind\":\"close\",\"id\":\"close_01ht3y903wfq9a5ms0h67n0c48\",\"createdAt\":\"2024-03-29T01:48:03.068Z\"},\"data\":{\"reason\":\"The reason for closing the exchange\",\"success\":true},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6Y2l0ZGdlOXFxaDFvdzF6emh5ZWdlanA4NGp4Zmo1N2hobzg5d211a3JjZzZhNWY4ZXBlbyMwIn0..h0UiCZZ8BSmgdXeSvldpzsjEisdZ44H5y0dCqwADLinlLVIeFsTQHmdOZdHwZ5zBBxeYO7QNG3MRE7UPq_3tDg\"}",
+  "input": "{\"metadata\":{\"from\":\"did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy\",\"to\":\"did:dht:qyac4pru9ykcxbrutpaaxkmususxh4wtc4ctt19813zrie8uyy5y\",\"exchangeId\":\"rfq_01hw25hn2xffnv99m4rb9r8rth\",\"protocol\":\"1.0\",\"kind\":\"close\",\"id\":\"close_01hw25hn2xffnv99m4rehcmj53\",\"createdAt\":\"2024-04-22T05:48:01.501Z\"},\"data\":{\"reason\":\"The reason for closing the exchange\",\"success\":true},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..ZvoVDuSrqqdXsSXgqB-U26tAU1WqUqqU_KpD1KvdYocIcmTsshjUASEwM_lUz1UnGglqkWeCIrHqrm9NNGDqBw\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:citdge9qqh1ow1zzhyegejp84jxfj57hho89wmukrcg6a5f8epeo",
-      "to": "did:dht:ii8yzk4cuk6k1a3f8a1ry9ohk3xodfye9cnfcmehhoeyazhfqhco",
-      "exchangeId": "rfq_01ht3y903wfq9a5ms0h3x4yp6q",
+      "from": "did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy",
+      "to": "did:dht:qyac4pru9ykcxbrutpaaxkmususxh4wtc4ctt19813zrie8uyy5y",
+      "exchangeId": "rfq_01hw25hn2xffnv99m4rb9r8rth",
       "protocol": "1.0",
       "kind": "close",
-      "id": "close_01ht3y903wfq9a5ms0h67n0c48",
-      "createdAt": "2024-03-29T01:48:03.068Z"
+      "id": "close_01hw25hn2xffnv99m4rehcmj53",
+      "createdAt": "2024-04-22T05:48:01.501Z"
     },
     "data": {
       "reason": "The reason for closing the exchange",
       "success": true
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6Y2l0ZGdlOXFxaDFvdzF6emh5ZWdlanA4NGp4Zmo1N2hobzg5d211a3JjZzZhNWY4ZXBlbyMwIn0..h0UiCZZ8BSmgdXeSvldpzsjEisdZ44H5y0dCqwADLinlLVIeFsTQHmdOZdHwZ5zBBxeYO7QNG3MRE7UPq_3tDg"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..ZvoVDuSrqqdXsSXgqB-U26tAU1WqUqqU_KpD1KvdYocIcmTsshjUASEwM_lUz1UnGglqkWeCIrHqrm9NNGDqBw"
   },
   "error": false
 }
