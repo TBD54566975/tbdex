@@ -142,7 +142,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `kind`                   | string                                  | Y        | Unique string identifying a single kind of payment method i.e. (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                 |
 | `name`                   | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`            | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
-| `group`                  | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
+| `group`                  | string                                  | N        | The category for which the given method belongs to e.g. Mobile Money vs. Direct Bank Deposit                                                        |
 | `requiredPaymentDetails` | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
 | `fee`                    | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
 | `min`                    | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
@@ -164,7 +164,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `estimatedSettlementTime` | uint                                    | Y        | estimated time taken to settle an order. expressed in seconds                                                                                       |
 | `name`                    | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`             | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
-| `group`                   | string                                  | N        | value that can be used to group specific payment methods together e.g. Mobile Money vs. Direct Bank Deposit                                         |
+| `group`                   | string                                  | N        | The category for which the given method belongs to e.g. Mobile Money vs. Direct Bank Deposit                                         |
 | `requiredPaymentDetails`  | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
 | `fee`                     | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
 | `min`                     | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
@@ -409,18 +409,18 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 > Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
 | field        | data type                                        | required | description                                                                                                                                                              |
-|--------------|--------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------ | ------------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `offeringId` | string                                           | Y        | Offering which Alice would like to get a quote for                                                                                                                       |
 | `claimsHash` | string                                           | N        | Salted hash of the list the claims appearing in `privateData.claims`. Omit `claimsHash` to denote that the RFQ contains no claims, i.e. `privateData.claims` is omitted. |
 | `payin`      | [`SelectedPayinMethod`](#selectedpaymentmethod)  | Y        | selected payin amount, method, and details                                                                                                                               |
 | `payout`     | [`SelectedPayoutMethod`](#selectedpaymentmethod) | Y        | selected payout method, and details                                                                                                                                      |
 
 #### `SelectedPayinMethod`
-| field                | data type                         | required | description                                                                 |
-| -------------------- | --------------------------------- | -------- | --------------------------------------------------------------------------- |
-| `amount`             | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency           |
-| `kind`               | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`) |
-| `paymentDetailsHash` | string                            | N        | A salted hash of `privateData.payin.paymentDetails`. Omit `paymentDetailsHash` when there are no payment details.                         |
+| field                | data type                         | required | description                                                                                                       |
+| -------------------- | --------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| `amount`             | [`DecimalString`](#decimalstring) | Y        | Amount of payin currency you want in exchange for payout currency                                                 |
+| `kind`               | string                            | Y        | Type of payment method (i.e. `DEBIT_CARD`, `BITCOIN_ADDRESS`, `SQUARE_PAY`)                                       |
+| `paymentDetailsHash` | string                            | N        | A salted hash of `privateData.payin.paymentDetails`. Omit `paymentDetailsHash` when there are no payment details. |
 
 #### `SelectedPayoutMethod`
 | field                | data type | required | description                                                                 |
@@ -436,7 +436,7 @@ In order to prevent storing this sensitive data with the message itself, an RFQ 
 Each property in `privateData` has a corresponding property in `data` with the suffix `Hash`. The salted hash of the property in `privateData` MUST match the value of the corresponding property in `data`. The following table enumerates all properties in `privateData` which have a corresponding property in `data`.
 
 | `privateData` property  | `data` property             | description                                                                                                                                                                                                                     |
-|-------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `payin.paymentDetails`  | `payin.paymentDetailsHash`  | The salted hash of `payin.paymentDetails` must match `payin.paymentDetailsHash`, unless `payint.paymentDetailsHash` is omitted. If `payin.paymentDetailsHash` is omitted, then `payin.paymentDetails` must also be omitted.     |
 | `payout.paymentDetails` | `payout.paymentDetailsHash` | The salted hash of `payout.paymentDetails` must match `payout.paymentDetailsHash`, unless `payout.paymentDetailsHash` is omitted. If `payout.paymentDetailsHash` is omitted, then `payout.paymentDetails` must also be omitted. |
 | `claims`                | `claimsHash`                | The salted hash of `claims` MUST match `claimsHash`, unless `claimsHash` is omitted. If `claimsHash` is omitted, then `claims` must also be omitted.                                                                            |
@@ -446,12 +446,12 @@ The salted hash is produced by creating a [digest](#digests) of a JSON array con
 The `privateData` field is ephemeral and **MUST** only be present when the message is initially sent to the intended recipient.
 
 This table enumerates the structure of `PrivateData` 
-| field    | data type                                         | required | description                                                                                                                                                                                                                                                                                            |
-|----------|---------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `salt`   | string                                            | Y        | Randomly generated salt used for hashing PrivateData fields                                                                                                                                                                                                                                            |
+| field    | data type                                         | required | description                                                                                                                                                                                                 |
+| -------- | ------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `salt`   | string                                            | Y        | Randomly generated salt used for hashing PrivateData fields                                                                                                                                                 |
 | `claims` | string[]                                          | N        | an array of claims that fulfill the requirements declared in an [Offering](#offering). If the creator of the RFQ wants to include no claims, then `claims` MUST be omitted rather than being an empty list. |
-| `payin`  | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payin.paymentDetails`                                                                                                                                                                                                                                                    |
-| `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                                                                                                                                                                                                                                   |
+| `payin`  | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payin.paymentDetails`                                                                                                                                                         |
+| `payout` | [`PrivatePaymentDetails`](#privatepaymentdetails) | N        | A container for the unhashed `payout.paymentDetails`                                                                                                                                                        |
 
 #### `PrivatePaymentDetails`
 | field            | data type | required | description                                                                                                                                                                                                                                |
@@ -542,11 +542,11 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
-| field        | data type                       | required | description                                              |
-| ------------ | ------------------------------- | -------- | -------------------------------------------------------- |
-| `expiresAt ` | datetime                        | Y        | When this quote expires. Expressed as ISO8601            |
-| `payin`      | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive |
-| `payout`     | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive  |
+| field       | data type                       | required | description                                              |
+| ----------- | ------------------------------- | -------- | -------------------------------------------------------- |
+| `expiresAt` | datetime                        | Y        | When this quote expires. Expressed as ISO8601            |
+| `payin`     | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive |
+| `payout`    | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive  |
 
 
 #### `QuoteDetails`
