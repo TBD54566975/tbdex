@@ -17,7 +17,6 @@ Version: Draft
   - [Error response structure](#error-response-structure)
   - [Error `code`](#error-code)
   - [ErrorDetail structure](#errordetail-structure)
-  - [| `path`    | String | N        | Path where validation failed (i.e. JSON schema path)                     |](#-path-----string--n---------path-where-validation-failed-ie-json-schema-path---------------------)
   - [Example](#example-1)
 - [Exceptions](#exceptions)
 - [Query Params](#query-params)
@@ -120,6 +119,7 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 | --------- | ------ | -------- | ------------------------------------------------------------------------ |
 | `message` | String | N        | A human-readable explanation specific to this occurrence of the problem. |
 | `path`    | String | N        | Path where validation failed (i.e. JSON schema path)                     |
+
 ---
 
 ## Example
