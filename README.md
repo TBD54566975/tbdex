@@ -42,30 +42,36 @@ For information on the development process for this protocol, check out [sdk-dev
 
 ## Implementations 
 
-* [JavaScript/Typescript](https://github.com/TBD54566975/tbdex-js) (feature complete)
-* [Kotlin](https://github.com/TBD54566975/tbdex-kt) (work in progress)
-* [Example PFI implementation](https://github.com/TBD54566975/tbdex-pfi-exemplar/)
+* [JavaScript/Typescript](https://github.com/TBD54566975/tbdex-js) 
+* [Kotlin](https://github.com/TBD54566975/tbdex-kt) 
+* [Swift](https://github.com/TBD54566975/tbdex-swift) (only supports client-side)
 
 ### Tooling
-All projects (including the test vectors in this repo!) use hermit to manage tooling like node, gradle, etc. Hermit version pins and automatically downloads and installs tooling for a repo, including compiler toolchains, utilities, etc.See [this page](https://cashapp.github.io/hermit/usage/get-started/) to set up Hermit on your machine - make sure to download the open source build.
+All projects (including the test vectors in this repo) use hermit to manage tooling like node, gradle, etc. Hermit version pins and automatically downloads and installs tooling for a repo, including compiler toolchains, utilities, etc. See [this page](https://cashapp.github.io/hermit/usage/get-started/) to set up Hermit on your machine - make sure to download the open source build.
 
-## Test Vectors
+### Test Vectors
 Implementations are run against a common set of [test vectors](./hosted/test-vectors/). For more information about how test vectors are used, check out the [Test Vectors](https://github.com/TBD54566975/sdk-development#test-vectors) section of the `sdk-development` readme.
+
+## Example Implementations
+
+* [Example PFI in Typescript](https://github.com/TBD54566975/tbdex-pfi-exemplar/)
+* [Example iOS Wallet in Swift](https://github.com/TBD54566975/tbdex-example-ios)
+
 
 ## Features
 
 ### tbDEX Message
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
-| Validation   | ✅         | ✅     | ❌   | ❌    |
-| Signing      | ✅         | ✅     | ❌   | ❌    |
-| Verification | ✅         | ✅     | ❌   | ❌    |
-| Parsing      | ✅         | ✅     | ❌   | ❌    |
+| Validation   | ✅         | ✅     | ✅   | ❌    |
+| Signing      | ✅         | ✅     | ✅   | ❌    |
+| Verification | ✅         | ✅     | ✅   | ❌    |
+| Parsing      | ✅         | ✅     | ✅   | ❌    |
 
 ### tbDEX Resource
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
 | Validation   | ✅          | ✅      | ❌    | ❌     |
 | Signing      | ✅          | ✅      | ❌    | ❌     |
@@ -74,7 +80,7 @@ Implementations are run against a common set of [test vectors](./hosted/test-vec
 
 ### tbDEX Offering Resource
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
 | Creation     | ✅          | ✅      | ❌    | ❌     |
 | Validation   | ✅          | ✅      | ❌    | ❌     |
@@ -84,17 +90,17 @@ Implementations are run against a common set of [test vectors](./hosted/test-vec
 
 ### tbDEX RFQ Message
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ❌    | ❌     |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| Creation     | ✅          | ✅      | ✅    | ❌     |
+| Validation   | ✅          | ✅      | ✅    | ❌     |
+| Signing      | ✅          | ✅      | ✅    | ❌     |
+| Verification | ✅          | ✅      | ✅    | ❌     |
+| Parsing      | ✅          | ✅      | ✅    | ❌     |
 
 ### tbDEX Quote Message
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
 | Creation     | ✅          | ✅      | ❌    | ❌     |
 | Validation   | ✅          | ✅      | ❌    | ❌     |
@@ -104,17 +110,17 @@ Implementations are run against a common set of [test vectors](./hosted/test-vec
 
 ### tbDEX Order Message
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ❌    | ❌     |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| Creation     | ✅          | ✅      | ✅    | ❌     |
+| Validation   | ✅          | ✅      | ✅    | ❌     |
+| Signing      | ✅          | ✅      | ✅    | ❌     |
+| Verification | ✅          | ✅      | ✅    | ❌     |
+| Parsing      | ✅          | ✅      | ✅    | ❌     |
 
 ### tbDEX Order-Status Message
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
 | Creation     | ✅          | ✅      | ❌    | ❌     |
 | Validation   | ✅          | ✅      | ❌    | ❌     |
@@ -124,30 +130,36 @@ Implementations are run against a common set of [test vectors](./hosted/test-vec
 
 ### tbDEX Close Message
 
-| Feature      | Typescript | Kotlin | Rust | Swift |
+| Feature      | Typescript | Kotlin | Swift | Rust |
 | ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ❌    | ❌     |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| Creation     | ✅          | ✅      | ✅    | ❌     |
+| Validation   | ✅          | ✅      | ✅    | ❌     |
+| Signing      | ✅          | ✅      | ✅    | ❌     |
+| Verification | ✅          | ✅      | ✅    | ❌     |
+| Parsing      | ✅          | ✅      | ✅    | ❌     |
 
 ### tbDEX Client
 
-| Feature       | Typescript | Kotlin | Rust | Swift |
+| Feature       | Typescript | Kotlin | Swift | Rust |
 | ------------- | ---------- | ------ | ---- | ----- |
-| Send Message  | ✅          | ✅      | ❌    | ❌     |
-| Get Exchange  | ✅          | ✅      | ❌    | ❌     |
-| Get Exchanges | ✅          | ✅      | ❌    | ❌     |
-| Get Offerings | ✅          | ✅      | ❌    | ❌     |
+| Send Message  | ✅          | ✅      | ✅    | ❌     |
+| Get Exchange  | ✅          | ✅      | ✅    | ❌     |
+| Get Exchanges | ✅          | ✅      | ✅    | ❌     |
+| Get Offerings | ✅          | ✅      | ✅    | ❌     |
 
 ### tbDEX Server
 
-| Feature               | Typescript | Kotlin | Rust | Swift |
+| Feature               | Typescript | Kotlin | Swift | Rust |
 | --------------------- | ---------- | ------ | ---- | ----- |
-| Get Exchange Handler  | ✅          | ❌      | ❌    | ❌     |
-| Get Exchanges Handler | ✅          | ❌      | ❌    | ❌     |
-| Get Offerings Handler | ✅          | ❌      | ❌    | ❌     |
-| Submit RFQ Handler    | ✅          | ❌      | ❌    | ❌     |
-| Submit Order Handler  | ✅          | ❌      | ❌    | ❌     |
-| Submit Close Handler  | ✅          | ❌      | ❌    | ❌     |
+| Get Exchange Handler  | ✅          | ✅      | ❌    | ❌     |
+| Get Exchanges Handler | ✅          | ✅      | ❌    | ❌     |
+| Get Offerings Handler | ✅          | ✅      | ❌    | ❌     |
+| Submit RFQ Handler    | ✅          | ✅      | ❌    | ❌     |
+| Submit Order Handler  | ✅          | ✅      | ❌    | ❌     |
+| Submit Close Handler  | ✅          | ✅      | ❌    | ❌     |
+
+## Documentation
+
+* [Developer Documentation](https://developer.tbd.website/docs/tbdex/)
+* [API Reference Guides](https://developer.tbd.website/docs/api)
+* [Website](https://www.tbdex.io/)
