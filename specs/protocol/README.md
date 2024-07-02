@@ -164,7 +164,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `estimatedSettlementTime` | uint                                    | Y        | estimated time taken to settle an order. expressed in seconds                                                                                       |
 | `name`                    | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`             | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
-| `group`                   | string                                  | N        | The category for which the given method belongs to e.g. Mobile Money vs. Direct Bank Deposit                                         |
+| `group`                   | string                                  | N        | The category for which the given method belongs to e.g. Mobile Money vs. Direct Bank Deposit                                                        |
 | `requiredPaymentDetails`  | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
 | `fee`                     | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
 | `min`                     | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
@@ -553,8 +553,9 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
 | field                | data type                                   | required | description                                                                                               |
 | -------------------- | ------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
 | `currencyCode`       | string                                      | Y        | ISO 4217 currency code string                                                                             |
-| `amount`             | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid to the PFI or by the PFI excluding fees                                       |
-| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount paid in fees                                                                                   |
+| `subtotal`           | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid for the exchange, **excluding** fees                                          |
+| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount of currency paid in fees                                                                       |
+| `total`              | [`DecimalString`](#decimalstring)           | Y        | The total amount of currency to be paid in or paid out. It is always a sum of `subtotal` and `fee`        |
 | `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 #### `PaymentInstruction`
