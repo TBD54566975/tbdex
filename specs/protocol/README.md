@@ -583,7 +583,7 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
       "fee": "0.20",
       "total": "200.20",
       "paymentInstruction": {
-        "link": "https://cash.app/pfi?currency=usd&amount=200.20"
+        "link": "https://example-pfi.com/payin?currency=usd&amount=200.20"
       }
     },
     "payout": {
