@@ -33,7 +33,6 @@ Version: Draft
     - [Description](#description)
     - [Endpoint](#endpoint)
     - [Protected](#protected)
-    - [Query Params](#query-params-1)
     - [Response](#response)
 - [Exchanges](#exchanges)
   - [Create Exchange](#create-exchange)
@@ -50,7 +49,6 @@ Version: Draft
     - [Description](#description-2)
     - [Endpoint](#endpoint-2)
     - [Protected](#protected-2)
-    - [Order Request Body](#order-request-body)
     - [Response](#response-2)
     - [Errors](#errors-1)
   - [Submit Close](#submit-close)
@@ -60,23 +58,28 @@ Version: Draft
     - [Request Body](#request-body-1)
     - [Response](#response-3)
     - [Errors](#errors-2)
-  - [Get Exchange](#get-exchange)
+  - [Submit Cancel](#submit-cancel)
     - [Description](#description-4)
     - [Endpoint](#endpoint-4)
     - [Protected](#protected-4)
+    - [Request Body](#request-body-2)
     - [Response](#response-4)
-  - [List Exchanges](#list-exchanges)
+    - [Errors](#errors-3)
+  - [Get Exchange](#get-exchange)
     - [Description](#description-5)
     - [Endpoint](#endpoint-5)
     - [Protected](#protected-5)
     - [Response](#response-5)
-    - [Query Params](#query-params-2)
-  - [List Balances](#list-balances)
+  - [List Exchanges](#list-exchanges)
     - [Description](#description-6)
-    - [Protected](#protected-6)
     - [Endpoint](#endpoint-6)
+    - [Protected](#protected-6)
     - [Response](#response-6)
-      - [Example](#example-3)
+  - [List Balances](#list-balances)
+    - [Description](#description-7)
+    - [Protected](#protected-7)
+    - [Endpoint](#endpoint-7)
+    - [Response](#response-7)
 - [References](#references)
 
 # Discoverability
@@ -348,10 +351,34 @@ False
 | 400    | Failed Signature Check  |
 | 409    | Exchange already exists |
 
-## Submit Order/Close
+## Submit Order
 
 ### Description
-Closes the exchange. Indicates that Alice is no longer interested
+Submits the Order. Indicates that Alice wants to execute the provided Quote.
+
+### Endpoint
+`PUT /exchanges/:exchange_id`
+
+### Protected
+False
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+### Errors
+| Status | Description                                  |
+| ------ | -------------------------------------------- |
+| 400    | Failed Signature Check, or Order not allowed |
+| 404    | Exchange not found                           |
+
+
+## Submit Close
+
+### Description
+Closes the exchange. Indicates that Alice is no longer interested. Cannot be sent 
 
 ### Endpoint
 `PUT /exchanges/:exchange_id`
@@ -376,6 +403,33 @@ False
 | 400    | Failed Signature Check |
 | 404    | Exchange not found     |
 | 409    | Close not allowed      |
+
+## Submit Cancel
+
+### Description
+Alice attempts to cancel the exchange. Indicates that Alice is no longer interested **after** she submits an Order and **before** PFI sends a Close
+
+### Endpoint
+`PUT /exchanges/:exchange_id`
+
+### Protected
+False
+
+### Request Body
+> [!IMPORTANT]
+> See Close structure [here](../protocol/README.md#close)
+
+
+### Response
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
+
+### Errors
+| Status | Description                                |
+| ------ | ------------------------------------------ |
+| 400    | Failed Signature Check, Cancel not allowed |
 
 ---
 
@@ -436,12 +490,12 @@ True
 `GET /balances`
 
 ### Response
-| Status             | Body                                   |
-| ------------------ | -------------------------------------- |
-| `200: OK.     `    | `{ data: Balance[] }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource|
-| `400: Bad Request` | `{ errors: Error[] }`                  |
-| `404: Not Found`   | N/A                                    |
-| `403: Forbidden`   | N/A                                    |
+| Status             | Body                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `200: OK.     `    | `{ data: Balance[] }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource |
+| `400: Bad Request` | `{ errors: Error[] }`                                                                                                                                               |
+| `404: Not Found`   | N/A                                                                                                                                                                 |
+| `403: Forbidden`   | N/A                                                                                                                                                                 |
 
 # References
 * JSON:API spec: https://jsonapi.org/format/

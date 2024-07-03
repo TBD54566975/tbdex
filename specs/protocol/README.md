@@ -24,6 +24,7 @@ Version: Draft
       - [`PayinDetails`](#payindetails)
       - [`PayoutDetails`](#payoutdetails)
       - [`PayinMethod`](#payinmethod)
+      - [`CancellationDetails`](#cancellationdetails)
       - [`PayoutMethod`](#payoutmethod)
         - [Reserved `PaymentMethod` Kinds](#reserved-paymentmethod-kinds)
       - [Example Offering](#example-offering)
@@ -56,6 +57,7 @@ Version: Draft
     - [`Order`](#order)
       - [Example Order](#example-order)
     - [`OrderStatus`](#orderstatus)
+    - [`Cancel`](#cancel)
 - [Common Traits](#common-traits)
   - [ID Generation](#id-generation-1)
   - [Digests](#digests)
@@ -119,6 +121,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency      |
 | `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency     |
 | `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering. |
+| `cancellation`            | [`Cancellation`](#cancellationdetails)                                                                   | Y        | Details about PFI's cancellation policy                     |
 
 #### `PayinDetails`
 | field          | data type                         | required | description                                            |
@@ -148,6 +151,14 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `min`                    | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
 | `max`                    | [`DecimalString`](#decimalstring)       | N        | maximum amount allowed when using this payment method.                                                                                              |
 
+#### `CancellationDetails`
+| field       | data type                                              | required | description                                               |
+| ----------- | ------------------------------------------------------ | -------- | --------------------------------------------------------- |
+| `enabled`   | boolean                                                | Y        | Whether cancellation is enabled for this offering         |
+| `terms_url` | [`URI`](https://datatracker.ietf.org/doc/html/rfc3986) | N        | A link to a page that describes the terms of cancellation |
+| `terms`     | string                                                 | N        | Cancellation terms in plaintext                           |
+
+
 > [!IMPORTANT]
 > `kind` should be a unique identifier of an individual payment method
 
@@ -164,7 +175,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `estimatedSettlementTime` | uint                                    | Y        | estimated time taken to settle an order. expressed in seconds                                                                                       |
 | `name`                    | string                                  | N        | Payment Method name. Expected to be rendered on screen.                                                                                             |
 | `description`             | string                                  | N        | Blurb containing helpful information about the payment method. Expected to be rendered on screen. e.g. "segwit addresses only"                      |
-| `group`                   | string                                  | N        | The category for which the given method belongs to e.g. Mobile Money vs. Direct Bank Deposit                                         |
+| `group`                   | string                                  | N        | The category for which the given method belongs to e.g. Mobile Money vs. Direct Bank Deposit                                                        |
 | `requiredPaymentDetails`  | [JSON Schema](https://json-schema.org/) | N        | A JSON Schema containing the fields that need to be collected in the RFQ's selected payment methods in order to use this payment method.            |
 | `fee`                     | [`DecimalString`](#decimalstring)       | N        | Fee charged to use this payment method. absence of this field implies that there is no _additional_ fee associated to the respective payment method |
 | `min`                     | [`DecimalString`](#decimalstring)       | N        | minimum amount required to use this payment method.                                                                                                 |
@@ -508,12 +519,11 @@ This table enumerates the structure of `PrivateData`
 
 ### `Close`
 > Alice -> PFI: "Not interested anymore." or "oops sent by accident"
-
 > PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)" or "Your exchange is completed"
 
 A `Close` indicates a terminal state; no messages are valid after a `Close`. 
-
-A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, but a `Close` sent by Alice *after* an `Order` but does not guarantee the cancellation of an actively executing order. 
+A `Close` can be sent by Alice after she sends an RFQ, or after she receives a Quote, to indicate she is no longer interested in continuing the exchange.
+A `Close` can be sent by the PFI at any point during the exchange, to indicate the PFI cannot continue the exchange.
 
 | Field     | Data Type | Required | Description                                                  |
 | --------- | --------- | -------- | ------------------------------------------------------------ |
@@ -524,8 +534,8 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
 ```json
 {
   "metadata": {
-    "from": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
-    "to": "did:ex:pfi",
+    "from": "did:ex:pfi",
+    "to": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
     "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
     "kind": "close",
     "id": "close_03ha83trerk6t9tkg7q42s48j",
@@ -533,7 +543,8 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
     "protocol": "1.0"
   },
   "data": {
-    "reason": "Rejecting Quote"
+    "reason": "Rejecting RFQ",
+    "success": false
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
 }
@@ -639,6 +650,35 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
 }
 ```
 
+### `Cancel`
+> Alice -> PFI: "I would like to back out of the exchange. I want a refund."
+
+`Cancel` can only be submitted by Alice after an `Order` message and before a `Close` message. There is no guarantee of whether `Cancel` will be honored by the PFI - it depends on their cancellation policy, which is outlined in their `Offering` resource.
+
+| field    | data type | required | description             |
+| -------- | --------- | -------- | ----------------------- |
+| `reason` | string    | N        | Reason for cancellation |
+
+
+```json
+{
+  "metadata": {
+    "from": "did:ex:pfi",
+    "to": "did:key:z6Mkgz7DnRNKVHdF8XavhU6gCcGKBbAUz3FwRjci4bsZQ5U5",
+    "exchangeId": "rfq_01ha83s5cmeecsm2qg7cvrc9hc",
+    "kind": "cancel",
+    "id": "cancel_01ha83s5crff3bmvq3t000cz91",
+    "createdAt": "2023-09-13T20:30:04.184Z",
+    "protocol": "1.0"
+  },
+  "data": {
+    "reason": "wrong delivery address"
+  },
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2d6N0RuUk5LVkhkRjhYYXZoVTZnQ2NHS0JiQVV6M0Z3UmpjaTRic1pRNVU1I3o2TWtnejdEblJOS1ZIZEY4WGF2aFU2Z0NjR0tCYkFVejNGd1JqY2k0YnNaUTVVNSJ9..RvOeT5cSurl3I5EO-wg3wVXaNd3mxHhjDUQQj1sNiHz-9u2dI3Hc0ALM-YA6fYLVW9N6XDlSpAAdQd7yZl7rDg"
+}
+```
+
+---
 
 # Common Traits
 Traits shared amongst both [Resources]() and [Messages]() are defined in this section
