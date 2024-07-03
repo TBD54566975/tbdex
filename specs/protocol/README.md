@@ -738,7 +738,6 @@ Quick explanation of terms used.
 | Term            | Definition                                                                                                                                                         |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | PFI             | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
-| KYC             | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
 | payin           | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
 | payout          | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
 | payout currency | currency that the PFI is paying out to Alice. Alice will _receive_ the payout currency from the PFI.                                                               |
