@@ -112,13 +112,13 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the payin currency, and what payment methods I can use to pay you the payout currency."
 
-| field                     | data type                                                                                                | required | description                                                 |
-| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------- |
-| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                 |
-| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit     |
-| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency      |
-| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency     |
-| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering. |
+| field                     | data type                                                                                                | required | description                                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------- |
+| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                  |
+| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit. An indicative rate. |
+| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency                       |
+| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency                      |
+| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering.                  |
 
 #### `PayinDetails`
 | field          | data type                         | required | description                                            |
@@ -542,12 +542,12 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
-| field       | data type                       | required | description                                                                                                   |
-| ----------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| `expiresAt` | datetime                        | Y        | When this quote expires. Expressed as ISO8601                                                                 |
-| `rate`      | string                          | Y        | The exchange rate to convert from payin currency to payout currency. Expressed as an unrounded decimal string |
-| `payin`     | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive                                                      |
-| `payout`    | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive                                                       |
+| field                     | data type                       | required | description                                                                                                   |
+| ------------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `expiresAt`               | datetime                        | Y        | When this quote expires. Expressed as ISO8601                                                                 |
+| `payoutUnitsPerPayinUnit` | string                          | Y        | The exchange rate to convert from payin currency to payout currency. Expressed as an unrounded decimal string |
+| `payin`                   | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive                                                      |
+| `payout`                  | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive                                                       |
 
 
 #### `QuoteDetails`
