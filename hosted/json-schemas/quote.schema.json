@@ -46,7 +46,7 @@
       "type": "string",
       "description": "When this quote expires. Expressed as ISO8601"
     },
-    "rate": {
+    "payoutUnitsPerPayinUnit": {
       "type": "string",
       "description": "The exchange rate to convert from payin currency to payout currency. Expressed as an unrounded decimal string."
     },
@@ -57,5 +57,5 @@
       "$ref": "#/definitions/QuoteDetails"
     }
   },
-  "required": ["expiresAt", "rate", "payin", "payout"]
+  "required": ["expiresAt", "payoutUnitsPerPayinUnit", "payin", "payout"]
 }
