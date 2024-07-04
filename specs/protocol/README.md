@@ -578,7 +578,7 @@ A `Close` can be sent by Alice _or_ the PFI at any point during the exchange, bu
   },
   "data": {
     "expiresAt": "2023-09-13T23:11:17.315Z",
-    "rate": "16.654345",
+    "payoutUnitsPerPayinUnit": "16.654345",
     "payin": {
       "link": "http://cash.app/pfi?currency=usd&amount=50"
     },
