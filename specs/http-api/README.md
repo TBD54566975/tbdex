@@ -276,7 +276,7 @@ An exchange is a series of linked tbDEX messages between Alice and a PFI for a s
 Submits an RFQ (Request For Quote). Alice is asking the PFI to provide a Quote so she can evaluate it.
 
 ### Endpoint
-`POST /exchanges/:exchange_id`
+`POST /exchanges`
 
 ### Authentication
 Refer to [Signature Verification Section]() of the tbDEX spec  
