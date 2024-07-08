@@ -329,12 +329,12 @@ Messages form exchanges between Alice and a PFI.
 ## Fields
 All tbdex messages are JSON objects which can include the following top-level properties:
 
-| Field       | Required (Y/N) | Description                                                           |
-| ----------- | -------------- | --------------------------------------------------------------------- |
-| `metadata`  | Y              | An object containing fields _about_ the message                       |
-| `data`      | Y              | The actual message content                                            |
-| `signature` | Y              | signature that verifies the authenticity and integrity of the message |
-| `private`   | N              | An ephemeral JSON object used to transmit sensitive data (e.g. PII)   |
+| Field         | Required (Y/N) | Description                                                           |
+| ------------- | -------------- | --------------------------------------------------------------------- |
+| `metadata`    | Y              | An object containing fields _about_ the message                       |
+| `data`        | Y              | The actual message content                                            |
+| `signature`   | Y              | signature that verifies the authenticity and integrity of the message |
+| `privateData` | N              | An ephemeral JSON object used to transmit sensitive data (e.g. PII)   |
 
 ### `metadata`
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
