@@ -353,7 +353,9 @@ False
 
 ### Request Body
 > [!IMPORTANT]
+> See Order structure [here](../protocol/README.md#order)
 > See Close structure [here](../protocol/README.md#close)
+
 ```javascript
 {
   "message": { } // order or close message
