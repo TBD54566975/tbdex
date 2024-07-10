@@ -114,14 +114,14 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 
 > PFI -> world: "Here are the currency pairs i have to offer. These are the constraints of my offer in terms of how much you can buy, what credentials I need from you, and what payment methods you can use to pay me the payin currency, and what payment methods I can use to pay you the payout currency."
 
-| field                     | data type                                                                                                | required | description                                                 |
-| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------- |
-| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                 |
-| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit     |
-| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency      |
-| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency     |
-| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering. |
-| `cancellation`            | [`CancellationDetails`](#cancellationdetails)                                                                   | Y        | Details about PFI's cancellation policy                     |
+| field                     | data type                                                                                                | required | description                                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------- |
+| `description`             | string                                                                                                   | Y        | Brief description of what is being offered.                                  |
+| `payoutUnitsPerPayinUnit` | [`DecimalString`](#decimalstring)                                                                        | Y        | Number of payout units alice would get for 1 payin unit. An indicative rate. |
+| `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency                       |
+| `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency                      |
+| `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering.                  |
+| `cancellation`            | [`CancellationDetails`](#cancellationdetails)                                                            | Y        | Details about PFI's cancellation policy                                      |
 
 #### `PayinDetails`
 | field          | data type                         | required | description                                            |
@@ -340,12 +340,12 @@ Messages form exchanges between Alice and a PFI.
 ## Fields
 All tbdex messages are JSON objects which can include the following top-level properties:
 
-| Field       | Required (Y/N) | Description                                                           |
-| ----------- | -------------- | --------------------------------------------------------------------- |
-| `metadata`  | Y              | An object containing fields _about_ the message                       |
-| `data`      | Y              | The actual message content                                            |
-| `signature` | Y              | signature that verifies the authenticity and integrity of the message |
-| `private`   | N              | An ephemeral JSON object used to transmit sensitive data (e.g. PII)   |
+| Field         | Required (Y/N) | Description                                                           |
+| ------------- | -------------- | --------------------------------------------------------------------- |
+| `metadata`    | Y              | An object containing fields _about_ the message                       |
+| `data`        | Y              | The actual message content                                            |
+| `signature`   | Y              | signature that verifies the authenticity and integrity of the message |
+| `privateData` | N              | An ephemeral JSON object used to transmit sensitive data (e.g. PII)   |
 
 ### `metadata`
 The `metadata` object contains fields _about_ the message and is present in _every_ tbdex message. 
@@ -521,19 +521,21 @@ This table enumerates the structure of `PrivateData`
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
-| field       | data type                       | required | description                                              |
-| ----------- | ------------------------------- | -------- | -------------------------------------------------------- |
-| `expiresAt` | datetime                        | Y        | When this quote expires. Expressed as ISO8601            |
-| `payin`     | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive |
-| `payout`    | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive  |
+| field                     | data type                       | required | description                                                                                                   |
+| ------------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `expiresAt`               | datetime                        | Y        | When this quote expires. Expressed as ISO8601                                                                 |
+| `payoutUnitsPerPayinUnit` | string                          | Y        | The exchange rate to convert from payin currency to payout currency. Expressed as an unrounded decimal string |
+| `payin`                   | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payin_ currency that the PFI will receive                                                      |
+| `payout`                  | [`QuoteDetails`](#quotedetails) | Y        | the amount of _payout_ currency that Alice will receive                                                       |
 
 
 #### `QuoteDetails`
 | field                | data type                                   | required | description                                                                                               |
 | -------------------- | ------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
 | `currencyCode`       | string                                      | Y        | ISO 4217 currency code string                                                                             |
-| `amount`             | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid to the PFI or by the PFI excluding fees                                       |
-| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount paid in fees                                                                                   |
+| `subtotal`           | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid for the exchange, **excluding** fees                                          |
+| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount of currency paid in fees                                                                       |
+| `total`              | [`DecimalString`](#decimalstring)           | Y        | The total amount of currency to be paid in or paid out. It is always a sum of `subtotal` and `fee`        |
 | `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
 
 #### `PaymentInstruction`
@@ -556,11 +558,23 @@ This table enumerates the structure of `PrivateData`
   },
   "data": {
     "expiresAt": "2023-09-13T23:11:17.315Z",
+    "payoutUnitsPerPayinUnit": "16.654345",
     "payin": {
-      "link": "http://cash.app/pfi?currency=usd&amount=50"
+      "currencyCode": "USD",
+      "subtotal": "200.00",
+      "fee": "0.20",
+      "total": "200.20",
+      "paymentInstruction": {
+        "link": "https://example-pfi.com/payin?currency=usd&amount=200.20"
+      }
     },
     "payout": {
-      "instruction": "BTC will be paid to the provided BTC address",
+      "currencyCode": "BTC",
+      "subtotal": "0.000016",
+      "total": "0.000016",
+      "paymentInstruction": {
+        "instruction": "BTC will be paid to the provided BTC address"
+      }
     }
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29yZUMxVVJNUUVWS204d3h6aFZGbnRMenZQWFlidEg4Q0VGTktVY1NrTFdUI3o2TWtvcmVDMVVSTVFFVkttOHd4emhWRm50THp2UFhZYnRIOENFRk5LVWNTa0xXVCJ9..R_BBKJoWifPFh10GJ1ij2gCCxND1CdzKbiOgPCIha__0GvRy0rHYCi18-TY7jNARaQ94RHXHYIsCRm2MuOPACw"
@@ -779,7 +793,6 @@ Quick explanation of terms used.
 | Term            | Definition                                                                                                                                                         |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | PFI             | Partipating Financial Institution: typically this is some kind of company that allows you to obtain a specified currency in exchange for another (e.g. BTC -> KES) |
-| KYC             | Know Your Customer: requirements that financial institutions know who their customer is for legal and compliance reasons.                                          |
 | payin           | a method/technology used by the sender to transmit funds to the PFI.                                                                                               |
 | payout          | a method/technology used by the PFI to transmit funds to the recipient. e.g. Mobile Money                                                                          |
 | payout currency | currency that the PFI is paying out to Alice. Alice will _receive_ the payout currency from the PFI.                                                               |
