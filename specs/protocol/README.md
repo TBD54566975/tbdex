@@ -58,6 +58,7 @@ Version: Draft
     - [`Close`](#close)
       - [Example Close](#example-close)
     - [`Cancel`](#cancel)
+      - [Example Cancel](#example-cancel)
 - [Common Traits](#common-traits)
   - [ID Generation](#id-generation-1)
   - [Digests](#digests)
@@ -417,7 +418,7 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 
 ## Message Kinds
 ### `RFQ (Request For Quote)`
-> Alice -> PFI: "Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
+> Alice -> PFI: "Give me a Quote against that Offering, and here is how much payin currency I want to trade for payout currency. Here are the credentials you're asking for, the payment method I want to pay in with, and the payment method I want you to pay out in."
 
 | field        | data type                                        | required | description                                                                                                                                                              |
 | ------------ | ------------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -519,7 +520,7 @@ This table enumerates the structure of `PrivateData`
 
 
 ### `Quote`
-> PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
+> PFI -> Alice: "OK, here's your Quote that describes how much payout currency you will receive based on your RFQ. Here's the total fee in payin currency associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
 
 | field                     | data type                       | required | description                                                                                                   |
 | ------------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
@@ -636,7 +637,7 @@ This table enumerates the structure of `PrivateData`
 
 A `Close` indicates a terminal state; no messages are valid after a `Close`. 
 A `Close` can be sent by the PFI at any point during the exchange, to indicate the PFI will not continue the exchange.
-A `Close` can *ONLY* be sent by PFI.
+A `Close` can **ONLY** be sent by PFI.
 
 | Field     | Data Type | Required | Description                                                  |
 | --------- | --------- | -------- | ------------------------------------------------------------ |
@@ -668,12 +669,17 @@ A `Close` can *ONLY* be sent by PFI.
 
 A `Cancel` indicates that Alice does not wish to further propagate the exchange.
 A `Cancel` can be sent by Alice after sending an RFQ, after receiving a Quote, and after sending an Order.
-If a `Cancel` is sent by Alice after she submits an `Order`, that means she would want a refund. There is no guarantee of whether `Cancel` will be honored by the PFI - it depends on their cancellation policy, which is outlined in their `Offering` [resource](./README.md#cancellationdetails)
+A `Cancel` can **ONLY** be sent by Alice.
+
+If a `Cancel` is sent by Alice after she submits an `Order`, that means she would want a refund of her payin. 
+There is no guarantee of whether `Cancel` will be honored by the PFI - it depends on their cancellation policy, which is outlined in their `Offering` [resource](./README.md#cancellationdetails)
 
 | field    | data type | required | description             |
 | -------- | --------- | -------- | ----------------------- |
 | `reason` | string    | N        | Reason for cancellation |
 
+
+#### Example Cancel
 
 ```json
 {
