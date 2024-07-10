@@ -45,34 +45,28 @@ Version: Draft
       - [`CreateExchangeRequest`](#createexchangerequest)
     - [Response](#response-1)
     - [Errors](#errors)
-  - [Submit Order](#submit-order)
+  - [Submit Order/Cancel](#submit-ordercancel)
     - [Description](#description-2)
     - [Endpoint](#endpoint-2)
     - [Protected](#protected-2)
+    - [Request Body](#request-body-1)
     - [Response](#response-2)
     - [Errors](#errors-1)
-  - [Submit Cancel](#submit-cancel)
+  - [Get Exchange](#get-exchange)
     - [Description](#description-3)
     - [Endpoint](#endpoint-3)
     - [Protected](#protected-3)
-    - [Request Body](#request-body-1)
     - [Response](#response-3)
-    - [Errors](#errors-2)
-  - [Get Exchange](#get-exchange)
+  - [List Exchanges](#list-exchanges)
     - [Description](#description-4)
     - [Endpoint](#endpoint-4)
     - [Protected](#protected-4)
     - [Response](#response-4)
-  - [List Exchanges](#list-exchanges)
-    - [Description](#description-5)
-    - [Endpoint](#endpoint-5)
-    - [Protected](#protected-5)
-    - [Response](#response-5)
   - [List Balances](#list-balances)
-    - [Description](#description-6)
-    - [Protected](#protected-6)
-    - [Endpoint](#endpoint-6)
-    - [Response](#response-6)
+    - [Description](#description-5)
+    - [Protected](#protected-5)
+    - [Endpoint](#endpoint-5)
+    - [Response](#response-5)
 - [References](#references)
 
 # Discoverability
@@ -344,35 +338,12 @@ False
 | 400    | Failed Signature Check  |
 | 409    | Exchange already exists |
 
-## Submit Order
-> [!IMPORTANT]
-> See Order structure [here](../protocol/README.md#order)
+## Submit Order/Cancel
 
 ### Description
-Submits the Order. Indicates that Alice wants to execute the provided Quote.
-
-### Endpoint
-`PUT /exchanges/:exchange_id`
-
-### Protected
-False
-
-### Response
-| Status             | Body                  |
-| ------------------ | --------------------- |
-| `202: Accepted`    | N/A                   |
-| `400: Bad Request` | `{ errors: Error[] }` |
-
-### Errors
-| Status | Description                                  |
-| ------ | -------------------------------------------- |
-| 400    | Failed Signature Check, or Order not allowed |
-| 404    | Exchange not found                           |
-
-## Submit Cancel
-
-### Description
-Alice attempts to cancel the exchange. Indicates that Alice is no longer interested **after** she submits an Order and **before** PFI sends a Close
+This endpoint can receive either an Order or a Cancel message.
+Alice can submit an Order, which indicates that she wants the PFI to execute on the Quote she received.
+Alice can submit a Cancel, which indicates that Alice is no longer interested in continuing with the exchange.
 
 ### Endpoint
 `PUT /exchanges/:exchange_id`
@@ -382,7 +353,14 @@ False
 
 ### Request Body
 > [!IMPORTANT]
+> See Order structure [here](../protocol/README.md#order)
 > See Cancel structure [here](../protocol/README.md#cancel)
+
+```javascript
+{
+  "message": { } // order or cancel message
+}
+```
 
 ### Response
 | Status             | Body                  |
@@ -391,11 +369,11 @@ False
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description            |
-| ------ | ---------------------- |
-| 400    | Failed Signature Check |
-| 409    | Close not allowed      |
-
+| Status | Description                |
+| ------ | -------------------------- |
+| 400    | Failed Signature Check     |
+| 404    | Exchange not found         |
+| 409    | Order or Close not allowed |
 
 ---
 
