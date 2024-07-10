@@ -47,9 +47,7 @@ Version: Draft
       - [`SelectedPayoutMethod`](#selectedpayoutmethod)
       - [`privateData`](#privatedata-1)
       - [`PrivatePaymentDetails`](#privatepaymentdetails)
-      - [RFQ example](#rfq-example)
-    - [`Close`](#close)
-      - [Example Close](#example-close)
+      - [Example RFQ](#example-rfq)
     - [`Quote`](#quote)
       - [`QuoteDetails`](#quotedetails)
       - [`PaymentInstruction`](#paymentinstruction)
@@ -57,6 +55,8 @@ Version: Draft
     - [`Order`](#order)
       - [Example Order](#example-order)
     - [`OrderStatus`](#orderstatus)
+    - [`Close`](#close)
+      - [Example Close](#example-close)
     - [`Cancel`](#cancel)
 - [Common Traits](#common-traits)
   - [ID Generation](#id-generation-1)
@@ -121,7 +121,7 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `payin`                   | [`PayinDetails`](#payindetails)                                                                          | Y        | Details and options associated to the _payin_ currency      |
 | `payout`                  | [`PayoutDetails`](#payoutdetails)                                                                        | Y        | Details and options associated to the _payout_ currency     |
 | `requiredClaims`          | [`PresentationDefinitionV2`](https://identity.foundation/presentation-exchange/#presentation-definition) | N        | Claim(s) required when submitting an RFQ for this offering. |
-| `cancellation`            | [`Cancellation`](#cancellationdetails)                                                                   | Y        | Details about PFI's cancellation policy                     |
+| `cancellation`            | [`CancellationDetails`](#cancellationdetails)                                                                   | Y        | Details about PFI's cancellation policy                     |
 
 #### `PayinDetails`
 | field          | data type                         | required | description                                            |
@@ -417,7 +417,7 @@ Currency amounts have type `DecimalString`, which is string containing a decimal
 
 ## Message Kinds
 ### `RFQ (Request For Quote)`
-> Alice -> PFI: "OK, that offering looks good. Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
+> Alice -> PFI: "Give me a Quote against that Offering, and here is how much USD (payin currency) I want to trade for BTC (payout currency). Here are the credentials you're asking for, the payment method I intend to pay you USD with, and the payment method I expect you to pay me BTC in."
 
 | field        | data type                                        | required | description                                                                                                                                                              |
 | ------------ | ------------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -469,7 +469,7 @@ This table enumerates the structure of `PrivateData`
 | ---------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `paymentDetails` | object    | N        | An object containing the properties defined in an Offering's `requiredPaymentDetails` json schema. If `data.payin/payout.paymentDetailsHash` is omitted, then `privateData.payin/payout.paymentDetails` respectively must also be omitted. |
 
-#### RFQ example
+#### Example RFQ
 ```json
 {
   "metadata": {
@@ -517,38 +517,6 @@ This table enumerates the structure of `PrivateData`
 }
 ```
 
-### `Close`
-> Alice -> PFI: "Not interested anymore." or "oops sent by accident"
-> PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)" or "Your exchange is completed"
-
-A `Close` indicates a terminal state; no messages are valid after a `Close`. 
-A `Close` can be sent by Alice after she sends an RFQ, or after she receives a Quote, to indicate she is no longer interested in continuing the exchange.
-A `Close` can be sent by the PFI at any point during the exchange, to indicate the PFI cannot continue the exchange.
-
-| Field     | Data Type | Required | Description                                                  |
-| --------- | --------- | -------- | ------------------------------------------------------------ |
-| `reason`  | string    | N        | an explanation of why the exchange is being closed/completed |
-| `success` | boolean   | N        | indicates whether or not the exchange successfully completed |
-
-#### Example Close
-```json
-{
-  "metadata": {
-    "from": "did:ex:pfi",
-    "to": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
-    "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
-    "kind": "close",
-    "id": "close_03ha83trerk6t9tkg7q42s48j",
-    "createdAt": "2023-09-13T20:28:40.345Z",
-    "protocol": "1.0"
-  },
-  "data": {
-    "reason": "Rejecting RFQ",
-    "success": false
-  },
-  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
-}
-```
 
 ### `Quote`
 > PFI -> Alice: "OK, here's your Quote that describes how much BTC you will receive based on your RFQ. Here's the total fee in USD associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
@@ -598,7 +566,6 @@ A `Close` can be sent by the PFI at any point during the exchange, to indicate t
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29yZUMxVVJNUUVWS204d3h6aFZGbnRMenZQWFlidEg4Q0VGTktVY1NrTFdUI3o2TWtvcmVDMVVSTVFFVkttOHd4emhWRm50THp2UFhZYnRIOENFRk5LVWNTa0xXVCJ9..R_BBKJoWifPFh10GJ1ij2gCCxND1CdzKbiOgPCIha__0GvRy0rHYCi18-TY7jNARaQ94RHXHYIsCRm2MuOPACw"
 }
 ```
-
 
 ### `Order`
 > Alice -> PFI: I'm happy with the quote and I want to execute the transaction"
@@ -650,10 +617,44 @@ A `Close` can be sent by the PFI at any point during the exchange, to indicate t
 }
 ```
 
-### `Cancel`
-> Alice -> PFI: "I would like to back out of the exchange. I want a refund."
+### `Close`
+> PFI -> Alice: "Can't fulfill what you sent me for whatever reason (e.g. RFQ is erroneous, don't have enough liquidity etc.)" or "Your exchange is completed"
 
-`Cancel` can only be submitted by Alice after an `Order` message and before a `Close` message. There is no guarantee of whether `Cancel` will be honored by the PFI - it depends on their cancellation policy, which is outlined in their `Offering` resource.
+A `Close` indicates a terminal state; no messages are valid after a `Close`. 
+A `Close` can be sent by the PFI at any point during the exchange, to indicate the PFI will not continue the exchange.
+A `Close` can *ONLY* be sent by PFI.
+
+| Field     | Data Type | Required | Description                                                  |
+| --------- | --------- | -------- | ------------------------------------------------------------ |
+| `reason`  | string    | N        | an explanation of why the exchange is being closed/completed |
+| `success` | boolean   | N        | indicates whether or not the exchange successfully completed |
+
+#### Example Close
+```json
+{
+  "metadata": {
+    "from": "did:ex:pfi",
+    "to": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
+    "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
+    "kind": "close",
+    "id": "close_03ha83trerk6t9tkg7q42s48j",
+    "createdAt": "2023-09-13T20:28:40.345Z",
+    "protocol": "1.0"
+  },
+  "data": {
+    "reason": "Rejecting RFQ",
+    "success": false
+  },
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
+}
+```
+
+### `Cancel`
+> Alice -> PFI: "I would like to back out of the exchange." or "I want a refund".
+
+A `Cancel` indicates that Alice does not wish to further propagate the exchange.
+A `Cancel` can be sent by Alice after sending an RFQ, after receiving a Quote, and after sending an Order.
+If a `Cancel` is sent by Alice after she submits an `Order`, that means she would want a refund. There is no guarantee of whether `Cancel` will be honored by the PFI - it depends on their cancellation policy, which is outlined in their `Offering` [resource](./README.md#cancellationdetails)
 
 | field    | data type | required | description             |
 | -------- | --------- | -------- | ----------------------- |
