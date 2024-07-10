@@ -33,7 +33,6 @@ Version: Draft
     - [Description](#description)
     - [Endpoint](#endpoint)
     - [Protected](#protected)
-    - [Query Params](#query-params-1)
     - [Response](#response)
 - [Exchanges](#exchanges)
   - [Create Exchange](#create-exchange)
@@ -46,37 +45,28 @@ Version: Draft
       - [`CreateExchangeRequest`](#createexchangerequest)
     - [Response](#response-1)
     - [Errors](#errors)
-  - [Submit Order](#submit-order)
+  - [Submit Order/Close](#submit-orderclose)
     - [Description](#description-2)
     - [Endpoint](#endpoint-2)
     - [Protected](#protected-2)
-    - [Order Request Body](#order-request-body)
+    - [Request Body](#request-body-1)
     - [Response](#response-2)
     - [Errors](#errors-1)
-  - [Submit Close](#submit-close)
+  - [Get Exchange](#get-exchange)
     - [Description](#description-3)
     - [Endpoint](#endpoint-3)
     - [Protected](#protected-3)
-    - [Request Body](#request-body-1)
     - [Response](#response-3)
-    - [Errors](#errors-2)
-  - [Get Exchange](#get-exchange)
+  - [List Exchanges](#list-exchanges)
     - [Description](#description-4)
     - [Endpoint](#endpoint-4)
     - [Protected](#protected-4)
     - [Response](#response-4)
-  - [List Exchanges](#list-exchanges)
-    - [Description](#description-5)
-    - [Endpoint](#endpoint-5)
-    - [Protected](#protected-5)
-    - [Response](#response-5)
-    - [Query Params](#query-params-2)
   - [List Balances](#list-balances)
-    - [Description](#description-6)
-    - [Protected](#protected-6)
-    - [Endpoint](#endpoint-6)
-    - [Response](#response-6)
-      - [Example](#example-3)
+    - [Description](#description-5)
+    - [Protected](#protected-5)
+    - [Endpoint](#endpoint-5)
+    - [Response](#response-5)
 - [References](#references)
 
 # Discoverability
@@ -302,7 +292,7 @@ False
 #### `CreateExchangeRequest`
 | field     | data type | required | description                                                                  |
 | --------- | --------- | -------- | ---------------------------------------------------------------------------- |
-| `rfq`     | object    | Y        | The request for quote                                                        |
+| `message` | object    | Y        | The request for quote                                                        |
 | `replyTo` | string    | N        | A string containing a valid URI where new messages from the PFI will be sent |
 
 > [!IMPORTANT]
@@ -310,7 +300,7 @@ False
 
 ```json
 {
-  "rfq": {
+  "message": {
     {
       "metadata": {
         "from": "did:key:z6Mks4N5XdrE6VieJsgH8SMSRavmTox74RqoroW7bZzBLQBi",
@@ -351,7 +341,9 @@ False
 ## Submit Order/Close
 
 ### Description
-Closes the exchange. Indicates that Alice is no longer interested
+This endpoint can receive either an Order or a Close message.
+Alice can submit an Order, which indicates that she wants the PFI to execute on the Quote she received.
+Alice can submit a Close, which indicates that Alice is no longer interested in continuing with the exchange.
 
 ### Endpoint
 `PUT /exchanges/:exchange_id`
@@ -361,8 +353,14 @@ False
 
 ### Request Body
 > [!IMPORTANT]
+> See Order structure [here](../protocol/README.md#order)
 > See Close structure [here](../protocol/README.md#close)
 
+```javascript
+{
+  "message": { } // order or close message
+}
+```
 
 ### Response
 | Status             | Body                  |
@@ -385,7 +383,7 @@ False
 Retrieves all messages associated to a specific exchange
 
 ### Endpoint
-`GET /exchanges/:id`
+`GET /exchanges/:exchange_id`
 
 ### Protected
 True
@@ -436,12 +434,12 @@ True
 `GET /balances`
 
 ### Response
-| Status             | Body                                   |
-| ------------------ | -------------------------------------- |
-| `200: OK.     `    | `{ data: Balance[] }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource|
-| `400: Bad Request` | `{ errors: Error[] }`                  |
-| `404: Not Found`   | N/A                                    |
-| `403: Forbidden`   | N/A                                    |
+| Status             | Body                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `200: OK.     `    | `{ data: Balance[] }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource |
+| `400: Bad Request` | `{ errors: Error[] }`                                                                                                                                               |
+| `404: Not Found`   | N/A                                                                                                                                                                 |
+| `403: Forbidden`   | N/A                                                                                                                                                                 |
 
 # References
 * JSON:API spec: https://jsonapi.org/format/
