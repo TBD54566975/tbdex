@@ -14,7 +14,8 @@ Version: Draft
 - [Discoverability](#discoverability)
   - [Example](#example)
 - [Error Responses](#error-responses)
-  - [Error object](#error-object)
+  - [Error response structure](#error-response-structure)
+  - [ErrorDetail structure](#errordetail-structure)
   - [Example](#example-1)
 - [Exceptions](#exceptions)
 - [Query Params](#query-params)
@@ -68,6 +69,29 @@ Version: Draft
     - [Endpoint](#endpoint-5)
     - [Response](#response-5)
 - [References](#references)
+>>>>>>> e9ca0bde0abbaef40f94889865b3075f08eff4e7
+    - [Description](#description-2)
+    - [Endpoint](#endpoint-2)
+    - [Protected](#protected-2)
+    - [Request Body](#request-body-1)
+    - [Response](#response-2)
+    - [Errors](#errors-1)
+  - [Get Exchange](#get-exchange)
+    - [Description](#description-3)
+    - [Endpoint](#endpoint-3)
+    - [Protected](#protected-3)
+    - [Response](#response-3)
+  - [List Exchanges](#list-exchanges)
+    - [Description](#description-4)
+    - [Endpoint](#endpoint-4)
+    - [Protected](#protected-4)
+    - [Response](#response-4)
+  - [List Balances](#list-balances)
+    - [Description](#description-5)
+    - [Protected](#protected-5)
+    - [Endpoint](#endpoint-5)
+    - [Response](#response-5)
+- [References](#references)
 
 # Discoverability
 PFIs can become publicly discoverable by advertising their API endpoint as a [Service](https://www.w3.org/TR/did-core/#services) within their DID Document. In order to increase the likelihood of being discovered The `service` entry **SHOULD** include the following properties:
@@ -99,41 +123,31 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 * An error response is one whose status code is `>= 400`.
 * If present, the body of an error response will conform to the following:
 
+## Error response structure
+| Field     | Type          | Required | Description                                                              |
+| --------- | ------------- | -------- | ------------------------------------------------------------------------ |
+| `message` | String        | Y        | A human-readable explanation specific to this occurrence of the problem. |
+| `details` | ErrorDetail[] | N        | Optional array of `ErrorDetail` objects                                  |
 
-| Field    | Required (Y/N) | Description             |
-| -------- | -------------- | ----------------------- |
-| `errors` | Y              | List of `Error` objects |
-
-
-## Error object
-| Field              | Required (Y/N) | Description                                                                                                                                                                                            |
-| ------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`               | N              | A unique identifier for this particular occurrence of the problem.                                                                                                                                     |
-| `status`           | N              | The HTTP status code applicable to this problem, expressed as a string value. This SHOULD be provided.                                                                                                 |
-| `code`             | N              | An application-specific error code, expressed as a string value.                                                                                                                                       |
-| `title`            | N              | A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.                                               |
-| `detail`           | Y              | A human-readable explanation specific to this occurrence of the problem. Like `title`, this field’s value can be localized.                                                                            |
-| `source`           | N              | An object containing references to the primary source of the error. It should include the `pointer`, `parameter`, or `header` members or be omitted.                                                   |
-| `source.pointer`   | N              | A JSON Pointer to the value in the request document that caused the error. This MUST point to a value in the request document that exists; if it doesn’t, the client SHOULD simply ignore the pointer. |
-| `source.parameter` | N              | A string indicating which URI query parameter caused the error.                                                                                                                                        |
-| `source.header`    | N              | A string indicating the name of a single request header which caused the error.                                                                                                                        |
-| `meta`             | N              | A meta object containing non-standard meta-information about the error.                                                                                                                                |
+## ErrorDetail structure
+| Field     | Type   | Required | Description                                                                            |
+| --------- | ------ | -------- | -------------------------------------------------------------------------------------- |
+| `id`      | String | N        | Optional server-generated request-specific ID, useful for diagnosing unexpected errors |
+| `message` | String | N        | A human-readable explanation specific to this occurrence of the problem.               |
+| `path`    | String | N        | Path where validation failed (i.e. JSON schema path)                                   |
 
 ---
 
 ## Example
 ```json
 {
-  "errors": [
-    {
-      "id": "95e076c3-1589-4535-9a38-dba793d5c181",
-      "status": 400,
-      "detail": "Offering with id offering_xyz not found",
-
-    }
-  ]
+  "message": "Missing field: payin.amount",
+  "details": [{ 
+    "id": "9af2bf88-e4f4-4f81-8ba9-55eaeeb718e2",
+    "message": "Payin amount must be present.",
+    "path": "$.payin.amount" 
+  }]
 }
-
 ```
 
 # Exceptions
@@ -292,7 +306,7 @@ False
 #### `CreateExchangeRequest`
 | field     | data type | required | description                                                                  |
 | --------- | --------- | -------- | ---------------------------------------------------------------------------- |
-| `rfq`     | object    | Y        | The request for quote                                                        |
+| `message` | object    | Y        | The request for quote                                                        |
 | `replyTo` | string    | N        | A string containing a valid URI where new messages from the PFI will be sent |
 
 > [!IMPORTANT]
@@ -300,7 +314,7 @@ False
 
 ```json
 {
-  "rfq": {
+  "message": {
     {
       "metadata": {
         "from": "did:key:z6Mks4N5XdrE6VieJsgH8SMSRavmTox74RqoroW7bZzBLQBi",
@@ -369,11 +383,11 @@ False
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description                |
-| ------ | -------------------------- |
-| 400    | Failed Signature Check     |
-| 404    | Exchange not found         |
-| 409    | Order or Close not allowed |
+| Status | Description                 |
+| ------ | --------------------------- |
+| 400    | Failed Signature Check      |
+| 404    | Exchange not found          |
+| 409    | Order or Cancel not allowed |
 
 ---
 
@@ -383,7 +397,7 @@ False
 Retrieves all messages associated to a specific exchange
 
 ### Endpoint
-`GET /exchanges/:id`
+`GET /exchanges/:exchange_id`
 
 ### Protected
 True
