@@ -1,19 +1,20 @@
 {
   "description": "Balance parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy\",\"kind\":\"balance\",\"id\":\"balance_01hw25hn2pej6rdnd5qnh96wxj\",\"createdAt\":\"2024-04-22T05:48:01.494Z\",\"protocol\":\"1.0\"},\"data\":{\"currencyCode\":\"USD\",\"available\":\"400.00\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..v6cJEJuEOjCes3-7UJvkyMgPRUk9dD3h_COfjSEQJiNMpQ7DOMTnFAVd-g_gsO4Y5FBqnKT8B9N86pFPoebNCQ\"}",
+  "input": "{\"metadata\": {\"from\": \"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6ImtRTWxxMTk0bjlHOXJiZWkxcDdEQW1ERi01S0loZXJnQkFKcno3Ulo5NXcifQ\",\"kind\": \"balance\",\"id\": \"balance_01j2f51rn5f3q8tp9tpgywsv62\",\"createdAt\": \"2024-07-10T20:23:39Z\",\"updatedAt\": \"2024-07-10T20:23:39Z\",\"protocol\": \"1.0\"},\"data\": {\"currencyCode\": \"USD\",\"available\": \"100.00\"},\"signature\": \"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbXRSVFd4eE1UazBiamxIT1hKaVpXa3hjRGRFUVcxRVJpMDFTMGxvWlhKblFrRktjbm8zVWxvNU5YY2lmUSMwIn0..OUf6mdYzPB1fFlzP-mdu7_lOtCuKEdng_iAJaBcImNVczha40mihJTBekdLquHZM8Wo1aGwGbHBzI41NqHlbAA\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy",
+      "from": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6ImtRTWxxMTk0bjlHOXJiZWkxcDdEQW1ERi01S0loZXJnQkFKcno3Ulo5NXcifQ",
       "kind": "balance",
-      "id": "balance_01hw25hn2pej6rdnd5qnh96wxj",
-      "createdAt": "2024-04-22T05:48:01.494Z",
+      "id": "balance_01j2f51rn5f3q8tp9tpgywsv62",
+      "createdAt": "2024-07-10T20:23:39Z",
+      "updatedAt": "2024-07-10T20:23:39Z",
       "protocol": "1.0"
     },
     "data": {
       "currencyCode": "USD",
-      "available": "400.00"
+      "available": "100.00"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..v6cJEJuEOjCes3-7UJvkyMgPRUk9dD3h_COfjSEQJiNMpQ7DOMTnFAVd-g_gsO4Y5FBqnKT8B9N86pFPoebNCQ"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbXRSVFd4eE1UazBiamxIT1hKaVpXa3hjRGRFUVcxRVJpMDFTMGxvWlhKblFrRktjbm8zVWxvNU5YY2lmUSMwIn0..OUf6mdYzPB1fFlzP-mdu7_lOtCuKEdng_iAJaBcImNVczha40mihJTBekdLquHZM8Wo1aGwGbHBzI41NqHlbAA"
   },
   "error": false
 }
