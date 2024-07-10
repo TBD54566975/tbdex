@@ -15,7 +15,6 @@ Version: Draft
   - [Example](#example)
 - [Error Responses](#error-responses)
   - [Error response structure](#error-response-structure)
-  - [Error `code`](#error-code)
   - [ErrorDetail structure](#errordetail-structure)
   - [Example](#example-1)
 - [Exceptions](#exceptions)
@@ -102,23 +101,17 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 * If present, the body of an error response will conform to the following:
 
 ## Error response structure
-| Field     | Type          | Required | Description                                                                            |
-| --------- | ------------- | -------- | -------------------------------------------------------------------------------------- |
-| `message` | String        | Y        | A human-readable explanation specific to this occurrence of the problem.               |
-| `id`      | String        | N        | Optional server-generated request-specific ID, useful for diagnosing unexpected errors |
-| `code`    | String        | Y        | An application-specific error code, expressed as a string value.                       |
-| `details` | ErrorDetail[] | N        | Optional array of `ErrorDetail` objects                                                |
-
-## Error `code`
-| Code | Description |
-| ---- | ----------- |
-| TODO |
+| Field     | Type          | Required | Description                                                              |
+| --------- | ------------- | -------- | ------------------------------------------------------------------------ |
+| `message` | String        | Y        | A human-readable explanation specific to this occurrence of the problem. |
+| `details` | ErrorDetail[] | N        | Optional array of `ErrorDetail` objects                                  |
 
 ## ErrorDetail structure
-| Field     | Type   | Required | Description                                                              |
-| --------- | ------ | -------- | ------------------------------------------------------------------------ |
-| `message` | String | N        | A human-readable explanation specific to this occurrence of the problem. |
-| `path`    | String | N        | Path where validation failed (i.e. JSON schema path)                     |
+| Field     | Type   | Required | Description                                                                            |
+| --------- | ------ | -------- | -------------------------------------------------------------------------------------- |
+| `id`      | String | N        | Optional server-generated request-specific ID, useful for diagnosing unexpected errors |
+| `message` | String | N        | A human-readable explanation specific to this occurrence of the problem.               |
+| `path`    | String | N        | Path where validation failed (i.e. JSON schema path)                                   |
 
 ---
 
@@ -126,9 +119,8 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 ```json
 {
   "message": "Missing field: payin.amount",
-  "id": "9af2bf88-e4f4-4f81-8ba9-55eaeeb718e2",
-  "code": "TBDEX_MESSAGE_VALIDATION_ERROR",
   "details": [{ 
+    "id": "9af2bf88-e4f4-4f81-8ba9-55eaeeb718e2",
     "message": "Payin amount must be present.",
     "path": "$.payin.amount" 
   }]
