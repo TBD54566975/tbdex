@@ -55,6 +55,7 @@ Version: Draft
     - [`Order`](#order)
       - [Example Order](#example-order)
     - [`OrderStatus`](#orderstatus)
+      - [`Status`](#status)
     - [`Close`](#close)
       - [Example Close](#example-close)
     - [`Cancel`](#cancel)
@@ -613,9 +614,27 @@ This table enumerates the structure of `PrivateData`
 > **Note**
 > There can be many `OrderStatus` messages in a tbdex exchange. 1 for every status change that a PFI wants to inform Alice of.
 
-| field         | data type | required | description                                   |
-| ------------- | --------- | -------- | --------------------------------------------- |
-| `orderStatus` | string    | Y        | Current status of Order that's being executed |
+| field     | data type | required | description                                   |
+| --------- | --------- | -------- | --------------------------------------------- |
+| `status`  | `Status`  | Y        | Current status of Order that's being executed |
+| `details` | string    | N        | Additional details about the status           |
+
+#### `Status`
+| `Status` value   | description                                                                   |
+| ---------------- | ----------------------------------------------------------------------------- |
+| PAYIN_PENDING    | PFI is awaiting payment from Alice.                                           |
+| PAYIN_INITIATED  | Payment from Alice has been initiated.                                        |
+| PAYIN_SETTLED    | Payment from Alice has been settled into PFI's account.                       |
+| PAYIN_FAILED     | Payment from Alice failed.                                                    |
+| PAYIN_EXPIRED    | Payment from Alice has not been received before Quote's `expiresAt` datetime. |
+| PAYOUT_PENDING   | Payment to Alice is pending further processing.                               |
+| PAYOUT_INITIATED | Payment to Alice has been initiated.                                          |
+| PAYOUT_SETTLED   | Payment to Alice has been settled out of PFI's account.                       |
+| PAYOUT_FAILED    | Payment to Alice failed.                                                      |
+| REFUND_PENDING   | Refund of Alice's payin is pending further processing.                        |
+| REFUND_INITIATED | Refund of Alice's payin has been initiated.                                   |
+| REFUND_FAILED    | Refund of Alice's payin failed.                                               |
+| REFUND_SETTLED   | Refund of Alice's payin has settled out of PFI's account.                     |
 
 
 ```json
