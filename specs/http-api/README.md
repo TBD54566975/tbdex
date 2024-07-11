@@ -46,7 +46,7 @@ Version: Draft
       - [`CreateExchangeRequest`](#createexchangerequest)
     - [Response](#response-1)
     - [Errors](#errors)
-  - [Submit Order/Close](#submit-orderclose)
+  - [Submit Order/Cancel](#submit-ordercancel)
     - [Description](#description-2)
     - [Endpoint](#endpoint-2)
     - [Protected](#protected-2)
@@ -329,12 +329,12 @@ False
 | 400    | Failed Signature Check  |
 | 409    | Exchange already exists |
 
-## Submit Order/Close
+## Submit Order/Cancel
 
 ### Description
-This endpoint can receive either an Order or a Close message.
+This endpoint can receive either an Order or a Cancel message.
 Alice can submit an Order, which indicates that she wants the PFI to execute on the Quote she received.
-Alice can submit a Close, which indicates that Alice is no longer interested in continuing with the exchange.
+Alice can submit a Cancel, which indicates that Alice is no longer interested in continuing with the exchange.
 
 ### Endpoint
 `PUT /exchanges/:exchange_id`
@@ -345,11 +345,11 @@ False
 ### Request Body
 > [!IMPORTANT]
 > See Order structure [here](../protocol/README.md#order)
-> See Close structure [here](../protocol/README.md#close)
+> See Cancel structure [here](../protocol/README.md#cancel)
 
 ```javascript
 {
-  "message": { } // order or close message
+  "message": { } // order or cancel message
 }
 ```
 
@@ -360,11 +360,11 @@ False
 | `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
-| Status | Description            |
-| ------ | ---------------------- |
-| 400    | Failed Signature Check |
-| 404    | Exchange not found     |
-| 409    | Close not allowed      |
+| Status | Description                 |
+| ------ | --------------------------- |
+| 400    | Failed Signature Check      |
+| 404    | Exchange not found          |
+| 409    | Order or Cancel not allowed |
 
 ---
 
