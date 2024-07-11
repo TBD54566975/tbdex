@@ -11,6 +11,7 @@
         "PAYIN_INITIATED", 
         "PAYIN_SETTLED", 
         "PAYIN_FAILED", 
+        "PAYIN_EXPIRED",
         "PAYOUT_PENDING", 
         "PAYOUT_INITIATED", 
         "PAYOUT_SETTLED", 
