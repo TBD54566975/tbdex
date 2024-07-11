@@ -153,11 +153,11 @@ An `Offering` is a resource created by a PFI to define requirements for a given 
 | `max`                    | [`DecimalString`](#decimalstring)       | N        | maximum amount allowed when using this payment method.                                                                                              |
 
 #### `CancellationDetails`
-| field       | data type                                              | required | description                                               |
-| ----------- | ------------------------------------------------------ | -------- | --------------------------------------------------------- |
-| `enabled`   | boolean                                                | Y        | Whether cancellation is enabled for this offering         |
-| `terms_url` | [`URI`](https://datatracker.ietf.org/doc/html/rfc3986) | N        | A link to a page that describes the terms of cancellation |
-| `terms`     | string                                                 | N        | Cancellation terms in plaintext                           |
+| field       | data type                                              | required | description                                                            |
+| ----------- | ------------------------------------------------------ | -------- | ---------------------------------------------------------------------- |
+| `enabled`   | boolean                                                | Y        | Whether cancellation is enabled for this offering                      |
+| `terms_url` | [`URI`](https://datatracker.ietf.org/doc/html/rfc3986) | N        | A link to a page that describes the terms of cancellation              |
+| `terms`     | string                                                 | N        | A human-readable description of the terms of cancellation in plaintext |
 
 
 > [!IMPORTANT]
@@ -294,6 +294,10 @@ Some payment methods should be consistent across PFIs and therefore have reserve
           }
         }
       ]
+    },
+    "cancellation": {
+      "enabled": true,
+      "terms_url": "http://example.com/refund_policy"
     }
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2syc1QyZUtvQWdUUTdzWjY3YTdmRDMzR21jYzZ1UXdaYmlxeWF5Rk1hYkhHI3o2TWtrMnNUMmVLb0FnVFE3c1o2N2E3ZkQzM0dtY2M2dVF3WmJpcXlheUZNYWJIRyJ9..9EBTL3VcajsQzSNOm8GElhcwvYcFGaRp24FTwmC845RCF84Md-ZB-CxdCo7kEjzsAY8OaB55XFSH_8K9vedhAw"

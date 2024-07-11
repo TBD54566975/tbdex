@@ -142,12 +142,31 @@
     "requiredClaims": {
       "type": "object",
       "description": "PresentationDefinition that describes the credential(s) the PFI requires in order to provide a quote."
+    },
+    "cancellation": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether cancellation is enabled for this offering"
+        },
+        "terms_url": {
+          "type": "string",
+          "description": "A link to a page that describes the terms of cancellation"
+        },
+        "terms": {
+          "type": "string",
+          "description": "A human-readable description of the terms of cancellation in plaintext"
+        }
+      },
+      "required": ["enabled"]
     }
   },
   "required": [
     "description",
     "payin",
     "payout",
-    "payoutUnitsPerPayinUnit"
+    "payoutUnitsPerPayinUnit",
+    "cancellation"
   ]
 }
