@@ -1,20 +1,21 @@
 {
   "description": "Order Status parses from string",
-  "input": "{\"metadata\":{\"from\":\"did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy\",\"to\":\"did:dht:qyac4pru9ykcxbrutpaaxkmususxh4wtc4ctt19813zrie8uyy5y\",\"exchangeId\":\"rfq_01hw25hn39ermsmftw3a3rb1ph\",\"protocol\":\"1.0\",\"kind\":\"orderstatus\",\"id\":\"orderstatus_01hw25hn39ermsmftw3d1efc2f\",\"createdAt\":\"2024-04-22T05:48:01.513Z\"},\"data\":{\"orderStatus\":\"wee\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..alR9hfgjKSbSEmuXi1fpA7Puh5JNp22uDqk2b5zGcbvbgUsDCkChBQ47SWjAV5BchmfZ0yaDLPQPTxiH918jBQ\"}",
+  "input": "{\"metadata\":{\"from\":\"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6IlhOOVB3T3R2MUEwV1VxcFp6YTFHeHFQM1VoRUxDZWhsdXBPcnp3dEl6NGMifQ\",\"to\":\"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6ImFHdVlsbmxiRHVZVmZMSVRJeDJkdWxPajhMVkFGaF83QzlEN2VQaU4xRnMifQ\",\"kind\":\"orderstatus\",\"id\":\"orderstatus_01j2hk4kt5f8jrsnmt24fnty86\",\"exchangeId\":\"rfq_01j2hk4kt5f8jbb105b3kaj0jp\",\"createdAt\":\"2024-07-11T19:08:21Z\",\"protocol\":\"1.0\"},\"data\":{\"status\":\"PAYIN_INITIATED\",\"details\":\"CC Payment Initiated\"},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbGhPT1ZCM1QzUjJNVUV3VjFWeGNGcDZZVEZIZUhGUU0xVm9SVXhEWldoc2RYQlBjbnAzZEVsNk5HTWlmUSMwIn0..9ieXFwyxUq13OXGFQuhNjZK7rznTghkhH4McnwJ7GqBtWiQBxwvbpMEE8ZWezMhKsbLuBbLi3UBfcrdU-3VyCA\"}",
   "output": {
     "metadata": {
-      "from": "did:dht:3whftgpbdjihx9ze9tdn575zqzm4qwccetnf1ybiibuzad7rrmyy",
-      "to": "did:dht:qyac4pru9ykcxbrutpaaxkmususxh4wtc4ctt19813zrie8uyy5y",
-      "exchangeId": "rfq_01hw25hn39ermsmftw3a3rb1ph",
-      "protocol": "1.0",
+      "from": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6IlhOOVB3T3R2MUEwV1VxcFp6YTFHeHFQM1VoRUxDZWhsdXBPcnp3dEl6NGMifQ",
+      "to": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6ImFHdVlsbmxiRHVZVmZMSVRJeDJkdWxPajhMVkFGaF83QzlEN2VQaU4xRnMifQ",
       "kind": "orderstatus",
-      "id": "orderstatus_01hw25hn39ermsmftw3d1efc2f",
-      "createdAt": "2024-04-22T05:48:01.513Z"
+      "id": "orderstatus_01j2hk4kt5f8jrsnmt24fnty86",
+      "exchangeId": "rfq_01j2hk4kt5f8jbb105b3kaj0jp",
+      "createdAt": "2024-07-11T19:08:21Z",
+      "protocol": "1.0"
     },
     "data": {
-      "orderStatus": "wee"
+      "status": "PAYIN_INITIATED",
+      "details": "CC Payment Initiated"
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpkaHQ6M3doZnRncGJkamloeDl6ZTl0ZG41NzV6cXptNHF3Y2NldG5mMXliaWlidXphZDdycm15eSMwIn0..alR9hfgjKSbSEmuXi1fpA7Puh5JNp22uDqk2b5zGcbvbgUsDCkChBQ47SWjAV5BchmfZ0yaDLPQPTxiH918jBQ"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbGhPT1ZCM1QzUjJNVUV3VjFWeGNGcDZZVEZIZUhGUU0xVm9SVXhEWldoc2RYQlBjbnAzZEVsNk5HTWlmUSMwIn0..9ieXFwyxUq13OXGFQuhNjZK7rznTghkhH4McnwJ7GqBtWiQBxwvbpMEE8ZWezMhKsbLuBbLi3UBfcrdU-3VyCA"
   },
   "error": false
 }
