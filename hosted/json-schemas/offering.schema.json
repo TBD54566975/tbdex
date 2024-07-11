@@ -150,7 +150,7 @@
           "type": "boolean",
           "description": "Whether cancellation is enabled for this offering"
         },
-        "terms_url": {
+        "termsUrl": {
           "type": "string",
           "description": "A link to a page that describes the terms of cancellation"
         },
