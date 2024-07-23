@@ -602,8 +602,8 @@ This table enumerates the structure of `PrivateData`
 
 | field    | data type                                   | required | description                                                                                                   |
 | -------- | ------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| `payin`  | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link)     |
-| `payout` | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how be paid by the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
+| `payin`  | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how to pay the PFI (e.g. BTC address, payment link)     |
+| `payout` | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how be paid by the PFI (e.g. BTC address, payment link) |
 
 
 #### `PaymentInstruction`
@@ -613,7 +613,7 @@ This table enumerates the structure of `PrivateData`
 | `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI |
 
 
-#### Example Quote
+#### Example OrderInstructions
 ```json
 {
   "metadata": {
@@ -626,8 +626,6 @@ This table enumerates the structure of `PrivateData`
     "protocol": "1.0"
   },
   "data": {
-    "expiresAt": "2023-09-13T23:11:17.315Z",
-    "payoutUnitsPerPayinUnit": "16.654345",
     "payin": {
       "link": "https://example-pfi.com/payin?currency=usd&amount=200.20"
     },
