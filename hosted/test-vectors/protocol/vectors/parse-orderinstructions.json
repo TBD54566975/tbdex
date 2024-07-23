@@ -1,0 +1,27 @@
+{
+  "description": "OrderInstructions parses from string",
+  "input": "{\"metadata\":{\"from\":\"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6IlJnenp4VEhEWkhua2l1dXg5RWE0YktZS0ttSzR5QkRYRnlSSGUtLVQ2Y2sifQ\",\"to\":\"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6IndiTTc4VzAtcXhtM0wxOWZfMkYtZ1FWOUhWNkEtcERwOVJyWUtNN0NCZTgifQ\",\"kind\":\"orderinstructions\",\"id\":\"orderinstructions_01j3ers909e91v1m52p1pg4dwt\",\"exchangeId\":\"rfq_01j3ers909e91a1e1cafmj9b9z\",\"createdAt\":\"2024-07-23T03:05:00Z\",\"protocol\":\"1.0\"},\"data\":{\"payin\":{\"link\":\"http://example.com/payin/123\",\"instruction\":\"deducted from stored balance\"},\"payout\":{\"link\":\"http://example.com/payout/123\",\"instruction\":\"sent to your bank account\"}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbEpuZW5wNFZFaEVXa2h1YTJsMWRYZzVSV0UwWWt0WlMwdHRTelI1UWtSWVJubFNTR1V0TFZRMlkyc2lmUSMwIn0..FIa-a_6a_eKEuM6gAcWp9VPKge_x1UFnPhoT6fdsq0MxgYBRlPPs1fzNqaKD7U_M4icjZ2x4lWR10GLkBy-gCA\"}",
+  "output": {
+    "metadata": {
+      "from": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6IlJnenp4VEhEWkhua2l1dXg5RWE0YktZS0ttSzR5QkRYRnlSSGUtLVQ2Y2sifQ",
+      "to": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6IndiTTc4VzAtcXhtM0wxOWZfMkYtZ1FWOUhWNkEtcERwOVJyWUtNN0NCZTgifQ",
+      "kind": "orderinstructions",
+      "id": "orderinstructions_01j3ers909e91v1m52p1pg4dwt",
+      "exchangeId": "rfq_01j3ers909e91a1e1cafmj9b9z",
+      "createdAt": "2024-07-23T03:05:00Z",
+      "protocol": "1.0"
+    },
+    "data": {
+      "payin": {
+        "link": "http://example.com/payin/123",
+        "instruction": "deducted from stored balance"
+      },
+      "payout": {
+        "link": "http://example.com/payout/123",
+        "instruction": "sent to your bank account"
+      }
+    },
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbEpuZW5wNFZFaEVXa2h1YTJsMWRYZzVSV0UwWWt0WlMwdHRTelI1UWtSWVJubFNTR1V0TFZRMlkyc2lmUSMwIn0..FIa-a_6a_eKEuM6gAcWp9VPKge_x1UFnPhoT6fdsq0MxgYBRlPPs1fzNqaKD7U_M4icjZ2x4lWR10GLkBy-gCA"
+  },
+  "error": false
+}
