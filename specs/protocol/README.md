@@ -215,7 +215,7 @@ Some payment methods should be consistent across PFIs and therefore have reserve
         {
           "kind": "DEBIT_CARD",
           "requiredPaymentDetails": {
-            "$schema": "https://json-schema.org/draft-07/schema#",
+            "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
             "properties": {
               "cardNumber": {
@@ -259,7 +259,7 @@ Some payment methods should be consistent across PFIs and therefore have reserve
           "kind": "BTC_ADDRESS",
           "estimatedSettlementTime": 3600,
           "requiredPaymentDetails": {
-            "$schema": "https://json-schema.org/draft-07/schema#",
+            "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
             "properties": {
               "btcAddress": {
