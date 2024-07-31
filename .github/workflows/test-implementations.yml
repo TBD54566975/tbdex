@@ -1,13 +1,14 @@
-name: Test Implementation Repos
+name: Test Spec Implementation Repos
 
 on:
   push:
     branches:
       - main
-      - leordev/test-implementations
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: '0 5 * * *'
 
 jobs:
   test:
@@ -50,12 +51,10 @@ jobs:
 
       - name: Setup Spec values
         id: spec-vals
-        env:
-          SPEC_SHA: ${{ github.event.head_commit.id }}
         run: |
-          SHORT_SHA=$(echo ${{ env.SPEC_SHA }} | cut -c 1-7)
-          echo "SPEC_SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
-          echo "SPEC_SHA=${{ env.SPEC_SHA }}" >> $GITHUB_OUTPUT
+          SHA="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
+          echo "SPEC_SHORT_SHA=${SHA:0:7}" >> $GITHUB_OUTPUT
+          echo "SPEC_SHA=$SHA" >> $GITHUB_OUTPUT
           echo "SPEC_REF=tbd-ci-cd-robot/spec-tests" >> $GITHUB_OUTPUT
 
       - name: Update spec submodule in ${{ matrix.repo }}
@@ -75,6 +74,7 @@ jobs:
           git config user.email "${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}+tbd-ci-cd-robot[bot]@users.noreply.github.com"
           git commit -m "Update tbdex spec to ${{ env.SPEC_SHORT_SHA }}"
           git push origin ${{ env.SPEC_REF }} -f
+          
 
       - name: Trigger and wait for ${{ matrix.repo }} CI pipeline
         uses: convictional/trigger-workflow-and-wait@v1.6.1
