@@ -1,39 +1,33 @@
 {
   "description": "Quote parses from string",
-  "input": "{\"metadata\": {\"from\": \"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6Im83eG85MkxXOWNiZGUtOWRMZUE1ZFhDVjBneUdWVnVtb0xfZVlmVFhtWGsifQ\",\"to\": \"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6Ii12V195SDFMMWkzUW5vVlNGcXNrMDRGWGd4YVhhRGtHOEV1cF96MmxtWlUifQ\",\"kind\": \"quote\",\"id\": \"quote_01j2f22daeefet5g9ynxg5stm3\",\"exchangeId\": \"rfq_01j2f22daeefeaaqbp61thnxpb\",\"createdAt\": \"2024-07-10T19:31:34Z\",\"protocol\": \"1.0\"},\"data\": {\"expiresAt\": \"2024-07-10T19:31:34Z\",\"payoutUnitsPerPayinUnit\": \"16.665\",\"payin\": {\"currencyCode\": \"USD\",\"subtotal\": \"10\",\"fee\": \"0\",\"total\": \"10\",\"paymentInstruction\": {\"instruction\": \"use link provided\"}},\"payout\": {\"currencyCode\": \"MXN\",\"subtotal\": \"500\",\"fee\": \"0\",\"total\": \"500\",\"paymentInstruction\": {\"instruction\": \"SPEI transfer\"}}},\"signature\": \"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbTgzZUc4NU1reFhPV05pWkdVdE9XUk1aVUUxWkZoRFZqQm5lVWRXVm5WdGIweGZaVmxtVkZodFdHc2lmUSMwIn0..SYMZMQwrThsrNHXxHnXoiozCyvtePVOy3kHzQ0Pj3LYYf0h-l6PC2GLblWEtGVJrz27Ct_VdqUnOvm7nF6NLAA\"}",
+  "input": "{\"metadata\":{\"from\":\"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6ImdJVUR0dFBhaDFhaGxSVnA5dnhpNkFsTVZtWDBEcGF4Y0hlbWU0TE1jRGMifQ\",\"to\":\"did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6Im8yek5wb284bFVhbGVfZXcwcE9la09maWdic3IwM1F2VUNCNkxwVkZXblUifQ\",\"kind\":\"quote\",\"id\":\"quote_01j3ern5tcf6zs8frq64wtbe2b\",\"exchangeId\":\"rfq_01j3ern5tcf6z81ch2e6tm1sws\",\"createdAt\":\"2024-07-23T03:02:45Z\",\"protocol\":\"1.0\"},\"data\":{\"expiresAt\":\"2024-07-23T03:02:45Z\",\"payoutUnitsPerPayinUnit\":\"16.665\",\"payin\":{\"currencyCode\":\"USD\",\"subtotal\":\"10\",\"fee\":\"0.1\",\"total\":\"10.1\"},\"payout\":{\"currencyCode\":\"MXN\",\"subtotal\":\"500\",\"fee\":\"0\",\"total\":\"500\"}},\"signature\":\"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbWRKVlVSMGRGQmhhREZoYUd4U1ZuQTVkbmhwTmtGc1RWWnRXREJFY0dGNFkwaGxiV1UwVEUxalJHTWlmUSMwIn0..ceuURLX2zdrAoUHlsQ6jfgWj4ika0oq4uxxJ7w_y7vUK5sizV0AzqMEmit469MjT5-cjCJe6oXzES3pqgnHvAQ\"}",
   "output": {
     "metadata": {
-      "from": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6Im83eG85MkxXOWNiZGUtOWRMZUE1ZFhDVjBneUdWVnVtb0xfZVlmVFhtWGsifQ",
-      "to": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6Ii12V195SDFMMWkzUW5vVlNGcXNrMDRGWGd4YVhhRGtHOEV1cF96MmxtWlUifQ",
+      "from": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6ImdJVUR0dFBhaDFhaGxSVnA5dnhpNkFsTVZtWDBEcGF4Y0hlbWU0TE1jRGMifQ",
+      "to": "did:jwk:eyJrdHkiOiJPS1AiLCJjcnYiOiJFZDI1NTE5IiwieCI6Im8yek5wb284bFVhbGVfZXcwcE9la09maWdic3IwM1F2VUNCNkxwVkZXblUifQ",
       "kind": "quote",
-      "id": "quote_01j2f22daeefet5g9ynxg5stm3",
-      "exchangeId": "rfq_01j2f22daeefeaaqbp61thnxpb",
-      "createdAt": "2024-07-10T19:31:34Z",
+      "id": "quote_01j3ern5tcf6zs8frq64wtbe2b",
+      "exchangeId": "rfq_01j3ern5tcf6z81ch2e6tm1sws",
+      "createdAt": "2024-07-23T03:02:45Z",
       "protocol": "1.0"
     },
     "data": {
-      "expiresAt": "2024-07-10T19:31:34Z",
+      "expiresAt": "2024-07-23T03:02:45Z",
       "payoutUnitsPerPayinUnit": "16.665",
       "payin": {
         "currencyCode": "USD",
         "subtotal": "10",
-        "fee": "0",
-        "total": "10",
-        "paymentInstruction": {
-          "instruction": "use link provided"
-        }
+        "fee": "0.1",
+        "total": "10.1"
       },
       "payout": {
         "currencyCode": "MXN",
         "subtotal": "500",
         "fee": "0",
-        "total": "500",
-        "paymentInstruction": {
-          "instruction": "SPEI transfer"
-        }
+        "total": "500"
       }
     },
-    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbTgzZUc4NU1reFhPV05pWkdVdE9XUk1aVUUxWkZoRFZqQm5lVWRXVm5WdGIweGZaVmxtVkZodFdHc2lmUSMwIn0..SYMZMQwrThsrNHXxHnXoiozCyvtePVOy3kHzQ0Pj3LYYf0h-l6PC2GLblWEtGVJrz27Ct_VdqUnOvm7nF6NLAA"
+    "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDpqd2s6ZXlKcmRIa2lPaUpQUzFBaUxDSmpjbllpT2lKRlpESTFOVEU1SWl3aWVDSTZJbWRKVlVSMGRGQmhhREZoYUd4U1ZuQTVkbmhwTmtGc1RWWnRXREJFY0dGNFkwaGxiV1UwVEUxalJHTWlmUSMwIn0..ceuURLX2zdrAoUHlsQ6jfgWj4ika0oq4uxxJ7w_y7vUK5sizV0AzqMEmit469MjT5-cjCJe6oXzES3pqgnHvAQ"
   },
   "error": false
 }

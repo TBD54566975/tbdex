@@ -50,10 +50,12 @@ Version: Draft
       - [Example RFQ](#example-rfq)
     - [`Quote`](#quote)
       - [`QuoteDetails`](#quotedetails)
-      - [`PaymentInstruction`](#paymentinstruction)
       - [Example Quote](#example-quote)
     - [`Order`](#order)
       - [Example Order](#example-order)
+    - [`OrderInstructions`](#orderinstructions)
+      - [`PaymentInstruction`](#paymentinstruction)
+      - [Example Quote](#example-quote-1)
     - [`OrderStatus`](#orderstatus)
       - [`Status`](#status)
     - [`Close`](#close)
@@ -536,19 +538,12 @@ This table enumerates the structure of `PrivateData`
 
 
 #### `QuoteDetails`
-| field                | data type                                   | required | description                                                                                               |
-| -------------------- | ------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| `currencyCode`       | string                                      | Y        | ISO 4217 currency code string                                                                             |
-| `subtotal`           | [`DecimalString`](#decimalstring)           | Y        | The amount of currency paid for the exchange, **excluding** fees                                          |
-| `fee`                | [`DecimalString`](#decimalstring)           | N        | The amount of currency paid in fees                                                                       |
-| `total`              | [`DecimalString`](#decimalstring)           | Y        | The total amount of currency to be paid in or paid out. It is always a sum of `subtotal` and `fee`        |
-| `paymentInstruction` | [`PaymentInstruction`](#paymentinstruction) | N        | Object that describes how to pay the PFI, and how to get paid by the PFI (e.g. BTC address, payment link) |
-
-#### `PaymentInstruction`
-| field         | data type | required | description                                                               |
-| ------------- | --------- | -------- | ------------------------------------------------------------------------- |
-| `link`        | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI                     |
-| `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI |
+| field          | data type                         | required | description                                                                                        |
+| -------------- | --------------------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `currencyCode` | string                            | Y        | ISO 4217 currency code string                                                                      |
+| `subtotal`     | [`DecimalString`](#decimalstring) | Y        | The amount of currency paid for the exchange, **excluding** fees                                   |
+| `fee`          | [`DecimalString`](#decimalstring) | N        | The amount of currency paid in fees                                                                |
+| `total`        | [`DecimalString`](#decimalstring) | Y        | The total amount of currency to be paid in or paid out. It is always a sum of `subtotal` and `fee` |
 
 #### Example Quote
 ```json
@@ -570,17 +565,11 @@ This table enumerates the structure of `PrivateData`
       "subtotal": "200.00",
       "fee": "0.20",
       "total": "200.20",
-      "paymentInstruction": {
-        "link": "https://example-pfi.com/payin?currency=usd&amount=200.20"
-      }
     },
     "payout": {
       "currencyCode": "BTC",
       "subtotal": "0.000016",
       "total": "0.000016",
-      "paymentInstruction": {
-        "instruction": "BTC will be paid to the provided BTC address"
-      }
     }
   },
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29yZUMxVVJNUUVWS204d3h6aFZGbnRMenZQWFlidEg4Q0VGTktVY1NrTFdUI3o2TWtvcmVDMVVSTVFFVkttOHd4emhWRm50THp2UFhZYnRIOENFRk5LVWNTa0xXVCJ9..R_BBKJoWifPFh10GJ1ij2gCCxND1CdzKbiOgPCIha__0GvRy0rHYCi18-TY7jNARaQ94RHXHYIsCRm2MuOPACw"
@@ -606,6 +595,48 @@ This table enumerates the structure of `PrivateData`
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
 }
 ```
+
+
+### `OrderInstructions`
+> PFI -> Alice: "Here's how to pay us, and how to let us pay you."
+
+| field    | data type                                   | required | description                                                                                                   |
+| -------- | ------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `payin`  | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how to pay the PFI (e.g. BTC address, payment link)     |
+| `payout` | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how be paid by the PFI (e.g. BTC address, payment link) |
+
+
+#### `PaymentInstruction`
+| field         | data type | required | description                                                               |
+| ------------- | --------- | -------- | ------------------------------------------------------------------------- |
+| `link`        | String    | N        | Link to allow Alice to pay PFI, or be paid by the PFI                     |
+| `instruction` | String    | N        | Instruction on how Alice can pay PFI, or how Alice can be paid by the PFI |
+
+
+#### Example OrderInstructions
+```json
+{
+  "metadata": {
+    "from": "did:ex:pfi",
+    "to": "did:key:z6MkoreC1URMQEVKm8wxzhVFntLzvPXYbtH8CEFNKUcSkLWT",
+    "exchangeId": "rfq_01ha83f661fs2avj6qgdhxpg28",
+    "kind": "orderinstructions",
+    "id": "orderinstructions_01ha83f663e3e88fshb06h6g78",
+    "createdAt": "2023-09-13T20:24:37.315Z",
+    "protocol": "1.0"
+  },
+  "data": {
+    "payin": {
+      "link": "https://example-pfi.com/payin?currency=usd&amount=200.20"
+    },
+    "payout": {
+      "instruction": "BTC will be paid to the provided BTC address"
+    }
+  },
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29yZUMxVVJNUUVWS204d3h6aFZGbnRMenZQWFlidEg4Q0VGTktVY1NrTFdUI3o2TWtvcmVDMVVSTVFFVkttOHd4emhWRm50THp2UFhZYnRIOENFRk5LVWNTa0xXVCJ9..R_BBKJoWifPFh10GJ1ij2gCCxND1CdzKbiOgPCIha__0GvRy0rHYCi18-TY7jNARaQ94RHXHYIsCRm2MuOPACw"
+}
+```
+
 
 ### `OrderStatus`
 > PFI -> Alice: "Here's the status of your order."
