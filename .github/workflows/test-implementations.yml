@@ -1,5 +1,12 @@
 name: Test Spec Implementation Repos
 
+# Parse the CI output status and make a markdown summary
+
+# TODO:
+# - make the pipeline ignore failures so devs dont ignore the CI checks
+# - add a step to add a comment summary with the failures in the PR, so PRs can act accordingly
+# - add a step to automate issue creation for each failure (or update existing one)
+
 on:
   push:
     branches:
@@ -8,7 +15,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 5 * * *'
+    - cron: "0 5 * * *"
 
 jobs:
   test:
@@ -19,18 +26,28 @@ jobs:
           - repo: tbdex-js
             ci_file: integrity-check.yml
             spec_path: tbdex
+            job_step: test-with-node;Run tests
           - repo: tbdex-swift
             ci_file: ci.yml
             spec_path: Tests/tbDEXTestVectors/tbdex-spec
+            job_step: build-and-test;Run tests
           - repo: tbdex-kt
             ci_file: ci.yml
             spec_path: tbdex
+            job_step: build-test-deploy-snapshot-ubuntu;Build, Test
           - repo: tbdex-rs
             ci_file: ci.yml
             spec_path: tbdex
+            job_step: build-test-deploy-snapshot-ubuntu;Build, Test
+
+    outputs:
+      tbdex-js: ${{ steps.output.outputs.tbdex-js }}
+      tbdex-swift: ${{ steps.output.outputs.tbdex-swift }}
+      tbdex-kt: ${{ steps.output.outputs.tbdex-kt }}
+      tbdex-rs: ${{ steps.output.outputs.tbdex-rs }}
 
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Generate an access token to write to downstream repo
         uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
         id: app-token
@@ -74,10 +91,10 @@ jobs:
           git config user.email "${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}+tbd-ci-cd-robot[bot]@users.noreply.github.com"
           git commit -m "Update tbdex spec to ${{ env.SPEC_SHORT_SHA }}"
           git push origin ${{ env.SPEC_REF }} -f
-          
 
       - name: Trigger and wait for ${{ matrix.repo }} CI pipeline
         uses: convictional/trigger-workflow-and-wait@v1.6.1
+        id: trigger-ci
         with:
           owner: TBD54566975
           repo: ${{ matrix.repo }}
@@ -85,12 +102,113 @@ jobs:
           workflow_file_name: ${{ matrix.ci_file }}
           ref: ${{ steps.spec-vals.outputs.SPEC_REF }}
           wait_interval: 10
+          propagate_failure: false
           # client_payload: '{}'
-          # propagate_failure: false
           # trigger_workflow: true
           # wait_workflow: true
-      
-      # TODO: 
-      # - make the pipeline ignore failures so devs dont ignore the CI checks
-      # - add a step to add a comment summary with the failures in the PR, so PRs can act accordingly
-      # - add a step to automate issue creation for each failure (or update existing one)
+
+      # Read CI status
+      - name: Read CI Job Status
+        uses: actions/github-script@v6
+        id: read-ci-status
+        env:
+          RUN_ID: ${{ steps.trigger-ci.outputs.workflow_id }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const {data: run} = await github.rest.actions.getWorkflowRun({
+              owner: 'TBD54566975',
+              repo: '${{ matrix.repo }}',
+              run_id: ${{ env.RUN_ID }},
+            });
+            console.info({run})
+            return run.conclusion
+
+      - id: output
+        run: |
+          echo "${{ matrix.repo }}=${{ steps.read-ci-status.outputs.result }}" >> $GITHUB_OUTPUT
+
+  collect-results:
+    name: Collect Tests Results
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect job results
+        id: summarize-results
+        run: |
+          get_status_emoji() {
+            if [ "$1" == "success" ]; then
+              echo "✅"
+            else
+              echo "❌"
+            fi
+          }
+
+          touch summary.md
+
+          echo "## tbdex Spec Implementation SDKs Test Results" >> summary.md
+          echo "| Repository | Status |" >> summary.md
+          echo "|------------|--------|" >> summary.md
+          echo "|tbdex-js|$(get_status_emoji ${{ needs.test.outputs.tbdex-js }}) (${{ needs.test.outputs.tbdex-js }})|" >> summary.md
+          echo "|tbdex-swift|$(get_status_emoji ${{ needs.test.outputs.tbdex-swift }}) (${{ needs.test.outputs.tbdex-swift }})|" >> summary.md
+          echo "|tbdex-kt|$(get_status_emoji ${{ needs.test.outputs.tbdex-kt }}) (${{ needs.test.outputs.tbdex-kt }})|" >> summary.md
+          echo "|tbdex-rs|$(get_status_emoji ${{ needs.test.outputs.tbdex-rs }}) (${{ needs.test.outputs.tbdex-rs }})|" >> summary.md
+
+          SUMMARY=$(cat summary.md)
+          echo "SUMMARY<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUMMARY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo $SUMMARY >> $GITHUB_STEP_SUMMARY
+
+      - name: Display job summary
+        env:
+          SUMMARY: ${{ steps.summarize-results.outputs.SUMMARY }}
+        run: echo $SUMMARY
+
+      - name: Generate an access token to write to downstream repo
+        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
+        id: app-token
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          app-id: ${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.CICD_ROBOT_GITHUB_APP_PRIVATE_KEY }}
+          owner: TBD54566975
+          repositories: tbdex
+
+      - name: Upsert comment with job summary
+        uses: actions/github-script@v6
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          SUMMARY: ${{ steps.summarize-results.outputs.SUMMARY }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const summaryFile = `${{ env.SUMMARY }}`
+            if (!summaryFile) {
+              throw new Error("SUMMARY is not set")
+            }
+
+            const suffixFooter = 'This is an automated CI report'
+            let githubSummary = `${summaryFile}\n\n---\n_${suffixFooter}_`;
+
+            const {data: comments} = await github.rest.issues.listComments({
+              owner: "TBD54566975",
+              repo: "tbdex",
+              issue_number: ${{ github.event.pull_request.number }},
+            });
+
+            const summaryComment = comments.find(({user, body}) => user.type === "Bot" && user.login === "tbd-ci-cd-robot[bot]" && body.includes(suffixFooter))
+
+            if (summaryComment) {
+              await github.rest.issues.updateComment({
+                comment_id: summaryComment.id,
+                body: githubSummary,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: "TBD54566975",
+                repo: "tbdex",
+                issue_number: ${{ github.event.pull_request.number }},
+                body: githubSummary,
+              });
+            }
