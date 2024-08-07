@@ -18,11 +18,10 @@
 ## Purpose
 This repo contains specifications for tbDEX
 
-
-| Specification                 | Description                                                                                          | Status                               |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| [Protocol](./specs/protocol/) | Defines the message and resource formats that make up the tbDEX messaging protocol                   | [Draft](./specs/protocol/#status-) |
-| [HTTP API](./specs/http-api/) | Defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX | [Draft](./specs/http-api/#status-) |
+| **Specification**                 | **Description**                                                                                          | **Status**                               |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [Protocol](./specs/protocol/)     | Defines the message and resource formats that make up the tbDEX messaging protocol                       | [Draft](./specs/protocol/#status-)       |
+| [HTTP API](./specs/http-api/)     | Defines a REST API that can be hosted by an individual PFI that wants to provide liquidity via tbDEX     | [Draft](./specs/http-api/#status-)       |
 
 ```mermaid
 sequenceDiagram
@@ -40,10 +39,10 @@ sequenceDiagram
 
 For information on the development process for this protocol, check out [sdk-development](https://github.com/TBD54566975/sdk-development/)
 
-## Implementations 
+## Implementations
 
-* [JavaScript/Typescript](https://github.com/TBD54566975/tbdex-js) 
-* [Kotlin](https://github.com/TBD54566975/tbdex-kt) 
+* [JavaScript/Typescript](https://github.com/TBD54566975/tbdex-js)
+* [Kotlin](https://github.com/TBD54566975/tbdex-kt)
 * [Swift](https://github.com/TBD54566975/tbdex-swift) (only supports client-side)
 
 ### Tooling
@@ -62,101 +61,101 @@ Implementations are run against a common set of [test vectors](./hosted/test-vec
 
 ### tbDEX Message
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Validation   | ✅         | ✅     | ✅   | ❌    |
-| Signing      | ✅         | ✅     | ✅   | ❌    |
-| Verification | ✅         | ✅     | ✅   | ❌    |
-| Parsing      | ✅         | ✅     | ✅   | ❌    |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Validation    | ✅             | ✅         | ✅        | ❌       |
+| Signing       | ✅             | ✅         | ✅        | ❌       |
+| Verification  | ✅             | ✅         | ✅        | ❌       |
+| Parsing       | ✅             | ✅         | ✅        | ❌       |
 
 ### tbDEX Resource
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Validation    | ✅             | ✅         | ❌        | ❌       |
+| Signing       | ✅             | ✅         | ❌        | ❌       |
+| Verification  | ✅             | ✅         | ❌        | ❌       |
+| Parsing       | ✅             | ✅         | ❌        | ❌       |
 
 ### tbDEX Offering Resource
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ❌    | ❌     |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Creation      | ✅             | ✅         | ❌        | ❌       |
+| Validation    | ✅             | ✅         | ❌        | ❌       |
+| Signing       | ✅             | ✅         | ❌        | ❌       |
+| Verification  | ✅             | ✅         | ❌        | ❌       |
+| Parsing       | ✅             | ✅         | ❌        | ❌       |
 
 ### tbDEX RFQ Message
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ✅    | ❌     |
-| Validation   | ✅          | ✅      | ✅    | ❌     |
-| Signing      | ✅          | ✅      | ✅    | ❌     |
-| Verification | ✅          | ✅      | ✅    | ❌     |
-| Parsing      | ✅          | ✅      | ✅    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Creation      | ✅             | ✅         | ✅        | ❌       |
+| Validation    | ✅             | ✅         | ✅        | ❌       |
+| Signing       | ✅             | ✅         | ✅        | ❌       |
+| Verification  | ✅             | ✅         | ✅        | ❌       |
+| Parsing       | ✅             | ✅         | ✅        | ❌       |
 
 ### tbDEX Quote Message
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ❌    | ❌     |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Creation      | ✅             | ✅         | ❌        | ❌       |
+| Validation    | ✅             | ✅         | ❌        | ❌       |
+| Signing       | ✅             | ✅         | ❌        | ❌       |
+| Verification  | ✅             | ✅         | ❌        | ❌       |
+| Parsing       | ✅             | ✅         | ❌        | ❌       |
 
 ### tbDEX Order Message
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ✅    | ❌     |
-| Validation   | ✅          | ✅      | ✅    | ❌     |
-| Signing      | ✅          | ✅      | ✅    | ❌     |
-| Verification | ✅          | ✅      | ✅    | ❌     |
-| Parsing      | ✅          | ✅      | ✅    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Creation      | ✅             | ✅         | ✅        | ❌       |
+| Validation    | ✅             | ✅         | ✅        | ❌       |
+| Signing       | ✅             | ✅         | ✅        | ❌       |
+| Verification  | ✅             | ✅         | ✅        | ❌       |
+| Parsing       | ✅             | ✅         | ✅        | ❌       |
 
 ### tbDEX Order-Status Message
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ❌    | ❌     |
-| Validation   | ✅          | ✅      | ❌    | ❌     |
-| Signing      | ✅          | ✅      | ❌    | ❌     |
-| Verification | ✅          | ✅      | ❌    | ❌     |
-| Parsing      | ✅          | ✅      | ❌    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Creation      | ✅             | ✅         | ❌        | ❌       |
+| Validation    | ✅             | ✅         | ❌        | ❌       |
+| Signing       | ✅             | ✅         | ❌        | ❌       |
+| Verification  | ✅             | ✅         | ❌        | ❌       |
+| Parsing       | ✅             | ✅         | ❌        | ❌       |
 
 ### tbDEX Close Message
 
-| Feature      | Typescript | Kotlin | Swift | Rust |
-| ------------ | ---------- | ------ | ---- | ----- |
-| Creation     | ✅          | ✅      | ✅    | ❌     |
-| Validation   | ✅          | ✅      | ✅    | ❌     |
-| Signing      | ✅          | ✅      | ✅    | ❌     |
-| Verification | ✅          | ✅      | ✅    | ❌     |
-| Parsing      | ✅          | ✅      | ✅    | ❌     |
+| **Feature**   | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------- | -------------- | ---------- | --------- | -------- |
+| Creation      | ✅             | ✅         | ✅        | ❌       |
+| Validation    | ✅             | ✅         | ✅        | ❌       |
+| Signing       | ✅             | ✅         | ✅        | ❌       |
+| Verification  | ✅             | ✅         | ✅        | ❌       |
+| Parsing       | ✅             | ✅         | ✅        | ❌       |
 
 ### tbDEX Client
 
-| Feature       | Typescript | Kotlin | Swift | Rust |
-| ------------- | ---------- | ------ | ---- | ----- |
-| Send Message  | ✅          | ✅      | ✅    | ❌     |
-| Get Exchange  | ✅          | ✅      | ✅    | ❌     |
-| Get Exchanges | ✅          | ✅      | ✅    | ❌     |
-| Get Offerings | ✅          | ✅      | ✅    | ❌     |
+| **Feature**       | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ----------------- | -------------- | ---------- | --------- | -------- |
+| Send Message      | ✅             | ✅         | ✅        | ❌       |
+| Get Exchange      | ✅             | ✅         | ✅        | ❌       |
+| Get Exchanges     | ✅             | ✅         | ✅        | ❌       |
+| Get Offerings     | ✅             | ✅         | ✅        | ❌       |
 
 ### tbDEX Server
 
-| Feature               | Typescript | Kotlin | Swift | Rust |
-| --------------------- | ---------- | ------ | ---- | ----- |
-| Get Exchange Handler  | ✅          | ✅      | ❌    | ❌     |
-| Get Exchanges Handler | ✅          | ✅      | ❌    | ❌     |
-| Get Offerings Handler | ✅          | ✅      | ❌    | ❌     |
-| Submit RFQ Handler    | ✅          | ✅      | ❌    | ❌     |
-| Submit Order Handler  | ✅          | ✅      | ❌    | ❌     |
-| Submit Close Handler  | ✅          | ✅      | ❌    | ❌     |
+| **Feature**               | **Typescript** | **Kotlin** | **Swift** | **Rust** |
+| ------------------------- | -------------- | ---------- | --------- | -------- |
+| Get Exchange Handler      | ✅             | ✅         | ❌        | ❌       |
+| Get Exchanges Handler     | ✅             | ✅         | ❌        | ❌       |
+| Get Offerings Handler     | ✅             | ✅         | ❌        | ❌       |
+| Submit RFQ Handler        | ✅             | ✅         | ❌        | ❌       |
+| Submit Order Handler      | ✅             | ✅         | ❌        | ❌       |
+| Submit Close Handler      | ✅             | ✅         | ❌        | ❌       |
 
 ## Documentation
 
