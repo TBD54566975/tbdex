@@ -37,7 +37,7 @@ sequenceDiagram
     deactivate PFI
 ```
 
-For information on the development process for this protocol, check out [sdk-development](https://github.com/TBD54566975/sdk-development/)
+For information on the development process for this protocol, check out [sdk-development](https://github.com/TBD54566975/sdk-development/).
 
 ## Implementations
 
@@ -58,6 +58,8 @@ Implementations are run against a common set of [test vectors](./hosted/test-vec
 
 
 ## Features
+
+A hosted set of the JSON schemas are also availbled on the [hosted site](https://tbdex.dev/).
 
 ### tbDEX Message
 
