@@ -16,5 +16,9 @@
       "type": "boolean"
     }
   },
-  "required": ["description", "input", "error"]
+  "required": [
+    "description",
+    "input",
+    "error"
+  ]
 }

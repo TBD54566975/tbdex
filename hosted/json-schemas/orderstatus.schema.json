@@ -5,26 +5,28 @@
   "additionalProperties": false,
   "properties": {
     "status": {
-      "type":"string",
+      "type": "string",
       "enum": [
-        "PAYIN_PENDING", 
-        "PAYIN_INITIATED", 
-        "PAYIN_SETTLED", 
-        "PAYIN_FAILED", 
+        "PAYIN_PENDING",
+        "PAYIN_INITIATED",
+        "PAYIN_SETTLED",
+        "PAYIN_FAILED",
         "PAYIN_EXPIRED",
-        "PAYOUT_PENDING", 
-        "PAYOUT_INITIATED", 
-        "PAYOUT_SETTLED", 
-        "PAYOUT_FAILED", 
-        "REFUND_PENDING", 
-        "REFUND_INITIATED", 
-        "REFUND_SETTLED", 
+        "PAYOUT_PENDING",
+        "PAYOUT_INITIATED",
+        "PAYOUT_SETTLED",
+        "PAYOUT_FAILED",
+        "REFUND_PENDING",
+        "REFUND_INITIATED",
+        "REFUND_SETTLED",
         "REFUND_FAILED"
       ]
     },
     "details": {
-      "type":"string"
+      "type": "string"
     }
   },
-  "required": ["status"]
+  "required": [
+    "status"
+  ]
 }

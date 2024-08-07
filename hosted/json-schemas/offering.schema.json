@@ -63,11 +63,16 @@
                 "description": "Fee charged to use this payment method. Absence of this field implies that there is no _additional_ fee associated to the respective payment method."
               }
             },
-            "required": ["kind"]
+            "required": [
+              "kind"
+            ]
           }
         }
       },
-      "required": ["currencyCode", "methods"]
+      "required": [
+        "currencyCode",
+        "methods"
+      ]
     },
     "payout": {
       "type": "object",
@@ -129,11 +134,17 @@
                 "minimum": 0
               }
             },
-            "required": ["kind", "estimatedSettlementTime"]
+            "required": [
+              "kind",
+              "estimatedSettlementTime"
+            ]
           }
         }
       },
-      "required": ["currencyCode", "methods"]
+      "required": [
+        "currencyCode",
+        "methods"
+      ]
     },
     "payoutUnitsPerPayinUnit": {
       "type": "string",
@@ -159,7 +170,9 @@
           "description": "A human-readable description of the terms of cancellation in plaintext"
         }
       },
-      "required": ["enabled"]
+      "required": [
+        "enabled"
+      ]
     }
   },
   "required": [

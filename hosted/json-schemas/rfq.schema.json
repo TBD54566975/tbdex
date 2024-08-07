@@ -27,7 +27,10 @@
           "description": "Digest of an object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
         }
       },
-      "required": ["amount", "kind"]
+      "required": [
+        "amount",
+        "kind"
+      ]
     },
     "payout": {
       "type": "object",
@@ -41,8 +44,14 @@
           "description": "Digest of an object containing the properties defined in the respective Offering's requiredPaymentDetails json schema"
         }
       },
-      "required": ["kind"]
+      "required": [
+        "kind"
+      ]
     }
   },
-  "required": ["offeringId", "payin", "payout"]
+  "required": [
+    "offeringId",
+    "payin",
+    "payout"
+  ]
 }

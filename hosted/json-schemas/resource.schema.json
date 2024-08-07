@@ -13,7 +13,10 @@
         },
         "kind": {
           "type": "string",
-          "enum": ["offering", "balance"],
+          "enum": [
+            "offering",
+            "balance"
+          ],
           "description": "The resource kind (e.g. Offering)"
         },
         "id": {
@@ -33,7 +36,13 @@
           "description": "Version of the protocol in use (x.x format)"
         }
       },
-      "required": ["from", "kind", "id", "createdAt", "protocol"],
+      "required": [
+        "from",
+        "kind",
+        "id",
+        "createdAt",
+        "protocol"
+      ],
       "description": "The metadata object contains fields about the resource and is present for every tbdex resources of all types."
     },
     "data": {
@@ -45,6 +54,10 @@
       "description": "Signature that verifies that authenticity and integrity of a message"
     }
   },
-  "required": ["metadata", "data", "signature"],
+  "required": [
+    "metadata",
+    "data",
+    "signature"
+  ],
   "description": "ResourceModel"
 }
