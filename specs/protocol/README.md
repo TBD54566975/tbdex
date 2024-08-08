@@ -527,7 +527,7 @@ This table enumerates the structure of `PrivateData`
 
 
 ### `Quote`
-> PFI -> Alice: "OK, here's your Quote that describes how much payout currency you will receive based on your RFQ. Here's the total fee in payin currency associated with the payment methods you selected. Here's how to pay us, and how to let us pay you, when you're ready to execute the Quote. This quote expires at X time."
+> PFI -> Alice: "OK, here's your Quote that describes how much payout currency you will receive based on your RFQ. Here's the total fee in payin currency associated with the payment methods you selected. This quote expires at X time."
 
 | field                     | data type                       | required | description                                                                                                   |
 | ------------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
