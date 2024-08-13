@@ -57,158 +57,158 @@ jobs:
           owner: TBD54566975
           repositories: ${{ matrix.repo }}
 
-      - name: Checkout spec repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          repository: TBD54566975/${{ matrix.repo }}
-          ref: main
-          submodules: true
-          # persist-credentials: false
+          #       - name: Checkout spec repository
+#         uses: actions/checkout@v4
+#         with:
+#           token: ${{ steps.app-token.outputs.token }}
+#           repository: TBD54566975/${{ matrix.repo }}
+#           ref: main
+#           submodules: true
+#           # persist-credentials: false
 
-      - name: Setup Spec values
-        id: spec-vals
-        run: |
-          SHA="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
-          echo "SPEC_SHORT_SHA=${SHA:0:7}" >> $GITHUB_OUTPUT
-          echo "SPEC_SHA=$SHA" >> $GITHUB_OUTPUT
-          echo "SPEC_REF=tbd-ci-cd-robot/spec-tests" >> $GITHUB_OUTPUT
+#       - name: Setup Spec values
+#         id: spec-vals
+#         run: |
+#           SHA="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
+#           echo "SPEC_SHORT_SHA=${SHA:0:7}" >> $GITHUB_OUTPUT
+#           echo "SPEC_SHA=$SHA" >> $GITHUB_OUTPUT
+#           echo "SPEC_REF=tbd-ci-cd-robot/spec-tests" >> $GITHUB_OUTPUT
 
-      - name: Update spec submodule in ${{ matrix.repo }}
-        env:
-          SPEC_SHORT_SHA: ${{ steps.spec-vals.outputs.SPEC_SHORT_SHA }}
-          SPEC_SHA: ${{ steps.spec-vals.outputs.SPEC_SHA }}
-          SPEC_REF: ${{ steps.spec-vals.outputs.SPEC_REF }}
-        run: |
-          REPO_ROOT=$(pwd)
-          cd ${{ matrix.spec_path }}
-          git fetch origin ${{ env.SPEC_SHA }}
-          git checkout ${{ env.SPEC_SHA }}
-          cd $REPO_ROOT
-          git checkout -b ${{ env.SPEC_REF }}
-          git add .
-          git config user.name "tbd-ci-cd-robot[bot]"
-          git config user.email "${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}+tbd-ci-cd-robot[bot]@users.noreply.github.com"
-          git commit -m "Update tbdex spec to ${{ env.SPEC_SHORT_SHA }}"
-          git push origin ${{ env.SPEC_REF }} -f
+#       - name: Update spec submodule in ${{ matrix.repo }}
+#         env:
+#           SPEC_SHORT_SHA: ${{ steps.spec-vals.outputs.SPEC_SHORT_SHA }}
+#           SPEC_SHA: ${{ steps.spec-vals.outputs.SPEC_SHA }}
+#           SPEC_REF: ${{ steps.spec-vals.outputs.SPEC_REF }}
+#         run: |
+#           REPO_ROOT=$(pwd)
+#           cd ${{ matrix.spec_path }}
+#           git fetch origin ${{ env.SPEC_SHA }}
+#           git checkout ${{ env.SPEC_SHA }}
+#           cd $REPO_ROOT
+#           git checkout -b ${{ env.SPEC_REF }}
+#           git add .
+#           git config user.name "tbd-ci-cd-robot[bot]"
+#           git config user.email "${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}+tbd-ci-cd-robot[bot]@users.noreply.github.com"
+#           git commit -m "Update tbdex spec to ${{ env.SPEC_SHORT_SHA }}"
+#           git push origin ${{ env.SPEC_REF }} -f
 
-      - name: Trigger and wait for ${{ matrix.repo }} CI pipeline
-        uses: convictional/trigger-workflow-and-wait@v1.6.1
-        id: trigger-ci
-        with:
-          owner: TBD54566975
-          repo: ${{ matrix.repo }}
-          github_token: ${{ steps.app-token.outputs.token }}
-          workflow_file_name: ${{ matrix.ci_file }}
-          ref: ${{ steps.spec-vals.outputs.SPEC_REF }}
-          wait_interval: 10
-          propagate_failure: false
-          # client_payload: '{}'
-          # trigger_workflow: true
-          # wait_workflow: true
+#       - name: Trigger and wait for ${{ matrix.repo }} CI pipeline
+#         uses: convictional/trigger-workflow-and-wait@v1.6.1
+#         id: trigger-ci
+#         with:
+#           owner: TBD54566975
+#           repo: ${{ matrix.repo }}
+#           github_token: ${{ steps.app-token.outputs.token }}
+#           workflow_file_name: ${{ matrix.ci_file }}
+#           ref: ${{ steps.spec-vals.outputs.SPEC_REF }}
+#           wait_interval: 10
+#           propagate_failure: false
+#           # client_payload: '{}'
+#           # trigger_workflow: true
+#           # wait_workflow: true
 
-      # Read CI status
-      - name: Read CI Job Status
-        uses: actions/github-script@v6
-        id: read-ci-status
-        env:
-          RUN_ID: ${{ steps.trigger-ci.outputs.workflow_id }}
-        with:
-          github-token: ${{ steps.app-token.outputs.token }}
-          script: |
-            const {data: run} = await github.rest.actions.getWorkflowRun({
-              owner: 'TBD54566975',
-              repo: '${{ matrix.repo }}',
-              run_id: ${{ env.RUN_ID }},
-            });
-            console.info({run})
-            return run.conclusion
+#       # Read CI status
+#       - name: Read CI Job Status
+#         uses: actions/github-script@v6
+#         id: read-ci-status
+#         env:
+#           RUN_ID: ${{ steps.trigger-ci.outputs.workflow_id }}
+#         with:
+#           github-token: ${{ steps.app-token.outputs.token }}
+#           script: |
+#             const {data: run} = await github.rest.actions.getWorkflowRun({
+#               owner: 'TBD54566975',
+#               repo: '${{ matrix.repo }}',
+#               run_id: ${{ env.RUN_ID }},
+#             });
+#             console.info({run})
+#             return run.conclusion
 
-      - id: output
-        run: |
-          echo "${{ matrix.repo }}=${{ steps.read-ci-status.outputs.result }}" >> $GITHUB_OUTPUT
+#       - id: output
+#         run: |
+#           echo "${{ matrix.repo }}=${{ steps.read-ci-status.outputs.result }}" >> $GITHUB_OUTPUT
 
-  collect-results:
-    name: Collect Tests Results
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Collect job results
-        id: summarize-results
-        run: |
-          get_status_emoji() {
-            if [ "$1" == "success" ]; then
-              echo "✅"
-            else
-              echo "❌"
-            fi
-          }
+#   collect-results:
+#     name: Collect Tests Results
+#     needs: test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Collect job results
+#         id: summarize-results
+#         run: |
+#           get_status_emoji() {
+#             if [ "$1" == "success" ]; then
+#               echo "✅"
+#             else
+#               echo "❌"
+#             fi
+#           }
 
-          touch summary.md
+#           touch summary.md
 
-          echo "## tbdex Spec Implementation SDKs Test Results" >> summary.md
-          echo "| Repository | Status |" >> summary.md
-          echo "|------------|--------|" >> summary.md
-          echo "|tbdex-js|$(get_status_emoji ${{ needs.test.outputs.tbdex-js }}) (${{ needs.test.outputs.tbdex-js }})|" >> summary.md
-          echo "|tbdex-swift|$(get_status_emoji ${{ needs.test.outputs.tbdex-swift }}) (${{ needs.test.outputs.tbdex-swift }})|" >> summary.md
-          echo "|tbdex-kt|$(get_status_emoji ${{ needs.test.outputs.tbdex-kt }}) (${{ needs.test.outputs.tbdex-kt }})|" >> summary.md
-          echo "|tbdex-rs|$(get_status_emoji ${{ needs.test.outputs.tbdex-rs }}) (${{ needs.test.outputs.tbdex-rs }})|" >> summary.md
+#           echo "## tbdex Spec Implementation SDKs Test Results" >> summary.md
+#           echo "| Repository | Status |" >> summary.md
+#           echo "|------------|--------|" >> summary.md
+#           echo "|tbdex-js|$(get_status_emoji ${{ needs.test.outputs.tbdex-js }}) (${{ needs.test.outputs.tbdex-js }})|" >> summary.md
+#           echo "|tbdex-swift|$(get_status_emoji ${{ needs.test.outputs.tbdex-swift }}) (${{ needs.test.outputs.tbdex-swift }})|" >> summary.md
+#           echo "|tbdex-kt|$(get_status_emoji ${{ needs.test.outputs.tbdex-kt }}) (${{ needs.test.outputs.tbdex-kt }})|" >> summary.md
+#           echo "|tbdex-rs|$(get_status_emoji ${{ needs.test.outputs.tbdex-rs }}) (${{ needs.test.outputs.tbdex-rs }})|" >> summary.md
 
-          SUMMARY=$(cat summary.md)
-          echo "SUMMARY<<EOF" >> $GITHUB_OUTPUT
-          echo "$SUMMARY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo $SUMMARY >> $GITHUB_STEP_SUMMARY
+#           SUMMARY=$(cat summary.md)
+#           echo "SUMMARY<<EOF" >> $GITHUB_OUTPUT
+#           echo "$SUMMARY" >> $GITHUB_OUTPUT
+#           echo "EOF" >> $GITHUB_OUTPUT
+#           echo $SUMMARY >> $GITHUB_STEP_SUMMARY
 
-      - name: Display job summary
-        env:
-          SUMMARY: ${{ steps.summarize-results.outputs.SUMMARY }}
-        run: echo $SUMMARY
+#       - name: Display job summary
+#         env:
+#           SUMMARY: ${{ steps.summarize-results.outputs.SUMMARY }}
+#         run: echo $SUMMARY
 
-      - name: Generate an access token to write to downstream repo
-        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
-        id: app-token
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          app-id: ${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}
-          private-key: ${{ secrets.CICD_ROBOT_GITHUB_APP_PRIVATE_KEY }}
-          owner: TBD54566975
-          repositories: tbdex
+#       - name: Generate an access token to write to downstream repo
+#         uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
+#         id: app-token
+#         if: ${{ github.event_name == 'pull_request' }}
+#         with:
+#           app-id: ${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}
+#           private-key: ${{ secrets.CICD_ROBOT_GITHUB_APP_PRIVATE_KEY }}
+#           owner: TBD54566975
+#           repositories: tbdex
 
-      - name: Upsert comment with job summary
-        uses: actions/github-script@v6
-        if: ${{ github.event_name == 'pull_request' }}
-        env:
-          SUMMARY: ${{ steps.summarize-results.outputs.SUMMARY }}
-        with:
-          github-token: ${{ steps.app-token.outputs.token }}
-          script: |
-            const summaryFile = `${{ env.SUMMARY }}`
-            if (!summaryFile) {
-              throw new Error("SUMMARY is not set")
-            }
+#       - name: Upsert comment with job summary
+#         uses: actions/github-script@v6
+#         if: ${{ github.event_name == 'pull_request' }}
+#         env:
+#           SUMMARY: ${{ steps.summarize-results.outputs.SUMMARY }}
+#         with:
+#           github-token: ${{ steps.app-token.outputs.token }}
+#           script: |
+#             const summaryFile = `${{ env.SUMMARY }}`
+#             if (!summaryFile) {
+#               throw new Error("SUMMARY is not set")
+#             }
 
-            const suffixFooter = 'This is an automated CI report'
-            let githubSummary = `${summaryFile}\n\n---\n_${suffixFooter}_`;
+#             const suffixFooter = 'This is an automated CI report'
+#             let githubSummary = `${summaryFile}\n\n---\n_${suffixFooter}_`;
 
-            const {data: comments} = await github.rest.issues.listComments({
-              owner: "TBD54566975",
-              repo: "tbdex",
-              issue_number: ${{ github.event.pull_request.number }},
-            });
+#             const {data: comments} = await github.rest.issues.listComments({
+#               owner: "TBD54566975",
+#               repo: "tbdex",
+#               issue_number: ${{ github.event.pull_request.number }},
+#             });
 
-            const summaryComment = comments.find(({user, body}) => user.type === "Bot" && user.login === "tbd-ci-cd-robot[bot]" && body.includes(suffixFooter))
+#             const summaryComment = comments.find(({user, body}) => user.type === "Bot" && user.login === "tbd-ci-cd-robot[bot]" && body.includes(suffixFooter))
 
-            if (summaryComment) {
-              await github.rest.issues.updateComment({
-                comment_id: summaryComment.id,
-                body: githubSummary,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: "TBD54566975",
-                repo: "tbdex",
-                issue_number: ${{ github.event.pull_request.number }},
-                body: githubSummary,
-              });
-            }
+#             if (summaryComment) {
+#               await github.rest.issues.updateComment({
+#                 comment_id: summaryComment.id,
+#                 body: githubSummary,
+#               });
+#             } else {
+#               await github.rest.issues.createComment({
+#                 owner: "TBD54566975",
+#                 repo: "tbdex",
+#                 issue_number: ${{ github.event.pull_request.number }},
+#                 body: githubSummary,
+#               });
+#             }

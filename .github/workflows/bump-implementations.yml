@@ -1,0 +1,67 @@
+name: Test Spec Implementation Repos
+
+# Parse the CI output status and make a markdown summary
+
+# TODO:
+# - make the pipeline ignore failures so devs dont ignore the CI checks
+# - add a step to add a comment summary with the failures in the PR, so PRs can act accordingly
+# - add a step to automate issue creation for each failure (or update existing one)
+
+on:
+  push:
+    branches:
+      - leordev/test-implementations
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag (must follow pattern vN.N.N)"
+        required: true
+        default: "v1.0.0"
+        type: string
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - repo: tbdex-js
+            ci_file: integrity-check.yml
+            spec_path: tbdex
+            job_step: test-with-node;Run tests
+          # - repo: tbdex-swift
+          #   ci_file: ci.yml
+          #   spec_path: Tests/tbDEXTestVectors/tbdex-spec
+          #   job_step: build-and-test;Run tests
+          # - repo: tbdex-kt
+          #   ci_file: ci.yml
+          #   spec_path: tbdex
+          #   job_step: build-test-deploy-snapshot-ubuntu;Build, Test
+          # - repo: tbdex-rs
+          #   ci_file: ci.yml
+          #   spec_path: tbdex
+          #   job_step: build-test-deploy-snapshot-ubuntu;Build, Test
+
+    outputs:
+      tbdex-js: ${{ steps.output.outputs.tbdex-js }}
+      tbdex-swift: ${{ steps.output.outputs.tbdex-swift }}
+      tbdex-kt: ${{ steps.output.outputs.tbdex-kt }}
+      tbdex-rs: ${{ steps.output.outputs.tbdex-rs }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get workflow tag
+        id: get-tag
+        run: |
+          TAG=${{ github.event.inputs.tag || github.ref_name }}
+          echo "Processing tag: $TAG"
+
+          # Validate tag format
+          if ! [[ $TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Tag '$TAG' is not in the required format vN.N.N"
+            exit 1
+          fi
+
+          echo "TAG=${TAG}" >> $GITHUB_OUTPUT
