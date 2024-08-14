@@ -17,7 +17,6 @@ Version: Draft
   - [Error response structure](#error-response-structure)
   - [ErrorDetail structure](#errordetail-structure)
   - [Example](#example-1)
-- [Exceptions](#exceptions)
 - [Query Params](#query-params)
   - [Pagination](#pagination)
     - [Example](#example-2)
@@ -39,8 +38,6 @@ Version: Draft
   - [Create Exchange](#create-exchange)
     - [Description](#description-1)
     - [Endpoint](#endpoint-1)
-    - [Authentication](#authentication-1)
-    - [Authorization](#authorization)
     - [Protected](#protected-1)
     - [Request Body](#request-body)
       - [`CreateExchangeRequest`](#createexchangerequest)
@@ -73,12 +70,13 @@ Version: Draft
 # Discoverability
 PFIs can become publicly discoverable by advertising their API endpoint as a [Service](https://www.w3.org/TR/did-core/#services) within their DID Document. In order to increase the likelihood of being discovered The `service` entry **SHOULD** include the following properties:
 
-| Property          | Value                                                                                       |
-| ----------------- | ------------------------------------------------------------------------------------------- |
-| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services)                               |
-| `type`            | `PFI`                                                                                       |
-| `serviceEndpoint` | PFI's publicly addressable API endpoint or DID which has PFIs publicly addressable endpoint |
-If the serviceEndpoint is itself a DID, this DID should resolve to a document and then its serviceEndpoints can be examined for the `PFI` type entry. The ID can be chosen at the discretion of the PFI, but the service entry should be of type `PFI`.
+| Property          | Value                                                         |
+| ----------------- | ------------------------------------------------------------- |
+| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services) |
+| `type`            | `PFI`                                                         |
+| `serviceEndpoint` | PFI's publicly addressable API endpoint                       |
+
+The ID can be chosen at the discretion of the PFI, but the service entry should be of type `PFI`.
 
 ## Example
 ```json
@@ -127,30 +125,13 @@ If the serviceEndpoint is itself a DID, this DID should resolve to a document an
 }
 ```
 
-# Exceptions
-Custom exceptions are thrown in many scenarios as a way to provide more narrow and detailed information when the client encounters an error. 
-
-| Exception                           | Description                                                                                                     | Typescript | Kotlin | Rust | Swift |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------- | ------ | ---- | ----- |
-| `RequestError`                      | General error thrown when making HTTP requests.                                                                 | ✅          | ❌      | ❌    | ❌     |
-| `ResponseError`                     | General error thrown when getting HTTP responses.                                                               | ✅          | ❌      | ❌    | ❌     |
-| `RequestTokenError`                 | General error thrown for request token related issues.                                                          | ✅          | ❌      | ❌    | ❌     |
-| `RequestTokenSigningError`          | Type of `RequestTokenError`. Thrown when a request token cannot be signed.                                      | ✅          | ❌      | ❌    | ❌     |
-| `RequestTokenVerificationError`     | Type of `RequestTokenError`. Thrown when a request token cannot be verified.                                    | ✅          | ❌      | ❌    | ❌     |
-| `RequestTokenMissingClaimsError`    | Type of `RequestTokenError`. Thrown when a request token is missing required claims.                            | ✅          | ❌      | ❌    | ❌     |
-| `RequestTokenAudienceMismatchError` | Type of `RequestTokenError`. Thrown when a request token aud does not match the PFI did for which its intended. | ✅          | ❌      | ❌    | ❌     |
-| `ValidationError`                   | General error thrown when validating data.                                                                      | ✅          | ❌      | ❌    | ❌     |
-| `InvalidDidError`                   | Type of `ValidationError`. Thrown when a DID is invalid.                                                        | ✅          | ❌      | ❌    | ❌     |
-| `MissingServiceEndpointError`       | Type of `ValidationError`. Thrown when a PFI's service endpoint can't be found.                                 | ✅          | ❌      | ❌    | ❌     |
-
-
 # Query Params
 Query parameters, also known as query strings, are a way to send additional information to the server as part of a URL. They allow clients to provide specific input or customize the server's response. Query parameters typically follow the main URL and start with a `?` character. They consist of key-value pairs, and multiple pairs can be separated by `&` characters
 
 Query params are supported by many of the `GET /${resource}` endpoints in the following ways
 
-* Simple Example: `?simple=field`
-* Same Field; Multiple Values: `field=value&field=anotherValue`
+* Simple Example: `?field=foo`
+* Same Field; Multiple Values: `field=bar&field=baz`
 
 ## Pagination
 Pagination is supported using the following query params:
@@ -166,14 +147,32 @@ Pagination is supported using the following query params:
 ---
 
 # Idempotency
-The IDs of individual tbDEX messages are used as idempotency keys
+The IDs of individual tbDEX messages are used as idempotency keys. For example, in a tbDEX Order message:
+
+```json
+{
+  "metadata": {
+    "from": "did:key:z6MkvUm6mZxpDsqvyPnpkeWS4fmXD2jJA3TDKq4fDkmR5BD7",
+    "to": "did:ex:pfi",
+    "exchangeId": "rfq_01ha83pkgnfxfv41gpa44ckkpz",
+    "kind": "order",
+    "id": "order_01ha83pkgsfk6t1kxg7q42s48j",
+    "createdAt": "2023-09-13T20:28:40.345Z",
+    "protocol": "1.0"
+  },
+  "data": {},
+  "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
+}
+```
+
+The `ID` here that serves as idempotency key is `order_01ha83pkgsfk6t1kxg7q42s48j`.
 
 ---
 
 # Callbacks
-Callbacks are implemented via the `replyTo` property on the [request to create an exchange](#create-exchange). 
+Callbacks are implemented via the `replyTo` property on the [request to create an exchange](#create-exchange).
 
-`replyTo` is a fully qualified URI which could either be a DID or just a URL.
+`replyTo` is a fully qualified URI which could either be a DID or a URL.
 
 If `replyTo` is present, a PFI will send any/all new messages for a given exchange to the supplied URI. This makes the URI scoped to each exchange, allowing the caller to specify a different URI per exchange if they so wish. 
 
@@ -269,12 +268,6 @@ Submits an RFQ (Request For Quote). Alice is asking the PFI to provide a Quote s
 ### Endpoint
 `POST /exchanges`
 
-### Authentication
-Refer to [Signature Verification Section]() of the tbDEX spec  
-
-### Authorization
-No Authorization required to create an exchange
-
 ### Protected
 False
 
@@ -283,7 +276,7 @@ False
 #### `CreateExchangeRequest`
 | field     | data type | required | description                                                                  |
 | --------- | --------- | -------- | ---------------------------------------------------------------------------- |
-| `message` | object    | Y        | The request for quote                                                        |
+| `message` | object    | Y        | The request for quote (RFQ) tbDEX message                                    |
 | `replyTo` | string    | N        | A string containing a valid URI where new messages from the PFI will be sent |
 
 > [!IMPORTANT]
@@ -317,10 +310,11 @@ False
 ```
 
 ### Response
-| Status             | Body                  |
-| ------------------ | --------------------- |
-| `202: Accepted`    | N/A                   |
-| `400: Bad Request` | `{ errors: Error[] }` |
+| Status                       | Body                  |
+| ---------------------------- | --------------------- |
+| `202: Accepted`              | N/A                   |
+| `400: Bad Request`           | `{ errors: Error[] }` |
+| `500: Internal Server Error` | `{ errors: Error[] }` |
 
 ### Errors
 | Status | Description             |
@@ -344,8 +338,7 @@ False
 
 ### Request Body
 > [!IMPORTANT]
-> See Order structure [here](../protocol/README.md#order)
-> See Cancel structure [here](../protocol/README.md#cancel)
+> See Order structure [here](../protocol/README.md#order). See Cancel structure [here](../protocol/README.md#cancel)
 
 ```javascript
 {
@@ -354,10 +347,12 @@ False
 ```
 
 ### Response
-| Status             | Body                  |
-| ------------------ | --------------------- |
-| `202: Accepted`    | N/A                   |
-| `400: Bad Request` | `{ errors: Error[] }` |
+| Status                       | Body                  |
+| ---------------------------- | --------------------- |
+| `202: Accepted`              | N/A                   |
+| `400: Bad Request`           | `{ errors: Error[] }` |
+| `500: Internal Server Error` | `{ errors: Error[] }` |
+
 
 ### Errors
 | Status | Description                 |
@@ -377,17 +372,17 @@ Retrieves all messages associated to a specific exchange
 `GET /exchanges/:exchange_id`
 
 ### Protected
-True
-
+True. See [Authentication](#authentication) section for more details.
 
 ### Response
 
-| Status             | Body                       |
-| ------------------ | -------------------------- |
-| `200: OK`          | `{ data: TbdexMessage[] }` |
-| `400: Bad Request` | `{ errors: Error[] }`      |
-| `404: Not Found`   | N/A                        |
-| `403: Forbidden`   | N/A                        |
+| Status                       | Body                       |
+| ---------------------------- | -------------------------- |
+| `200: OK`                    | `{ data: TbdexMessage[] }` |
+| `400: Bad Request`           | `{ errors: Error[] }`      |
+| `401: Unauthorized`          | `{ errors: Error[] }`      |
+| `404: Not Found`             | N/A                        |
+| `500: Internal Server Error` | `{ errors: Error[] }`      |
 
 ---
 
@@ -400,15 +395,16 @@ Returns a list of exchange IDs
 `GET /exchanges`
 
 ### Protected
-True
+True. See [Authentication](#authentication) section for more details.
 
 ### Response
-| Status             | Body                     |
-| ------------------ | ------------------------ |
-| `200: OK.`         | `{ data: [id, id, id] }` |
-| `400: Bad Request` | `{ errors: Error[] }`    |
-| `404: Not Found`   | N/A                      |
-| `403: Forbidden`   | N/A                      |
+| Status                       | Body                                           |
+| ---------------------------- | ---------------------------------------------- |
+| `200: OK`                    | List of exchangeIds, i.e. `{ data: string[] }` |
+| `400: Bad Request`           | `{ errors: Error[] }`                          |
+| `401: Unauthorized`          | `{ errors: Error[] }`                          |
+| `404: Not Found`             | N/A                                            |
+| `500: Internal Server Error` | `{ errors: Error[] }`                          |
 
 ---
 
@@ -419,18 +415,19 @@ This endpoint is *OPTIONAL*. It is only relevant for PFIs which expose a stored 
 Returns an array of balance resources for each currency held by the caller.  
 
 ### Protected
-True
+True. See [Authentication](#authentication) section for more details.
 
 ### Endpoint
 `GET /balances`
 
 ### Response
-| Status             | Body                                                                                                                                                                |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `200: OK.     `    | `{ data: Balance[] }` See [Balance spec](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) for the full schema of a Balance resource |
-| `400: Bad Request` | `{ errors: Error[] }`                                                                                                                                               |
-| `404: Not Found`   | N/A                                                                                                                                                                 |
-| `403: Forbidden`   | N/A                                                                                                                                                                 |
+| Status                       | Body                                                                                                                           |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `200: OK`                    | `{ data: Balance[] }` See [Balance structure](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) |
+| `400: Bad Request`           | `{ errors: Error[] }`                                                                                                          |
+| `401: Unauthorized`          | `{ errors: Error[] }`                                                                                                          |
+| `404: Not Found`             | N/A                                                                                                                            |
+| `500: Internal Server Error` | `{ errors: Error[] }`                                                                                                          |
 
 # References
 * JSON:API spec: https://jsonapi.org/format/
