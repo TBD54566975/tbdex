@@ -319,7 +319,6 @@ False
 | ---------------------------- | --------------------- |
 | `202: Accepted`              | N/A                   |
 | `400: Bad Request`           | `{ errors: Error[] }` |
-| `500: Internal Server Error` | `{ errors: Error[] }` |
 
 ### Errors
 | Status | Description             |
@@ -356,7 +355,6 @@ False
 | ---------------------------- | --------------------- |
 | `202: Accepted`              | N/A                   |
 | `400: Bad Request`           | `{ errors: Error[] }` |
-| `500: Internal Server Error` | `{ errors: Error[] }` |
 
 
 ### Errors
@@ -387,7 +385,6 @@ True. See [Authentication](#authentication) section for more details.
 | `400: Bad Request`           | `{ errors: Error[] }`      |
 | `401: Unauthorized`          | `{ errors: Error[] }`      |
 | `404: Not Found`             | N/A                        |
-| `500: Internal Server Error` | `{ errors: Error[] }`      |
 
 ---
 
@@ -409,7 +406,6 @@ True. See [Authentication](#authentication) section for more details.
 | `400: Bad Request`           | `{ errors: Error[] }`                          |
 | `401: Unauthorized`          | `{ errors: Error[] }`                          |
 | `404: Not Found`             | N/A                                            |
-| `500: Internal Server Error` | `{ errors: Error[] }`                          |
 
 ---
 
@@ -432,7 +428,6 @@ True. See [Authentication](#authentication) section for more details.
 | `400: Bad Request`           | `{ errors: Error[] }`                                                                                                          |
 | `401: Unauthorized`          | `{ errors: Error[] }`                                                                                                          |
 | `404: Not Found`             | N/A                                                                                                                            |
-| `500: Internal Server Error` | `{ errors: Error[] }`                                                                                                          |
 
 # References
 * JSON:API spec: https://jsonapi.org/format/
