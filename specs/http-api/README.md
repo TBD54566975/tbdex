@@ -165,7 +165,12 @@ The IDs of individual tbDEX messages are used as idempotency keys. For example, 
 }
 ```
 
-The `ID` here that serves as idempotency key is `order_01ha83pkgsfk6t1kxg7q42s48j`.
+The `ID` here that serves as idempotency key is `order_01ha83pkgsfk6t1kxg7q42s48j`. Each tbDEX message's idempotency key can be accessed via `message.metadata.id` like so:
+
+```kotlin
+val order = Order.create(...)
+val orderId = order.metadata.id
+```
 
 ---
 
