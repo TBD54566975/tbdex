@@ -55,7 +55,7 @@ Version: Draft
       - [Example Order](#example-order)
     - [`OrderInstructions`](#orderinstructions)
       - [`PaymentInstruction`](#paymentinstruction)
-      - [Example Quote](#example-quote-1)
+      - [Example OrderInstructions](#example-orderinstructions)
     - [`OrderStatus`](#orderstatus)
       - [`Status`](#status)
     - [`Close`](#close)
@@ -600,8 +600,8 @@ This table enumerates the structure of `PrivateData`
 ### `OrderInstructions`
 > PFI -> Alice: "Here's how to pay us, and how to let us pay you."
 
-| field    | data type                                   | required | description                                                                                                   |
-| -------- | ------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| field    | data type                                   | required | description                                                                   |
+| -------- | ------------------------------------------- | -------- | ----------------------------------------------------------------------------- |
 | `payin`  | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how to pay the PFI (e.g. BTC address, payment link)     |
 | `payout` | [`PaymentInstruction`](#PaymentInstruction) | Y        | Object that describes how be paid by the PFI (e.g. BTC address, payment link) |
 
@@ -838,9 +838,11 @@ sequenceDiagram
 	PFI1->>Alice: Offering
 	PFI2->>Alice: Offering
 	PFIn->>Alice: Offering
-  Alice->>PFI1: RequestForQuote (RFQ)
+  Alice->>PFI1: Request For Quote (RFQ)
   PFI1->>Alice: Quote
   Alice->>PFI1: Order
+  PFI1->>Alice: OrderInstructions
+  Alice->>PFI1: Alice completes payin per OrderInstructions
   PFI1->>Alice: OrderStatus
   PFI1->>Alice: OrderStatus
   PFI1->>Alice: OrderStatus

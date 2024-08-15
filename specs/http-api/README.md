@@ -158,7 +158,7 @@ The IDs of individual tbDEX messages are used as idempotency keys. For example, 
     "kind": "order",
     "id": "order_01ha83pkgsfk6t1kxg7q42s48j",
     "createdAt": "2023-09-13T20:28:40.345Z",
-    "protocol": "1.0"
+    "protocol": "2.0"
   },
   "data": {},
   "signature": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3ZVbTZtWnhwRHNxdnlQbnBrZVdTNGZtWEQyakpBM1RES3E0ZkRrbVI1QkQ3I3o2TWt2VW02bVp4cERzcXZ5UG5wa2VXUzRmbVhEMmpKQTNUREtxNGZEa21SNUJENyJ9..tWyGAiuUXFuVvq318Kdz-EJJgCPCWEMO9xVMZD9amjdwPS0p12fkaLwu1PSLxHoXPKSyIbPQnGGZayI_v7tPCA"
@@ -298,7 +298,7 @@ False
         "id": "rfq_01ha835rhefwmagsknrrhvaa0k",
         "exchangeId": "rfq_01ha835rhefwmagsknrrhvaa0k",
         "createdAt": "2023-09-13T20:19:28.430Z",
-        "protocol": "1.0"
+        "protocol": "2.0"
       },
       "data": {
         "offeringId": "abcd123",
