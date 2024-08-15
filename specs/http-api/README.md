@@ -70,25 +70,29 @@ Version: Draft
 # Discoverability
 PFIs can become publicly discoverable by advertising their API endpoint as a [Service](https://www.w3.org/TR/did-core/#services) within their DID Document. In order to increase the likelihood of being discovered The `service` entry **SHOULD** include the following properties:
 
-| Property          | Value                                                         |
-| ----------------- | ------------------------------------------------------------- |
-| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services) |
-| `type`            | `PFI`                                                         |
-| `serviceEndpoint` | PFI's publicly addressable API endpoint                       |
+| Property          | Value                                                                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`              | see [DID-CORE spec](https://www.w3.org/TR/did-core/#services)                                                                                                      |
+| `type`            | `PFI`                                                                                                                                                              |
+| `serviceEndpoint` | PFI's publicly addressable API endpoint, the [base URL](https://swagger.io/docs/specification/api-host-and-base-path/) with which tbDEX HTTP requests can be made. |
 
-The ID can be chosen at the discretion of the PFI, but the service entry should be of type `PFI`.
 
 ## Example
 ```json
 {
   "id": "did:example:pfi",
   "service": [{
-    "id":"my-pfi",
+    "id":"#my-pfi",
     "type": "PFI",
     "serviceEndpoint": "https://pfi.organization.com"
   }]
 }
 ```
+
+This example illustrates that:
+* The ID can be chosen at the discretion of the PFI, but the service entry should be of type `PFI`.
+* The `serviceEndpoint` of the PFI `https://pfi.organization.com` is the PFI's base URL.
+  * The PFI's base URL is combined with relative paths listed below (i.e. `POST /exchanges`) by the client to create an tbDEX HTTP request to the PFI.
 
 > [!NOTE]
 >
@@ -319,10 +323,10 @@ False
 ```
 
 ### Response
-| Status                       | Body                  |
-| ---------------------------- | --------------------- |
-| `202: Accepted`              | N/A                   |
-| `400: Bad Request`           | `{ errors: Error[] }` |
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
 
 ### Errors
 | Status | Description             |
@@ -355,10 +359,10 @@ False
 ```
 
 ### Response
-| Status                       | Body                  |
-| ---------------------------- | --------------------- |
-| `202: Accepted`              | N/A                   |
-| `400: Bad Request`           | `{ errors: Error[] }` |
+| Status             | Body                  |
+| ------------------ | --------------------- |
+| `202: Accepted`    | N/A                   |
+| `400: Bad Request` | `{ errors: Error[] }` |
 
 
 ### Errors
@@ -383,12 +387,12 @@ True. See [Authentication](#authentication) section for more details.
 
 ### Response
 
-| Status                       | Body                       |
-| ---------------------------- | -------------------------- |
-| `200: OK`                    | `{ data: TbdexMessage[] }` |
-| `400: Bad Request`           | `{ errors: Error[] }`      |
-| `401: Unauthorized`          | `{ errors: Error[] }`      |
-| `404: Not Found`             | N/A                        |
+| Status              | Body                       |
+| ------------------- | -------------------------- |
+| `200: OK`           | `{ data: TbdexMessage[] }` |
+| `400: Bad Request`  | `{ errors: Error[] }`      |
+| `401: Unauthorized` | `{ errors: Error[] }`      |
+| `404: Not Found`    | N/A                        |
 
 ---
 
@@ -404,12 +408,12 @@ Returns a list of exchange IDs
 True. See [Authentication](#authentication) section for more details.
 
 ### Response
-| Status                       | Body                                           |
-| ---------------------------- | ---------------------------------------------- |
-| `200: OK`                    | List of exchangeIds, i.e. `{ data: string[] }` |
-| `400: Bad Request`           | `{ errors: Error[] }`                          |
-| `401: Unauthorized`          | `{ errors: Error[] }`                          |
-| `404: Not Found`             | N/A                                            |
+| Status              | Body                                           |
+| ------------------- | ---------------------------------------------- |
+| `200: OK`           | List of exchangeIds, i.e. `{ data: string[] }` |
+| `400: Bad Request`  | `{ errors: Error[] }`                          |
+| `401: Unauthorized` | `{ errors: Error[] }`                          |
+| `404: Not Found`    | N/A                                            |
 
 ---
 
@@ -426,12 +430,12 @@ True. See [Authentication](#authentication) section for more details.
 `GET /balances`
 
 ### Response
-| Status                       | Body                                                                                                                           |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `200: OK`                    | `{ data: Balance[] }` See [Balance structure](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) |
-| `400: Bad Request`           | `{ errors: Error[] }`                                                                                                          |
-| `401: Unauthorized`          | `{ errors: Error[] }`                                                                                                          |
-| `404: Not Found`             | N/A                                                                                                                            |
+| Status              | Body                                                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `200: OK`           | `{ data: Balance[] }` See [Balance structure](https://github.com/TBD54566975/tbdex/blob/main/specs/protocol/README.md#balance) |
+| `400: Bad Request`  | `{ errors: Error[] }`                                                                                                          |
+| `401: Unauthorized` | `{ errors: Error[] }`                                                                                                          |
+| `404: Not Found`    | N/A                                                                                                                            |
 
 # References
 * JSON:API spec: https://jsonapi.org/format/
