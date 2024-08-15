@@ -130,8 +130,8 @@ Query parameters, also known as query strings, are a way to send additional info
 
 Query params are supported by many of the `GET /${resource}` endpoints in the following ways
 
-* Simple Example: `?field=foo`
-* Same Field; Multiple Values: `field=bar&field=baz`
+* Simple Example: `?field=simpleValue`
+* Same Field; Multiple Values: `field=value&field=anotherValue`
 
 Query Param support is **optional** for all `GET` endpoints that return a list that can be filtered by parameters.
 
