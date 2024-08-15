@@ -838,7 +838,7 @@ sequenceDiagram
 	PFI1->>Alice: Offering
 	PFI2->>Alice: Offering
 	PFIn->>Alice: Offering
-  Alice->>PFI1: Request For Quote (RFQ)
+  Alice->>PFI1: RFQ (Request For Quote)
   PFI1->>Alice: Quote
   Alice->>PFI1: Order
   PFI1->>Alice: OrderInstructions
