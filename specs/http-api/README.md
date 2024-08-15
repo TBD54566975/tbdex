@@ -133,6 +133,8 @@ Query params are supported by many of the `GET /${resource}` endpoints in the fo
 * Simple Example: `?field=foo`
 * Same Field; Multiple Values: `field=bar&field=baz`
 
+Query Param support is **optional** for all `GET` endpoints that return a list that can be filtered by parameters.
+
 ## Pagination
 Pagination is supported using the following query params:
 
@@ -143,6 +145,8 @@ Pagination is supported using the following query params:
 
 ### Example
 `/?page[offset]=0&page[limit]=10`
+
+Pagination support is **optional** for all `GET` endpoints that return a list.
 
 ---
 
