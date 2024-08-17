@@ -1,0 +1,55 @@
+name: format json files with `jq`
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  format-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - uses: cashapp/activate-hermit@v1
+        name: setup hermit with `just` and `jq`
+        with:
+          cache: true
+
+      - name: format json files
+        id: format-json
+        run: |
+          just format
+          if [ $? -ne 0 ]; then
+            echo "::set-output name=format_failed::true"
+            exit 1
+          fi
+
+      - name: check for changes
+        id: check-changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::set-output name=changes_detected::true"
+          fi
+
+      - name: commit changes
+        if: steps.check-changes.outputs.changes_detected == "true"
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add "**/*.json"
+          git commit --message "chore: format json files"
+          git push
+
+      - name: create issue if formatting failed
+        if: failure() && steps.format.outputs.format_failed == "true"
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'JSON Formatting Failed',
+              body: 'The automatic JSON formatting job failed. Please check the logs and fix the issues manually.'
+            })
