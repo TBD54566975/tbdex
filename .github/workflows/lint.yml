@@ -18,10 +18,14 @@ jobs:
       - name: lint json files
         id: lint-json
         run: |
-          just lint || echo "::set-output name=lint_failed::true"
+          if just lint; then
+            echo "lint_failed=false" >> $GITHUB_ENV
+          else
+            echo "lint_failed=true" >> $GITHUB_ENV
+          fi
 
       - name: add a comment to the pull request
-        if: steps.lint.outputs.lint_failed == "true"
+        if: env.lint_failed == 'true'
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

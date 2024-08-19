@@ -19,21 +19,23 @@ jobs:
       - name: format json files
         id: format-json
         run: |
-          just format
-          if [ $? -ne 0 ]; then
-            echo "::set-output name=format_failed::true"
-            exit 1
+          if just format; then
+            echo "format_failed=false" >> $GITHUB_ENV
+          else
+            echo "format_failed=true" >> $GITHUB_ENV
           fi
 
       - name: check for changes
         id: check-changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "::set-output name=changes_detected::true"
+            echo "changes_detected=true" >> $GITHUB_ENV
+          else
+            echo "changes_detected=false" >> $GITHUB_ENV
           fi
 
       - name: commit changes
-        if: steps.check-changes.outputs.changes_detected == "true"
+        if: env.changes_detected == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -42,7 +44,7 @@ jobs:
           git push
 
       - name: create issue if formatting failed
-        if: failure() && steps.format.outputs.format_failed == "true"
+        if: failure() && env.format_failed == 'true'
         uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
