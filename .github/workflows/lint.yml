@@ -1,7 +1,9 @@
 name: lint json files with `jq`
 on:
-  pull_request_target:
-    types: [opened, synchronize]
+  workflow_run:
+    workflows: ["run-linter"]
+    types:
+      - completed
 
 permissions:
   issues: write
