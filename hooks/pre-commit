@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if just lint; then
+  echo "[success] linting passed"
+else
+  echo "[error] linting failed"
+  exit 1
+fi

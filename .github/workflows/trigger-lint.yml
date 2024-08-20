@@ -1,0 +1,19 @@
+name: run-linter
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  trigger-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "[trigger]: run lint workflow"
+        run: |
+          curl \
+            --request POST \
+            --user "${{ secrets.GITHUB_TOKEN }}" \
+            --header "Accept: application/vnd.github.v3+json" \
+            --url "https://api.github.com/repos/TBD54566975/tbdex/actions/workflows/lint.yml/dispatches" \
+            --data '{"ref": "main"}'

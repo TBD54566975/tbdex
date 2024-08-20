@@ -23,7 +23,11 @@
           "description": "The total amount of currency to be paid in or paid out. It is always a sum of subtotal and fee"
         }
       },
-      "required": ["currencyCode", "subtotal", "total"]
+      "required": [
+        "currencyCode",
+        "subtotal",
+        "total"
+      ]
     }
   },
   "type": "object",
@@ -44,5 +48,10 @@
       "$ref": "#/definitions/QuoteDetails"
     }
   },
-  "required": ["expiresAt", "payoutUnitsPerPayinUnit", "payin", "payout"]
+  "required": [
+    "expiresAt",
+    "payoutUnitsPerPayinUnit",
+    "payin",
+    "payout"
+  ]
 }

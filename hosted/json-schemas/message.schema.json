@@ -16,7 +16,15 @@
         },
         "kind": {
           "type": "string",
-          "enum": ["rfq", "quote", "order", "orderstatus", "close", "cancel", "orderinstructions"],
+          "enum": [
+            "rfq",
+            "quote",
+            "order",
+            "orderstatus",
+            "close",
+            "cancel",
+            "orderinstructions"
+          ],
           "description": "The message kind (e.g. rfq, quote)"
         },
         "id": {
@@ -40,7 +48,15 @@
           "description": "Version of the protocol in use (x.x format)"
         }
       },
-      "required": ["from", "to", "kind", "id", "exchangeId", "createdAt", "protocol"]
+      "required": [
+        "from",
+        "to",
+        "kind",
+        "id",
+        "exchangeId",
+        "createdAt",
+        "protocol"
+      ]
     }
   },
   "type": "object",
@@ -62,5 +78,9 @@
     }
   },
   "additionalProperties": false,
-  "required": ["metadata", "data", "signature"]
+  "required": [
+    "metadata",
+    "data",
+    "signature"
+  ]
 }
