@@ -3,16 +3,25 @@ set positional-arguments := true
 _help:
     @just -l
 
-clean:
+clean: install_hooks
     #!/usr/bin/env bash
     find hosted -type f -name "*.tmp" -delete
+
+install_hooks:
+    #!/usr/bin/env bash
+    cp hooks/pre-commit .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
 
 format: lint
     #!/usr/bin/env bash
     find hosted -type f -name "*.json" | while read file; do
       jq --indent 2 . $file > $file.json.tmp
-      mv $file.json.tmp $file
-      printf "formatted: %s\n" $file
+      if ! diff --brief $file $file.json.tmp > /dev/null; then
+        mv $file.json.tmp $file
+        printf "formatted: %s\n" $file
+      else
+        rm $file.json.tmp
+      fi
     done
 
 lint: clean
@@ -22,13 +31,19 @@ lint: clean
       exit 1
     fi
 
-    find hosted -type f -name "*.json" | while read file; do
+    no_errors_found=true
+    for file in $(find hosted -type f -name "*.json"); do
       if ! jq empty $file > /dev/null; then
         printf "[error] %s is not a valid JSON file\n\n" $file
-        exit 1
+        no_errors_found=false
       fi
     done
-    echo "[success] All JSON files are valid"
+
+    if [ "$no_errors_found" = true ]; then
+      echo "[success] All JSON files are valid"
+    else
+      exit 1
+    fi
 
 schemas: lint
     #!/usr/bin/env bash
