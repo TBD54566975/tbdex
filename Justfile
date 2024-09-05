@@ -31,17 +31,15 @@ lint: clean
       exit 1
     fi
 
-    no_errors_found=true
+    has_errors=false
     for file in $(find hosted -type f -name "*.json"); do
       if ! jq empty $file > /dev/null; then
         printf "[error] %s is not a valid JSON file\n\n" $file
-        no_errors_found=false
+        has_errors=true
       fi
     done
 
-    if [ "$no_errors_found" = true ]; then
-      echo "[success] All JSON files are valid"
-    else
+    if [ "$has_errors" = true ]; then
       exit 1
     fi
 

@@ -1,0 +1,26 @@
+name: validate-json
+on:
+  push:
+    branches:
+      - "**"
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - uses: cashapp/activate-hermit@v1
+        name: setup hermit with `just` and `jq`
+        with:
+          cache: true
+
+      - name: format json files
+        id: format-json
+        run: just format
