@@ -1,0 +1,163 @@
+name: Bump Released Spec in SDKs Repos
+
+# Parse the CI output status and make a markdown summary
+
+# TODO:
+# - make the pipeline ignore failures so devs dont ignore the CI checks
+# - add a step to add a comment summary with the failures in the PR, so PRs can act accordingly
+# - add a step to automate issue creation for each failure (or update existing one)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag (must follow pattern vN.N.N)"
+        required: true
+        type: string
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - repo: tbdex-js
+            ci_file: integrity-check.yml
+            spec_path: tbdex
+            job_step: test-with-node;Run tests
+          # - repo: tbdex-swift
+          #   ci_file: ci.yml
+          #   spec_path: Tests/tbDEXTestVectors/tbdex-spec
+          #   job_step: build-and-test;Run tests
+          # - repo: tbdex-kt
+          #   ci_file: ci.yml
+          #   spec_path: tbdex
+          #   job_step: build-test-deploy-snapshot-ubuntu;Build, Test
+          # - repo: tbdex-rs
+          #   ci_file: ci.yml
+          #   spec_path: tbdex
+          #   job_step: build-test-deploy-snapshot-ubuntu;Build, Test
+
+    outputs:
+      tbdex-js: ${{ steps.output.outputs.tbdex-js }}
+      tbdex-swift: ${{ steps.output.outputs.tbdex-swift }}
+      tbdex-kt: ${{ steps.output.outputs.tbdex-kt }}
+      tbdex-rs: ${{ steps.output.outputs.tbdex-rs }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare workflow values
+        id: values
+        run: |
+          TAG=${{ github.event.inputs.tag || github.ref_name }}
+          echo "Processing tag: $TAG"
+
+          # Validate tag format - TODO: uncomment
+          # if ! [[ $TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          #   echo "Error: Tag '$TAG' is not in the required format vN.N.N"
+          #   exit 1
+          # fi
+
+          echo "TAG=${TAG}" >> $GITHUB_OUTPUT
+
+          SPEC_REF=tbd-ci-cd-robot/spec-bump
+          echo "SPEC_REF=${SPEC_REF}" >> $GITHUB_OUTPUT
+
+      - name: Generate an access token to write to downstream repo
+        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
+        id: app-token
+        with:
+          app-id: ${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.CICD_ROBOT_GITHUB_APP_PRIVATE_KEY }}
+          owner: TBD54566975
+          repositories: ${{ matrix.repo }}
+
+      - name: Checkout spec repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          repository: TBD54566975/${{ matrix.repo }}
+          ref: main
+          submodules: true
+          # persist-credentials: false
+
+      - name: Update spec submodule in ${{ matrix.repo }}
+        id: bump
+        run: |
+          # initialize configs and vars
+          SPEC_REF=${{ steps.values.outputs.SPEC_REF }}
+          TAG=${{ steps.values.outputs.TAG }}
+          REPO_ROOT=$(pwd)
+          git config user.name "tbd-ci-cd-robot[bot]"
+          git config user.email "${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}+tbd-ci-cd-robot[bot]@users.noreply.github.com"
+
+          echo "Current directory: $(pwd)"
+
+          # check if $SPEC_REF exists
+          echo "Checking if $SPEC_REF exists..."
+          if git ls-remote --exit-code origin $SPEC_REF; then
+            echo "$SPEC_REF exists, checking out..."
+            git fetch origin $SPEC_REF
+            git checkout $SPEC_REF || { echo "Failed to checkout $SPEC_REF"; exit 1; }
+          else
+            echo "$SPEC_REF doesn't exist, creating new branch..."
+            git checkout -b $SPEC_REF || { echo "Failed to create new branch $SPEC_REF"; exit 1; }
+          fi
+
+          # bumps the spec submodule
+          echo "Bumping spec submodule to $TAG..."
+          cd ${{ matrix.spec_path }}
+          echo "Updating submodule..."
+          git submodule update --init --recursive
+          echo "Fetching tags..."
+          git fetch --all --tags
+          echo "Checking out $TAG..."
+          git checkout $TAG
+
+          # commit changes and push
+          echo "Checking changes to commit..."
+          cd $REPO_ROOT
+          # only commit if needed
+          if git status --porcelain | grep -q '^.M'; then
+            git add .
+            git commit -m "Bump tbdex spec to $TAG"
+            git push origin $SPEC_REF
+            echo "Changes committed and pushed to $SPEC_REF"
+            echo "PUSHED=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Manage autobump PR with the Changes
+        uses: actions/github-script@v6
+        if: ${{ steps.bump.outputs.PUSHED == 'true' }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const head = "${{ steps.values.outputs.SPEC_REF }}"
+            const owner = "TBD54566975"
+
+            const { data: prs } = await github.rest.pulls.list({
+                owner,
+                head,
+                repo: "${{ matrix.repo }}",
+                state: "open",
+            });
+
+            if (prs.length === 0) {
+              console.info("No PR found, creating one...");
+              const createdPr = await github.rest.pulls.create({
+                  owner,
+                  head,
+                  repo: "tbdex-js",
+                  title: "Autobump tbdex spec",
+                  body: "Automated PR to remind the team to bump the tbdex spec.\n\nCode owners, please address all the spec changes in this PR until the tests vectors are green.",
+                  base: "main",
+              });
+              console.info({ createdPr })
+            } else {
+              console.info("PR found, skipping creation since CI will be triggered from the pushed commit above...");
+            }
