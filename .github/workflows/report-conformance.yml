@@ -1,0 +1,59 @@
+name: Report Spec Conformance
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        description: The tag to report conformance for
+  push:
+    tags:
+      - "v*"
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Spec Tag Version
+        id: spec-tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            SPEC_TAG=${{ inputs.tag }}
+          else
+            SPEC_TAG=${{ github.ref_name }}
+          fi
+
+          # validate the tag is semver with optional patch suffix eg: v1.0.0 or v1.0 are valid or v1.0-beta.1
+          if [[ ! "${SPEC_TAG}" =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?(-[a-zA-Z0-9]+)?$ ]]; then
+            echo "Invalid tag: ${SPEC_TAG}"
+            exit 1
+          fi
+
+          echo "Spec Tag: ${SPEC_TAG}"
+          echo "SPEC_TAG=${SPEC_TAG}" >> $GITHUB_OUTPUT
+
+      - name: Generate an access token to write to downstream repo
+        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
+        id: app-token
+        with:
+          app-id: ${{ secrets.CICD_ROBOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.CICD_ROBOT_GITHUB_APP_PRIVATE_KEY }}
+          owner: TBD54566975
+          repositories: sdk-report-runner
+
+      - name: Trigger Spec Conformance Report
+        uses: convictional/trigger-workflow-and-wait@v1.6.5
+        id: trigger-ci
+        with:
+          owner: TBD54566975
+          repo: sdk-report-runner
+          github_token: ${{ steps.app-token.outputs.token }}
+          workflow_file_name: build-conformance-table.yaml
+          wait_interval: 10
+          propagate_failure: true
+          wait_workflow: true
+          client_payload: '{"specTag": "${{ steps.spec-tag.outputs.SPEC_TAG }}", "specRepo": "tbdex"}'
